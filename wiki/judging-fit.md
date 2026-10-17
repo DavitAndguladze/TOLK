@@ -13,3 +13,8 @@ Source: [[raw/challenge-3-ai-that-strengthens-learning]]
 | Privacy / de-identified data | — | Voice of possible minors: retention policy TBD |
 | OCI GenAI + privacy tech | OCI GenAI for re-leveling; OCI Speech for listening | Verify realtime word timestamps |
 | Usable prototype, path to scale | — | Platform + demo script TBD |
+
+## Update 2026-10-17 (scope doc)
+- "Supports understanding, not task completion": Chapter Check with Key Points + link-back re-reading; AI never reads or answers for the Reader.
+- "Engaging, scalable": Streak, Daily Puzzle, 5–10 minute Chapters.
+- "Transparency": "AI · OCI <service>" labels and graded-against Key Points on every result.

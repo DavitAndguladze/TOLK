@@ -3,9 +3,10 @@
 Six people, six coding agents, one repo, ~20 hours. Optimise for **merging small, working slices to `main` every hour**.
 
 ## Read first
-- `CONTEXT.md` — the glossary. Name every type, table, route, and component with these terms (Story, Page, Leveled Page, Level, Scene, Key Point, Reader, Practice Word, Comprehension Check…). New term? Add it there in the same commit.
-- `docs/adr/` — settled decisions. Read before changing architecture, storage, the listening pipeline, or what counts as progress (ADR-0005: comprehension-first).
-- `wiki/timeline.md` — what is P0 now. Work on P0 until the Golden Path milestone is green.
+- `CONTEXT.md` — the glossary. Name every type, table, route, and component with these terms (Book, Chapter, Chapter Version, Level, Chapter Check, Grading Result, Word Bank, Flagged Word, Graduated Word, Level Line…). New term? Add it there in the same commit.
+- `docs/spec/reading-app-v1.md` — the v1 spec: user stories, Pillar rules, seams. Read before starting a ticket.
+- `docs/adr/` — settled decisions. Read before changing architecture, storage, the listening pipeline, or what counts as progress (ADR-0008: per-Reader chapter generation; ADR-0009: one Grading Result + Word Bank).
+- GitHub Issues — the tickets. Work the frontier (open, no open blockers), P0 first, until the Golden Path issue is closed.
 
 ## Boundaries
 - Each role owns one folder under `src/` (see `wiki/team-roles.md`). Edit another role's folder only through a PR they review.
@@ -18,7 +19,7 @@ One skill per moment, so agents never pick between two that overlap. Plugins (Su
 | When you are… | Use skill |
 |---|---|
 | Starting a feature: shaping the idea into a plan | `brainstorming` (Superpowers) |
-| Building pure logic (alignment, level rule, validators, Practice Word guardrails) | `tdd` |
+| Building pure logic (alignment, grading combiner, level rules, Word Bank, chapter validator) | `tdd` |
 | Answering "will this work?" before committing to it (spikes, UI feel) | `prototype` |
 | Designing a module's interface or a seam between roles | `codebase-design` |
 | Turning a wiki page into tickets / implementing tickets | `to-tickets`, `implement` |
@@ -41,3 +42,17 @@ Codex: open the matching `SKILL.md` (project skills: `.claude/skills/<name>/`) a
 - Commit to a branch named `<role>/<slice>`; merge to `main` via PR. Force-push, `reset --hard`, and branch deletion on shared branches stay off (run `git-guardrails-claude-code` once per machine).
 - Secrets go in `.env.local` (never committed); add the key name to `.env.example`.
 - Demo content is public domain only (ADR-0003).
+
+## Agent skills
+
+### Issue tracker
+
+Issues and specs live in this repo's GitHub Issues (`gh` CLI, REST fallback in cloud sessions). See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Default vocabulary: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.

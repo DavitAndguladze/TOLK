@@ -5,8 +5,8 @@ Sources: [[raw/initial-pitch]], [[raw/challenge-3-ai-that-strengthens-learning]]
 ## One-liner (draft)
 A read-aloud app that listens word by word, measures how you read, and re-levels the vocabulary of the same story so every reader can read it — and stretch toward harder words.
 
-## North star (ADR-0005)
-Reading comprehension. Word-by-word scoring is only an input to choose the Level; every progress metric the Reader sees is about understanding.
+## North star (ADR-0008, ADR-0009, Reading App Flow)
+Each Chapter is rewritten one step closer to the author's original, based on how well the Reader understood the last one. Spec: docs/spec/reading-app-v1.md.
 
 ## Core loop (draft, pending interview)
 1. Learner picks a story.

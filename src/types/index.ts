@@ -1,125 +1,123 @@
 // Shared contract between the six roles. Names follow CONTEXT.md.
+// Aligned to the Reading App Flow (ADR-0008, ADR-0009).
 // Change this file in its own small PR and announce it in team chat.
 
 // ── Content ──────────────────────────────────────────────────────────────
 
-/** One step on the fixed 5-step vocabulary scale (D18). */
+/** Rung on the ladder: L1 most simplified … L5 = the author's original text. */
 export type Level = 1 | 2 | 3 | 4 | 5;
 export const LEVELS: readonly Level[] = [1, 2, 3, 4, 5];
+export const ORIGINAL_LEVEL: Level = 5;
 
-/** Rules each Level must satisfy; the leveling validator checks against these. */
+/** Targets the chapter generator and validator aim for at each Level. */
 export interface LevelSpec {
   level: Level;
-  cefr: "A2" | "B1" | "B2" | "C1" | "C2";
-  /** Word must rank within the top N most frequent English words; null = no cap. */
+  /** Word must rank within the top N most frequent English words; null = author's choice. */
   maxWordRank: number | null;
-  /** Max words per sentence; null = keep the original sentence length. */
+  /** Max words per sentence; null = the author's sentences. */
   maxSentenceWords: number | null;
-  /** Reader-facing description shown in the Level Picker. */
+  figurativeLanguage: "none" | "light" | "some" | "most" | "original";
   label: string;
 }
 
-export interface Story {
+export interface Book {
   id: string;
   title: string;
   author: string;
   /** Public-domain source (ADR-0003). */
   sourceUrl: string;
-  /** Level where the untouched source text sits. */
-  originalLevel: Level;
-  sceneIds: string[];
+  chapterCount: number;
+  coverImageUrl?: string;
 }
 
-/** A run of Pages ending at a natural pause; Comprehension Checks happen only at Scene ends. */
-export interface Scene {
+/** A Book chapter as the author wrote it (L5). */
+export interface Chapter {
   id: string;
-  storyId: string;
-  index: number;
+  bookId: string;
+  /** 1-based. */
+  number: number;
   title: string;
-  pageIds: string[];
+  originalText: string;
   keyPoints: KeyPoint[];
+  complexWords: ComplexWord[];
 }
 
-/** A fact the Reader should understand from a Scene; the grading rubric. */
+/** A plot point; Chapter Check questions target these. */
 export interface KeyPoint {
   id: string;
-  sceneId: string;
+  chapterId: string;
   text: string;
 }
 
-/** The unit a Reader reads aloud at one time. Level changes only between Pages. */
-export interface Page {
-  id: string;
-  storyId: string;
-  sceneId: string;
-  /** Position within the Story, 0-based. */
-  index: number;
-  isSceneEnd: boolean;
+/** One of a Chapter's hardest words, detected before the Reader starts. */
+export interface ComplexWord {
+  word: string;
+  meaning: string;
 }
 
 /** One word on screen, the unit Listening scores. */
-export interface PageToken {
+export interface Token {
   index: number;
-  /** As displayed, including punctuation: `years,` */
+  /** As displayed, with punctuation: `years,` */
   text: string;
-  /** Lowercase, punctuation stripped, used for alignment: `years` */
+  /** Lowercase, punctuation stripped, for alignment: `years` */
   normalized: string;
   sentenceIndex: number;
 }
 
-export interface PageSentence {
+export interface Sentence {
   index: number;
   text: string;
-  /** The same sentence at the Original Level, for tap-to-see-original. */
+  /** The author's sentence this one was rewritten from (tap-to-see-original). */
   originalText: string;
 }
 
-/** A position on a Leveled Page where a Practice Word can be woven in (D20). */
-export interface PracticeWordSlot {
+export type Reinforcement = "plain" | "context-clue" | "inline-definition";
+
+export interface ReinforcedWord {
+  word: string;
+  reinforcement: Reinforcement;
   sentenceIndex: number;
-  tokenIndex: number;
-  /** Practice Words that fit here without changing meaning. */
-  candidateWords: string[];
 }
 
-export interface LevelValidation {
-  passed: boolean;
-  /** Share of words outside the Level's frequency band, 0–1. */
-  outOfBandRatio: number;
-  longestSentenceWords: number;
-  notes: string[];
-}
-
-/** One Page rewritten at one Level; plot, names, and event order are locked. */
-export interface LeveledPage {
-  pageId: string;
+/** One Chapter rewritten for one Reader at one Level (ADR-0008). */
+export interface ChapterVersion {
+  id: string;
+  /** null = shared version (Chapter 1 at L1, demo fallbacks). */
+  readerId: string | null;
+  bookId: string;
+  chapterId: string;
+  chapterNumber: number;
   level: Level;
-  isOriginal: boolean;
+  /** Distance from the original, 0 (very simplified) – 100 (original). Baseline for the next generation. */
+  levelScore: number;
+  status: "generating" | "ready" | "failed";
   text: string;
-  sentences: PageSentence[];
-  tokens: PageToken[];
-  practiceWordSlots: PracticeWordSlot[];
-  validation: LevelValidation;
+  sentences: Sentence[];
+  tokens: Token[];
+  reinforcedWords: ReinforcedWord[];
+  /** The Chapter Version this was generated from; null for Chapter 1. */
+  baselineVersionId: string | null;
+  generatedAt: string;
 }
 
-/** A photographed page of a physical book; no Levels (glasses, P2). */
+/** A page of a physical book, photographed and OCR'd (glasses, P2). No Levels. */
 export interface PaperPage {
   id: string;
   readerId: string;
   text: string;
-  tokens: PageToken[];
+  tokens: Token[];
   createdAt: string;
 }
 
-// ── Listening ────────────────────────────────────────────────────────────
+// ── Read-aloud ───────────────────────────────────────────────────────────
 
-export type WordOutcome = "pending" | "correct" | "substituted" | "skipped";
+export type WordOutcome = "pending" | "correct" | "mispronounced" | "skipped";
 
-/** How one expected word was read, after aligning speech to the Page (ADR-0002). */
+/** How one expected word was read, after aligning speech to the text (ADR-0002). */
 export interface WordResult {
   tokenIndex: number;
   outcome: WordOutcome;
-  /** What the recognizer heard, when it differs. */
   heard?: string;
   startMs?: number;
   endMs?: number;
@@ -128,20 +126,25 @@ export interface WordResult {
   hesitationMs: number;
 }
 
+export interface ReadAloudMiss {
+  word: string;
+  tokenIndex: number;
+  kind: "mispronounced" | "skipped";
+}
+
 export type ListeningEvent =
   | { type: "word"; result: WordResult }
-  /** Reader has been stuck on a word longer than the hesitation threshold (~3s). */
   | { type: "hesitation"; tokenIndex: number; ms: number }
-  | { type: "page-complete"; summary: PageReadSummary }
+  | { type: "chunk-complete"; summary: ReadAloudSummary }
   | { type: "error"; message: string };
 
-/** Fluency data for one Page. Feeds only the Level rule (ADR-0005). */
-export interface PageReadSummary {
-  pageId: string;
-  level: Level;
+/** Result of reading (part of) a Chapter Version aloud. Merge chunk summaries per Chapter. */
+export interface ReadAloudSummary {
+  chapterVersionId: string;
   /** Share of tokens read correctly, 0–1. */
   accuracy: number;
   wordResults: WordResult[];
+  misses: ReadAloudMiss[];
   startedAt: string;
   endedAt: string;
 }
@@ -151,80 +154,146 @@ export type ListeningEngine = "oci-realtime" | "web-speech" | "mock";
 /** The seam Role 1 implements. Reading UI depends only on this. */
 export interface ListeningSource {
   readonly engine: ListeningEngine;
-  start(
-    page: { pageId: string; level: Level; tokens: PageToken[] },
-    onEvent: (event: ListeningEvent) => void,
-  ): Promise<void>;
-  /** Stops listening and returns the summary for whatever was read. */
-  stop(): Promise<PageReadSummary>;
+  start(chunk: { chapterVersionId: string; tokens: Token[] }, onEvent: (event: ListeningEvent) => void): Promise<void>;
+  stop(): Promise<ReadAloudSummary>;
 }
 
-// ── Comprehension ────────────────────────────────────────────────────────
+export interface FlaggedWord {
+  word: string;
+  chapterVersionId: string;
+  tokenIndex: number;
+  at: string;
+}
+
+// ── Chapter Check + grading ──────────────────────────────────────────────
 
 /** 0 = missed, 1 = partial, 2 = got it. */
-export type CheckGrade = 0 | 1 | 2;
+export type AnswerGrade = 0 | 1 | 2;
 
-export interface ComprehensionCheck {
+export interface CheckQuestion {
   id: string;
-  sceneId: string;
-  level: Level;
-  kind: "recall" | "inference" | "prediction";
-  /** Book-club tone, spoken aloud by TTS (D11). */
-  question: string;
+  kind: "key-point" | "complex-word";
+  prompt: string;
+  /** Multiple choice for complex-word questions; open answer otherwise. */
+  choices?: string[];
+  keyPointId?: string;
+  word?: string;
+  /** Sentence in this Chapter Version that answers it (link back on a miss). */
+  answerSentenceIndex: number;
 }
 
-export interface CheckResult {
-  checkId: string;
-  readerId: string;
-  sceneId: string;
-  levelReadAt: Level;
-  answerTranscript: string;
-  grade: CheckGrade;
-  /** One spoken line, never a score (D11). */
+export interface ChapterCheck {
+  id: string;
+  chapterVersionId: string;
+  questions: CheckQuestion[];
+}
+
+export interface ChapterCheckAnswers {
+  answers: { questionId: string; answer: string; via: "spoken" | "typed" }[];
+}
+
+export interface QuestionGrade {
+  questionId: string;
+  grade: AnswerGrade;
+  /** One line, from OCI Generative AI. */
   feedback: string;
-  keyPointIdsHit: string[];
-  skipped: boolean;
-  disputed: boolean;
-  answeredAt: string;
+  rereadSentenceIndex: number | null;
 }
 
-// ── Level engine ─────────────────────────────────────────────────────────
+export type GradingResult = "fully-understood" | "partly-understood" | "struggled";
 
-export type LevelChangeReason =
-  | "read-smoothly-and-understood" // up
-  | "struggled-with-words" // down: accuracy < 90%
-  | "missed-the-meaning" // down: last check missed, incl. fluent-but-confused (D26)
-  | "reader-choice" // Level Picker
-  | "hold"; // no change
+/** Output of the deterministic grading combiner (pure). */
+export interface Grading {
+  result: GradingResult;
+  /** 0–100: Chapter Check 70% + read-aloud accuracy 20% + flags 10% (Check 90% when no read-aloud). Tunable. */
+  score: number;
+  barelyPassed: boolean;
+  questionGrades: QuestionGrade[];
+  missedWords: { word: string; source: "read-aloud" | "chapter-check" | "flagged" }[];
+  /** Shown to Reader and judges: what the grade was based on. */
+  basis: { readAloudAccuracy: number | null; checkScore: number; checkMax: number; flaggedCount: number };
+}
+
+/** Pure grading combiner input: AI question grades + signals. */
+export interface GradingInput {
+  questionGrades: QuestionGrade[];
+  readAloud: ReadAloudSummary | null;
+  flaggedWords: string[];
+  complexWordMisses: string[];
+}
+
+export interface SessionResult {
+  id: string;
+  readerId: string;
+  chapterVersionId: string;
+  chapterNumber: number;
+  level: Level;
+  readAloudMisses: ReadAloudMiss[];
+  grading: Grading;
+  completedAt: string;
+}
+
+// ── Level rules + Word Bank (pure) ───────────────────────────────────────
+
+export type LevelReason =
+  | "fully-understood" // up one
+  | "barely-passed" // same
+  | "partly-understood" // same
+  | "struggled-hold" // same, score ≥ 35
+  | "struggled-down" // down one, score < 35
+  | "at-original"; // already L5
 
 export interface LevelDecision {
   from: Level;
   to: Level;
-  reason: LevelChangeReason;
-  /** Reader-facing line for the level-change moment. */
+  reason: LevelReason;
+  /** Reader-facing line. */
   explanation: string;
+  reinforcement: Reinforcement;
 }
 
-/** Input to the pure level rule (D13): up if ≥97% + "got it"; down if <90% or "missed"; ≤1 move per 2 Pages. */
-export interface LevelRuleInput {
-  current: Level;
-  lastPage: PageReadSummary;
-  /** Most recent check result since the last Level change, if any. */
-  lastCheck?: CheckResult;
-  pagesSinceLastChange: number;
-  /** Pages left where the auto rule is paused after a Level Picker choice (D19). */
-  readerChoicePauseRemaining: number;
+export interface WordBankEntry {
+  word: string;
+  source: "wrong" | "flagged";
+  timesSeen: number;
+  graduated: boolean;
+  addedInChapter: number;
+  graduatedInChapter: number | null;
 }
 
-/** What the Level Picker shows: the upcoming paragraph at every Level. */
-export interface LevelPreview {
-  level: Level;
-  isOriginal: boolean;
-  text: string;
-  label: string;
+export interface WordBankUpdate {
+  bank: WordBankEntry[];
+  graduatedThisChapter: string[];
+  wordsLearnedTotal: number;
 }
 
-// ── Reader ───────────────────────────────────────────────────────────────
+/** The core pure seam: grading → level → word bank. Most tests live here. */
+export interface ChapterOutcome {
+  grade(input: GradingInput): Grading;
+  decideNextLevel(current: Level, grading: Grading): LevelDecision;
+  applyToWordBank(
+    bank: WordBankEntry[],
+    session: SessionResult,
+    version: Pick<ChapterVersion, "chapterNumber" | "tokens">,
+    flaggedWords: string[],
+  ): WordBankUpdate;
+}
+
+/** Inputs for writing Chapter N+1 (ADR-0008). */
+export interface NextChapterInput {
+  original: Chapter;
+  baseline: ChapterVersion;
+  decision: LevelDecision;
+  wordBank: WordBankEntry[];
+  graduatedWords: string[];
+  readerId: string;
+}
+
+export interface ChapterGenerator {
+  generate(input: NextChapterInput): Promise<{ version: ChapterVersion; check: ChapterCheck }>;
+}
+
+// ── Reader + progress ────────────────────────────────────────────────────
 
 export interface Reader {
   id: string;
@@ -232,72 +301,40 @@ export interface Reader {
   email: string;
 }
 
-export interface PracticeWord {
-  word: string;
-  addedAt: string;
-  storyIdsSeenIn: string[];
-  checkIdsUsedIn: string[];
-  /** Read correctly in 3 Stories and used once in a spoken answer. */
-  mastered: boolean;
-}
-
-export interface ReaderProfile {
-  readerId: string;
+export interface BookProgress {
+  bookId: string;
+  currentChapterNumber: number;
   currentLevel: Level;
-  understoodLevel: Level | null;
-  practiceWords: PracticeWord[];
-  /** Current position, so a returning Reader resumes. */
-  bookmark: { storyId: string; pageId: string } | null;
+  currentVersionId: string;
 }
 
-/** A sentence on Page N+1 rewritten to include a Practice Word (D20). */
-export interface WovenSentence {
-  pageId: string;
-  sentenceIndex: number;
-  practiceWord: string;
-  text: string;
-  /** "genai" passed validation; "swap" is the deterministic fallback. */
-  method: "genai" | "swap";
-}
-
-// ── Progress (comprehension-first, ADR-0005) ─────────────────────────────
-
-export interface SceneTile {
-  sceneId: string;
-  title: string;
-  levelReadAt: Level | null;
-  status: "got-it" | "partial" | "missed" | "skipped" | "unread";
-  checkResult?: CheckResult;
-  keyPoints: KeyPoint[];
+export interface Streak {
+  current: number;
+  longest: number;
+  lastDay: string | null;
 }
 
 export interface ProgressView {
-  understoodLevel: Level | null;
-  stories: {
-    storyId: string;
-    title: string;
-    understoodLevel: Level | null;
-    sceneMap: SceneTile[];
-  }[];
-  practiceWords: PracticeWord[];
+  bookId: string;
+  levelLine: { chapterNumber: number; level: Level; result: GradingResult | null }[];
+  wordsLearned: { total: number; thisChapter: string[] };
+  wordBank: WordBankEntry[];
+  streak: Streak;
 }
 
 // ── HTTP contract (Next.js route handlers) ───────────────────────────────
 
 export interface Api {
-  "GET /api/stories": { req: void; res: Story[] };
-  "GET /api/stories/[storyId]": { req: void; res: { story: Story; scenes: Scene[]; pages: Page[] } };
-  "GET /api/pages/[pageId]?level": { req: void; res: LeveledPage };
-  "GET /api/pages/[pageId]/preview": { req: void; res: LevelPreview[] };
-  "POST /api/reading/page-summary": { req: PageReadSummary; res: { decision: LevelDecision; nextPage: LeveledPage | null; sceneCheck: ComprehensionCheck | null } };
-  "POST /api/reader/level": { req: { level: Level }; res: ReaderProfile };
-  "GET /api/reader/profile": { req: void; res: ReaderProfile };
-  "POST /api/checks/[checkId]/answer": { req: { answerTranscript: string; skipped?: boolean }; res: CheckResult };
-  "POST /api/checks/[checkId]/dispute": { req: void; res: CheckResult };
+  "GET /api/library?q": { req: void; res: (Book & { progress: BookProgress | null })[] };
+  "POST /api/books/[bookId]/open": { req: void; res: { chapter: Pick<Chapter, "id" | "number" | "title">; version: ChapterVersion } };
+  "GET /api/chapter-versions/[versionId]": { req: void; res: ChapterVersion };
+  "POST /api/chapter-versions/[versionId]/read-aloud": { req: ReadAloudSummary; res: { ok: true } };
+  "POST /api/chapter-versions/[versionId]/flags": { req: { word: string; tokenIndex: number }; res: { flagged: FlaggedWord; meaning: string } };
+  "DELETE /api/chapter-versions/[versionId]/flags/[tokenIndex]": { req: void; res: { ok: true } };
+  "GET /api/chapter-versions/[versionId]/check": { req: void; res: ChapterCheck };
+  "POST /api/checks/[checkId]/answers": { req: ChapterCheckAnswers; res: { session: SessionResult; decision: LevelDecision; wordBank: WordBankUpdate; nextVersionId: string | null } };
+  "GET /api/progress?bookId": { req: void; res: ProgressView };
   "POST /api/speech/token": { req: void; res: { token: string; region: string; compartmentId: string; expiresAt: string } };
   "POST /api/tts": { req: { text: string }; res: ArrayBuffer /* audio */ };
-  "POST /api/practice-words": { req: { word: string }; res: ReaderProfile };
-  "POST /api/practice-words/weave": { req: { pageId: string; level: Level; words: string[] }; res: WovenSentence[] };
-  "GET /api/progress": { req: void; res: ProgressView };
   "POST /api/paper-pages": { req: FormData /* image */; res: PaperPage };
 }

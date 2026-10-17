@@ -4,9 +4,9 @@ Priorities and timing: [[timeline]]. Pitch, slides, demo script, and wiki are AI
 
 | # | Role | Owns | Depends on |
 |---|---|---|---|
-| 1 | Listening | OCI Speech realtime in browser, alignment to expected Page, per-word results, hesitation detection, Web Speech fallback flag | spike (see [[first-hour-spike]]) |
-| 2 | Reading UI | Page renderer, live word highlighting, level-change moment, Level Picker, mobile PWA shell | shared types; mock word results |
-| 3 | Leveling pipeline | Offline 5-Level generation with OCI GenAI, frequency/length validator, slot tagging for Practice Words, seed Gatsby + Sherlock into DB | Level table (D18) |
-| 4 | Comprehension engine | Scene-break Comprehension Checks (generate + grade 0–2), session-end retell, comprehension progress view | Leveled Pages from #3 |
-| 5 | Voice out + Practice Words runtime | OCI TTS, tap-to-hear, hesitation prompt, read-time Practice Word weaving with guardrails; Meta glasses paper-book experiment (P2, [[glasses-paper-book]]) | #1 events, #3 slots |
-| 6 | Platform + Level engine | OCI VM, Docker, Caddy HTTPS, managed OCI PostgreSQL + schema (ADR-0006), Better Auth, shared types + API contracts, Reader profile + level-change rule | — (unblocks everyone; ships contracts in hour 1) |
+| 1 | Listening | Spike (#03), real listening + Read-aloud Misses (#08) | OCI infra, highlighting |
+| 2 | Reading UI | Skeleton with R6 (#01), live highlighting (#06), progress view (#13) | shared types |
+| 3 | Leveling | Book ingestion (#04), next-Chapter generation + validator (#12), second Book (#17) | Level rules, grading |
+| 4 | Comprehension | Chapter Check (#09), AI grading (#10), silent fallback (#18) | ingestion, flags |
+| 5 | Words + voice | Flag/meaning/TTS (#07), Word Bank with R6 (#11), glasses (#19) | sign in |
+| 6 | Platform | OCI infra (#02), sign in + Library (#05), Level rules (#11), Streak (#16) | — |

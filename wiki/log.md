@@ -20,3 +20,9 @@ Settled D30–D33. ADR-0006 accepted with managed OCI Database with PostgreSQL. 
 
 ## [2026-10-17 16:05] build | Shared contract, OCI wizard, tickets
 Team confirmed shared understanding. Wrote src/types (contract + HTTP API map) and src/mocks (Gatsby Page at 5 Levels obeying sentence caps, mock ListeningSource, check, progress). OCI setup wizard (11 stages) + provision-vm.sh, docker-compose + Caddy, Dockerfile, deploy workflow, .env.example. 21 tracer-bullet tickets with blocking edges in repo-starter/tickets.
+
+## [2026-10-17 17:40] ingest + spec | Scope doc aligned
+Ingested team scope doc. Wrote v1 spec (to-spec) aligned to it: three Pillars with Tracks, Chapter + Chapter Check (3 questions + Chapter Words, link-back, unlock on completion), Silent Mode, Baseline Assessment, Streak, Daily Puzzle; resolved the doc's open questions from earlier decisions. ADR-0007 supersedes ADR-0005. CONTEXT.md rewritten (Scene→Chapter, Comprehension Check→Chapter Check, Understood Level→Comprehension Level). Shared types + mocks updated to match (typecheck clean). Tickets 09–11, 13 marked stale pending regeneration.
+
+## [2026-10-17 18:20] ingest + tickets | Reading App Flow aligned
+Ingested the team flow doc (authoritative). ADR-0008 (per-Reader chapter generation, L5 = original; supersedes 0001) and ADR-0009 (one Grading Result + Word Bank; supersedes 0007). CONTEXT.md rewritten (Book, Chapter Version, Grading Result, Word Bank, Graduated Word, Level Line…). Spec rewritten to the flow. Shared types + mocks rewritten (typecheck clean). Configured GitHub tracker docs (docs/agents) + Agent skills block. Drafted 19 tickets; awaiting repo + approval to publish as GitHub issues.

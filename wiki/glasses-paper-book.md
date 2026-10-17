@@ -1,6 +1,6 @@
 # Glasses: read a paper book (option B, P2 experiment)
 
-Team owns Ray-Ban Meta Gen 3 (D22). Goal: read a physical book; glasses see the page; app listens and asks Comprehension Checks.
+Team owns Ray-Ban Meta Gen 3 (D22). Goal: read a physical book; glasses see the page; app listens and asks a Chapter Check.
 
 ## Blocker found
 Meta's Wearables Device Access Toolkit (native iOS/Android only) listed supported devices as Gen 1, Gen 2, Ray-Ban Display, and Oakley Meta models. **Gen 3 was not on the list** as of the Sept 23, 2026 coverage. — https://vr.org/articles/meta-glasses-three-tiers-wearables-toolkit-publishing-connect-2026
@@ -12,7 +12,7 @@ Meta's Wearables Device Access Toolkit (native iOS/Android only) listed supporte
 
 ## What a Paper Page supports
 - Listening + highlighting against the OCR'd text (same alignment)
-- Comprehension Checks generated on the fly from the OCR text (no pre-generated Key Points)
+- A Chapter Check generated on the fly from the OCR text (no pre-generated Key Points)
 - No re-leveling (the paper text is fixed); optionally show a Leveled version of a hard sentence on the phone
 
 ## Pitch value

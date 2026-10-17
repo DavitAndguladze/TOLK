@@ -1,63 +1,103 @@
 # Read-Aloud Leveling
 
-A read-aloud app that listens to an adult reader, scores each word, and serves the same story at the vocabulary level that fits them.
+An adaptive read-aloud app: each Chapter of a Book is rewritten one Level at a time, moving closer to the author's original text, based on how well the Reader understood the last Chapter.
 
 ## Content
 
-**Story**:
-A public-domain work the reader picks, split into Pages. The plot, names, and order of events never change.
-_Avoid_: Book, text, document
+**Book**:
+A public-domain work in the Library, made of Chapters. Plot, names, and tone never change.
+_Avoid_: Story, text, document
 
-**Page**:
-The unit a reader sees and reads aloud at one time. Adaptation only happens between Pages.
-_Avoid_: Chunk, passage, section
+**Library**:
+The catalog of Books a Reader can browse or search. Choosing a Book opens it at the Reader's current Chapter.
+_Avoid_: Shelf, catalog page, store
 
-**Scene**:
-A run of consecutive Pages that ends at a natural pause in the Story. Comprehension Checks happen only at the end of a Scene.
-_Avoid_: Chapter, section, checkpoint
-
-**Key Point**:
-One of 3–5 facts a Reader should understand from a Scene. Key Points are the rubric for grading Comprehension Checks and retells.
-_Avoid_: Answer key, summary, rubric item
-
-**Paper Page**:
-A page of a physical book, photographed and turned into text, that the Reader reads aloud. It has no Levels.
-_Avoid_: Scan, photo page
+**Chapter**:
+One chapter of a Book as the author wrote it. Holds the original text, its Key Points, and its Complex Words.
+_Avoid_: Scene, section, page
 
 **Level**:
-One step on a fixed 5-step vocabulary scale (word difficulty + sentence length).
+One rung on the 5-step ladder a Chapter is written at: L1 (most simplified) to L5 (the author's original text).
 _Avoid_: Difficulty, grade, Lexile
 
-**Original Level**:
-The Level at which the Story's untouched source text sits. Levels above it are enriched beyond the author's wording.
-_Avoid_: Default level, base text
+**Chapter Version**:
+One Chapter rewritten for one Reader at one Level, generated on the fly from the previous Chapter Version, the Grading Result, and the Word Bank. It becomes the baseline for the next Chapter.
+_Avoid_: Leveled Page, simplified text, rewrite
 
-**Level Picker**:
-The Reader-controlled slider that previews the same passage at every Level so the Reader can choose the one they understand. The Reader's choice outranks the automatic rule.
-_Avoid_: Difficulty slider, settings
+**Level Score**:
+The stored measure of how far a Chapter Version sits from the original (sentence length, vocabulary, figurative language). The next generation compares against it.
+_Avoid_: Difficulty score, readability
 
-**Leveled Page**:
-One Page rewritten at one Level. Word choice and sentence length change; meaning is locked.
-_Avoid_: Simplified text, rewrite, version
+**Key Point**:
+A plot point of a Chapter. Key Points are what Chapter Check questions target.
+_Avoid_: Plot point, answer key, summary
 
-## Reader
+**Complex Word**:
+One of a Chapter's hardest words, detected from the Chapter text before the Reader starts. Chapter Check word questions target them.
+_Avoid_: Vocab word, hard word
+
+**Paper Page**:
+A page of a physical book, photographed and turned into text, that the Reader reads. It has no Levels.
+_Avoid_: Scan, photo page
+
+## Reading session
 
 **Reader**:
-An adult using the app to read a Story aloud.
+A person with an account who reads Books.
 _Avoid_: User, student, learner
 
-**Practice Word**:
-A word the Reader asks to have woven into their Stories.
-_Avoid_: Keyword, vocab word, target word
+**Read-aloud**:
+The Reader reading a Chapter Version out loud while the app compares speech word by word against the text.
+_Avoid_: Dictation, voice mode
 
-**Mastered**:
-A Practice Word read correctly in 3 different Stories and used once in a spoken Comprehension Check answer.
-_Avoid_: Learned, known
+**Read-aloud Miss**:
+A word the Reader mispronounced or skipped while reading aloud.
+_Avoid_: Error, mistake
 
-**Comprehension Check**:
-A spoken question at the end of a Scene, answered aloud and graded 0–2 (missed / partial / got it) against the Scene's Key Points.
-_Avoid_: Quiz, test, question
+**Flagged Word**:
+A word the Reader tapped while reading to say they don't know it. It goes straight to the Word Bank.
+_Avoid_: Lookup, bookmark, highlight
 
-**Understood Level**:
-The highest Level at which at least 2 of the Reader's last 3 Comprehension Checks were "got it". The headline measure of progress.
-_Avoid_: Reading level, score, fluency
+**Chapter Check**:
+The short comprehension check after each Chapter, with questions on its Key Points and Complex Words.
+_Avoid_: Quiz, assessment, test
+
+**Grading Result**:
+The one result the AI gives per Chapter after combining Read-aloud Misses, Chapter Check answers, and Flagged Words: Fully understood, Partly understood, or Struggled. It sets the next Chapter's Level.
+_Avoid_: Score, grade, pass/fail
+
+**Barely Passed**:
+A Fully understood Grading Result whose score sits just above the threshold. The next Chapter stays at the same Level instead of moving up.
+_Avoid_: Borderline, close call
+
+**Session Result**:
+The stored record of one Chapter read: Read-aloud Misses, Chapter Check score, and Grading Result.
+_Avoid_: Attempt, run
+
+## Words
+
+**Word Bank**:
+The Reader's words not yet mastered. Words enter when the Reader got them wrong (Read-aloud Miss or Chapter Check) or flagged them. The next Chapter Version reinforces them.
+_Avoid_: Practice words, vocab list, keyword list
+
+**Reinforcement**:
+How a Chapter Version reuses a Word Bank word: plain reuse, a context clue, or an inline definition, depending on the Grading Result.
+_Avoid_: Weaving, injection
+
+**Graduated Word**:
+A Word Bank word the Reader later read or answered correctly. It leaves the Word Bank and appears in its original form from then on.
+_Avoid_: Mastered, learned word
+
+**Words Learned**:
+The running total of Graduated Words for a Reader.
+_Avoid_: Word count, vocabulary score
+
+## Progress
+
+**Level Line**:
+The Level of each Chapter the Reader has read, shown as a climb toward L5. The demo moment.
+_Avoid_: Progress bar, chart
+
+**Streak**:
+The count of consecutive days the Reader completed at least one Chapter Check.
+_Avoid_: Login streak, chain

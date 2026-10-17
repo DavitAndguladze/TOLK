@@ -34,4 +34,14 @@
 | D31 | Progress view: Understood Level + Scene Map + grading transparency P1; Practice Words list P1; Dispute + recap growth P2; Key Points per Scene from leveling pipeline | 2026-10-17 | [[progress-view]] |
 | D32 | Glasses: test DAT on Gen 3; native path if supported, else Meta AI photo-sync upload; both P2 | 2026-10-17 | [[glasses-paper-book]] |
 | D33 | Team plugins: Superpowers, ponytail, UI/UX Pro Max via project settings; one skill per workflow moment | 2026-10-17 | [[dev-skills]] |
+| D34 | Scope doc adopted: three Pillars (Fluency, Vocabulary, Comprehension), each with a Track; supersedes comprehension-only progress | 2026-10-17 | ADR-0007 |
+| D35 | Scene → Chapter (5–10 min); Comprehension Check → Chapter Check (3 questions graded 0–2 + Chapter Words quiz, same screen, misses link back) | 2026-10-17 | spec |
+| D36 | Read-aloud fluency stays in v1; Silent Mode added (Fluency Track pauses) | 2026-10-17 | spec |
+| D37 | Completing a Chapter Check unlocks the next Chapter; no pass mark | 2026-10-17 | spec |
+| D38 | Pillar Levels on the same 1–5 scale; next Chapter Level = min(Vocabulary, Comprehension), ±1 per Chapter | 2026-10-17 | spec |
+| D39 | Baseline Assessment (Level Picker + one passage + 3 questions); Streak (Chapter Check or Daily Puzzle per day); Daily Puzzle in v1 | 2026-10-17 | spec |
+| D40 | Reading App Flow adopted: per-Reader Chapter Versions generated one Level step from the last; L1→L5 where L5 = author's original; no placement test, Chapter 1 at L1 | 2026-10-17 | ADR-0008 |
+| D41 | One Grading Result per Chapter (Fully / Partly / Struggled) from Read-aloud Misses + Chapter Check + Flagged Words; Word Bank with graduation; progress = Level Line + Words Learned + Word Bank | 2026-10-17 | ADR-0009 |
+| D42 | Dropped: Baseline Assessment, Level Picker, Pillar Tracks, Practice Words list, Level above original; Daily Puzzle + Silent Mode → P2 | 2026-10-17 | ADR-0009 |
+| D43 | Issue tracker: GitHub Issues, default triage labels, single-context domain docs | 2026-10-17 | docs/agents |
 | D17 | Next.js full stack (route handlers, no FastAPI) in one Docker container on OCI; no Vercel | 2026-10-17 | ADR-0004 |

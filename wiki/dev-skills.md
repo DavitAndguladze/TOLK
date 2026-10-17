@@ -1,6 +1,6 @@
 # Dev skills shared with the team
 
-Vendored into `repo-starter/.claude/skills/` (Matt Pocock skills, MIT — license file included; `frontend-design`, Apache-2.0). Mapping of skill → moment is in `repo-starter/AGENTS.md`.
+Vendored into `.claude/skills/` (Matt Pocock skills, MIT — license file included; `frontend-design`, Apache-2.0). Mapping of skill → moment is in `AGENTS.md`.
 
 | Skill | Used for |
 |---|---|
@@ -19,7 +19,7 @@ Vendored into `repo-starter/.claude/skills/` (Matt Pocock skills, MIT — licens
 | git-guardrails-claude-code, setup-pre-commit | Run once per machine/repo |
 | frontend-design | Reading UI, progress view |
 
-## Team plugins (installed per machine, declared in `repo-starter/.claude/settings.json`)
+## Team plugins (installed per machine, declared in `.claude/settings.json`)
 | Plugin | Install (inside Claude Code) | Used for |
 |---|---|---|
 | Superpowers | `/plugin marketplace add obra/superpowers-marketplace` → `/plugin install superpowers@superpowers-marketplace` | brainstorming, verification-before-completion |

@@ -1,31 +1,37 @@
-// Mock ListeningSource: "reads" the Page at a steady pace so Reading UI,
-// Voice, and the Level engine can be built before real listening lands.
-import type { ListeningEvent, ListeningSource, Level, PageReadSummary, PageToken, WordResult } from "../types";
+// Mock ListeningSource: "reads" a Chapter Version chunk at a steady pace so the
+// Reading UI and grading can be built before real listening lands.
+import type { ListeningEvent, ListeningSource, ReadAloudMiss, ReadAloudSummary, Token, WordResult } from "../types";
 
 export interface MockListeningOptions {
   /** ms between words. */
   wordIntervalMs?: number;
-  /** Token indexes to mark as substituted (e.g. a stumble on "vulnerable"). */
-  stumbleOn?: number[];
+  /** Token indexes to mark as mispronounced. */
+  mispronounce?: number[];
+  /** Token indexes to mark as skipped. */
+  skip?: number[];
   /** Token index where the mock pauses long enough to fire a hesitation. */
   hesitateOn?: number;
   hesitationMs?: number;
 }
 
 export function createMockListeningSource(opts: MockListeningOptions = {}): ListeningSource {
-  const { wordIntervalMs = 350, stumbleOn = [], hesitateOn, hesitationMs = 3200 } = opts;
+  const { wordIntervalMs = 350, mispronounce = [], skip = [], hesitateOn, hesitationMs = 3200 } = opts;
   let timer: ReturnType<typeof setTimeout> | undefined;
   let results: WordResult[] = [];
-  let current: { pageId: string; level: Level; tokens: PageToken[] } | undefined;
+  let tokens: Token[] = [];
+  let versionId = "";
   let startedAt = "";
 
-  const summary = (): PageReadSummary => {
+  const summary = (): ReadAloudSummary => {
+    const misses: ReadAloudMiss[] = results
+      .filter((r) => r.outcome === "mispronounced" || r.outcome === "skipped")
+      .map((r) => ({ word: tokens[r.tokenIndex].normalized, tokenIndex: r.tokenIndex, kind: r.outcome as ReadAloudMiss["kind"] }));
     const correct = results.filter((r) => r.outcome === "correct").length;
     return {
-      pageId: current?.pageId ?? "",
-      level: current?.level ?? 4,
-      accuracy: current && current.tokens.length ? correct / current.tokens.length : 0,
+      chapterVersionId: versionId,
+      accuracy: tokens.length ? correct / tokens.length : 0,
       wordResults: results,
+      misses,
       startedAt,
       endedAt: new Date().toISOString(),
     };
@@ -33,30 +39,31 @@ export function createMockListeningSource(opts: MockListeningOptions = {}): List
 
   return {
     engine: "mock",
-    async start(page, onEvent: (e: ListeningEvent) => void) {
-      current = page;
+    async start(chunk, onEvent: (e: ListeningEvent) => void) {
+      ({ tokens } = chunk);
+      versionId = chunk.chapterVersionId;
       results = [];
       startedAt = new Date().toISOString();
       let i = 0;
       let clock = 0;
       const next = () => {
-        if (i >= page.tokens.length) {
-          onEvent({ type: "page-complete", summary: summary() });
+        if (i >= tokens.length) {
+          onEvent({ type: "chunk-complete", summary: summary() });
           return;
         }
-        const token = page.tokens[i];
+        const token = tokens[i];
         const pause = token.index === hesitateOn ? hesitationMs : 0;
         if (pause) onEvent({ type: "hesitation", tokenIndex: token.index, ms: pause });
         timer = setTimeout(() => {
           clock += wordIntervalMs + pause;
-          const stumbled = stumbleOn.includes(token.index);
+          const outcome = skip.includes(token.index) ? "skipped" : mispronounce.includes(token.index) ? "mispronounced" : "correct";
           const result: WordResult = {
             tokenIndex: token.index,
-            outcome: stumbled ? "substituted" : "correct",
-            heard: stumbled ? token.normalized.slice(0, 3) + "able" : undefined,
+            outcome,
+            heard: outcome === "mispronounced" ? token.normalized.slice(0, 3) : undefined,
             startMs: clock - wordIntervalMs,
             endMs: clock,
-            confidence: stumbled ? 0.42 : 0.94,
+            confidence: outcome === "correct" ? 0.94 : 0.4,
             hesitationMs: pause,
           };
           results.push(result);
