@@ -1,0 +1,10 @@
+{
+  "name": "TOLK",
+  "short_name": "TOLK",
+  "description": "Read aloud, one Level closer to the original.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": []
+}
