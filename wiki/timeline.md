@@ -1,7 +1,7 @@
 # Timeline — priority and parallel lanes (Sat 3:15pm → Sun 1pm showcase)
 
 ## Priority tiers
-**P0 — demo dies without it (the Golden Path)** — tickets 01–15
+**P0 — demo dies without it (the Golden Path)** — tickets 01–15 = issues #3–#17 (Golden Path is #16)
 1. App deployed on OCI over HTTPS with mic permission working
 2. Sign in → Library → open Gatsby at the current Chapter (Chapter 1 at L1)
 3. Read aloud with live highlighting; Read-aloud Misses recorded

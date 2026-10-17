@@ -26,3 +26,6 @@ Ingested team scope doc. Wrote v1 spec (to-spec) aligned to it: three Pillars wi
 
 ## [2026-10-17 18:20] ingest + tickets | Reading App Flow aligned
 Ingested the team flow doc (authoritative). ADR-0008 (per-Reader chapter generation, L5 = original; supersedes 0001) and ADR-0009 (one Grading Result + Word Bank; supersedes 0007). CONTEXT.md rewritten (Book, Chapter Version, Grading Result, Word Bank, Graduated Word, Level Line…). Spec rewritten to the flow. Shared types + mocks rewritten (typecheck clean). Configured GitHub tracker docs (docs/agents) + Agent skills block. Drafted 19 tickets; awaiting repo + approval to publish as GitHub issues.
+
+## [2026-10-17 18:35] publish | GitHub issues live
+Spec published as #2; tickets 01–19 as issues #3–#21 (offset +2: PR #1 took number 1). All blocked-by dependencies and sub-issue links verified on GitHub. Frontier: #3–#6.
