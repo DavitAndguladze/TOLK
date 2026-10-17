@@ -1,0 +1,21 @@
+name: deploy
+on:
+  push:
+    branches: [main]
+concurrency: deploy
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Log in to OCIR
+        run: printf '%s' "${{ secrets.OCIR_AUTH_TOKEN }}" | docker login "${{ vars.OCIR_HOST }}" -u "${{ secrets.OCIR_USERNAME }}" --password-stdin
+      - name: Build and push
+        run: |
+          docker build -t "${{ vars.APP_IMAGE }}" .
+          docker push "${{ vars.APP_IMAGE }}"
+      - name: Roll out on the VM
+        run: |
+          install -m 600 /dev/null key && printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > key
+          ssh -i key -o StrictHostKeyChecking=accept-new "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
+            "cd /opt/hacktn26 && sudo docker compose pull app && sudo docker compose up -d"
