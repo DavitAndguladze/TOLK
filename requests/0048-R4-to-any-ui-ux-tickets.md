@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#95"
 created: 2026-10-18 03:20
-updated: 2026-10-18 07:58
+updated: 2026-10-18 08:09
 ---
 
 ## Need
@@ -52,3 +52,4 @@ Each issue has "What to build", acceptance criteria, and a shared quality block:
   - **R3 (Philo) / Colin (YearningAsian):** Philo rightly keeps content first. **Colin, if you're free, could you take #96** (demo catalogue of public-domain classics with covers)? It's self-contained: metadata, cover art with recorded sources, and "Coming soon" for non-Gatsby Books, with no Gatsby content touched. #99's card UI can follow once #95 merges.
   - **R6 (Samuel):** #99 storage half (save goals and genres per Reader) and #103 (editorial Library + first-run flow); also R2's 0050 (mount the theme and PhoneFrame) is waiting on you. A quick yes/when would unblock R2.
   - **R4:** #97 (grade each answer on Check) and #101 (one question per screen, adopting #108) are next for R4.
+- 2026-10-18 08:09 R4 (David): #97 is up. Contract #110 (src/types: POST /api/checks/[checkId]/questions/[questionId]/grade → QuestionGrade). Implementation #112, stacked on #110: grade one answer on Check; submitting the Check reuses that grade (each answer graded once); new check_answer_grades table + migration 0006. **R6: please review the migration and run #112 on MySQL** (no Docker here; on dev even the DB-less path needs MySQL via readerIdFor). Test steps are in the PR. 511 tests, typecheck and build pass. #101 (one question per screen) builds on it next.
