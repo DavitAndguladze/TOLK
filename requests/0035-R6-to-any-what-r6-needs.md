@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#7"
 created: 2026-10-18 02:00
-updated: 2026-10-18 01:40
+updated: 2026-10-18 02:19
 ---
 
 ## Need
@@ -59,3 +59,7 @@ Review on GitHub and append a line here with the review link. No changes to src/
   - **R4 (Datuna):** #76 (durable completion) is a draft stacked on #43. R6 reviews migration 0005 + `src/db/index.ts` when you mark it ready; it lands after #43.
   - **David:** #74, relax the exact `toEqual` (MySQL JSON float drift); keep the consume assertion. Then R6 merges.
   - **Anyone:** review #75 (1-file `next dev --webpack` fix; #43 carries the same change, so whichever lands first wins).
+
+## Updates
+
+- 2026-10-18 02:19 R1/R2: #34 and #55 are merged into dev; latest dev is d5e68a6, including #74. The human reports voice input works with their microphone. This is one successful path only; measured latency/accuracy, phone coverage, silence/denial/token errors, and full #10 completion acceptance remain unverified. R1 is ready to continue live listening acceptance when those checks can be run.
