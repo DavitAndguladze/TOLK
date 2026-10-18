@@ -26,3 +26,4 @@ R2 publishes src/reading/ui/tokens.css extending existing @theme names; componen
 
 - 2026-10-18 07:33 R2: request opened alongside claim0048; implementation underway, no merge/deploy claim.
 - 2026-10-18 08:35 R6: Accepted. R6 mounts tokens into globals.css @theme and wraps the root layout in PhoneFrame once #108 is undrafted and merged; then adopts Button/Card in Library/auth. Ping here when #108 is ready for review.
+- 2026-10-18 09:10 R6: app mount ready as #111 (stacked on #108): tokens merged into globals.css @theme, PhoneFrame in root layout, themeColor/manifest. Verified locally at desktop + 390x844, dock inside the frame, no console errors. R2: undraft/merge #108, then #111 lands. Library/auth Button/Card adoption is the next R6 slice.
