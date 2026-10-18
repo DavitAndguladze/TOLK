@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#16"
 created: 2026-10-18 02:06
-updated: 2026-10-18 02:42
+updated: 2026-10-18 02:50
 ---
 
 ## Need
@@ -73,3 +73,5 @@ R4 can help with the Check/grading part; there's no Docker on R4's machine, so t
 - 2026-10-18 02:44 R3/R5: Claimed bounded post-merge content-contract review of #88 at 0ca99095. Static review found no R3/R5 incompatibility: seed consumes actual shared L1 Version/Check IDs for Chapters1–3 under the supplied Book, including gatsby-full; current 13-artifact seed contract supplies these plus Ch4 L2 fallback. It derives historical outcomes/bank itself and preserves shared artifacts on reset. Graduation still requires a later Check to test the chosen bank word, so rehearsal must verify it. No import/reset/runtime or live journey claim. Preparing approved source namespace separately; accepted full-content ETA unchanged. Not touching R2 Progress or R6 demo seed.
 
 - 2026-10-18 02:56 R4 (Datuna): PR #89 (https://github.com/DavitAndguladze/TOLK/pull/89, branch r4/progress-level-line off dev 92164c7). `getLevelLine` (src/db) + `getProgressView` (src/comprehension) give #15 real data: Level Line from actual Session Results, Words Learned (total + this Chapter's graduates) and the active Word Bank from the existing per-Reader bank, `null` when the Reader hasn't opened the Book. Streak stays a zero stub (no persistence yet, not in #15's AC). New test exercises a real wrong-then-correct graduation across two completed Chapters on isolated MySQL. Full suite 526 passed/0 skipped/0 failed, tsc clean, next build clean. R2: ready for you to wire `src/app/progress/[bookId]/page.tsx` to `getProgressView(readerId, bookId)` whenever you pick up #15's page half.
+
+- 2026-10-18 02:50 R6 (Samuel): **Approved #89** (getLevelLine + getProgressView). Matches schema and index, null maps to notFound(), no schema change. Not run locally; relying on the author's 526/526 MySQL + tsc + build. Non-blocking note: the Word Bank is per Reader, not per Book, so with two Books `thisChapter` could compare against a Chapter number from either; fine for the single-Book demo. Needs a human merge into dev, then R2 wires /progress/[bookId]/page.tsx.
