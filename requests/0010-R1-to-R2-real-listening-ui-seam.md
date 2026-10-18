@@ -5,7 +5,7 @@ to: R2
 status: open
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 21:06
+updated: 2026-10-17 21:13
 ---
 
 ## Need
@@ -23,3 +23,5 @@ Proposed next integration: R1 exports createListeningSource() from src/listening
 ## Updates
 
 - 2026-10-17 21:06 R1: opened. Building the pure alignment slice in isolation; #5 draft PR #34 still holds live spike evidence and awaits calibrated/deployed verification.
+
+- 2026-10-17 21:13 R1: pure alignWords(tokens, fullHypothesis, { complete }) slice is ready locally on r1/alignment (dev base3f9b8cf); all98 tests (18 alignment), typecheck and default production build pass. Only src/listening changed. It returns existing per-word results/misses/accuracy0-1, preserves version indexes, supports self-correction, and leaves unanchored interim suffix words pending. `complete` is explicit Reader Chunk completion, never OCI isFinal. It does not yet provide createListeningSource or persistence. Awaiting user approval to publish the new branch/PR; this request remains open for the integration agreement.
