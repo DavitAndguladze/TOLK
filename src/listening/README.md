@@ -1,5 +1,7 @@
 # Listening — R1
 
+An expired authenticated Speech token request (HTTP401) now tells the Reader to sign in again and explicitly preserves silent reading. It never requests the microphone or falls back to mock/browser recognition. Adapter tests also cover denied permission, cleanup, retry on the same source, and connected silence producing only pending words.
+
 Issue #10 provides alignment, Read-aloud Summary helpers, and browser listening adapters behind the existing `ListeningSource` contract. Reading UI wiring, authenticated persistence, and deployed accuracy verification remain separate handoffs below.
 
 ## Browser listening interface
