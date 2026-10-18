@@ -87,8 +87,9 @@ export function ChapterCheckPanel({ check, readerId, gradeAnswer, onSubmit, tran
           aria-label="Previous question" className="min-h-touch min-w-touch cursor-pointer rounded-control text-xl text-fog outline-light focus-visible:outline-2 disabled:cursor-not-allowed disabled:opacity-40">
           &larr;
         </button>
+        {/* The bar alone sits in the row so it lines up with ← and ×; the count goes on its own line below. */}
         <div className="flex-1">
-          <ProgressBar value={state.index + (grade ? 1 : 0)} max={check.questions.length} label={`Question ${state.index + 1} of ${check.questions.length}`} showPercent={false} />
+          <ProgressBar value={state.index + (grade ? 1 : 0)} max={check.questions.length} label={`Question ${state.index + 1} of ${check.questions.length}`} showPercent={false} showLabel={false} />
         </div>
         <button type="button" onClick={() => setExiting(true)} aria-label="Leave the Chapter Check"
           className="min-h-touch min-w-touch cursor-pointer rounded-control text-xl text-fog outline-light focus-visible:outline-2">
@@ -96,7 +97,9 @@ export function ChapterCheckPanel({ check, readerId, gradeAnswer, onSubmit, tran
         </button>
       </div>
 
-      <h2 className="mt-8 font-ui text-xl font-bold text-ink">{question.prompt}</h2>
+      <p className="mt-1 text-center font-ui text-sm text-fog">Question {state.index + 1} of {check.questions.length}</p>
+
+      <h2 className="mt-6 font-ui text-xl font-bold text-ink">{question.prompt}</h2>
 
       <div className="mt-5">
         {question.choices ? (

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ORIGINAL_LEVEL, type Book, type ProgressView } from "../types";
 import { celebratesOriginal } from "./levelLine";
 import { LevelLineChart, RESULT_LABEL, ResultMarker } from "./LevelLineChart";
@@ -10,6 +11,10 @@ export function ProgressScreen({ book, progress }: { book: Book; progress: Progr
 
   return (
     <main className="mx-auto min-h-dvh max-w-xl px-6 pt-[max(1.5rem,env(safe-area-inset-top))] pb-16">
+      <Link href="/" className="mb-4 inline-flex min-h-touch items-center gap-2 rounded-control px-2 font-ui font-semibold text-light outline-light hover:underline focus-visible:outline-2 focus-visible:outline-offset-4">
+        <span aria-hidden="true">&larr;</span>
+        Back to Library
+      </Link>
       <p className="font-book text-[1.0625rem] text-fog italic">{book.title}</p>
       <h1 className="font-book text-[1.75rem] leading-tight font-medium">Your progress</h1>
 

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Card } from "../../reading/ui/Card";
 import controls from "../../reading/ui/DesignSystem.module.css";
 import styles from "./FirstChapterIntro.module.css";
@@ -32,7 +31,8 @@ export function FirstChapterIntro({ bookTitle, chapterTitle, questionCount, star
         <li><strong>Read aloud if you like.</strong><p>It’s optional. Reading aloud helps us grade your reading more accurately. Silent reading works too.</p></li>
       </ol>
       <p className={styles.reassurance}>There’s no placement test. This is practice, and feedback helps you keep learning.</p>
-      <Link href={startHref} className={`${controls.button} ${controls.primary} ${controls.fullWidth} ${styles.start}`}>Start reading</Link>
+      {/* A plain link: startHref is the open route, which records progress, so it must never be prefetched. */}
+      <a href={startHref} className={`${controls.button} ${controls.primary} ${controls.fullWidth} ${styles.start}`}>Start reading</a>
     </main>
   );
 }

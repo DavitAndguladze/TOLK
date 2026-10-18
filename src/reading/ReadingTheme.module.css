@@ -1,21 +1,25 @@
 .surface {
   color: var(--color-ink);
-  background: #fbfdff;
+  /* One warm page colour for the whole read route, header included (src/app/read uses bg-paper too). */
+  background: var(--color-paper);
   font-family: var(--font-atkinson), system-ui, sans-serif;
-  min-height: 100dvh;
+  min-height: 100%;
 }
 
 .text {
-  font-family: inherit;
-  font-size: clamp(1.65rem, 4.8vw, 2.15rem);
-  line-height: 1.85;
-  overflow-wrap: anywhere;
+  /* A paragraph per screen reads like a book page: Times New Roman (--font-book), sized for running text. */
+  font-family: var(--font-book);
+  font-size: clamp(1.3rem, 4.4vw, 1.55rem);
+  line-height: 1.7;
+  letter-spacing: 0.005em;
+  hyphens: auto;
+  overflow-wrap: break-word;
 }
 
 .controls {
   border-top: 1px solid var(--color-hairline);
   border-radius: 1.75rem 1.75rem 0 0;
-  background: #f5faff;
+  background: var(--color-paper);
   box-shadow: 0 -6px 28px rgb(36 95 165 / 8%);
 }
 
@@ -47,3 +51,29 @@
 }
 
 .legend p { margin-top: 0.5rem; }
+
+/* End of Chapter: a centered message that fades away, then the Chapter Check opens.
+   Fixed inside PhoneFrame (its transform makes it the containing block), so it centers on the phone screen. */
+.endIntro {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+  background: var(--color-paper);
+}
+
+/* Readable by default; the fade runs only when motion is welcome (a reduced-motion Reader sees it still, then the Check). */
+@media (prefers-reduced-motion: no-preference) {
+  .endIntro { animation: end-intro 2200ms ease-in-out forwards; }
+}
+
+@keyframes end-intro {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; }
+}
