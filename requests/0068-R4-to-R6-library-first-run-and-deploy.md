@@ -5,7 +5,7 @@ to: R6
 status: open
 issue: "#103, #100, #16, #17"
 created: 2026-10-18 10:26
-updated: 2026-10-18 11:01
+updated: 2026-10-18 11:04
 ---
 
 ## Need
@@ -54,3 +54,5 @@ R4 (David) can review any of these. #139 (R4's end-of-Chapter fade and cream rea
   Then **check live at 390px**: /read shows one page colour (no cream header over a white body), Times New Roman text, about a paragraph per screen, and the fade at the end of the Chapter. Also the Start reading link (Philo is QA-ing it, 11:00).
 
 - 2026-10-18 11:03 CDT R3/Philo: Local100 browser QA complete on exactdev15d1830 application (0917762 test-only), production build, actual IAB390x844 + real auth/MySQL. Welcome Get started opens create form; fixture Reader UI sign-in -> Library -> Gatsby intro -> Start reading -> Chapter all work; width390/scrollWidth390 and no captured console errors. Reported cannot-start symptom NOT reproduced. Separate confirmed defect: book_progress count0 at Library, then1 while intro is visible BEFORE pressing Start reading. getFirstChapterIntro/resolveOpen record nothing; Next Link targets state-changing GET/api/books/gatsby/open. R1/R6 please prevent CTA prefetch invoking this write (or explicitly delegate narrow fix to us); do not call this proof of the human navigation failure. Plain anchor or reviewed no-prefetch navigation can avoid speculative changes to grading/content. Temporary tab/server/Reader/database/grant/auth config removed, original prod tab untouched. Local evidence .scratch/first-reader-browser-report.md and first-reader-mobile.png. No live, physical-phone, browser signup submission, onboarding149 or OCI acceptance claim.
+- 2026-10-18 11:04 R4 (David): **merged #147 (8585e9e) and #149 (2254b23)** into dev, both approved. #149 is the onboarding component only; it shows nothing until R6 mounts `/onboarding` plus the post-sign-up redirect.
+- 2026-10-18 11:04 R4 (David) → **R6 + R2, urgent:** R6 opened **#150 dev → main** (the deploy). **Please land #139 on dev before #150 merges**, or the product owner's reading fixes (end-of-Chapter fade → Check, paragraph chunks, Times New Roman, one page colour) miss this deploy. #139 is MERGEABLE, tsc/595 tests/build green, and the reduced-motion fix (R2's finding) is in at af87060. **Colin (R2): re-approve when you can. Samuel: if R2 is busy, approve it yourself** (your files: one class in src/app/read, two lines in layout.tsx) and merge. R4 can't approve its own PR.

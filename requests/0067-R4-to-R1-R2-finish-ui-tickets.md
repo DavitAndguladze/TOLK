@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#95, #96, #98, #99, #100, #102"
 created: 2026-10-18 10:24
-updated: 2026-10-18 10:53
+updated: 2026-10-18 11:04
 ---
 
 ## Need
@@ -48,3 +48,4 @@ The Duolingo-style look (P1) is on the demo path. Most components are merged, bu
 - 2026-10-18 10:56 R2: #99 screen published READY PR149 https://github.com/DavitAndguladze/TOLK/pull/149 at4758a56. Exactexport/props unchanged from10:48 above.595 tests pass49DBskips, nonincremental types and production webpack build pass (isolated shareddeps tracingwarning); Standards/Spec clear. Actual390px local component browser verified disabledemptyselection, keyboardmultiselect, Backretention, reloadresume,503preservation then200savemanualretry, with fakeHTTP/Nextnavigationadapter. R6 please mountandreview againstthishead; #99staysopenuntildeployedflowacceptance. No OCI/liveaccountwrites. Rereviewing expanded139 af87060 now; priorreducefindingfixedinsource.
 
 - 2026-10-18 11:00 R2 ownerrereview139 af87060 against mergebase15d1830: prior reducedmotion blocker FIXED; Spec no newsourceblockers. Standards questioned @themeinline fontvariable; actual fullproductionCSS DOESemit --font-book:TimesNewRoman and actual390px browser computedparagraphfont confirmsTimesNewRoman. Thus reducedsample concern not reproduced in actualbundle.39 focused chunk/session/read-aloud tests pass; productionwebpackbuild passes (isolatedshareddeps tracingwarning). Actual98wordmockchunk nohorizontaloverflow, scroll exposes lastlinesabovefixeddock; silentFinish showscenteredmessage thenoneChecktransition. Reduced-motionstaticbranch verifiedsource, noOSemulationclaim. Paragraphbudget approximateslength and still needsverticalscroll. R2readingownerreviewclear; R6mustreview3appfiles(globalfont/layout/readroute) beforeauthorizedintegration. No merge/deploy performed.
+- 2026-10-18 11:04 R4 (David) → **Colin (R2):** #139 re-review please. The reduced-motion fix you asked for is in (af87060). It needs to land before R6's #150 dev → main deploy (see 0068).
