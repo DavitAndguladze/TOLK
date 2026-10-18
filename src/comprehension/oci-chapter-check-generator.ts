@@ -1,6 +1,6 @@
 import type { Chapter, ChapterVersion, CheckQuestion } from "../types";
 import type { ChapterCheckGenerator } from "./chapter-check-generator";
-import { askWithDeadline, jsonObjectIn, type Chat } from "./oci-key-point-grader";
+import { askWithDeadline, jsonObjectIn, safeErrorMessage, type Chat } from "./oci-key-point-grader.ts";
 
 /** Only the served sentences: a question must be answerable from the text the Reader read (comms 0016). */
 const questionsPrompt = (chapter: Chapter, version: ChapterVersion) =>
@@ -52,7 +52,7 @@ export function createOciChapterCheckGenerator({ chat, fallback, timeoutMs }: { 
       if (keyPointQuestions) return { ...base, questions: [...keyPointQuestions, ...base.questions.filter((q) => q.kind === "complex-word")] };
       console.warn(`OCI Check generation for ${version.id}: reply not grounded in the served text, using the deterministic Check`);
     } catch (err) {
-      console.warn(`OCI Check generation failed for ${version.id}, using the deterministic Check:`, err);
+      console.warn(`OCI Check generation failed for ${version.id}, using the deterministic Check: ${safeErrorMessage(err)}`);
     }
     return base;
   };

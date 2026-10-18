@@ -18,6 +18,11 @@ const gradingPrompt: (input: Parameters<KeyPointGrader>[0]) => string = ({ quest
     'Reply with only this JSON: {"grade": 0, 1 or 2, "feedback": "one short sentence"}',
   ].join("\n");
 
+/** A log-safe summary of a thrown value - never the raw error, which can carry OCI request/response details. */
+export function safeErrorMessage(err: unknown): string {
+  return err instanceof Error ? err.message : "unknown error";
+}
+
 /** The JSON object in a model's reply, or null. Models often wrap it in a code fence or a sentence: take the outermost {...}. */
 export function jsonObjectIn(text: string): Record<string, unknown> | null {
   try {
@@ -60,7 +65,7 @@ export function createOciKeyPointGrader({ chat, fallback, timeoutMs }: { chat: C
       if (graded) return graded;
       console.warn(`OCI grading: unusable reply for question ${input.question.id}, using the stand-in`);
     } catch (err) {
-      console.warn(`OCI grading failed for question ${input.question.id}, using the stand-in:`, err);
+      console.warn(`OCI grading failed for question ${input.question.id}, using the stand-in: ${safeErrorMessage(err)}`);
     }
     return fallback(input);
   };
