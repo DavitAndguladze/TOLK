@@ -1,0 +1,220 @@
+{
+  "chapterId": "gatsby-excerpts-ch1",
+  "chapterTitle": "Chapter 1 (excerpt)",
+  "level": 1,
+  "policy": {
+    "requiredNames": [
+      "Middle",
+      "Civil War",
+      "Teutonic",
+      "Great",
+      "All"
+    ],
+    "retainedWords": [
+      "Teutonic",
+      "parcelled",
+      "riotous",
+      "flabby",
+      "heightened",
+      "veteran",
+      "privileged",
+      "intricate",
+      "abortive",
+      "short-winded",
+      "plagiaristic"
+    ],
+    "retainedWordEvidence": [
+      {
+        "word": "Teutonic",
+        "reason": "specifically refers to the migration of people of Germanic descent during World War I",
+        "originalSentenceIndex": 18,
+        "quote": "that delayed Teutonic migration known as the Great War"
+      },
+      {
+        "word": "flabby",
+        "reason": "provides a distinct characterization of a particular type of impressionability",
+        "originalSentenceIndex": 13,
+        "quote": "that flabby impressionability which is dignified under the name of the “creative temperament”"
+      },
+      {
+        "word": "abortive",
+        "reason": "conveys a specific nuance of unsuccessful or unfulfilled sorrows",
+        "originalSentenceIndex": 14,
+        "quote": "the abortive sorrows and short-winded elations of men"
+      },
+      {
+        "word": "parcelled",
+        "reason": "conveys the idea of distribution or allocation",
+        "originalSentenceIndex": 7,
+        "quote": "a sense of the fundamental decencies is parcelled out unequally at birth"
+      },
+      {
+        "word": "riotous",
+        "reason": "describes a particular type of excursion",
+        "originalSentenceIndex": 10,
+        "quote": "no more riotous excursions with privileged glimpses into the human heart"
+      },
+      {
+        "word": "heightened",
+        "reason": "describes a particular quality of sensitivity",
+        "originalSentenceIndex": 12,
+        "quote": "some heightened sensitivity to the promises of life"
+      },
+      {
+        "word": "veteran",
+        "reason": "describes a particular type of person",
+        "originalSentenceIndex": 3,
+        "quote": "the victim of not a few veteran bores"
+      },
+      {
+        "word": "privileged",
+        "reason": "describes a particular type of glimpse",
+        "originalSentenceIndex": 10,
+        "quote": "riotous excursions with privileged glimpses into the human heart"
+      },
+      {
+        "word": "intricate",
+        "reason": "describes a particular type of machine",
+        "originalSentenceIndex": 12,
+        "quote": "related to one of those intricate machines that register earthquakes ten thousand miles away"
+      },
+      {
+        "word": "short-winded",
+        "reason": "conveys a specific nuance of elations",
+        "originalSentenceIndex": 14,
+        "quote": "the abortive sorrows and short-winded elations of men"
+      }
+    ]
+  },
+  "failedPassages": [
+    {
+      "passageIndex": 0,
+      "sourceSentences": [
+        {
+          "text": "In my younger and more vulnerable years my father gave me some advice that I’ve been turning over in my mind ever since.",
+          "originalSentenceIndex": 0
+        },
+        {
+          "text": "“Whenever you feel like criticizing anyone,” he told me, “just remember that all the people in this world haven’t had the advantages that you’ve had.”",
+          "originalSentenceIndex": 1
+        },
+        {
+          "text": "He didn’t say any more, but we’ve always been unusually communicative in a reserved way, and I understood that he meant a great deal more than that.",
+          "originalSentenceIndex": 2
+        },
+        {
+          "text": "In consequence, I’m inclined to reserve all judgements, a habit that has opened up many curious natures to me and also made me the victim of not a few veteran bores.",
+          "originalSentenceIndex": 3
+        },
+        {
+          "text": "The abnormal mind is quick to detect and attach itself to this quality when it appears in a normal person, and so it came about that in college I was unjustly accused of being a politician, because I was privy to the secret griefs of wild, unknown men.",
+          "originalSentenceIndex": 4
+        },
+        {
+          "text": "Most of the confidences were unsought—frequently I have feigned sleep, preoccupation, or a hostile levity when I realized by some unmistakable sign that an intimate revelation was quivering on the horizon; for the intimate revelations of young men, or at least the terms in which they express them, are usually plagiaristic and marred by obvious suppressions.",
+          "originalSentenceIndex": 5
+        },
+        {
+          "text": "Reserving judgements is a matter of infinite hope.",
+          "originalSentenceIndex": 6
+        },
+        {
+          "text": "I am still a little afraid of missing something if I forget that, as my father snobbishly suggested, and I snobbishly repeat, a sense of the fundamental decencies is parcelled out unequally at birth.",
+          "originalSentenceIndex": 7
+        },
+        {
+          "text": "And, after boasting this way of my tolerance, I come to the admission that it has a limit.",
+          "originalSentenceIndex": 8
+        },
+        {
+          "text": "Conduct may be founded on the hard rock or the wet marshes, but after a certain point I don’t care what it’s founded on.",
+          "originalSentenceIndex": 9
+        }
+      ],
+      "rejectedDraft": "{\"level\":1,\"levelScore\":1,\"sentences\":[{\"text\":\"I was young and weak.\",\"originalSentenceIndex\":0},{\"text\":\"My father gave me some advice.\",\"originalSentenceIndex\":0},{\"text\":\"I have been thinking about it.\",\"originalSentenceIndex\":0},{\"text\":\"He said do not judge others.\",\"originalSentenceIndex\":1},{\"text\":\"Not all people are like you.\",\"originalSentenceIndex\":1},{\"text\":\"He did not say more.\",\"originalSentenceIndex\":2},{\"text\":\"We understood each other.\",\"originalSentenceIndex\":2},{\"text\":\"I do not judge people.\",\"originalSentenceIndex\":3},{\"text\":\"This has made me meet many people.\",\"originalSentenceIndex\":3},{\"text\":\"Some are not very good.\",\"originalSentenceIndex\":3},{\"text\":\"Some people are quick to see things.\",\"originalSentenceIndex\":4},{\"text\":\"They like people who are normal.\",\"originalSentenceIndex\":4},{\"text\":\"I was blamed for being a bad person.\",\"originalSentenceIndex\":4},{\"text\":\"I knew some men with problems.\",\"originalSentenceIndex\":4},{\"text\":\"I did not want to hear their problems.\",\"originalSentenceIndex\":5},{\"text\":\"I pretended to be asleep or not care.\",\"originalSentenceIndex\":5},{\"text\":\"Young men talk about their problems.\",\"originalSentenceIndex\":5},{\"text\":\"They are not very good at it.\",\"originalSentenceIndex\":5},{\"text\":\"Not judging is good.\",\"originalSentenceIndex\":6},{\"text\":\"I am still a little afraid.\",\"originalSentenceIndex\":7},{\"text\":\"My father said some things are not fair.\",\"originalSentenceIndex\":7},{\"text\":\"Some people are born with more good things.\",\"originalSentenceIndex\":7},{\"text\":\"I am proud of being kind.\",\"originalSentenceIndex\":8},{\"text\":\"But it has a limit.\",\"originalSentenceIndex\":8},{\"text\":\"People do things for different reasons.\",\"originalSentenceIndex\":9},{\"text\":\"I do not care why.\",\"originalSentenceIndex\":9}],\"reinforcedWords\":[{\"word\":\"weak\",\"reinforcement\":\"plain\",\"sentenceIndex\":0},{\"word\":\"advice\",\"reinforcement\":\"plain\",\"sentenceIndex\":1},{\"word\":\"understood\",\"reinforcement\":\"plain\",\"sentenceIndex\":6},{\"word\":\"blamed\",\"reinforcement\":\"plain\",\"sentenceIndex\":12},{\"word\":\"pretended\",\"reinforcement\":\"plain\",\"sentenceIndex\":14},{\"word\":\"asleep\",\"reinforcement\":\"plain\",\"sentenceIndex\":14},{\"word\":\"judging\",\"reinforcement\":\"plain\",\"sentenceIndex\":18},{\"word\":\"limit\",\"reinforcement\":\"plain\",\"sentenceIndex\":23},{\"word\":\"reasons\",\"reinforcement\":\"plain\",\"sentenceIndex\":24}]}",
+      "validationMessages": "vocabulary: Words missing or outside the frequency target: weak, advice, understood, blamed, pretended, asleep, judging, limit, reasons"
+    },
+    {
+      "passageIndex": 1,
+      "sourceSentences": [
+        {
+          "text": "When I came back from the East last autumn I felt that I wanted the world to be in uniform and at a sort of moral attention forever; I wanted no more riotous excursions with privileged glimpses into the human heart.",
+          "originalSentenceIndex": 10
+        },
+        {
+          "text": "Only Gatsby, the man who gives his name to this book, was exempt from my reaction—Gatsby, who represented everything for which I have an unaffected scorn.",
+          "originalSentenceIndex": 11
+        },
+        {
+          "text": "If personality is an unbroken series of successful gestures, then there was something gorgeous about him, some heightened sensitivity to the promises of life, as if he were related to one of those intricate machines that register earthquakes ten thousand miles away.",
+          "originalSentenceIndex": 12
+        },
+        {
+          "text": "This responsiveness had nothing to do with that flabby impressionability which is dignified under the name of the “creative temperament”—it was an extraordinary gift for hope, a romantic readiness such as I have never found in any other person and which it is not likely I shall ever find again.",
+          "originalSentenceIndex": 13
+        },
+        {
+          "text": "No—Gatsby turned out all right at the end; it is what preyed on Gatsby, what foul dust floated in the wake of his dreams that temporarily closed out my interest in the abortive sorrows and short-winded elations of men.",
+          "originalSentenceIndex": 14
+        },
+        {
+          "text": "My family have been prominent, well-to-do people in this Middle Western city for three generations.",
+          "originalSentenceIndex": 15
+        },
+        {
+          "text": "The Carraways are something of a clan, and we have a tradition that we’re descended from the Dukes of Buccleuch, but the actual founder of my line was my grandfather’s brother, who came here in fifty-one, sent a substitute to the Civil War, and started the wholesale hardware business that my father carries on today.",
+          "originalSentenceIndex": 16
+        },
+        {
+          "text": "I never saw this great-uncle, but I’m supposed to look like him—with special reference to the rather hard-boiled painting that hangs in father’s office.",
+          "originalSentenceIndex": 17
+        }
+      ],
+      "rejectedDraft": "{\"level\":1,\"levelScore\":1,\"sentences\":[\n{\"text\":\"I came back from the East last autumn.\",\"originalSentenceIndex\":10},\n{\"text\":\"I felt I wanted the world to be in uniform.\",\"originalSentenceIndex\":10},\n{\"text\":\"I wanted it at a sort of moral attention.\",\"originalSentenceIndex\":10},\n{\"text\":\"I wanted no more riotous excursions with privileged glimpses.\",\"originalSentenceIndex\":10},\n{\"text\":\"I wanted no more glimpses into the human heart.\",\"originalSentenceIndex\":10},\n{\"text\":\"Only Gatsby was exempt from my reaction.\",\"originalSentenceIndex\":11},\n{\"text\":\"Gatsby was the man who gives his name to this.\",\"originalSentenceIndex\":11},\n{\"text\":\"Gatsby represented everything for which I have scorn.\",\"originalSentenceIndex\":11},\n{\"text\":\"If personality is a series of successful gestures,\",\"originalSentenceIndex\":12},\n{\"text\":\"then there was something gorgeous about him.\",\"originalSentenceIndex\":12},\n{\"text\":\"He had some heightened sensitivity to life's promises.\",\"originalSentenceIndex\":12},\n{\"text\":\"He was like one of those intricate machines.\",\"originalSentenceIndex\":12},\n{\"text\":\"Those machines register earthquakes ten thousand miles away.\",\"originalSentenceIndex\":12},\n{\"text\":\"This responsiveness had nothing to do with flabby impressionability.\",\"originalSentenceIndex\":13},\n{\"text\":\"It was an extraordinary gift for hope.\",\"originalSentenceIndex\":13},\n{\"text\":\"It was a romantic readiness I have never found again.\",\"originalSentenceIndex\":13},\n{\"text\":\"Gatsby turned out all right at the end.\",\"originalSentenceIndex\":14},\n{\"text\":\"It was what preyed on Gatsby that was not good.\",\"originalSentenceIndex\":14},\n{\"text\":\"Foul dust floated in the wake of his dreams.\",\"originalSentenceIndex\":14},\n{\"text\":\"This closed out my interest in men's sorrows.\",\"originalSentenceIndex\":14},\n{\"text\":\"It was men's abortive sorrows and short-winded elations.\",\"originalSentenceIndex\":14},\n{\"text\":\"My family have been prominent people in this city.\",\"originalSentenceIndex\":15},\n{\"text\":\"They have been well-to-do for three generations.\",\"originalSentenceIndex\":15},\n{\"text\":\"The Carraways are something of a clan.\",\"originalSentenceIndex\":16},\n{\"text\":\"We have a tradition that we’re descended from the Dukes.\",\"originalSentenceIndex\":16},\n{\"text\":\"The actual founder of my line was my grandfather’s brother.\",\"originalSentenceIndex\":16},\n{\"text\":\"He came here in fifty-one.\",\"originalSentenceIndex\":16},\n{\"text\":\"He sent a substitute to the Civil War.\",\"originalSentenceIndex\":16},\n{\"text\":\"He started the hardware business my father has today.\",\"originalSentenceIndex\":16},\n{\"text\":\"I never saw this great-uncle.\",\"originalSentenceIndex\":17},\n{\"text\":\"I’m supposed to look like him.\",\"originalSentenceIndex\":17},\n{\"text\":\"There is a hard-boiled painting that hangs in father’s office.\",\"originalSentenceIndex\":17}],\n\"reinforcedWords\":[\n{\"word\":\"riotous\",\"reinforcement\":\"plain\",\"sentenceIndex\":3},\n{\"word\":\"flabby\",\"reinforcement\":\"plain\",\"sentenceIndex\":13},\n{\"word\":\"heightened\",\"reinforcement\":\"plain\",\"sentenceIndex\":10},\n{\"word\":\"privileged\",\"reinforcement\":\"plain\",\"sentenceIndex\":3},\n{\"word\":\"intricate\",\"reinforcement\":\"plain\",\"sentenceIndex\":11},\n{\"word\":\"abortive\",\"reinforcement\":\"plain\",\"sentenceIndex\":19},\n{\"word\":\"short-winded\",\"reinforcement\":\"plain\",\"sentenceIndex\":19}],\n\"levelScore\":1}",
+      "validationMessages": "vocabulary: Words missing or outside the frequency target: east, autumn, uniform, moral, excursions, glimpses, gatsby, exempt, reaction, gives, represented, scorn, personality, series, successful, gestures, gorgeous, sensitivity, life's, promises, machines, register, earthquakes, thousand, responsiveness, impressionability, extraordinary, gift, romantic, readiness, preyed, foul, dust, floated, dreams, closed, interest, men's, sorrows, elations, prominent, welltodo, generations, carraways, clan, tradition, descended, dukes, actual, founder, grandfathers, fiftyone, substitute, hardware, greatuncle, im, hardboiled, painting, hangs, fathers; names: Required name changed or omitted: Middle"
+    },
+    {
+      "passageIndex": 2,
+      "sourceSentences": [
+        {
+          "text": "I graduated from New Haven in 1915, just a quarter of a century after my father, and a little later I participated in that delayed Teutonic migration known as the Great War.",
+          "originalSentenceIndex": 18
+        },
+        {
+          "text": "I enjoyed the counter-raid so thoroughly that I came back restless.",
+          "originalSentenceIndex": 19
+        },
+        {
+          "text": "Instead of being the warm centre of the world, the Middle West now seemed like the ragged edge of the universe—so I decided to go East and learn the bond business.",
+          "originalSentenceIndex": 20
+        },
+        {
+          "text": "Everybody I knew was in the bond business, so I supposed it could support one more single man.",
+          "originalSentenceIndex": 21
+        },
+        {
+          "text": "All my aunts and uncles talked it over as if they were choosing a prep school for me, and finally said, “Why—ye-es,” with very grave, hesitant faces.",
+          "originalSentenceIndex": 22
+        },
+        {
+          "text": "Father agreed to finance me for a year, and after various delays I came East, permanently, I thought, in the spring of twenty-two.",
+          "originalSentenceIndex": 23
+        },
+        {
+          "text": "The practical thing was to find rooms in the city, but it was a warm season, and I had just left a country of wide lawns and friendly trees, so when a young man at the office suggested that we take a house together in a commuting town, it sounded like a great idea.",
+          "originalSentenceIndex": 24
+        },
+        {
+          "text": "He found the house, a weather-beaten cardboard bungalow at eighty a month, but at the last minute the firm ordered him to Washington, and I went out to the country alone.",
+          "originalSentenceIndex": 25
+        },
+        {
+          "text": "I had a dog—at least I had him for a few days until he ran away—and an old Dodge and a Finnish woman, who made my bed and cooked breakfast and muttered Finnish wisdom to herself over the electric stove.",
+          "originalSentenceIndex": 26
+        }
+      ],
+      "rejectedDraft": "{\"level\":1,\"levelScore\":1,\"sentences\":[\n{\"text\":\"I went to school in New Haven.\",\"originalSentenceIndex\":18},\n{\"text\":\"I finished school in 1915.\",\"originalSentenceIndex\":18},\n{\"text\":\"My father went to school before me.\",\"originalSentenceIndex\":18},\n{\"text\":\"I was in the Great War later.\",\"originalSentenceIndex\":18},\n{\"text\":\"I was in that Teutonic migration.\",\"originalSentenceIndex\":18},\n{\"text\":\"I enjoyed the counter-raid very much.\",\"originalSentenceIndex\":19},\n{\"text\":\"I came back from the war not calm.\",\"originalSentenceIndex\":19},\n{\"text\":\"The Middle West did not feel like home.\",\"originalSentenceIndex\":20},\n{\"text\":\"It felt like the edge of the world.\",\"originalSentenceIndex\":20},\n{\"text\":\"I went East to learn about bonds.\",\"originalSentenceIndex\":20},\n{\"text\":\"Many people I knew did bond work.\",\"originalSentenceIndex\":21},\n{\"text\":\"I thought I could do it too.\",\"originalSentenceIndex\":21},\n{\"text\":\"All my family talked about my job.\",\"originalSentenceIndex\":22},\n{\"text\":\"They were very serious about it.\",\"originalSentenceIndex\":22},\n{\"text\":\"My father said he would help me.\",\"originalSentenceIndex\":23},\n{\"text\":\"He would give me money for a year.\",\"originalSentenceIndex\":23},\n{\"text\":\"I went East in the spring.\",\"originalSentenceIndex\":23},\n{\"text\":\"I needed a place to stay.\",\"originalSentenceIndex\":24},\n{\"text\":\"A young man at work had an idea.\",\"originalSentenceIndex\":24},\n{\"text\":\"We could share a house.\",\"originalSentenceIndex\":24},\n{\"text\":\"He found a house to rent.\",\"originalSentenceIndex\":25},\n{\"text\":\"It was not a good house.\",\"originalSentenceIndex\":25},\n{\"text\":\"It cost eighty dollars a month.\",\"originalSentenceIndex\":25},\n{\"text\":\"The man had to go to Washington.\",\"originalSentenceIndex\":25},\n{\"text\":\"I went to the country by myself.\",\"originalSentenceIndex\":25},\n{\"text\":\"I had a dog for a few days.\",\"originalSentenceIndex\":26},\n{\"text\":\"Then my dog ran away.\",\"originalSentenceIndex\":26},\n{\"text\":\"I had an old car.\",\"originalSentenceIndex\":26},\n{\"text\":\"I had a woman to help me.\",\"originalSentenceIndex\":26},\n{\"text\":\"She made my bed and food.\",\"originalSentenceIndex\":26}],\n\"reinforcedWords\":[]}",
+      "validationMessages": "vocabulary: Words missing or outside the frequency target: migration, enjoyed, counterraid, west, edge, east, bonds, bond, spring, rent, cost, eighty, dollars, washington"
+    }
+  ]
+}
