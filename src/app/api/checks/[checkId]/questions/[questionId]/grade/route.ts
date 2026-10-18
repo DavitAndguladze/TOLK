@@ -9,7 +9,6 @@ import { getReader, readerIdFor } from "@/platform/auth";
 import type { Api } from "@/types";
 
 type Grade = Api["POST /api/checks/[checkId]/questions/[questionId]/grade"];
-const mysqlGrades = createMySqlAnswerGradeStore();
 
 /** Grades one Chapter Check answer when the Reader presses Check (#97); submitting the Check reuses it. */
 export async function POST(req: Request, { params }: { params: Promise<{ checkId: string; questionId: string }> }) {
@@ -25,7 +24,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ checkId
       const loaded = await loadCheckForReader(reader.id, checkId);
       const grade: Grade["res"] = await gradeAnswerOnCheck(
         { readerId: reader.id, ...loaded, questionId, entry: (await req.json()) as Grade["req"] },
-        { keyPointGrader, store: mysqlGrades },
+        { keyPointGrader, store: createMySqlAnswerGradeStore() },
       );
       return NextResponse.json(grade, { headers: { "Cache-Control": "private, no-store" } });
     }
