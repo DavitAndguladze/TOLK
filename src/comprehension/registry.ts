@@ -1,10 +1,12 @@
-import type { Chapter, ChapterCheck, Grading, Level, LevelDecision, SessionResult, WordBankUpdate } from "../types";
+import type { Chapter, ChapterCheck, Grading, Level, LevelDecision, SessionResult, WordBankEntry, WordBankUpdate } from "../types";
 import { LEVELS } from "../types";
 import { mockChapter, mockChapterVersion } from "../mocks";
+import { type ChapterEvidence, updateWordBank } from "../words/word-bank";
 import { createInMemoryAnswersStore } from "./answers-store";
-import { generateChapterCheck } from "./chapter-check-generator";
+import { generateChapterCheck, type ChapterCheckGenerator } from "./chapter-check-generator";
 import type { KeyPointGrader } from "./grade-check";
 import { mockKeyPointGrader } from "./key-point-grader";
+import { createOciChapterCheckGenerator } from "./oci-chapter-check-generator";
 import { createOciChat } from "./oci-chat";
 import { createOciKeyPointGrader } from "./oci-key-point-grader";
 import { getChapterCheckForVersion } from "./service";
@@ -19,12 +21,18 @@ export const chapterCheckCache = new Map<string, Promise<ChapterCheck>>(); // ke
 export const checksById = new Map<string, ChapterCheck>(); // keyed by Chapter Check id
 export const answersStore = createInMemoryAnswersStore();
 export const sessionResults = new Map<string, SessionResult>(); // keyed like answersStore: `${checkId}:${readerSessionId}`
+export const wordBanks = new Map<string, WordBankEntry[]>(); // keyed by Reader session id
 
 // OCI Generative AI grades Key Point answers when .env.local configures it; the stand-in otherwise, and as its fallback.
 const ociChat = createOciChat();
 export const keyPointGrader: KeyPointGrader = ociChat
   ? createOciKeyPointGrader({ chat: ociChat, fallback: mockKeyPointGrader, timeoutMs: 10_000 })
   : mockKeyPointGrader;
+
+// OCI Generative AI writes the Key Point questions the same way, falling back to the deterministic Check.
+const chapterCheckGenerator: ChapterCheckGenerator = ociChat
+  ? createOciChapterCheckGenerator({ chat: ociChat, fallback: generateChapterCheck, timeoutMs: 15_000 })
+  : generateChapterCheck;
 
 /** Stand-in until R6's Level rules (#13): the next Chapter stays at this Level. */
 export function holdLevel(level: Level, grading: Grading): LevelDecision {
@@ -41,8 +49,12 @@ export function holdLevel(level: Level, grading: Grading): LevelDecision {
   };
 }
 
-/** Stand-in until the Word Bank (#13) lands. */
-export const emptyWordBankUpdate: WordBankUpdate = { bank: [], graduatedThisChapter: [], wordsLearnedTotal: 0 };
+/** Applies one Chapter's evidence to a Reader's Word Bank and persists the result. */
+export function recordWordBank(readerId: string, evidence: ChapterEvidence): WordBankUpdate {
+  const update = updateWordBank(wordBanks.get(readerId) ?? [], evidence);
+  wordBanks.set(readerId, update.bank);
+  return update;
+}
 
 // Mock Chapter Versions until #04/#05 land real Book ingestion and a Chapter Version store.
 export const mockVersions = LEVELS.map((level) => mockChapterVersion(level));
@@ -55,7 +67,7 @@ export function findMockVersion(versionId: string) {
 export async function ensureChapterCheck(versionId: string, chapter: Chapter = mockChapter): Promise<ChapterCheck | null> {
   const version = findMockVersion(versionId);
   if (!version) return null;
-  const check = await getChapterCheckForVersion(chapter, version, { generate: generateChapterCheck, cache: chapterCheckCache });
+  const check = await getChapterCheckForVersion(chapter, version, { generate: chapterCheckGenerator, cache: chapterCheckCache });
   checksById.set(check.id, check);
   return check;
 }
