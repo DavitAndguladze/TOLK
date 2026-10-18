@@ -15,6 +15,13 @@
       "when": 1792296948488,
       "tag": "0001_session_results",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1792297932007,
+      "tag": "0002_words-and-generation",
+      "breakpoints": true
     }
   ]
 }
