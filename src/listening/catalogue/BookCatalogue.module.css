@@ -1,6 +1,6 @@
 @layer theme, base, components, utilities;
 @layer components {
-  .catalogue { color: var(--color-ink); }
+  .catalogue { color: var(--color-ink); container-type: inline-size; }
   .heading { max-width: 23rem; font-size: 1.65rem; line-height: 1.2; font-weight: 800; letter-spacing: -.025em; }
   .intro { margin-top: .65rem; margin-bottom: 1.25rem; color: var(--color-fog); line-height: 1.55; }
   .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; padding: 0; margin: 0; list-style: none; align-items: start; }
@@ -18,6 +18,6 @@
   .credit { margin-top: .7rem; font-size: .75rem; color: var(--color-fog); }
   .source { margin-top: .8rem; padding: .5rem; font-size: .8rem; }
   .srOnly { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-  @media (max-width: 340px) { .grid { grid-template-columns: 1fr; } .cover { max-height: 13rem; object-fit: contain; } }
-  @media (min-width: 700px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @container (max-width: 280px) { .grid { grid-template-columns: 1fr; } .cover { max-height: 13rem; object-fit: contain; } }
+  @container (min-width: 650px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 }
