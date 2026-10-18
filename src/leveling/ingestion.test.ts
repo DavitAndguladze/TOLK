@@ -146,6 +146,29 @@ describe("Gatsby ingestion", () => {
     expect(content.chapters[0].complexWords[0].word).toBe("peremptorily");
   });
 
+  it("repairs a retained-word exception's dictionary form the same way, and keeps retainedWords consistent", async () => {
+    // Real observed model behavior: it names "peremptory" in a retainedWordEvidence citation
+    // whose own quote only contains "peremptorily" at that index.
+    const peremptorilyIndex = splitOriginalSentences(originals[0].originalText)
+      .findIndex((sentence) => sentence.includes("peremptorily"));
+    const content = await ingestGatsby(source, { generateText: async (prompt) => {
+      const data = JSON.parse(prompt.split("DATA:\n")[1]);
+      const value = metadata(data.number);
+      if (data.number !== 1) return JSON.stringify(value);
+      const sentence = splitOriginalSentences(originals[0].originalText)[peremptorilyIndex];
+      return JSON.stringify({ ...value, retainedWords: [...value.retainedWords, "peremptory"],
+        retainedWordEvidence: [{ word: "peremptory", originalSentenceIndex: peremptorilyIndex, quote: sentence,
+          reason: "Shows Daisy's commanding tone." }] });
+    } });
+    expect(content.policies["gatsby-ch1"].retainedWords).toEqual(expect.arrayContaining(["peremptorily"]));
+    expect(content.policies["gatsby-ch1"].retainedWords).not.toContain("peremptory");
+    expect(content.policies["gatsby-ch1"].retainedWordEvidence).toEqual([{
+      word: "peremptorily", originalSentenceIndex: peremptorilyIndex,
+      quote: splitOriginalSentences(originals[0].originalText)[peremptorilyIndex],
+      reason: "Shows Daisy's commanding tone.",
+    }]);
+  });
+
   it("still rejects a Complex Word whose quote shares nothing with it", async () => {
     await expect(ingestGatsby(source, { generateText: async (prompt) => {
       const data = JSON.parse(prompt.split("DATA:\n")[1]);

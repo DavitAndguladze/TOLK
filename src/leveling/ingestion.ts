@@ -133,20 +133,27 @@ DATA:\n${JSON.stringify({ ...original, originalText: undefined,
           throw new Error(`Missing or invalid required-name policy for ${original.id}`);
         }
         if (!Array.isArray(retained) || !retained.every(text)) throw new Error(`Invalid retained-word policy for ${original.id}`);
-        // The prompt asks the model to echo every extracted Complex Word into retainedWords too,
-        // but it inconsistently drops some; validateRetainedWordPolicy already treats a Complex
-        // Word as retained with or without this echo, so repair the list from the data the code
-        // already has instead of failing a correct extraction over the model's own duplicate echo.
-        const repairedRetained = [...retained, ...complexWords.map((entry) => entry.word).filter((word) => !retained.includes(word))];
         const chapter = { ...original, keyPoints, complexWords };
         if (value.retainedWordEvidence !== undefined && !Array.isArray(value.retainedWordEvidence)) {
           throw new Error(`Invalid retained-word evidence for ${original.id}`);
         }
+        // Same dictionary-vs-inflected-form bias as above, now for a retained-word citation
+        // instead of a Complex Word: repair the word to what its own quote actually contains,
+        // and carry that exact rename into retainedWords so the two stay consistent.
+        const renamed = new Map<string, string>();
         const retainedWordEvidence = (value.retainedWordEvidence as unknown[] | undefined)?.map((row) => {
           const evidence = citation(row);
           if (!record(row) || !text(row.word) || !text(row.reason)) throw new Error(`Invalid retained-word evidence for ${original.id}`);
-          return { word: row.word, reason: row.reason.trim(), ...evidence };
+          const word = contains(evidence.quote, row.word) ? row.word : inflectedWordInQuote(evidence.quote, row.word) ?? row.word;
+          if (word !== row.word) renamed.set(row.word, word);
+          return { word, reason: row.reason.trim(), ...evidence };
         });
+        // The prompt asks the model to echo every extracted Complex Word into retainedWords too,
+        // but it inconsistently drops some; validateRetainedWordPolicy already treats a Complex
+        // Word as retained with or without this echo, so repair the list from the data the code
+        // already has instead of failing a correct extraction over the model's own duplicate echo.
+        const repairedRetained = [...new Set([...retained.map((word) => renamed.get(word) ?? word),
+          ...complexWords.map((entry) => entry.word)])];
         const retainedIssues = validateRetainedWordPolicy(chapter, { retainedWords: repairedRetained, retainedWordEvidence });
         if (retainedIssues.length) throw new Error(retainedIssues.map((issue) => issue.message).join("; "));
         chapters.push(chapter);
