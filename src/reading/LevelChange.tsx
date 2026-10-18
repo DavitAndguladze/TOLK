@@ -8,8 +8,9 @@ import { LevelLadder } from "./LevelLadder";
 export function LevelChange({ from, to }: { from: Level; to: Level }) {
   const [shown, setShown] = useState(from);
   useEffect(() => {
+    setShown(from);
     const timer = setTimeout(() => setShown(to), 700);
     return () => clearTimeout(timer);
-  }, [to]);
+  }, [from, to]);
   return <LevelLadder current={shown} />;
 }

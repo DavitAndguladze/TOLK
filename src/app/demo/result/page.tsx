@@ -20,7 +20,8 @@ const CASES: Record<string, { decision: LevelDecision; grading?: Partial<Answers
 };
 
 export default async function ResultDemoPage({ searchParams }: { searchParams: Promise<{ case?: string }> }) {
-  const { decision, grading } = CASES[(await searchParams).case ?? "up"] ?? CASES.up;
+  const requested = (await searchParams).case ?? "up";
+  const { decision, grading } = Object.hasOwn(CASES, requested) ? CASES[requested] : CASES.up;
   const result: AnswersResult = {
     session: { ...mockSession, grading: { ...mockGrading, ...grading } },
     decision,
