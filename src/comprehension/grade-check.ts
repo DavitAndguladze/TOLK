@@ -38,7 +38,14 @@ export async function gradeChapterCheck(
       const answer = answerTo.get(question.id) ?? "";
       if (question.kind === "complex-word") {
         // Multiple choice built from the Chapter's Complex Words, so the right answer is known: no AI needed.
-        const { meaning } = chapter.complexWords.find((w) => w.word === question.word)!;
+        const complexWord = chapter.complexWords.find((w) => w.word === question.word);
+        if (!complexWord) {
+          // A Check named a word this Chapter no longer has (stale seed/content edit): hold the question
+          // rather than fail the whole completion, so the mismatch doesn't block the Reader's grade.
+          console.warn(`Chapter Check question ${question.id} asks about "${question.word}", which isn't one of Chapter ${chapter.id}'s Complex Words; holding it.`);
+          return { questionId: question.id, grade: 2 as const, feedback: "Held: not scored.", rereadSentenceIndex: null, rereadSentence: null };
+        }
+        const { meaning } = complexWord;
         if (answer === meaning) {
           return { questionId: question.id, grade: 2 as const, feedback: "Yes.", rereadSentenceIndex: null, rereadSentence: null };
         }
