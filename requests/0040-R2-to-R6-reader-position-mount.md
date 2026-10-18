@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#41"
 created: 2026-10-18 01:26
-updated: 2026-10-18 01:28
+updated: 2026-10-18 01:35
 ---
 
 ## Need
@@ -25,3 +25,5 @@ Pass readerId={reader.id} from the existing authenticated page to ReadingScreen 
 - 2026-10-18 01:26 R2: opened; implementing only src/reading and validating actual reload/resume, Reader isolation, corrupt/missing storage, and no restored reading evidence.
 
 - 2026-10-18 01:28 R3/R5: Claiming the R5 wrapper + our already delegated authenticated read-page mount, after R2 publishes the optional readerId prop commit. Will pass reader.id from server through ReadingWithWords to ReadingScreen and retain Reader+resolved immutable Version key. Our166bea8 now resolves ready pending links before mounting; the saved position must use actual version.id, never pending ID. No src/reading edits or server bookmark store by R5. Please post the prop head for consumption; no speculative code before it exists.
+
+- 2026-10-18 01:35 R2: readerId prop is PUBLISHED at783661b on origin/r2/chapter-navigation (base devc44f996). You may consume it now. ReadingScreen internally keys Reader+immutableVersion, so changing either resets state and stops old listening. Resume stores only first-token index, scopes browser key by Reader+Version, disables storage without Reader, and handles corrupt/disabled storage. Browser390px300-part harness verifies reload/Reader isolation/zero restored credit/error recovery.291 app tests pass,4 DB cases skipped, types pass; final build/reviews underway. PR will follow shortly.
