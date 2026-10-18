@@ -29,6 +29,7 @@ function Word({ token, outcome, latest, stuck }: { token: Token; outcome: WordOu
       } ${stuck ? "animate-pulse bg-gold/15 ring-2 ring-gold/60" : ""}`}
     >
       {token.text}
+      {(outcome === "mispronounced" || outcome === "skipped") && <span className="sr-only"> ({outcome})</span>}
     </span>
   );
 }
