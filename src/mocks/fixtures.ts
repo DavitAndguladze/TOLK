@@ -116,9 +116,15 @@ export const mockChapterCheck: ChapterCheck = {
 };
 
 export const mockQuestionGrades: QuestionGrade[] = [
-  { questionId: "q1", grade: 2, feedback: "Right: don't be quick to judge people.", rereadSentenceIndex: null },
-  { questionId: "q2", grade: 1, feedback: "Close. It's because not everyone had the good things Nick had.", rereadSentenceIndex: 3 },
-  { questionId: "q3", grade: 2, feedback: "Yes.", rereadSentenceIndex: null },
+  { questionId: "q1", grade: 2, feedback: "Right: don't be quick to judge people.", rereadSentenceIndex: null, rereadSentence: null },
+  {
+    questionId: "q2",
+    grade: 1,
+    feedback: "Close. It's because not everyone had the good things Nick had.",
+    rereadSentenceIndex: 3,
+    rereadSentence: "Not everyone has had the good things you have had.”",
+  },
+  { questionId: "q3", grade: 2, feedback: "Yes.", rereadSentenceIndex: null, rereadSentence: null },
 ];
 
 export const mockGrading: Grading = {

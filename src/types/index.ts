@@ -198,6 +198,8 @@ export interface QuestionGrade {
   /** One line, from OCI Generative AI. */
   feedback: string;
   rereadSentenceIndex: number | null;
+  /** This Chapter Version's text for rereadSentenceIndex, so feedback can quote it without a second lookup. */
+  rereadSentence: string | null;
 }
 
 export type GradingResult = "fully-understood" | "partly-understood" | "struggled";

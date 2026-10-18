@@ -154,6 +154,20 @@ export function ReadingScreen({
               ))}
             </ol>
           </div>
+          {state.status === "ready" && state.chunkIndex === 0 && (
+            <button
+              type="button"
+              role="switch"
+              aria-checked={state.silent}
+              onClick={() => dispatch({ type: "toggle-silent" })}
+              className="mt-2 flex items-center gap-2 text-sm text-fog"
+            >
+              <span aria-hidden className={`relative h-5 w-9 rounded-full transition-colors ${state.silent ? "bg-light" : "bg-hairline"}`}>
+                <span className={`absolute top-0.5 left-0.5 size-4 rounded-full bg-white transition-transform ${state.silent ? "translate-x-4" : ""}`} />
+              </span>
+              Read silently
+            </button>
+          )}
           <div className="mt-3 flex gap-3">
             <button
               type="button"
@@ -164,14 +178,16 @@ export function ReadingScreen({
             >
               <Icon d="m15 18-6-6 6-6" />
             </button>
-            <button
-              type="button"
-              onClick={() => dispatch({ type: listening ? "pause" : "read-aloud" })}
-              className={`${button} flex flex-1 items-center justify-center gap-2 bg-light text-white hover:bg-[#125f3f]`}
-            >
-              <Icon d={listening ? PAUSE : MIC} />
-              {listening ? "Pause" : state.status === "paused" ? "Resume" : "Read aloud"}
-            </button>
+            {!state.silent && (
+              <button
+                type="button"
+                onClick={() => dispatch({ type: listening ? "pause" : "read-aloud" })}
+                className={`${button} flex flex-1 items-center justify-center gap-2 bg-light text-white hover:bg-[#125f3f]`}
+              >
+                <Icon d={listening ? PAUSE : MIC} />
+                {listening ? "Pause" : state.status === "paused" ? "Resume" : "Read aloud"}
+              </button>
+            )}
             {state.chunkIndex === chunks.length - 1 ? (
               <button type="button" aria-label="Finish chapter" disabled={listening} onClick={() => dispatch({ type: "finish-chapter" })} className={stepButton}>
                 <Icon d="M20 6 9 17l-5-5" />
