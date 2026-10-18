@@ -1,4 +1,4 @@
-import type { Chapter, ChapterCheck, Grading, Level, LevelDecision, SessionResult, WordBankEntry, WordBankUpdate } from "../types";
+import type { Chapter, ChapterCheck, Grading, Level, LevelDecision, ReadAloudSummary, SessionResult, WordBankEntry, WordBankUpdate } from "../types";
 import { LEVELS } from "../types";
 import { mockChapter, mockChapterVersion } from "../mocks";
 import { type ChapterEvidence, updateWordBank } from "../words/word-bank";
@@ -21,6 +21,7 @@ export const chapterCheckCache = new Map<string, Promise<ChapterCheck>>(); // ke
 export const checksById = new Map<string, ChapterCheck>(); // keyed by Chapter Check id
 export const answersStore = createInMemoryAnswersStore();
 export const sessionResults = new Map<string, SessionResult>(); // keyed like answersStore: `${checkId}:${readerSessionId}`
+export const gradedReadAloud = new Map<string, ReadAloudSummary>(); // keyed like answersStore: the reading each submission was last graded with
 export const wordBanks = new Map<string, WordBankEntry[]>(); // keyed by Reader session id
 
 // OCI Generative AI grades Key Point answers when .env.local configures it; the stand-in otherwise, and as its fallback.

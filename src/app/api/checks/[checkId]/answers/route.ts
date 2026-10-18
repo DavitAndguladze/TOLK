@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 import { gradeChapterCheck } from "@/comprehension/grade-check";
+import { readAloudForAttempt } from "@/comprehension/read-aloud-attempt";
 import { AnswerValidationError } from "@/comprehension/record-answers";
 import {
-  answersStore, checksById, ensureChapterCheck, findMockVersion, holdLevel, keyPointGrader, recordWordBank, sessionResults,
+  answersStore, checksById, ensureChapterCheck, findMockVersion, gradedReadAloud, holdLevel, keyPointGrader, recordWordBank,
+  sessionResults,
 } from "@/comprehension/registry";
 import { submitCheckAnswers } from "@/comprehension/service";
 import { mockChapter } from "@/mocks";
-import { getReadAloudSummary } from "@/platform/registry";
+import { consumeReadAloudSummary, getReadAloudSummary } from "@/platform/registry";
 import type { Api, ChapterCheckAnswers } from "@/types";
 import { flagStore, readerIdOf } from "@/words/registry";
 import { chapterEvidence } from "@/words/word-bank";
@@ -29,15 +31,23 @@ export async function POST(req: Request, { params }: { params: Promise<{ checkId
     await submitCheckAnswers(check, submission, answersStore, storageKey);
     const answers = (await answersStore.get(storageKey))!;
     const flaggedWords = flagStore.flaggedWords(sessionId, version.id);
-    // The clean summary R6's read-aloud route saved for this Reader and Version (comms 0011). Null
-    // when they read silently, so the Chapter Check and Flagged Words weigh 90%/10% between them.
-    const readAloud = await getReadAloudSummary(sessionId, version.id);
+    // Only the reading this completion names (comms 0024): a silent reread or a failed save gets null,
+    // so the Chapter Check and Flagged Words weigh 90%/10% between them. A retried submission can
+    // still match the reading it was first graded with.
+    const readAloud = readAloudForAttempt(submission.readAloudStartedAt, [
+      await getReadAloudSummary(sessionId, version.id),
+      gradedReadAloud.get(storageKey) ?? null,
+    ]);
 
     const session = await gradeChapterCheck(
       { check, chapter: mockChapter, version, answers, readAloud, flaggedWords, readerId: sessionId },
       { keyPointGrader, now: () => new Date() },
     );
     sessionResults.set(storageKey, session);
+    if (readAloud) {
+      gradedReadAloud.set(storageKey, readAloud);
+      await consumeReadAloudSummary(sessionId, readAloud); // spent: the next completion starts without it (#66)
+    }
     const evidence = chapterEvidence({ version, check, grading: session.grading, readAloud });
 
     const res: Api["POST /api/checks/[checkId]/answers"]["res"] = {
