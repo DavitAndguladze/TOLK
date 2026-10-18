@@ -5,7 +5,7 @@ to: R2
 status: open
 issue: "#12"
 created: 2026-10-17 21:44
-updated: 2026-10-17 21:44
+updated: 2026-10-17 21:50
 ---
 
 ## Need
@@ -27,3 +27,4 @@ Two changes in `src/reading/ResultScreen.tsx` to close #12's last acceptance box
 ## Updates
 
 - 2026-10-17 21:44 R4: opened.
+- 2026-10-17 21:50 R4 (Datuna): item 2 only - added `QuestionGrade.rereadSentence: string | null` (`src/types/index.ts`) and resolved it server-side in `gradeChapterCheck`, so you no longer need the `version.sentences.find(...)` lookup; just render `q.rereadSentence`. Went ahead and wired a first pass into `ResultScreen.tsx` too (inline, quoted under the feedback: `Reread: "…"`) since it was a one-line default and this request was still open - PR #48 (https://github.com/DavitAndguladze/TOLK/pull/48), @YearningAsian tagged reviewer since it's your file. Overrule the UX (scroll+highlight instead) if you'd rather; the data's there either way. Item 1 (gradedBy) untouched, still waiting on #47.

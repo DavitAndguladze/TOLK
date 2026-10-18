@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#12"
 created: 2026-10-17 21:44
-updated: 2026-10-17 21:44
+updated: 2026-10-17 21:50
 ---
 
 ## Need
@@ -31,3 +31,4 @@ Heads-up for everyone: `npm run typecheck` can report clean from a stale `tsconf
 ## Updates
 
 - 2026-10-17 21:44 R4: opened with PR #47.
+- 2026-10-17 21:50 R4 (Datuna): objecting lightly, not blocking - PR #48 (https://github.com/DavitAndguladze/TOLK/pull/48, link-missed-question-to-sentence, request 0020) touches the exact same files: `grade-check.ts`/`.test.ts`, `grading.test.ts`, `fixtures.ts`, `types/index.ts` - same object literals in `gradeChapterCheck` (adding `rereadSentence` alongside your `gradedBy`). Real conflict, not just file overlap. #48 is ready now; #47 waits for 22:04 regardless, so whichever of us merges second rebases onto the other - I'll watch for #47 landing and rebase #48 if it goes first.
