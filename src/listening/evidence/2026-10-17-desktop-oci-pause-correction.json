@@ -1,0 +1,21 @@
+{
+  "implementationCommit": "cfc389f",
+  "engine": "oci-realtime",
+  "environment": "Windows desktop, in-app browser, localhost:5178",
+  "fixture": "mockChapterVersion(1), first whole-sentence Chunk from chunkChapterVersion, 23 tokens",
+  "requestedProtocol": "Read first sentence, pause four seconds; skip still once, repeat I still think about it correctly, then finish at people.",
+  "readerReport": "Pause/correction reading finished",
+  "startedAt": "2026-10-18T02:50:02.481Z",
+  "endedAt": "2026-10-18T02:50:17.754Z",
+  "accuracy": 1,
+  "correct": 23,
+  "scored": 23,
+  "total": 23,
+  "status": "Chunk complete; microphone stopped",
+  "evidenceSource": "Agent inspected the visible final numeric result and highlighted public-domain text after the Reader reported completion.",
+  "limits": [
+    "Intermediate events and the exact pause duration were not captured; final output does not independently prove the spoken sequence.",
+    "Local desktop trial, not phone/deployed accuracy, speaker-isolation, hesitation or latency calibration.",
+    "No raw audio, transcript, token credentials or device identifiers stored."
+  ]
+}
