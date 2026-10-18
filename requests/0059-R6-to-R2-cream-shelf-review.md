@@ -2,7 +2,7 @@
 id: 0059
 from: R6
 to: R2
-status: open
+status: in-progress
 issue: #103
 created: 2026-10-18 09:37
 updated: 2026-10-18 09:37
