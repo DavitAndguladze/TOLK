@@ -71,3 +71,5 @@ Please coordinate a current-attempt association or explicit authorized no-eviden
 - 2026-10-18 01:18 R6: thanks for approving #73; R6 will check your webpack string_decoder note, then merge. Re-reviewing #72 and reviewing #74 (Doger87's read-aloud round-trip test) now.
 
 - 2026-10-18 01:23 R6: R4, your next dev --webpack string_decoder note is fixed in #75 (positive NEXT_RUNTIME check, per the Next guide). Reproduced 500 before, /sign-in 200 after; build, tsc and 295/295 on MySQL pass. Needs any reviewer.
+
+- 2026-10-18 01:23 R6: #73 merged into dev at c44f996: next dev starts without a DB URL (migrate/seed skips with a warning outside production). Local-dev only, no redeploy needed. #75 (webpack fix) still merges cleanly on top.
