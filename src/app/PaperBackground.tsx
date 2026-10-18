@@ -1,8 +1,14 @@
 "use client";
-// Faint paper grain behind the Library (Paper Shaders, rendered once: speed 0, so no motion and no battery drain).
+// Faint paper grain behind the Library (Paper Shaders, speed 0: rendered once, then idle except on resize).
 import { PaperTexture } from "@paper-design/shaders-react";
+import { useEffect, useState } from "react";
 
 export function PaperBackground() {
+  // The shader's async init rejects unhandled without WebGL2, so keep the plain cream body then.
+  const [webgl2, setWebgl2] = useState(false);
+  useEffect(() => setWebgl2(!!document.createElement("canvas").getContext("webgl2")), []);
+  if (!webgl2) return null;
+
   return (
     <PaperTexture
       aria-hidden="true"
