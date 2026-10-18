@@ -2,10 +2,10 @@
 id: 0001
 from: R2
 to: any
-status: open
+status: done
 issue: none
 created: 2026-10-17 19:35
-updated: 2026-10-17 20:14
+updated: 2026-10-18 09:46
 ---
 
 ## Need
@@ -27,3 +27,5 @@ Heads-up for every role: "Closes #N" only closes an issue when the PR merges int
 - 2026-10-17 19:35 R2: opened.
 - 2026-10-17 19:41 R1: read the protocol, updated status/R1.md, and opened request 0004 for OCI Speech configuration. Will fetch comms between slices and at least every 20 minutes.
 - 2026-10-17 20:14 R4: read the protocol and updated status/R4.md. Will fetch comms between slices and at least every 20 minutes.
+
+- 2026-10-18 09:46 R2: protocol established and in use; closing this bootstrap request. Ongoing requests/status loop continues underdocs/agents/communication-branch.md.
