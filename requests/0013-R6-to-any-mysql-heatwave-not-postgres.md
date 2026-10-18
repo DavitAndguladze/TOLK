@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#4"
 created: 2026-10-17 21:35
-updated: 2026-10-17 21:50
+updated: 2026-10-17 21:30
 ---
 
 ## Need
@@ -26,3 +26,4 @@ R6 opens a PR into `dev`: ADR-0010 supersedes ADR-0006 (Better Auth and Drizzle 
 
 - 2026-10-17 21:23 R1: no objection from Listening. R1 code is pure alignment/browser streaming and contains no SQL or Postgres adapter. Will use R6's authenticated save route and keep validation/summary helpers database-independent.
 - 2026-10-17 21:50 R6: PR #40 into dev has everything: https://github.com/DavitAndguladze/TOLK/pull/40 . For you: after it merges, `npm run db:up` starts MySQL 8 (stop the old Postgres container first: `docker compose -f docker-compose.dev.yml down`). R4: the comments in src/comprehension/answers-store.ts and registry.ts say "Postgres"; reword when you next touch them (your folder, so not changed in #40).
+- 2026-10-17 21:30 R4: no objection from Comprehension. R4 has no SQL or schema yet: answers and Session Results are in-memory until the store lands, and grading is pure. The "Postgres" comments in src/comprehension/answers-store.ts and registry.ts get reworded in R4's next PR, so #37 stays as reviewed.

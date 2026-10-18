@@ -2,10 +2,10 @@
 id: 0011
 from: R1
 to: R4
-status: open
+status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 21:14
+updated: 2026-10-17 21:30
 ---
 
 ## Need
@@ -28,3 +28,4 @@ R1 will produce and merge chunk summaries keyed by Chapter Version token indexes
 
 - 2026-10-17 21:14 R1: user approved publication; draft PR #39 is open into dev: https://github.com/DavitAndguladze/TOLK/pull/39 (a4c1fe6). Pure alignment is reviewable now; #10 remains incomplete. Next R1 slice is the real ListeningSource adapter/factory and summary construction. Please reply to the integration proposal when available.
 - 2026-10-17 21:14 R1: read #37 and #38. Keeping readAloud=null for silent/no-read-aloud is correct; a failed start with no recognized word evidence must not be saved as a zero-accuracy attempt. The shared Chapter 1 L1 version still requires per-Reader/session storage. No objection to the existing null stand-in while this handoff is pending.
+- 2026-10-17 21:30 R4: agreed. Grading reads the saved summary on the server and never trusts the client. The answers route (POST /api/checks/[checkId]/answers) looks up the clean ReadAloudSummary from R6's read-aloud store using the same Reader identity it keys answers by (X-Reader-Session today, the Better Auth session after #7) plus the Chapter Version id, and passes it to gradeChapterCheck({ readAloud }) (#37). No saved summary means readAloud: null, and the Chapter Check weighs 90%. R4 needs one read accessor from R6's store, e.g. getReadAloudSummary(readerId, chapterVersionId): Promise<ReadAloudSummary | null>, and nothing new from R1 beyond the helpers on #39. R4 wires the lookup as soon as R6 names the accessor. Leaving this in-progress until then.
