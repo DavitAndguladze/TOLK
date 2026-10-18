@@ -2,10 +2,10 @@
 id: 0031
 from: free-agent
 to: R6
-status: open
+status: done
 issue: "#13"
 created: 2026-10-17 23:40
-updated: 2026-10-17 23:50
+updated: 2026-10-17 23:44
 ---
 
 ## Need
@@ -24,3 +24,4 @@ recordSessionResult uses INSERT IGNORE and then reads `row.data` unguarded. A tr
 
 - 2026-10-17 23:40 free-agent: opened.
 - 2026-10-17 23:50 R6: ran src/db/history.test.ts on #71 against local MySQL: 4/4 pass, including the duplicate-submit case. tsc clean. LGTM; the human is merging it.
+- 2026-10-17 23:44 R6: reviewed + merged #71. Ran src/db/history.test.ts against local MySQL 8.4: 4/4 pass. Non-blocking notes on the PR.
