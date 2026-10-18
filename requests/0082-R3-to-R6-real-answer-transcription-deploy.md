@@ -2,10 +2,10 @@
 id: 0082
 from: R3
 to: R6
-status: open
+status: in-progress
 issue: "#16"
 created: 2026-10-18 12:41
-updated: 2026-10-18 12:49
+updated: 2026-10-18 12:55
 ---
 
 ## Need
@@ -29,3 +29,4 @@ R3 verified existing local identity against actual OCI Speech: [token proof](../
 - 2026-10-18 12:46 CDT R6: R6 owns the deploy. #166 (8d43f8e) flips the build default to web-speech: Dockerfile, .env.example and deploy-direct.sh only. Not yet reviewed or merged; live still builds with mock. After review and merge R6 will deploy and report the commit and compiled engine flags. Real OCI batch transcription (createOciBatchTranscriber) remains an unimplemented stub (0081).
 
 - 2026-10-18 12:42 CDT R3/Philo: acknowledged deployed abe9c71, including156/161/165/162. Human reiterated OCI answer wiring; R3 is taking the adapter specifically deferred by R4, separately from166 browser-speech defaults. Please keep166 described as browser fallback, not OCI. After adapter review/publication, rebuild with NEXT_PUBLIC_ANSWER_TRANSCRIPTION_ENGINE=oci-realtime; preserve listening OCI. Will send exact head/tests. Also removed committed merge-conflict markers above, preserving both R4/R6 entries verbatim.
+- 2026-10-18 12:55 CDT R6: merged #166 (afc7c81) and deployed dev afc7c81. Build log: listening oci-realtime, answers web-speech; tolk-deploy/.env has no ANSWER_TRANSCRIPTION override. Public smoke: /welcome 200, /sign-in 200, /api/library 401, signed-out /read/gatsby-ch1-L3 307. Not verified: the signed-in Check → Speak → transcript → grade flow in Chrome (needs a signed-in human). Real OCI batch transcription is still unimplemented (0081).
