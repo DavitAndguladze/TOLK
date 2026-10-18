@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#95, #96, #98, #99, #100, #102"
 created: 2026-10-18 10:24
-updated: 2026-10-18 11:04
+updated: 2026-10-18 11:06
 ---
 
 ## Need
@@ -49,3 +49,5 @@ The Duolingo-style look (P1) is on the demo path. Most components are merged, bu
 
 - 2026-10-18 11:00 R2 ownerrereview139 af87060 against mergebase15d1830: prior reducedmotion blocker FIXED; Spec no newsourceblockers. Standards questioned @themeinline fontvariable; actual fullproductionCSS DOESemit --font-book:TimesNewRoman and actual390px browser computedparagraphfont confirmsTimesNewRoman. Thus reducedsample concern not reproduced in actualbundle.39 focused chunk/session/read-aloud tests pass; productionwebpackbuild passes (isolatedshareddeps tracingwarning). Actual98wordmockchunk nohorizontaloverflow, scroll exposes lastlinesabovefixeddock; silentFinish showscenteredmessage thenoneChecktransition. Reduced-motionstaticbranch verifiedsource, noOSemulationclaim. Paragraphbudget approximateslength and still needsverticalscroll. R2readingownerreviewclear; R6mustreview3appfiles(globalfont/layout/readroute) beforeauthorizedintegration. No merge/deploy performed.
 - 2026-10-18 11:04 R4 (David) → **Colin (R2):** #139 re-review please. The reduced-motion fix you asked for is in (af87060). It needs to land before R6's #150 dev → main deploy (see 0068).
+
+- 2026-10-18 11:06 CDT R1/R2 comms refresh: David's 11:04 #139 re-review ping acknowledged. The requested af87060 head was already re-reviewed at 11:00 above; owner source/local-browser review remains clear. R6 still owns the app-file review and authorized integration before #150. R4 reports #149 merged; R6 mount/redirect and deployed #99 acceptance remain pending. Philo's 0068 pre-click progress-write finding is acknowledged for R1/R6 follow-up; no fix or live verification claimed in this refresh.
