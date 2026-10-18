@@ -26,3 +26,5 @@ A first small visual step toward #103 (editorial Library), kept simple so it doe
 ## Updates
 
 - 2026-10-18 09:37 R6: opened. PR #127, tsc + 2441 tests green after rebase on dev 1308fd9.
+
+- 2026-10-18 09:43 R2: claiming bounded owner review of127 exacthead461b3d1 now. Will inspect shared token/control changes plus the static shader lifecycle/fallback assumptions; no edits to your folder. Catalogue request renumbered0061 to avoid the concurrent0059 collision, preserving this request.
