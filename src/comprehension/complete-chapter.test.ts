@@ -211,4 +211,55 @@ describe.skipIf(!process.env.TOLK_TEST_DATABASE_URL)("persisted Chapter completi
     expect((await database.getChapterCheck(ready!.id))?.chapterVersionId).toBe(ready!.id);
     expect(await getChapterCompletion(readerId, baseline.version.id)).toEqual(outcome);
   });
+
+  test("an explicit retry that bypasses generateCompletedChapter still promotes progress once the generation is ready", async () => {
+    const { createChapterGenerator } = await import("../leveling/generator");
+    const { generateGatsbySeed } = await import("../leveling/seed");
+    const { createGenerationRuntime } = await import("../leveling/runtime");
+    const { loadGatsbySeed, getGenerationVersion } = await import("../db/generation");
+    const { promotePendingProgress, getSavedGenerationInput } = await import("./complete-chapter");
+    const vocabulary = (await import("../data/vocabulary/english-2018.json")).default;
+    const readerId = randomUUID(), bookId = randomUUID();
+    await database.db().insert(schema.user).values({ id: readerId, name: "Retry promotion test", email: `${readerId}@example.com` });
+    const sentences = ["Nick saw a light.", "He went home.", "He felt hope."];
+    const chapters = [1, 2, 3, 4].map((number) => ({ id: `${bookId}-ch${number}`, bookId, number, title: `Chapter ${number}`,
+      originalText: sentences.join(" "), keyPoints: sentences.map((text, index) => ({ id: `${bookId}-ch${number}-kp${index}`, chapterId: `${bookId}-ch${number}`, text })),
+      complexWords: [{ word: "hope", meaning: "a feeling that good things can happen" }] }));
+    const policies = Object.fromEntries(chapters.map((chapter) => [chapter.id, { requiredNames: ["Nick"], retainedWords: ["hope"], originalEvidence: {
+      keyPoints: chapter.keyPoints.map((point, originalSentenceIndex) => ({ keyPointId: point.id, originalSentenceIndex, quote: sentences[originalSentenceIndex] })),
+      complexWords: [{ word: "hope", originalSentenceIndex: 2, quote: sentences[2] }],
+    } }]));
+    const generator = createChapterGenerator({ generateText: async (prompt) => {
+      const data = JSON.parse(prompt.split("DATA:\n")[1]);
+      return JSON.stringify({ level: data.level, levelScore: data.level * 20, sentences: data.sentences, reinforcedWords: [] });
+    }, generateCheck: generateChapterCheck, policyForChapter: () => ({ requiredNames: ["Nick"], retainedWords: ["hope"], vocabulary }),
+    evaluateFidelity: async ({ version, check, digest, chapter }) => ({ versionId: version.id, digest, plotPreserved: true, tonePreserved: true,
+      checkAnswerable: true, reinforcementAppropriate: true,
+      keyPointEvidence: chapter.keyPoints.map((point, sentenceIndex) => ({ keyPointId: point.id, sentenceIndex, quote: version.sentences[sentenceIndex].text })),
+      checkEvidence: check.questions.map((q) => ({ questionId: q.id, sentenceIndex: q.answerSentenceIndex, quote: version.sentences[q.answerSentenceIndex].text })),
+    }) });
+    const seed = await generateGatsbySeed({ book: { ...mockBook, id: bookId, chapterCount: 4 }, chapters, policies }, generator);
+    await loadGatsbySeed(seed);
+    const baseline = seed.sharedChapterOne;
+    await database.setBookProgress(readerId, { bookId, currentChapterNumber: 1, currentLevel: 1, currentVersionId: baseline.version.id });
+    const answers: ChapterCheckAnswers = { answers: baseline.check.questions.map((q) => ({ questionId: q.id, via: "typed",
+      answer: q.kind === "complex-word" ? chapters[0].complexWords[0].meaning : "Nick saw a light." })) };
+    const outcome = await completeChapter(readerId, baseline.check.id, answers, grading);
+    const pendingId = outcome.nextVersionId!;
+
+    // Simulates R3's retry endpoint: calls runGeneration directly, bypassing generateCompletedChapter's promotion.
+    const input = await getSavedGenerationInput(readerId, pendingId);
+    await createGenerationRuntime({ chat: null }).run(pendingId, input!);
+    const ready = await getGenerationVersion(readerId, pendingId);
+    expect(ready?.status).toBe("ready");
+    expect((await database.getBookProgress(readerId, bookId))?.currentVersionId).toBe(pendingId); // still stuck
+
+    await promotePendingProgress(readerId, pendingId);
+    expect((await database.getBookProgress(readerId, bookId))?.currentVersionId).toBe(ready!.id);
+    expect((await database.openBook(readerId, bookId))?.version).toEqual(ready);
+
+    // Idempotent: calling again (e.g. a second retry, or recovery after a crash) does not error or move progress again.
+    await promotePendingProgress(readerId, pendingId);
+    expect((await database.getBookProgress(readerId, bookId))?.currentVersionId).toBe(ready!.id);
+  });
 });

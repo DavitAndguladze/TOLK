@@ -42,6 +42,23 @@ export async function getSavedGenerationInput(readerId: string, pendingId: strin
     graduatedWords: outcome.wordBank.bank.filter((word) => word.graduated).map((word) => word.word) };
 }
 
+/**
+ * Idempotent: promotes the Reader's Book progress from a pending generation id to its ready Version.
+ * Safe after an explicit R3 retry, when the job was already ready, or called again - a no-op once
+ * progress has moved past the pending id (already promoted, or the Reader moved on another way).
+ */
+export async function promotePendingProgress(readerId: string, pendingId: string): Promise<void> {
+  const pending = await resolveGeneration(readerId, pendingId);
+  if (pending?.status !== "ready" || !pending.artifact) return;
+  await db().transaction(async (tx) => {
+    await tx.select({ id: user.id }).from(user).where(eq(user.id, readerId)).for("update");
+    const progress = await getBookProgress(readerId, pending.bookId, tx);
+    if (progress?.currentVersionId !== pendingId) return;
+    await setBookProgress(readerId, { bookId: pending.bookId, currentChapterNumber: pending.chapterNumber,
+      currentLevel: pending.level, currentVersionId: pending.artifact!.version.id }, tx);
+  });
+}
+
 /** Runs only after the outcome commits. A retry reuses the same generation identity and saved inputs. */
 export async function generateCompletedChapter(outcome: ChapterCompletion, generate: typeof runGeneration = runGeneration): Promise<void> {
   if (!outcome.nextVersionId) return;
@@ -51,15 +68,8 @@ export async function generateCompletedChapter(outcome: ChapterCompletion, gener
   if (pending?.status !== "pending") return;
   const input = await getSavedGenerationInput(session.readerId, outcome.nextVersionId);
   if (!input) throw new Error("Missing saved Chapter generation input");
-  const { baseline } = input;
-  const result = await generate(outcome.nextVersionId, input);
-  if (result?.status === "ready" && result.artifact) await db().transaction(async (tx) => {
-    await tx.select({ id: user.id }).from(user).where(eq(user.id, session.readerId)).for("update");
-    const progress = await getBookProgress(session.readerId, baseline.bookId, tx);
-    if (progress?.currentVersionId !== outcome.nextVersionId) return;
-    await setBookProgress(session.readerId, { bookId: baseline.bookId, currentChapterNumber: result.chapterNumber,
-      currentLevel: result.level, currentVersionId: result.artifact!.version.id }, tx);
-  });
+  await generate(outcome.nextVersionId, input);
+  await promotePendingProgress(session.readerId, outcome.nextVersionId);
 }
 
 /** One Reader lock protects both the cross-Book Word Bank and every completion effect. */
