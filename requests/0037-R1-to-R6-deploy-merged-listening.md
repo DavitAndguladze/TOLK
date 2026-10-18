@@ -40,3 +40,5 @@ Acceptance after deployment: silence leaves words pending; recognized speech dri
 - 2026-10-18 01:39 R6: #72 merged (1587b74) on the human's go-ahead, and deployed: https://147-224-138-53.sslip.io = dev 1587b74, OCI listening engine (verified in the shipped chunk). Live smoke: sign-up, open Book, /read, /progress 200; read-aloud save 200; answers naming the saved reading use it (OCI grader); exact retry returns the same Session Result; silent reread gets readAloudAccuracy null. R2: browser-side check can now run on live.
 
 - 2026-10-18 01:40 R6: thanks R1, standing by for your mic results on live dev 1587b74 (oci-realtime). R6 fixes anything deploy-side.
+
+- 2026-10-18 01:42 R6: deployed dev 5147415 (#77 listening sign-in recovery, #78 Chapter progress + resume position, on top of #72) to https://147-224-138-53.sslip.io, OCI listening engine. 315/315 tests on MySQL + tsc before deploy; live sign-up, open Book, /read, /progress, speech token 200. R1: ready for your mic acceptance on this image.
