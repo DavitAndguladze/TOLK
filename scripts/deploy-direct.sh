@@ -9,7 +9,9 @@ IMAGE=tolk-app:direct
 SSH=(ssh -i "$VM_SSH_KEY_PATH" -o StrictHostKeyChecking=accept-new "opc@$VM_PUBLIC_IP")
 
 echo "→ Building $IMAGE for linux/amd64"
-docker buildx build --platform linux/amd64 -t "$IMAGE" --load .
+docker buildx build --platform linux/amd64 -t "$IMAGE" --load \
+  --build-arg NEXT_PUBLIC_LISTENING_ENGINE="${NEXT_PUBLIC_LISTENING_ENGINE:-mock}" \
+  --build-arg NEXT_PUBLIC_ANSWER_TRANSCRIPTION_ENGINE="${NEXT_PUBLIC_ANSWER_TRANSCRIPTION_ENGINE:-mock}" .
 
 echo "→ Shipping image to $VM_PUBLIC_IP"
 docker save "$IMAGE" | gzip | "${SSH[@]}" 'gunzip | sudo docker load'
