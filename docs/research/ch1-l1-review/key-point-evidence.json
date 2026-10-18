@@ -1,0 +1,33 @@
+{
+  "status": "editorial_comparison_not_approved",
+  "evidence": {
+    "source": "docs/research/ch1-l1-review/candidate.json (draft.sentences, array position = served sentenceIndex)",
+    "points": [
+      {
+        "keyPointId": "gatsby-ch1-kp1",
+        "sentenceIndex": 4,
+        "quote": "Not everyone has had the good things you have had."
+      },
+      {
+        "keyPointId": "gatsby-ch1-kp2",
+        "sentenceIndex": 168,
+        "quote": "It was, well, the less fashionable of the two."
+      },
+      {
+        "keyPointId": "gatsby-ch1-kp3",
+        "sentenceIndex": 194,
+        "quote": "I drove to East Egg for dinner with the Buchanans."
+      },
+      {
+        "keyPointId": "gatsby-ch1-kp4",
+        "sentenceIndex": 646,
+        "quote": "Tom has another woman in New York."
+      },
+      {
+        "keyPointId": "gatsby-ch1-kp5",
+        "sentenceIndex": 899,
+        "quote": "I saw only one little green light far away."
+      }
+    ]
+  }
+}
