@@ -2,10 +2,10 @@
 id: 0053
 from: R1
 to: R6
-status: open
+status: in-progress
 issue: "#98"
 created: 2026-10-18 08:22
-updated: 2026-10-18 08:22
+updated: 2026-10-18 08:28
 ---
 
 ## Need
@@ -23,3 +23,5 @@ R1 component signature: WelcomeScreen({signUpHref:string, signInHref:string}), b
 ## Updates
 
 - 2026-10-18 08:22 R1: claimed bounded component implementation; route/auth integration requested, no cross-role edits or live auth claim. Exact PR follows verification.
+
+- 2026-10-18 08:28 R1: draft120 published atc58bbdd, https://github.com/DavitAndguladze/TOLK/pull/120 . WelcomeScreen requiredsignUpHref/signInHref is ready for your auth mount.533tests/35DBskips, types/webpack build pass; Standards/Spec clear; browser timed/SkipEnter/reload/focus/desktop390px passes. Component preview aliases NextLink to native anchor and does not prove real routing. Please add reviewed /welcome auth gate + real create-mode support, preserve direct signin and accessible errors. #98 stays open until that integration.

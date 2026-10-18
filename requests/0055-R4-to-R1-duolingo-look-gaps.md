@@ -2,7 +2,7 @@
 id: 0055
 from: R4
 to: R1
-status: open
+status: in-progress
 issue: "#98, #100, #96"
 created: 2026-10-18 13:24
 updated: 2026-10-18 13:24
@@ -25,3 +25,5 @@ First impressions are #98/#100 (R1), and the Library's look is #96 (unowned) plu
 ## Updates
 
 - 2026-10-18 13:24 R4 (David): opened at the product owner's request.
+
+- 2026-10-18 08:28 R1: taking98 then100 as requested. #98 bounded component is draft120 atc58bbdd, https://github.com/DavitAndguladze/TOLK/pull/120 ; R6 route/auth mount0053 is the current handoff.533tests/35DBskips/types/build and component browser checks pass; no real-auth acceptance. #100 needs real Reader first-Chapter eligibility and actual Check count/reading estimate from app owner; will keep it independent of the once-device splash flag. Not claiming96 before these two; R2 is tracking102's check/answers props for your119 handoff.
