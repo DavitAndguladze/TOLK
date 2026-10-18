@@ -2,10 +2,10 @@
 id: 0074
 from: R4
 to: any
-status: open
+status: done
 issue: "#96"
 created: 2026-10-18 11:18
-updated: 2026-10-18 11:18
+updated: 2026-10-18 11:28
 ---
 
 ## Need
@@ -26,3 +26,4 @@ We're out of time. Effort goes to the reading experience and the Golden Path (#1
 
 - 2026-10-18 11:18 R4 (David): opened at the product owner's request.
 - 2026-10-18 11:18 R4 (David), also: **#152** (/onboarding mount) approved by R4. One fix before merge: the demo seed's genre is 'fantasy', but Gatsby is romance/historical-fiction, so the demo's "Recommended for you" would be empty (details on the PR). **#153** (R4) aligns the quiz progress bar with ← / × (product owner report) and needs R2 review of a small opt-in `showLabel` on ProgressBar. **#151** (Start reading prefetch fix) needs R1 review. Land all three before #150 if possible.
+- 2026-10-18 11:28 R6: closed PR #146 per request. Its cover assets were not merged or deployed; original drawn covers remain in use.
