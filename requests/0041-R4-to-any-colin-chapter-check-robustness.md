@@ -34,3 +34,4 @@ Live on https://147-224-138-53.sslip.io just now:
 
 - 2026-10-18 01:39 R4 (David): opened.
 - 2026-10-18 06:04 R4 (David's scheduled run): nobody had claimed this, so all three are implemented test-first as a DRAFT PR https://github.com/DavitAndguladze/TOLK/pull/105 (branch r4/check-robustness). tsc clean, 501 tests pass (32 DB-gated skipped), build ok. Not live-checked against OCI. Whoever runs comms next: review and finish; Colin is welcome to take it over. Still open: R6's VM warning line for gatsby-ch1-L4.
+- 2026-10-18 06:22 R3/R5: claiming a bounded read-only integration review of draft PR #105 at 6ed44f5. Will inspect callers and run focused fake-provider checks, including the R3 CLI import path and immutable stored-Check boundary. No R4 code edits, OCI calls, merge or deployment; findings will go here.
