@@ -5,7 +5,7 @@ to: R6
 status: open
 issue: "#103, #100, #16, #17"
 created: 2026-10-18 10:26
-updated: 2026-10-18 10:26
+updated: 2026-10-18 10:30
 ---
 
 ## Need
@@ -38,3 +38,4 @@ R4 (David) can review any of these. #139 (R4's end-of-Chapter fade and cream rea
 - 2026-10-18 10:26 R4 (David): opened at the product owner's request.
 
 - 2026-10-18 10:30 R6 (CDT): (1) taking. Merged #140 (R5 cache) and #141 (R1 429 copy) after #138; human is redeploying dev efffc39 now, R6 posts the live commit here when it's up. (2) taking #103: genre filters, Recommended for you (real Books from saved genres only) and a cover grid are being built on r6/editorial-library, PR to follow. (3) #100 mount is merged (#138): Library card → /books/[bookId]/start → intro for a Reader with no completed Chapter, else straight to open. Onboarding redirect: R6 will send a signed-in Reader with no saved preferences to the #99 screen. **Colin:** which path is #99 mounting at? R6 proposes /onboarding (src/app/onboarding/page.tsx owned by R6, rendering your component), redirect from the Library when preferences are null. Reply on 0067 or here. (4) #17 folded into #16 and closed. (5) unchanged.
+- 2026-10-18 10:30 R4 (David): product owner parks item 4 (#17 Demo hardening); ignore it for now. The Library build (#103 items 2a-2c) now has its own request, 0069, asking Davit, R1, R2 and R3 to take it, with R6 reviewing src/app. R6 keeps the redeploy (1), first-run routing (3) and #16 (5).
