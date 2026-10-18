@@ -24,6 +24,18 @@ function metadata(number: number) {
 }
 
 describe("Gatsby ingestion", () => {
+  it("gives the model explicit source indexes so it can cite a full Chapter without counting sentences", async () => {
+    const content = await ingestGatsby(source, { generateText: async (prompt) => {
+      const data = JSON.parse(prompt.split("DATA:\n")[1]);
+      if (data.number === 1) expect(data.sentences[0]).toEqual({
+        originalSentenceIndex: 0,
+        text: "In my younger and more vulnerable years my father gave me some advice that I’ve been turning over in my mind ever since.",
+      });
+      return JSON.stringify(metadata(data.number));
+    } });
+    expect(content.policies["gatsby-ch1"].originalEvidence.keyPoints[0].originalSentenceIndex).toBe(0);
+  });
+
   it("extracts full original Chapters 1-4 with stable identities and source-backed metadata", async () => {
     const generateText = async (prompt: string) => {
       const data = JSON.parse(prompt.split("DATA:\n")[1]);
@@ -45,10 +57,23 @@ describe("Gatsby ingestion", () => {
     ["missing Key Points", { ...metadata(1), keyPoints: [] }],
     ["absent contextual word", { ...metadata(1), complexWords: [{ ...metadata(1).complexWords[0], word: "hallucination" }, ...metadata(1).complexWords.slice(1)] }],
     ["invented quote", { ...metadata(1), keyPoints: [{ ...metadata(1).keyPoints[0], quote: "This never happens." }, ...metadata(1).keyPoints.slice(1)] }],
+    ["wrong source index", { ...metadata(1), keyPoints: [{ ...metadata(1).keyPoints[0], originalSentenceIndex: 1 }, ...metadata(1).keyPoints.slice(1)] }],
     ["arbitrary exemption", { ...metadata(1), retainedWords: ["younger", "complicated"] }],
     ["missing vocabulary exemption", { ...metadata(1), retainedWords: [] }],
   ])("rejects %s before producing usable seed data", async (_, value) => {
     await expect(ingestGatsby(source, { generateText: async () => JSON.stringify(value) })).rejects.toThrow();
+  });
+
+  it("stores the exact original excerpt when a model normalizes quote typography or capitalization", async () => {
+    const content = await ingestGatsby(source, { generateText: async (prompt) => {
+      const data = JSON.parse(prompt.split("DATA:\n")[1]);
+      const value = metadata(data.number);
+      if (data.number === 1) value.keyPoints[1].quote = "The advantages that you've had.";
+      return JSON.stringify(value);
+    } });
+    expect(content.policies["gatsby-ch1"].originalEvidence.keyPoints[1]).toEqual({
+      keyPointId: "gatsby-ch1-kp2", originalSentenceIndex: 1, quote: "the advantages that you’ve had",
+    });
   });
 
   it("rejects an empty required-name policy instead of silently exempting no names", async () => {
@@ -68,6 +93,25 @@ describe("Gatsby ingestion", () => {
 
   it("rejects malformed model JSON", async () => {
     await expect(ingestGatsby(source, { generateText: async () => "not JSON" })).rejects.toThrow();
+  });
+
+  it("repairs one rejected metadata reply within the same ingestion budget", async () => {
+    let first = true;
+    const content = await ingestGatsby(source, { generateText: async (prompt) => {
+      if (first) { first = false; return "not JSON"; }
+      const data = JSON.parse(prompt.split("DATA:\n")[1]);
+      return JSON.stringify(metadata(data.number));
+    } });
+    expect(content.chapters).toHaveLength(4);
+  });
+
+  it("stops after one repair when metadata remains invalid", async () => {
+    let calls = 0;
+    await expect(ingestGatsby(source, { generateText: async () => {
+      calls++;
+      return "not JSON";
+    } })).rejects.toThrow(SyntaxError);
+    expect(calls).toBe(2);
   });
 
   it("bounds cancellation even when the text provider ignores its signal", async () => {

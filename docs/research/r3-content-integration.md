@@ -22,8 +22,8 @@ R6 must persist the ready version and Check together, scope access to the authen
 
 ## Outstanding owner boundaries
 
-- R4: transport guards for truncated/filtered responses, and grounded Check questions. The current deterministic Check generator is a stand-in and may be rejected by validation; a question's original-text match does not establish an answer in the served text. The owner has approved the OCI Check generator handoff. Follow-ups are tracked in `comms` request 0016.
-- R6: MySQL/auth schema, seed import, durable completion, duplicate submission protection, history-based Level rules, pending/ready/failed storage and version route (0017).
+- R4: #52's grounded OCI Check factory is integrated. Its native Node runtime import needs an explicit `.ts` extension before CLI wiring; the CLI currently uses the deterministic stand-in, which may be rejected by fidelity validation. Transport guards for truncated/filtered responses and sanitized provider-error logging remain requested on `comms` 0016.
+- R6: MySQL/auth schema, seed import, durable completion, duplicate submission protection, history persistence, pending/ready/failed storage and version route (0017). R6 delegated the pure three-Chapter Level rule to R4 on 0021; R6 retains review and persistence.
 - R5/R6: contextual vocabulary graduation and Word Bank persistence (0018).
 - R2: saved reading position, bounded full-Chapter navigation, fallback labels, display-only Level ladder and updated progression copy (0015). Existing next-version polling is reused.
 

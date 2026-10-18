@@ -100,3 +100,8 @@ test("keeps paragraph boundaries without terminal punctuation while joining CRLF
   expect(splitOriginalSentences("Nick waited\r\nby the door\r\n \t\r\nTom arrived\r\nat dusk\r\n\r\n"))
     .toEqual(["Nick waited by the door", "Tom arrived at dusk"]);
 });
+
+test("keeps Gatsby titles and initials with their names instead of inventing sentence boundaries", () => {
+  expect(splitOriginalSentences("The eyes of Doctor T. J. Eckleburg are blue. Mr. Wilson waited.\n\nDaisy saw him."))
+    .toEqual(["The eyes of Doctor T. J. Eckleburg are blue.", "Mr. Wilson waited.", "Daisy saw him."]);
+});

@@ -1,6 +1,6 @@
 # R3 OCI generation constraints
 
-Official sources checked 2026-10-17. No credentials or live inference were available in this worktree. The team reports Maverick working in Chicago; this note does not independently verify that report. R3 reuses R4's SDK transport from PR #46, coordinated in comms request 0016; no separate signing implementation ships with R3.
+Official sources checked 2026-10-17. R3 now independently verified a bounded JSON request through Maverick in Chicago (744 ms) using the supplied local configuration and matching signing key. This establishes access, not full-Chapter generation latency or quality. R3 reuses R4's SDK transport from PR #46, coordinated in comms request 0016; no separate signing implementation ships with R3.
 
 ## API and signing
 
@@ -44,3 +44,9 @@ The [gpt-oss-120b model page](https://docs.oracle.com/en-us/iaas/Content/generat
 R4's `createOciChat(env)` consumes the team's OCI environment names and returns a callable chat interface or null for absent configuration. PR #46 at d19c5fe is included in the R3 branch: `Chat(prompt, { maxTokens, signal })` preserves the grader's 200-token default while the R3 CLI requests 4,000. Its cancellation stops the wait, not the underlying SDK HTTP request. The generator owns its total deadline, retry, and fallback policy, including bounding an injected dependency that ignores cancellation. Transport finish-reason/content guards remain requested from R4; the current client does not yet reject every truncated or filtered reply.
 
 Fake-response tests cannot verify IAM permissions, model availability, latency, prose quality, or deployed behavior. Live checks require the team's configured credentials and the actual model response.
+
+## Live ingestion findings
+
+Maverick metadata trials exposed implicit source indexes, sentence splits inside titles/initials, normalized quote typography, inferred full names absent from the source, dictionary forms instead of cited inflections, and occasional invalid JSON. Source rows now carry explicit indexes; Gatsby titles/initials stay with their sentences; harmless quote-format changes resolve back to exact source excerpts. Wrong indexes, invented quotes, absent names and unsupported vocabulary still fail. One metadata repair is allowed within the existing total deadline, with the actual validation reason.
+
+R4's grounded Check factory from #52 is integrated, but its extensionless runtime import is incompatible with the native Node CLI. The import fix, sanitized error logging, and response finish/content guards are requested on 0016. The CLI still uses the deterministic Check until the owner's import fix can be integrated; full seed generation is not verified.
