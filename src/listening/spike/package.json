@@ -9,7 +9,7 @@
     "pretypecheck": "npm run prepare-sdk",
     "typecheck": "tsc --noEmit",
     "pretest": "npm run prepare-sdk",
-    "test": "node --test smoke.test.mjs",
+    "test": "node --test smoke.test.mjs session.test.mjs",
     "prebuild": "npm run prepare-sdk",
     "build": "tsc --noEmit && vite build"
   },
@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@types/node": "26.6.5",
-    "typescript": "7.0.2",
+    "typescript": "5.9.3",
     "vite": "8.3.4"
   }
 }

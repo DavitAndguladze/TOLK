@@ -41,6 +41,6 @@ npm.cmd run typecheck --prefix src/listening/spike
 npm.cmd run build --prefix src/listening/spike
 ```
 
-The smoke check starts a separate loopback server with OCI configuration blanked. It verifies page/module serving, method/origin rejection, and the missing-configuration response without calling OCI. It does not establish microphone, service quality, or live latency. Browser and deployed-URL verification remain required for #5.
+The smoke check starts a separate loopback server with OCI configuration blanked. It verifies page/module serving, method/origin rejection, and the missing-configuration response without calling OCI. Session regression checks drive the real page handlers with fake browser/SDK boundaries to verify separate partial/final clocks and failed/late microphone cleanup. These do not establish actual microphone behavior, service quality, or live latency. Browser and deployed-URL verification remain required for #5.
 
 See [research](../../../docs/research/oci-speech-realtime.md) and [decision/evidence status](../../../wiki/first-hour-spike.md).

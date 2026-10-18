@@ -104,13 +104,17 @@ start.onclick = async () => {
             && word.endTimeInMs >= word.startTimeInMs && Number.isFinite(word.confidence);
           const delay = firstAudioAt === undefined || !valid ? null
             : Math.round(firstSeen.get(key)! - firstAudioAt - word.endTimeInMs);
+          const arrivalDelay = firstAudioAt === undefined || !valid ? null
+            : Math.round(arrivedAt - firstAudioAt - word.endTimeInMs);
           const row = words.insertRow();
           for (const value of [word.token, word.startTimeInMs, word.endTimeInMs, word.confidence,
-            transcription.isFinal ? "Final" : "Partial", delay ?? "Unavailable"]) {
+            transcription.isFinal ? "Final" : "Partial", arrivalDelay ?? "Unavailable"]) {
             row.insertCell().textContent = String(value);
           }
           if (valid) document.querySelector("#fields-check")!.textContent = "Word timing and confidence: observed — inspect partial and final rows in evidence.";
-          record("word", { ...word, isFinal: transcription.isFinal, delayEstimateMs: delay });
+          record("word", { ...word, isFinal: transcription.isFinal, arrivedAtMs: arrivedAt,
+            audioOriginEstimateMs: firstAudioAt ?? null, delayEstimateMs: arrivalDelay,
+            firstArrivalDelayEstimateMs: delay });
         }
         if (transcription.isFinal) finished += ` ${transcription.transcription}`;
         document.querySelector("#delay-check")!.textContent = "Delay under one second: review first-arrival estimates in evidence, then confirm externally.";
@@ -127,6 +131,19 @@ start.onclick = async () => {
     const setState = session.setWebSocketState;
     session.setWebSocketState = state => {
       setState(state);
+      if (state === RealtimeWebSocketState.ERROR) {
+        // Normal SDK errors call onError synchronously; capture silent startRecording failures too.
+        queueMicrotask(() => {
+          if (client === session) {
+            status.textContent = "Audio initialization failed. Check microphone access and start again.";
+            record("error", { message: status.textContent });
+            cleanup();
+          } else if (session.mediaStream?.getTracks().some(track => track.readyState !== "ended")) {
+            release(session);
+          }
+        });
+        return;
+      }
       if (state !== RealtimeWebSocketState.RUNNING) return;
       // A permission prompt may resolve after a socket failure or page teardown.
       if (client !== session) { release(session); return; }
