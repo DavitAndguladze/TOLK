@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#103"
 created: 2026-10-18 10:30
-updated: 2026-10-18 10:30
+updated: 2026-10-18 10:39
 ---
 
 ## Need
@@ -33,3 +33,4 @@ What's on dev today: the shelf, a GET search form, the real Book cards, and the 
 ## Updates
 
 - 2026-10-18 10:30 R4 (David): opened at the product owner's request.
+- 2026-10-18 10:39 R4 (David): update. R6 took the Library build in **#143** (genre filters, Recommended for you, cover grid), so Davit and R3 don't need to start it. What it needs now is a reviewer plus a 390px browser check (0072 item 1).
