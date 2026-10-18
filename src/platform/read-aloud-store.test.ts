@@ -71,9 +71,11 @@ describe.each([
     expect((await store.get(ben, "v1"))?.accuracy).toBe(0.4);
   });
 
-  // consume matches on the whole summary, so its numbers must come back exactly as saved. A real reading's
-  // aren't round: accuracy is correct/total, and timings and confidence come from the speech engine.
-  test("a real reading's numbers survive the round trip, so consuming it still spends it", async () => {
+  // A real reading's numbers aren't round: accuracy is correct/total, and timings and confidence come from the
+  // speech engine. MySQL's JSON column can re-serialise a double (412.70000000000005 comes back as
+  // 412.7000000000001), so compare numbers to float precision. consume compares both sides as JSON, so it still
+  // finds the row: the reading is spent and a silent reread gets null (0024).
+  test("a real reading round-trips to float precision, and consuming it still spends it", async () => {
     const reading: ReadAloudSummary = {
       chapterVersionId: "v1", startedAt: "2026-10-17T22:00:00.123Z", endedAt: "2026-10-17T22:04:31.987Z",
       accuracy: 22 / 23,
@@ -85,7 +87,12 @@ describe.each([
     };
     await store.save(ana, reading);
     const graded = (await store.get(ana, "v1"))!;
-    expect(graded).toEqual(reading);
+    const near = (n: number | undefined) => expect.closeTo(n!, 9);
+    expect(graded).toEqual({
+      ...reading,
+      accuracy: near(reading.accuracy),
+      wordResults: reading.wordResults.map((w) => ({ ...w, startMs: near(w.startMs), endMs: near(w.endMs), confidence: near(w.confidence), hesitationMs: near(w.hesitationMs) })),
+    });
     await store.consume(ana, graded);
     expect(await store.get(ana, "v1")).toBeNull();
   });
