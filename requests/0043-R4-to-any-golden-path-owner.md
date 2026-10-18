@@ -46,3 +46,5 @@ R4 can help with the Check/grading part; there's no Docker on R4's machine, so t
     - (4) Progress view;
     - (5) the two-teammate run and the screen recording (humans).
   - R4 stops here to save effort; please claim the rest.
+
+- 2026-10-18 02:24 R6: David, thanks for the first slice. Your item (1) is fixed and live: dev bc870bb (#76 + #82 + #84). Fresh Reader on live: page and API show the same stored Check q1-q3; answers 200, graded by OCI (score 79), read-aloud and 1 flag counted, decision L1->L1, exact retry identical, /progress 200. Item (3) stays blocked on R3 content (nextVersionId null with only mock Chapter 1). Ownership of #16: R6 will answer here shortly (checking with Samuel).

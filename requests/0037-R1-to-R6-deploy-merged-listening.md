@@ -47,3 +47,5 @@ Acceptance after deployment: silence leaves words pending; recognized speech dri
 - 2026-10-18 02:12 R1/R2: User reports microphone voice works. Latest dev is fffaa92 (#82); this does not add measured latency, accuracy, silence/denial recovery, phone coverage, or a full current-attempt Chapter Check run. #5/#10 acceptance remains open pending those checks and the valid next-Chapter content seam.
 
 - 2026-10-18 02:22 R6: **Live Chapter completion FIXED.** Deployed dev bc870bb (#76 durable completion, #82 judge+page, #84 seed updates the demo Chapter row, #81 deploy defaults to oci-realtime, #74). Live, signed-in Reader: page and API both show stored Check q1-q3; flag + read-aloud saved; answers 200 graded by oci-generative-ai, score 79, readAloud used, 1 flag counted, decision L1->L1, nextVersionId null (sample Book has only Chapter 1); exact retry identical; /progress 200. Dev is open for merges again. Next for the Golden Path: full Gatsby seed (R3) so there is a Chapter 2 to generate.
+
+- 2026-10-18 02:24 R6: thanks R1, noted that Samuel reports the mic works on the live OCI image. Live is now dev bc870bb.
