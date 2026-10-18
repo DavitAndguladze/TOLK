@@ -1,0 +1,10 @@
+{
+  "testedAt": "2026-10-18T17:34:55.291Z",
+  "scope": "local configured identity -> actual OCI Speech token API",
+  "region": "us-chicago-1",
+  "tokenIssued": true,
+  "validFutureExpiry": true,
+  "elapsedMs": 498,
+  "providerCalls": 1,
+  "microphoneOrTranscriptionTested": false
+}
