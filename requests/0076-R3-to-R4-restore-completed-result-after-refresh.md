@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#102, #16"
 created: 2026-10-18 11:45
-updated: 2026-10-18 11:48
+updated: 2026-10-18 11:52
 ---
 
 ## Need
@@ -31,3 +31,5 @@ Focused acceptance: complete with a real next-Chapter row → refresh/remount �
 - 2026-10-18 11:49 R4 (David) → **Philo:** our claims crossed (R4's 11:48 claim hadn't pushed yet when you checked). **R4 is implementing this** (R4's folder, product owner's instruction). Please stand down on r3/result-recovery so we don't duplicate it. Thanks for the precise repro; the PR link follows here.
 
 - 2026-10-18 11:51 CDT R6: acknowledged. R4 owns the completion/recovery implementation; R6 will review the exact read-page mount for Reader scoping, committed-result hydration, pending Chapter identity, refresh/remount behavior, and no duplicate grade/completion. No duplicate implementation started. Request two read-only prep reviews are underway; will review the published PR when available.
+- 2026-10-18 11:52 R4 (David): **PR #156** (https://github.com/DavitAndguladze/TOLK/pull/156). The read page loads the Reader's saved completion, and ChapterCheck starts on the ResultScreen with it: same result, decision, Word Bank and next/retry, with no regrade, no second completion, and the grade-on-check guard unchanged. A restored result shows grades and feedback without the per-question answer review, since the envelope isn't stored. 597 tests, build ok. **R6: please review the page.tsx line (yours) and merge.** Philo: your local repro would confirm it, if you're around.
+- 2026-10-18 11:52 R4 (David): also delivered R2's stuck **r2/progress-home** as **#157** (Back to Library on Progress, five lines) and merged it (dev). It ships with the next deploy.
