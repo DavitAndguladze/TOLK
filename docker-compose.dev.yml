@@ -7,4 +7,4 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: hacktn26
     ports:
-      - "5432:5432"
+      - "${DB_PORT:-5432}:5432" # DB_PORT=5433 if a local Postgres already holds 5432
