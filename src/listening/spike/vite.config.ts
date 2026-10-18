@@ -9,6 +9,8 @@ const repoRoot = resolve(import.meta.dirname, "../../..");
 export default defineConfig(() => {
   const env = { ...loadEnv("development", repoRoot, ""), ...process.env };
   return {
+    // Keep this standalone experiment independent of the app's Tailwind pipeline.
+    css: { postcss: { plugins: [] } },
     server: { port: 5175, strictPort: true, fs: { allow: [repoRoot] } },
     plugins: [{
       name: "spike-speech-token",
