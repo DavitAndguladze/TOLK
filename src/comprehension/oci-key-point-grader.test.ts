@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import { mockChapter, mockChapterVersion } from "../mocks";
 import type { KeyPointGrader } from "./grade-check";
 import { createOciKeyPointGrader, type Chat } from "./oci-key-point-grader";
@@ -47,6 +47,23 @@ describe("createOciKeyPointGrader", () => {
       expect(result).toEqual(fellBack);
     });
 
+    test("and logs only the error's kind and status, never its message (it can carry request details)", async () => {
+      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+      const sdkError = Object.assign(new Error("POST https://inference... Authorization: Signature keyId=ocid1.tenancy.secret"), {
+        statusCode: 401,
+        serviceCode: "NotAuthenticated",
+      });
+
+      await gradeWith(async () => {
+        throw sdkError;
+      });
+
+      const logged = warn.mock.calls.flat().map(String).join(" ");
+      warn.mockRestore();
+      expect(logged).toContain("401 NotAuthenticated");
+      expect(logged).not.toContain("Signature");
+    });
+
     test("when OCI Generative AI doesn't answer in time, and tells the call to stop", async () => {
       let signal: AbortSignal | undefined;
       const never: Chat = (_, options) => {
@@ -57,6 +74,16 @@ describe("createOciKeyPointGrader", () => {
       expect(await gradeWith(never, 20)).toEqual(fellBack);
       expect(signal?.aborted).toBe(true);
     });
+  });
+
+  test("asks OCI for a JSON object, not free text", async () => {
+    let json: boolean | undefined;
+    await gradeWith(async (_, options) => {
+      json = options?.json;
+      return '{"grade": 2, "feedback": "Yes."}';
+    });
+
+    expect(json).toBe(true);
   });
 
   test("asks about the Key Point, with the sentence that answers it and the Reader's answer", async () => {

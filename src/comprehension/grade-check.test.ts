@@ -4,13 +4,13 @@ import { mockChapter, mockChapterVersion } from "../mocks";
 import { generateChapterCheck } from "./chapter-check-generator";
 import { gradeChapterCheck, type KeyPointGrader } from "./grade-check";
 
-const version = mockChapterVersion(1);
+const version = mockChapterVersion(4);
 const now = () => new Date("2026-10-17T21:00:00Z");
 const meaning = (word: string) => mockChapter.complexWords.find((w) => w.word === word)!.meaning;
 
 let check: ChapterCheck;
 beforeAll(async () => {
-  // The L1 check: three Key Point questions, then 'vulnerable' and 'criticizing'.
+  // The L4 check: three Key Point questions, then 'vulnerable' and 'criticizing' (both in the L4 text).
   check = await generateChapterCheck(mockChapter, version);
 });
 
@@ -38,9 +38,9 @@ describe("gradeChapterCheck", () => {
 
     expect(session).toMatchObject({
       readerId: "reader-1",
-      chapterVersionId: "gatsby-ch1-L1",
+      chapterVersionId: "gatsby-ch1-L4",
       chapterNumber: 1,
-      level: 1,
+      level: 4,
       readAloudMisses: [],
       completedAt: "2026-10-17T21:00:00.000Z",
       // 10 of 10 → 90, no flags → 10.

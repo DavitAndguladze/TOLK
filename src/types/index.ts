@@ -190,6 +190,12 @@ export interface ChapterCheck {
 
 export interface ChapterCheckAnswers {
   answers: { questionId: string; answer: string; via: "spoken" | "typed" }[];
+  /**
+   * The `startedAt` of the read-aloud summary saved for this completion of the Chapter, or null
+   * (or absent) when the Reader read silently or the save failed. Grading uses a saved summary only
+   * when it matches, so an older reading is never credited (comms 0024).
+   */
+  readAloudStartedAt?: string | null;
 }
 
 export interface QuestionGrade {
@@ -251,7 +257,12 @@ export type LevelReason =
   | "partly-understood" // same
   | "struggled-hold" // same, score ≥ 35
   | "struggled-down" // down one, score < 35
-  | "at-original"; // already L5
+  | "at-original" // already L5
+  | "insufficient-history" // fewer than three qualifying Chapters
+  | "sustained-understanding" // three-Chapter average >= 88, up one
+  | "sustained-struggle" // three-Chapter average < 35, down one
+  | "sustained-hold" // three-Chapter average in [35, 88)
+  | "at-simplest"; // already L1
 
 export interface LevelDecision {
   from: Level;
@@ -280,7 +291,12 @@ export interface WordBankUpdate {
 /** The core pure seam: grading → level → word bank. Most tests live here. */
 export interface ChapterOutcome {
   grade(input: GradingInput): Grading;
-  decideNextLevel(current: Level, grading: Grading): LevelDecision;
+  /**
+   * #41: history includes the just-completed Chapter, oldest first. The storage adapter must
+   * scope it to one Reader + Book, since the last actual Level change (even on return to an
+   * earlier Level). No history means hold; reinforcement still follows the latest grading.
+   */
+  decideNextLevel(current: Level, grading: Grading, history?: readonly SessionResult[]): LevelDecision;
   applyToWordBank(
     bank: WordBankEntry[],
     session: SessionResult,

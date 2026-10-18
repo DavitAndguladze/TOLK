@@ -8,6 +8,10 @@ FROM node:22-alpine AS build
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+# NEXT_PUBLIC_* flags are baked into the client bundle at build time (.env* is dockerignored), 0022.
+ARG NEXT_PUBLIC_LISTENING_ENGINE=mock
+ARG NEXT_PUBLIC_ANSWER_TRANSCRIPTION_ENGINE=mock
+ENV NEXT_PUBLIC_LISTENING_ENGINE=$NEXT_PUBLIC_LISTENING_ENGINE NEXT_PUBLIC_ANSWER_TRANSCRIPTION_ENGINE=$NEXT_PUBLIC_ANSWER_TRANSCRIPTION_ENGINE
 RUN npm run build
 
 FROM node:22-alpine AS run
@@ -16,5 +20,7 @@ ENV NODE_ENV=production PORT=3000 HOSTNAME=0.0.0.0
 COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
 COPY --from=build /app/public ./public
+# Applied on server start by src/instrumentation.ts.
+COPY --from=build /app/drizzle ./drizzle
 EXPOSE 3000
 CMD ["node", "server.js"]

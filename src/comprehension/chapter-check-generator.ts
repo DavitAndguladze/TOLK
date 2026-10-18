@@ -7,12 +7,12 @@ const FILLER_CHOICES = ["to decide something quickly", "to speak very loudly"];
 
 const ORDINALS = ["first", "second", "third"];
 
-/** Picks the sentence whose text shares the most words with `needle`; falls back to the first sentence. */
+/** Picks the served sentence whose text shares the most words with `needle`; falls back to the first sentence. */
 function bestMatchingSentence(sentences: Sentence[], needle: string): number {
   const words = needle.toLowerCase().match(/[a-z']+/g) ?? [];
   let best = { index: sentences[0]?.index ?? 0, score: -1 };
   for (const sentence of sentences) {
-    const haystack = `${sentence.text} ${sentence.originalText}`.toLowerCase();
+    const haystack = sentence.text.toLowerCase(); // the served text only: the answer must be readable here (comms 0016)
     const score = words.filter((w) => haystack.includes(w)).length;
     if (score > best.score) best = { index: sentence.index, score };
   }
@@ -30,15 +30,13 @@ function complexWordChoices(target: ComplexWord, all: ComplexWord[]): string[] {
 
 /**
  * Complex Words are Chapter-level (the author's original vocabulary) and may not appear in a
- * heavily simplified Chapter Version's rewritten text - that's the point of simplifying. Put
- * words that do appear in this Version first, so the question matches what the Reader actually
- * read whenever possible; a Level too simplified to contain any still falls back to the
- * Chapter's full list (answerSentenceIndex still links correctly via the sentence's originalText).
+ * simplified Chapter Version's text - that's the point of simplifying. A word the Reader never
+ * saw can't be answered from the text (comms 0016), so only words in this Version are asked
+ * about, and a Version with none gets no Complex Word question.
  */
-function prioritizeWordsInVersion(words: ComplexWord[], version: ChapterVersion): ComplexWord[] {
+function wordsInVersion(words: ComplexWord[], version: ChapterVersion): ComplexWord[] {
   const present = new Set(version.tokens.map((t) => t.normalized));
-  const [inVersion, notInVersion] = [words.filter((w) => present.has(w.word.toLowerCase())), words.filter((w) => !present.has(w.word.toLowerCase()))];
-  return [...inVersion, ...notInVersion];
+  return words.filter((w) => present.has(w.word.toLowerCase()));
 }
 
 /**
@@ -62,7 +60,7 @@ export const generateChapterCheck: ChapterCheckGenerator = async (chapter, versi
     answerSentenceIndex: bestMatchingSentence(version.sentences, kp.text),
   }));
 
-  const complexWordQuestions = prioritizeWordsInVersion(chapter.complexWords, version)
+  const complexWordQuestions = wordsInVersion(chapter.complexWords, version)
     .slice(0, complexWordCount)
     .map((cw, i) => ({
       id: `${version.id}-cw-${i}`,

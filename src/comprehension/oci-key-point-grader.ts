@@ -2,9 +2,15 @@ import type { KeyPointGrader } from "./grade-check";
 
 /**
  * One prompt in, the model's text out. createOciChat implements it with OCI Generative AI.
- * `signal` aborts the wait (comms 0016: R3's generator has one overall deadline).
+ * `signal` aborts the wait (comms 0016: R3's generator has one overall deadline); `json` asks
+ * the model for a single JSON object instead of free text.
  */
-export type Chat = (prompt: string, options?: { maxTokens?: number; signal?: AbortSignal }) => Promise<string>;
+export type Chat = (prompt: string, options?: ChatOptions) => Promise<string>;
+export interface ChatOptions {
+  maxTokens?: number;
+  signal?: AbortSignal;
+  json?: boolean;
+}
 
 const gradingPrompt: (input: Parameters<KeyPointGrader>[0]) => string = ({ question, keyPoint, answer, sentence }) =>
   [
@@ -18,18 +24,45 @@ const gradingPrompt: (input: Parameters<KeyPointGrader>[0]) => string = ({ quest
     'Reply with only this JSON: {"grade": 0, 1 or 2, "feedback": "one short sentence"}',
   ].join("\n");
 
-/** The model's reply as a grade, or null when it isn't one we can trust. */
-function parseReply(text: string): Awaited<ReturnType<KeyPointGrader>> | null {
-  // Models often wrap the JSON in a code fence or a sentence: take the outermost {...}.
-  let reply: { grade?: unknown; feedback?: unknown };
+/** The JSON object in a model's reply, or null. Models often wrap it in a code fence or a sentence: take the outermost {...}. */
+export function jsonObjectIn(text: string): Record<string, unknown> | null {
   try {
-    reply = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1));
+    const value: unknown = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1));
+    return typeof value === "object" && value !== null ? (value as Record<string, unknown>) : null;
   } catch {
     return null;
   }
+}
+
+/** The model's reply as a grade, or null when it isn't one we can trust. */
+function parseReply(text: string): Awaited<ReturnType<KeyPointGrader>> | null {
+  const reply = jsonObjectIn(text);
+  if (!reply) return null;
   const { grade, feedback } = reply;
   if ((grade !== 0 && grade !== 1 && grade !== 2) || typeof feedback !== "string" || !feedback.trim()) return null;
   return { grade, feedback: feedback.trim(), gradedBy: "oci-generative-ai" };
+}
+
+/**
+ * A failed OCI call as something safe to log: the error's name, HTTP status and OCI service code.
+ * Never the message, which can carry request or config details (comms 0016).
+ */
+export function describeOciError(err: unknown): string {
+  if (!(err instanceof Error)) return "unknown error";
+  const { statusCode, serviceCode } = err as { statusCode?: unknown; serviceCode?: unknown };
+  return [err.name, statusCode, serviceCode].filter((part) => typeof part === "string" || typeof part === "number").join(" ");
+}
+
+/** Asks `chat`, rejecting (and aborting its signal) when no reply comes within `timeoutMs`. */
+export async function askWithDeadline(chat: Chat, prompt: string, { timeoutMs, ...options }: { timeoutMs: number } & Omit<ChatOptions, "signal">): Promise<string> {
+  const deadline = new AbortController();
+  const timer = setTimeout(() => deadline.abort(Object.assign(new Error(`no reply within ${timeoutMs} ms`), { name: "Timeout" })), timeoutMs);
+  const timedOut = new Promise<never>((_, reject) => deadline.signal.addEventListener("abort", () => reject(deadline.signal.reason)));
+  try {
+    return await Promise.race([chat(prompt, { ...options, signal: deadline.signal }), timedOut]);
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 /**
@@ -38,17 +71,12 @@ function parseReply(text: string): Awaited<ReturnType<KeyPointGrader>> | null {
  */
 export function createOciKeyPointGrader({ chat, fallback, timeoutMs }: { chat: Chat; fallback: KeyPointGrader; timeoutMs: number }): KeyPointGrader {
   return async (input) => {
-    const deadline = new AbortController();
-    const timer = setTimeout(() => deadline.abort(new Error(`no reply within ${timeoutMs} ms`)), timeoutMs);
-    const timedOut = new Promise<never>((_, reject) => deadline.signal.addEventListener("abort", () => reject(deadline.signal.reason)));
     try {
-      const graded = parseReply(await Promise.race([chat(gradingPrompt(input), { signal: deadline.signal }), timedOut]));
+      const graded = parseReply(await askWithDeadline(chat, gradingPrompt(input), { timeoutMs, json: true }));
       if (graded) return graded;
       console.warn(`OCI grading: unusable reply for question ${input.question.id}, using the stand-in`);
     } catch (err) {
-      console.warn(`OCI grading failed for question ${input.question.id}, using the stand-in:`, err);
-    } finally {
-      clearTimeout(timer);
+      console.warn(`OCI grading failed for question ${input.question.id} (${describeOciError(err)}), using the stand-in`);
     }
     return fallback(input);
   };
