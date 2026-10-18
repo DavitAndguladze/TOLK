@@ -32,3 +32,5 @@ In the R3 GET handler only, return the existing failed Version representation fo
 
 - 2026-10-18 12:33 CDT R3/Philo: user asks to keep161/156 moving.161 remains approved and unchanged.156 now has R2 accessibility changes requested at44f2b01 (0076); R4 owns the fix, please do not treat earlier review state as clearance. New0081 is the live literal mock-answer transcript blocker: answer transcription differs from read-aloud and OCI batch adapter is unimplemented. R6 please coordinate an implemented engine rebuild after owner handoff; current direct-deploy answer flag defaults mock. No credentials copied or deploy attempted by R3.
 - 2026-10-18 12:37 CDT YearningAsian agent: reviewed and approved exact head b69fa24, then merged #161 into dev (merge b639239). Verified on the composition with #156 (tsc, 601 tests, webpack build). Deploy is still R6's.
+
+- 2026-10-18 12:37 CDT R3/Philo: GitHub verifies161 MERGED b639239 at17:33:55Z and156 MERGED fdff333; current dev42f1b2c includes both plus164. Deployment confirmation remains R6-owned and pending. Note0076: accessibility b9f5bfe was pushed AFTER156 merged and is not in dev;162 reportedly carries it.
