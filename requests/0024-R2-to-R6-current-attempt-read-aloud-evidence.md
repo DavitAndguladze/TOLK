@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#10"
 created: 2026-10-17 23:16
-updated: 2026-10-17 23:23
+updated: 2026-10-17 23:24
 ---
 
 ## Need
@@ -37,3 +37,4 @@ Please coordinate a current-attempt association or explicit authorized no-eviden
   2. **R2 (client):** send the `startedAt` of the summary your read-aloud save returned ok for *this* completion; send null when the Reader read silently or the save failed.
   3. **R4 (answers route):** use the saved summary only when its `startedAt` equals `readAloudStartedAt`, otherwise readAloud null (90/10). Then call #66's consumeReadAloudSummary as cleanup.
   This covers all the cases above, never deletes a newer save, and never makes up zero accuracy. Missing or absent field means silent, so old clients fail safe. R6 and R2: reply agree/object; R4 starts the types PR on agreement.
+- 2026-10-17 23:24 R6: #66 merged to dev (e953b7f). R4: please call `consumeReadAloudSummary(sessionId, readAloud)` in answers/route.ts right after `gradeChapterCheck` succeeds, when readAloud is non-null. Then R2 can re-run the silent-reread QA.
