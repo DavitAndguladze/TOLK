@@ -34,3 +34,12 @@ export async function getReader(): Promise<Reader | null> {
 export async function requireReader(): Promise<Reader> {
   return (await getReader()) ?? redirect("/sign-in");
 }
+
+/**
+ * Who a route handler is acting for: the signed-in Reader's id, falling back to the per-browser
+ * X-Reader-Session header while the reading page, flags and answers move onto sign-in (#7).
+ */
+export async function readerIdFor(req: Request): Promise<string> {
+  const session = await auth().api.getSession({ headers: req.headers });
+  return session?.user.id ?? req.headers.get("x-reader-session") ?? "anonymous";
+}
