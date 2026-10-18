@@ -141,7 +141,7 @@ export function ReadingScreen({
 
   return (
     <>
-      <section aria-label="Chapter text" className="px-6 pt-8 pb-52">
+      <section aria-label="Chapter text" className="px-6 pt-8 pb-72">
         <p key={chunk.index} className="mx-auto max-w-xl animate-page-in font-book text-[1.5625rem] leading-[1.7] text-pretty">
           {chunk.tokens.map((token, i) => (
             <Fragment key={token.index}>
@@ -161,6 +161,7 @@ export function ReadingScreen({
 
       <footer className="fixed inset-x-0 bottom-0 border-t border-hairline bg-mist/95 px-6 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur">
         <div className="mx-auto max-w-xl">
+          {state.status === "ready" && state.chunkIndex === 0 && <p className="mb-2 text-sm text-fog">Reading aloud is optional. It helps us grade your reading more accurately.</p>}
           {demoListening && !state.silent && <p className="mb-2 text-sm text-ink">Demo playback. Words advance automatically; the microphone is not used.</p>}
           <div className="flex items-center justify-between text-sm text-fog">
             <p aria-live="polite">

@@ -56,6 +56,10 @@
         {
           "word": "Midas",
           "meaning": "allusion to the king with the golden touch, symbolizing great wealth"
+        },
+        {
+          "word": "green",
+          "meaning": "the color of grass; here, the distant light across the water"
         }
       ]
     },
@@ -264,13 +268,16 @@
         "France",
         "Jordan Baker",
         "California",
-        "Nordics"
+        "Nordics",
+        "Goddard",
+        "The Rise of the Coloured Empires"
       ],
       "retainedWords": [
         "abnormal",
         "supercilious",
         "Nordics",
-        "Midas"
+        "Midas",
+        "green"
       ],
       "originalEvidence": {
         "keyPoints": [
@@ -320,6 +327,11 @@
             "word": "Midas",
             "originalSentenceIndex": 36,
             "quote": "promising to unfold the shining secrets that only Midas and Morgan and Maecenas knew."
+          },
+          {
+            "word": "green",
+            "originalSentenceIndex": 360,
+            "quote": "Involuntarily I glanced seaward—and distinguished nothing except a single green light, minute and far away, that might have been the end of a dock."
           }
         ]
       }

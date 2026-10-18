@@ -9,3 +9,8 @@ export const readAloudStore = (shared.tolkReadAloudStore ??= createInMemoryReadA
 export function getReadAloudSummary(readerId: string, chapterVersionId: string): Promise<ReadAloudSummary | null> {
   return readAloudStore.get(readerId, chapterVersionId);
 }
+
+/** Call after grading a completion with `summary`, so the next completion of this Version starts without it. */
+export function consumeReadAloudSummary(readerId: string, summary: ReadAloudSummary): Promise<void> {
+  return readAloudStore.consume(readerId, summary);
+}

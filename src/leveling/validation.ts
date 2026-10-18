@@ -13,7 +13,7 @@ export interface ChapterVersionContext {
 }
 
 export interface ContentValidationPolicy {
-  /** Pinned, externally supplied frequency ranks; unknown words fail L1-L4 validation. */
+  /** Pinned frequency ranks; numeric quantities/dates are not English vocabulary words. */
   vocabulary: { source: string; ranks: Readonly<Record<string, number>> };
   requiredNames: readonly string[];
   /** Explicit vocabulary exemptions, alongside proper names and Graduated Words. */
@@ -148,7 +148,9 @@ export function validateChapterVersion(
         ...context.graduatedWords.flatMap(words), ...policy.retainedWords.flatMap(words),
         ...[...reinforced].flatMap(words),
       ]);
-      const outsideTarget = [...new Set(expectedTokens.map((token) => token.normalized).filter(Boolean))].filter((word) => {
+      const outsideTarget = [...new Set(expectedTokens.filter((token) =>
+        !/^\d+(?:,\d{3})*(?:\.\d+)?$/.test(token.text.replace(/^["'“‘(]+|["'”’).,!?;:]+$/gu, "")))
+        .map((token) => token.normalized).filter(Boolean))].filter((word) => {
         const rank = policy.vocabulary.ranks[word];
         return !exemptions.has(word) && (!Number.isInteger(rank) || rank < 1 || rank > spec.maxWordRank!);
       });

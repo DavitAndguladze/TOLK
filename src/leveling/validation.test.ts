@@ -119,6 +119,24 @@ test.each([
   expect(validateChapterVersion(version, input, policy).issues).toContainEqual(expect.objectContaining({ code: "vocabulary" }));
 });
 
+test.each(["1915", "80", "1,234.50"])("treats the numeric literal %s as a quantity outside English frequency ranks", (number) => {
+  const { version, input, policy } = setup();
+  replaceSentence(version, 2, `Nick kept that advice ${number}.`);
+  expect(validateChapterVersion(version, input, policy).valid).toBe(true);
+});
+
+test.each(["nine", "1915th", "80dollars", "1.2.3"])("does not treat %s as an exempt numeric literal", (word) => {
+  const { version, input, policy } = setup();
+  replaceSentence(version, 2, `Nick kept that advice ${word}.`);
+  expect(validateChapterVersion(version, input, policy).issues).toContainEqual(expect.objectContaining({ code: "vocabulary" }));
+});
+
+test("still counts numeric quantities toward the sentence-length limit", () => {
+  const { version, input, policy } = setup();
+  replaceSentence(version, 2, "Nick kept that advice 1 2 3 4 5 6 7.");
+  expect(validateChapterVersion(version, input, policy).issues).toContainEqual(expect.objectContaining({ code: "sentence-length" }));
+});
+
 test("requires an explicit frequency source instead of silently waiving vocabulary validation", () => {
   const { version, input, policy } = setup();
   policy.vocabulary.source = "";
