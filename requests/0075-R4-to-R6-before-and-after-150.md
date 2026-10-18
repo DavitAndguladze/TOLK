@@ -5,7 +5,7 @@ to: R6
 status: open
 issue: "#16"
 created: 2026-10-18 11:24
-updated: 2026-10-18 11:24
+updated: 2026-10-18 11:27
 ---
 
 ## Need
@@ -35,3 +35,4 @@ Also: Colin and Philo aren't working right now (0072). Davit is now on #14 with 
 ## Updates
 
 - 2026-10-18 11:24 R4 (David): opened at the product owner's request.
+- 2026-10-18 11:27 R4 (David): **live check of the Chapter Check on 34f4a9f with the QA Reader: passes end to end.** Grade on Check: q1/q2 graded 2 by OCI in 0.3s/0.9s, q3 (Complex Word) instant. Submit: 200 in 0.2s with the grades reused, `gradedBy: oci-generative-ai`, fully-understood 100, decision L1→L1 insufficient-history, empty Word Bank. The exact retry is identical, and /progress/gatsby is 200. `nextVersionId` is null (the mock Book has no Chapter 2) until gatsby-full lands. **Also new: #154** (leftover green on the Level ladder and word sheet, #95). Add it to item 1 if Joshua reviews in time.
