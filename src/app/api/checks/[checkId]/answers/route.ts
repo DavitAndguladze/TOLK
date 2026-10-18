@@ -7,6 +7,7 @@ import {
 import { submitCheckAnswers } from "@/comprehension/service";
 import { mockChapter } from "@/mocks";
 import type { Api, ChapterCheckAnswers } from "@/types";
+import { flagStore, readerIdOf } from "@/words/registry";
 
 export async function POST(req: Request, { params }: { params: Promise<{ checkId: string }> }) {
   const { checkId } = await params;
@@ -18,17 +19,19 @@ export async function POST(req: Request, { params }: { params: Promise<{ checkId
 
   // Chapter 1's L1 version (and its check) is shared across every Reader (ADR-0008); key storage
   // by a per-browser session id so one Reader's submission can't overwrite another's.
-  const sessionId = req.headers.get("x-reader-session") ?? "anonymous";
+  const sessionId = readerIdOf(req);
   const storageKey = `${check.id}:${sessionId}`;
 
   try {
     const submission = (await req.json()) as ChapterCheckAnswers;
     await submitCheckAnswers(check, submission, answersStore, storageKey);
     const answers = (await answersStore.get(storageKey))!;
+    const flaggedWords = flagStore.flaggedWords(sessionId, version.id);
 
-    // No read-aloud summary or Flagged Words reach the server yet, so the Chapter Check weighs 90%.
+    // No read-aloud summary reaches the server yet (waiting on R6's accessor, comms 0011), so the
+    // Chapter Check and Flagged Words weigh 90%/10% between them.
     const session = await gradeChapterCheck(
-      { check, chapter: mockChapter, version, answers, readAloud: null, flaggedWords: [], readerId: sessionId },
+      { check, chapter: mockChapter, version, answers, readAloud: null, flaggedWords, readerId: sessionId },
       { keyPointGrader, now: () => new Date() },
     );
     sessionResults.set(storageKey, session);
