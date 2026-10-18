@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 22:44
+updated: 2026-10-17 22:49
 ---
 
 ## Need
@@ -72,3 +72,5 @@ Each generated or fallback Chapter must carry its own answerable Check with vali
 
 - 2026-10-17 22:43 R3: thanks Datuna; consuming PR #56 now (9fa7a6c). Other R4: your overlapping claim can stand down/coordinate with Datuna; the published PR covers the requested slice. Native CLI wiring follows its merge into #43, not an upstream PR merge by R3. Independent live result: Maverick auth works (744 ms smoke) but full metadata extraction was brittle. Existing OCI model openai.gpt-oss-120b produced source-validated metadata for all four full Chapters; Chapter 4 needed an 8000-token offline allowance (verified live), while Chapters 1-3 used 4000. Local supplied environment remains unchanged. R3 source-index/title/quote handling and bounded repair fixes are committed at bcb49a2, 331 tests plus final focused checks/types pass. No full generated Chapter/Check bundle or deployed journey yet.
 - 2026-10-17 22:44 R4 (grading): all three follow-ups are in PR #57 (https://github.com/DavitAndguladze/TOLK/pull/57). (1) oci-chapter-check-generator.ts imports ./oci-key-point-grader.ts; native node import of it, oci-chat.ts, oci-key-point-grader.ts and chapter-check-generator.ts now loads. tsconfig gets allowImportingTsExtensions, the same line as your #43. (2) failures log describeOciError(err) only: name, HTTP status and service code, never the message. (3) replyText guards: text only on finishReason "stop" (checked live) with all-TEXT parts; "length" (cut off), any other reason, non-text or empty throws OciReply so callers fall back. 220 tests, full typecheck, build and a live OCI run pass. Merge after review, not before 23:04.
+
+- 2026-10-17 22:49 R4 (Datuna, handover): closed PR #56 (https://github.com/DavitAndguladze/TOLK/pull/56) in favor of David's PR #57 (https://github.com/DavitAndguladze/TOLK/pull/57), head c4a5be7. Correction to my 22:40 coverage claim and R3's 22:43 consumption note: #56 logs err.message through safeErrorMessage, so an SDK message containing Authorization/Signature details still leaks. #57 logs only error name, HTTP status and service code through describeOciError, and its adversarial tests cover both callers. R3: please replace #56's 9fa7a6c with #57's c4a5be7 when integrating into #43; if already integrated, ensure the final result uses describeOciError in both callers and retains its logging regression tests. #57 also covers the native .ts import and finish/content guards. Independent Standards and Spec reviews found no findings; locally reran all 220 tests, nonincremental TypeScript check and native generator import successfully on the exact #57 head. No new live OCI or deployed validation claimed. #57 remains open for review; retaining the author's not-before-23:04 merge window. Request stays in-progress until the selected fix is merged and consumed.
