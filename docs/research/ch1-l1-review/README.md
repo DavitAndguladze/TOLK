@@ -58,3 +58,52 @@ Additional unresolved imagery: riotous island at 41; courtesy bay/domesticated w
 R1 compared the complete mapped groups for source 0–39 at `3467489` and reported concrete meaning/attitude issues at 10, 12, 13, 18 and 19. These agree with the remaining opening repair list: military moral-order imagery, personality as gestures, impressionability/romantic readiness, the ironic war allusion, and restlessness rather than distress. R1 found the neighbourhood-freedom rendering at 33 defensible in context; remove it from the concrete-defect list without inventing new detail. The earlier founder, portrait, books and well-rounded-specialist repairs were present, with no additional concrete plot/relationship error reported in 20–39.
 
 This is a bounded independent review with findings, not full Chapter approval. R1 did not certify all exception necessities, review source 40–361, or regenerate/revalidate the historical Check. Full source 0–39 remained unchanged in slice 3.
+
+## Slice 4 — 2026-10-18 (Davit/R4, taking over #6)
+
+Compared source 80–159. Repaired 88 and 101.
+
+- 88: "It felt like I had made her stop something" was a vague, inaccurate gloss of "disturbed her by coming in" — replaced with "I felt like I should not have come in," preserving Nick's near-apology for intruding.
+- 101: "12 people sent **her** love through me" wrongly implied the people were relaying Daisy's own love back to her; the original is "their love" (the dozen people's own regards, sent to Daisy via Nick). Fixed the pronoun.
+
+No new source-word exceptions were needed for either fix (both use only existing low-rank vocabulary, verified against `src/data/vocabulary/english-2018.json`). Combined structural validation still passes: 897 served sentences, all 362 ordered source indexes covered in order, every sentence at most 10 words (checked with the actual `tokenize` used by the validator, not a manual word count).
+
+Source 80–159 was otherwise faithful: no dropped plot facts, attitude changes, or relationship errors found, including the dialogue-heavy stretch (100–139) where short interjections ("Never.", "Absolutely!", "Tomorrow!") are consistently expanded to full sentences — a deliberate, consistent simplification pattern, not a fidelity defect. Notably 117's "hovering restlessly" → "moving around the room without rest" correctly avoids the "restlessness as distress" error R1 flagged for the opening range.
+
+The next comparison is 160–179. Source 0–79 stayed unchanged. Key Points, updated Check evidence and independent semantic acceptance remain outstanding, as do the four unresolved imagery rows from slices 2–3 (10/12/13/18/19/33/41/42/47/51/79).
+
+## Slice 5 — 2026-10-18 (Davit/R4)
+
+Compared source 160–239, including the dinner-table scene, Tom's "Rise of the Coloured Empires" monologue (180–199), the butler's-nose story, and Miss Baker's revelation of Tom's affair. No repairs needed — this stretch was faithful throughout, including subtler cases:
+
+- 187: "unthoughtful sadness" correctly rendered as "her sad look did not seem to come from thought," not just "sad."
+- 199: "pathetic in his concentration" correctly uses the older, non-pejorative sense ("almost made me feel sorry for him"), not the modern dismissive one.
+- 212: "quickened something within her" correctly rendered as "did seem more alive," preserving the cause (Tom's absence).
+- 236–238: "some woman" → "another woman" actually clarifies the affair implication for an L1 reader without changing it.
+
+Two borderline, defensible calls (not fixed, same standard R1 used at source 33): 166 renders "complained" (a mild whine) as "angry voice" (stronger than the original register); 210 moves the departing light's personified "lingering regret" onto the narrator's own feeling, preserving the bittersweet tone but changing the grammatical subject.
+
+Structural validation still passes (897 served sentences, all 362 source indexes, ≤10 words each). The next comparison is 240–259. Source 0–79 remains for R1's independent review. Key Points, updated Check evidence and independent semantic acceptance remain outstanding, as do the unresolved imagery rows from slices 2–3 and the two new borderline calls above.
+
+**Running total: 240 of 362 source sentences compared (66%).**
+
+## Slice 6 — 2026-10-18 (Davit/R4): Chapter 1 editorial pass complete
+
+Compared source 240–361, finishing the chapter. Repaired 249: "Daisy moved her head at Tom, making her no clear" was broken English (a dropped/garbled clause), not a meaning error — replaced with "Daisy moved her head at Tom to say no."
+
+This stretch covered the chapter's two most load-bearing passages, both faithful:
+
+- **The "beautiful little fool" scene (270–279)**: Daisy's monologue about her daughter's birth is preserved verbatim at the key line (278: "a beautiful little fool").
+- **The ending (353–361)**: the green light, Gatsby's trembling reach toward the dark water, and the "silver pepper of the stars" are all intact. Source 361's "unquiet darkness" is correctly rendered as "dark, without quiet" rather than the opposite-meaning "quiet darkness" — a place a careless rewrite could easily have flipped the ending's mood.
+
+One more defensible, unforced call: 326 completes Daisy's intentionally truncated "Our beautiful white—" (interrupted by Tom) with "lives," resolving an ambiguity the original leaves open. Noted, not changed, since it doesn't introduce a false fact.
+
+**Chapter 1's editorial comparison is now complete: all 362 of 362 source sentences reviewed.** Combined repairs across all sessions: source 0–361, with concrete fixes at (from earlier slices) 5, 14, 15, 16, 17, 20, 22, 24, 25, 26, 28, 29, 32, 34, 35, 37, 38, 39, 6, 8, 9, 40, 41, 42, 44, 45, 46, 49, 51, 54, 55, 56, 58, 59, 61, 62, 63, 66, 67, 68, 70, 71, 72, 73, 74, 75, 77, and (this session) 88, 101, 249. Structural validation passes in full: 897 served sentences, all 362 source indexes covered in strict order, every sentence at most 10 words (verified against the actual `tokenize`/rank data the validator uses, not a manual count).
+
+**What is still outstanding before this can be imported** (unchanged by this session, listed for whoever picks this up next):
+1. **Unresolved imagery/tone rows**, never hard-fixed because they're genuinely defensible, not wrong: 10, 12, 13, 18, 19 (R1 confirmed these as concrete issues — still open), 33 (R1 confirmed defensible, not a defect), 41, 42, 47, 51, 79 (slices 2–3), 166, 210, 326 (this session).
+2. **Key Points**: never compared in this review. The Chapter's 3 Key Points need the same sentence-level fidelity check against this candidate's served sentences.
+3. **The Chapter Check** (`check.json`): stale — bound to an old candidate revision, with sentence indexes that no longer match. Must be regenerated against the final candidate and independently fidelity-checked.
+4. **Independent model fidelity gate**: every actual attempt so far has failed (throttling after 35 calls, omitted real passages, a validator that gave false explanations of its own rejections). A human-approved candidate does not equal a passing fidelity run; that gate still has to actually pass before this is importable.
+5. **R1's independent review** only covered 0–39 so far; 40–361 (including this session's slices) has had editorial repair but no second, independent reader.
+6. This is Chapter 1 of 4 needed (Ch 2–4 are fallback/original-only so far, per `r3-content-integration.md`) before the Golden Path's content blocker clears.
