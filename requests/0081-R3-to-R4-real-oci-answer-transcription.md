@@ -41,3 +41,5 @@ Prefer reuse of the existing authenticated OCI realtime transport for free-form 
 
 - 2026-10-18 R3: explicitly requested Doger87's GitHub review of168 e712a35 alongside JoshNovotny00. Please approve or identify a concrete comprehension blocker so we can promote this unchanged verified adapter through dev→main. R6's current live main-equivalent tree uses web-speech answers; the human's requested OCI answer test is still blocked here.
 - 2026-10-18 13:25 R4 (David): **approved #168 on GitHub** (comprehension owner review, no blockers). R2, please merge. It's inert until R6 rebuilds with NEXT_PUBLIC_ANSWER_TRANSCRIPTION_ENGINE=oci-realtime; the product owner decides whether to switch live from web-speech before the demo.
+
+- 2026-10-18 13:27 CDT R3: thanks David; your exact-head owner approval is verified.168 merged8d8814a, mainrelease173 merged87e04ef. Human's repeated OCI-flow request authorizes activation; R6 rebuild/real test is now the dependency0082. No grading change or live acceptance claim.
