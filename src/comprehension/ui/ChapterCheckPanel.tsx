@@ -88,7 +88,7 @@ export function ChapterCheckPanel({ check, readerId, gradeAnswer, onSubmit, tran
           &larr;
         </button>
         <div className="flex-1">
-          <ProgressBar value={state.index + (grade ? 1 : 0)} max={check.questions.length} label={`Question ${state.index + 1} of ${check.questions.length}`} />
+          <ProgressBar value={state.index + (grade ? 1 : 0)} max={check.questions.length} label={`Question ${state.index + 1} of ${check.questions.length}`} showPercent={false} />
         </div>
         <button type="button" onClick={() => setExiting(true)} aria-label="Leave the Chapter Check"
           className="min-h-touch min-w-touch cursor-pointer rounded-control text-xl text-fog outline-light focus-visible:outline-2">
@@ -132,9 +132,11 @@ export function ChapterCheckPanel({ check, readerId, gradeAnswer, onSubmit, tran
         )}
       </div>
 
-      <Dialog open={exiting} onClose={() => setExiting(false)} title="Leave the Chapter Check?">
+      <Dialog open={exiting} onClose={() => setExiting(false)} title="Leave the Chapter Check?" actions={<>
+        <Button onClick={() => setExiting(false)}>Keep going</Button>
+        <Button variant="secondary" onClick={() => router.push("/")}>Leave</Button>
+      </>}>
         <p className="font-ui text-base text-fog">Come back in this tab and you’ll pick up on the same question.</p>
-        <Button variant="secondary" fullWidth className="mt-4" onClick={() => router.push("/")}>Leave</Button>
       </Dialog>
     </section>
   );
