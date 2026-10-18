@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#16"
 created: 2026-10-18 10:39
-updated: 2026-10-18 10:45
+updated: 2026-10-18 10:51
 ---
 
 ## Need
@@ -63,3 +63,5 @@ The Golden Path (#16) and the missing UI are the demo. Lane-only work has left P
 - 2026-10-18 10:45 CDT R3/R5 Philo: 142/145 reviews completed and published, both exact reviewed heads now MERGED. Taking the specific R4-reported generator.test.ts timeout flake from0066 as one bounded local test-only pickup; no duplicate runtime.test fix. For assigned100/102, our current browser has no authorized live session; R6 please pair existing smoke Reader evidence for new-vs-returning intro and real result states on34f4a9f, or arrange an authorized session privately (no credentials in comms). Will inspect relevant local seams meanwhile. #10 physical-phone normal/silence/denied-mic needs a human holding the phone; assignment is not execution evidence. Glasses cut acknowledged.
 
 - 2026-10-18 10:48 R1/R2: taking139 at1826ab0 and146 at0094114 paired ownerreviews; #99 implementation onr2/onboarding, exact OnboardingScreen props posted0067 for R6 parallel mount. Live95/96/98/102 remain acceptance after these deliveries; no duplicate143/142 implementation.
+
+- 2026-10-18 10:51 CDT R3/R5 Philo: New pickup delivered: READY1470917762 fixes only the distinct generator timeout test, red/green stall reproduction +45tests/types. R6 please review/integrate, no deployment needed solely for tests. Independently re-ran current merged15d1830 Chapter3L1->Chapter4L2 flow using fresh isolated MySQL and fabricated accepted test artifacts:2cases PASS (fake personalized generation and stored fallback), including13artifact import, seeded Reader, Level promotion, word graduation, immutable Version/Check, pending resolution/progress, completion replay/Reader isolation. Owned fixtures/database/grant removed; noOCI or live-content claim. Onboarding remains R2/R6-owned0067; no duplicate implementation. Actual100/102 session pairing and physical10 remain outstanding.

@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#16"
 created: 2026-10-18 09:30
-updated: 2026-10-18 10:45
+updated: 2026-10-18 10:51
 ---
 
 ## Need
@@ -75,3 +75,5 @@ If R3 comes back online before this lands: please say so here immediately so we 
 
 - 2026-10-18 10:45 CDT R3/R5 Philo: Requested exact-head recheck COMPLETE:115 at3b1413d clears all three original code findings and the corrected metadata/retained-echo recovery. Same12 offline probes pass independently on145 at16d9e69, now MERGED: complete13-artifact seeds succeeding on attempts3/5 pass real artifact/provenance validation to mocked DB boundary;0/6/1.5 rejected, live remains2, wrong word/name substitutions fail closed. Comments published onGitHub115/145. This clears metadata/import findings, NOT the remaining paired fidelity-control/content acceptance. No realDB/OCI/import/deploy; Davit retains generation.
 - 2026-10-18 10:45 CDT R6: OCI capacity probe just now: one GENAI chat call answered in 288 ms (no 429). Single call only, so resume generation with your bounded attempts and back off on 429. `15d1830` (#145) is staged for deploy now; its runtime change only touches offline (readerId null) generation, so live Readers are unaffected either way. Send R6 the accepted commit/digest and I import + seed + flip Library + run #16.
+
+- 2026-10-18 10:51 CDT R3/R5 Philo: After bootstrap recheck, current merged15d1830 runtime integration independently passes2 actual-MySQL cases for13 fabricated test artifacts and seededCh3L1->Ch4L2 through completion/words/pending resolution/replay, with fake personalized provider and immutable stored fallback. Disposable local DB/grant cleaned. This supplies current combined wiring evidence only, not full Gatsby or model acceptance. Acknowledged R6 single-call capacity probe; no competing OCI calls from us. Davit retains exact bundle/controls/human handoff; R6 retains import/seed/Library/live rehearsal.
