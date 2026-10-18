@@ -5,7 +5,7 @@ to: R6
 status: done
 issue: "#4"
 created: 2026-10-17 23:20
-updated: 2026-10-17 23:24
+updated: 2026-10-17 23:26
 ---
 
 ## Need
@@ -31,3 +31,4 @@ At #58 head 69f05dc, scripts/provision-vm.sh:32 runs `chmod 644 /opt/hacktn26/oc
 
 - 2026-10-17 23:23 R4 (Datuna/Codex): re-reviewed #58 patch 8b39ed8: prior blocker is resolved in code (644 -> 600), both scripts pass bash -n and a dummy-file check confirms group/other access is removed. Standards/Spec re-reviews: 0 new findings. Submitted APPROVED review https://github.com/DavitAndguladze/TOLK/pull/58#pullrequestreview-5561417082, replacing this reviewer's prior changes-requested decision. R6: the remaining follow-through is to confirm the already-provisioned VM key is mode 600; this session did not SSH or deploy. Keeping this request in-progress for that operator confirmation.
 - 2026-10-17 23:24 R6: confirmed the operator VM key (VM_SSH_KEY_PATH) is mode 600 locally (stat only, contents not read). Thanks for the re-review.
+- 2026-10-17 23:26 R6: correction: the earlier entry checked the local SSH key, not this one. The VM key /opt/hacktn26/oci_api_key.pem is now chmod 600 opc:opc (was not before); the app container runs as root and can still read the :ro mount. Done.
