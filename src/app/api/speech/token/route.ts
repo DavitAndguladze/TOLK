@@ -3,18 +3,22 @@ import { existsSync, readFileSync } from "node:fs";
 import { AIServiceSpeechClient } from "oci-aispeech";
 import { Region, SimpleAuthenticationDetailsProvider } from "oci-common";
 import { getReader } from "@/platform/auth";
+import { ociQuotaResponse, takeOciCall } from "@/platform/oci-quota";
 import type { Api } from "@/types";
 
 const json = (body: unknown, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
 
 export async function POST() {
-  if (!(await getReader())) return json({ message: "Sign in to read aloud." }, 401);
+  const reader = await getReader();
+  if (!reader) return json({ message: "Sign in to read aloud." }, 401);
 
   const { OCI_TENANCY_OCID: tenancy, OCI_USER_OCID: user, OCI_FINGERPRINT: fingerprint, OCI_PRIVATE_KEY_PATH: keyPath, OCI_COMPARTMENT_OCID: compartmentId } = process.env;
   const regionId = process.env.OCI_SPEECH_REGION || process.env.OCI_REGION;
   if (!tenancy || !user || !fingerprint || !keyPath || !compartmentId || !regionId || !existsSync(keyPath)) {
     return json({ message: "OCI Speech is not configured on this server." }, 503);
   }
+  const retryAfter = takeOciCall(reader.id);
+  if (retryAfter) return ociQuotaResponse(retryAfter);
 
   try {
     const region = Region.fromRegionId(regionId);

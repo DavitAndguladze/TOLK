@@ -1,30 +1,8 @@
-"use client";
-// Faint paper grain behind the Library (Paper Shaders, speed 0: rendered once, then idle except on resize).
-import { PaperTexture } from "@paper-design/shaders-react";
-import { useEffect, useState } from "react";
+// Faint paper grain behind the Library: one static SVG noise tile, no canvas or WebGL (0066).
+const grain = `url("data:image/svg+xml,${encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="3" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .55 0 0 0 0 .45 0 0 0 0 .25 0 0 0 .09 0"/></filter><rect width="100%" height="100%" filter="url(#g)"/></svg>`,
+)}")`;
 
 export function PaperBackground() {
-  // The shader's async init rejects unhandled without WebGL2, so keep the plain cream body then.
-  const [webgl2, setWebgl2] = useState(false);
-  useEffect(() => setWebgl2(!!document.createElement("canvas").getContext("webgl2")), []);
-  if (!webgl2) return null;
-
-  return (
-    <PaperTexture
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0 -z-10"
-      speed={0}
-      fit="cover"
-      scale={1}
-      colorBack="#fbf3dc"
-      colorPaper="#fbf3dc"
-      colorShadow="#e9dcb8"
-      roughness={0.35}
-      fiber={0.3}
-      folds={0}
-      wrinkles={0}
-      crumples={0}
-      drops={0}
-    />
-  );
+  return <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10" style={{ backgroundImage: grain }} />;
 }
