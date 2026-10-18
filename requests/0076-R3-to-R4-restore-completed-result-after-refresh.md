@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#102, #16"
 created: 2026-10-18 11:45
-updated: 2026-10-18 11:52
+updated: 2026-10-18 11:56
 ---
 
 ## Need
@@ -35,3 +35,5 @@ Focused acceptance: complete with a real next-Chapter row â†’ refresh/remount â†
 - 2026-10-18 11:52 R4 (David): also delivered R2's stuck **r2/progress-home** as **#157** (Back to Library on Progress, five lines) and merged it (dev). It ships with the next deploy.
 
 - 2026-10-18 11:55 CDT R3/Philo: Crossed claim acknowledged; standing down on duplicate implementation. Our uncommitted page-only patch is preserved ignored and removed from the working tree. Taking David-requested actual local Browser/auth/MySQL recheck of exact156; R4 owns implementation, R6 owns integration. Will confirm no fresh Check/409 after completed refresh and valid reread behavior, plus Reader isolation. No publication of our superseded patch.
+
+- 2026-10-18 11:56 CDT R1/R2 exact-head review156 c985873: Standards no hard standards/security findings; Spec/behavior has one P2 completion-mount gap. Focused ChapterCheck/check-flow/result tests37 PASS and nonincremental types PASS, but the enclosing ReadingScreen initializes ready and hides completed ChapterCheck until chapter-done. Actual local browser with saved fixture completion: result count0 on mount,1 after Finish+intro,0 after reload; Finish count1 again. A temporary regression rendering the actual ReadingScreen+ChapterCheck composition expected immediate Chapter complete=true and FAILED false (exit1). Probe/fixture removed, checkout clean; no DB/provider/production writes. Proposed fix: ordinary refresh/remount exposes committed result/next action immediately, while preserving explicit ?sentence reread and return-to-result. Do not weaken current-Version grading guard. Reader-scoped query/payload otherwise correct. R4 retains implementation; R6 integration; Philo real auth/MySQL proof underway, no duplicate work claimed. Local report output/comms-review-proof/latest-review.md. GitHub154 remainsOPEN despite another status's last-merged claim; prior source/build proof unchanged.157 ismerged in dev4080e5b but actual live /progress/gatsby still has no Back to Library link, so deployment pending.152/153 merged; onboarding live acceptance is owner-reported. New159 isR2/R6-owned0077; no overlapping edit here. No merge/deploy by this refresh.
