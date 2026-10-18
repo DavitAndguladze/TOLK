@@ -3,7 +3,7 @@ import { generateChapterCheck } from "../comprehension/chapter-check-generator.t
 import { mockChapterVersion } from "../mocks/fixtures.ts";
 import vocabulary from "../data/vocabulary/english-2018.json" with { type: "json" };
 import type { Chapter, NextChapterInput } from "../types";
-import { createChapterGenerator, type FidelityInput, type FidelityReview } from "./generator.ts";
+import { createChapterGenerator, verifyChapterArtifact, type FidelityInput, type FidelityReview } from "./generator.ts";
 
 const chapter: Chapter = {
   id: "gatsby-ch2", bookId: "gatsby", number: 2, title: "Chapter 2",
@@ -41,6 +41,17 @@ const dependencies = () => ({
 });
 
 describe("ChapterGenerator", () => {
+  it("verifies stored artifacts after JSON object keys are reordered but rejects changed values", async () => {
+    const settings = dependencies();
+    const artifact = await createChapterGenerator(settings).generatePreGenerated(chapter, 1);
+    const stored = JSON.parse(JSON.stringify({ chapter, artifact }), (_key, value) =>
+      value && typeof value === "object" && !Array.isArray(value) ? Object.fromEntries(Object.entries(value).reverse()) : value);
+    const context = { original: stored.chapter, level: 1 as const, readerId: null, wordBank: [], graduatedWords: [], reinforcement: "plain" as const };
+    expect(() => verifyChapterArtifact(stored.artifact, context, settings.policyForChapter())).not.toThrow();
+    stored.artifact.version.sentences[0].text = "Nick saw a red light.";
+    expect(() => verifyChapterArtifact(stored.artifact, context, settings.policyForChapter())).toThrow("Separate fidelity review");
+  });
+
   it("returns a frozen, validated version with its matching Check and supplied Level decision", async () => {
     const result = await createChapterGenerator(dependencies()).generate(input());
     expect(result.version).toMatchObject({ status: "ready", level: 1, readerId: "reader-1", baselineVersionId: "gatsby-ch1-L1", text: chapter.originalText });

@@ -72,8 +72,13 @@ DATA:\n${JSON.stringify({ ...input, version: { id: input.version.id, level: inpu
       sentences: input.version.sentences, reinforcedWords: input.version.reinforcedWords } })}`, options));
 }
 
-function digestFor(chapter: Chapter, version: ChapterVersion, check: ChapterCheck): string {
-  return createHash("sha256").update(JSON.stringify({ chapter, version: { ...version, status: undefined }, check })).digest("hex");
+/** MySQL JSON may reorder keys; array order and every defined value remain significant. */
+export function chapterArtifactDigest(chapter: Chapter, version: ChapterVersion, check: ChapterCheck): string {
+  const json = JSON.stringify({ chapter, version: { ...version, status: undefined }, check }, (_key, value) =>
+    value && typeof value === "object" && !Array.isArray(value)
+      ? Object.fromEntries(Object.entries(value).sort(([left], [right]) => left < right ? -1 : left > right ? 1 : 0))
+      : value);
+  return createHash("sha256").update(json).digest("hex");
 }
 
 function freeze<T>(value: T): T {
@@ -86,7 +91,7 @@ function freeze<T>(value: T): T {
 
 export function verifyChapterArtifact(artifact: ChapterArtifact, context: ChapterVersionContext, policy: ChapterPolicy): void {
   const { version, check, fidelity } = artifact;
-  if (!fidelity || fidelity.versionId !== version.id || fidelity.digest !== digestFor(context.original, version, check)
+  if (!fidelity || fidelity.versionId !== version.id || fidelity.digest !== chapterArtifactDigest(context.original, version, check)
     || fidelity.plotPreserved !== true || fidelity.tonePreserved !== true || fidelity.checkAnswerable !== true
     || fidelity.reinforcementAppropriate !== true || !Array.isArray(fidelity.keyPointEvidence) || !Array.isArray(fidelity.checkEvidence)) {
     throw new Error("Separate fidelity review did not approve this exact Chapter Version and Check");
@@ -212,7 +217,7 @@ export function createChapterGenerator(options: ChapterGeneratorOptions): Gatsby
       check.questions = questions.map((question, index) => ({ ...question, id: `${version.id}-q${index + 1}` }));
     }
     const fidelity = structuredClone(await withSignal(() => evaluate(structuredClone({ chapter: context.original, version, check,
-      digest: digestFor(context.original, version, check), wordBank: context.wordBank, graduatedWords: context.graduatedWords,
+      digest: chapterArtifactDigest(context.original, version, check), wordBank: context.wordBank, graduatedWords: context.graduatedWords,
       reinforcement: context.reinforcement }), { signal: bounded }), bounded)) as FidelityReview;
     const artifact = { version, check, fidelity };
     verifyChapterArtifact(artifact, context, policy);
