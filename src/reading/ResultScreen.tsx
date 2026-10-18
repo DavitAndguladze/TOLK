@@ -1,7 +1,9 @@
 import type { Api } from "../types";
 import { LevelChange } from "./LevelChange";
 import { NextChapter } from "./NextChapter";
+import { ScoreCountUp } from "./ScoreCountUp";
 import { resultHeadline } from "./result";
+import motion from "./ReadingMotion.module.css";
 
 export type AnswersResult = Api["POST /api/checks/[checkId]/answers"]["res"];
 
@@ -22,7 +24,17 @@ export function ResultScreen({ result, nextHref }: { result: AnswersResult; next
   return (
     <section aria-live="polite" className="mx-auto max-w-xl animate-page-in px-6 pt-8 pb-12">
       <p className="text-sm text-fog">Chapter {chapterNumber} result</p>
-      <h2 className="mt-1 font-book text-[2rem] leading-tight">{resultHeadline(grading)}</h2>
+      <h2 className={`mt-1 font-book text-[2rem] leading-tight ${motion.resultHeadline} ${grading.result === "fully-understood" ? motion.celebratedHeadline : ""}`}>
+        {resultHeadline(grading)}
+      </h2>
+
+      <div className={`mt-5 rounded-2xl border border-hairline bg-white/60 p-4 ${motion.scoreCard}`}>
+        <p className="text-sm text-fog">Chapter score</p>
+        <p className="mt-1 font-book text-4xl font-semibold text-ink">
+          <ScoreCountUp score={grading.score} />
+          <span aria-hidden="true" className="ml-1 text-sm font-normal text-fog">out of 100</span>
+        </p>
+      </div>
 
       <div className="mt-6 rounded-2xl border border-hairline bg-white/60 px-4 pt-4 pb-4">
         <p className="text-sm text-fog">Next Chapter</p>
@@ -32,17 +44,17 @@ export function ResultScreen({ result, nextHref }: { result: AnswersResult; next
 
       <h3 className="mt-8 font-semibold">What this was based on</h3>
       <dl className="mt-2 grid grid-cols-3 gap-2">
-        <div className="rounded-xl bg-white/60 p-3">
+        <div className={`rounded-xl bg-white/60 p-3 ${motion.statCard}`}>
           <dt className="text-xs text-fog">Read aloud</dt>
           <dd className="mt-1 text-xl font-semibold">{readAloudAccuracy === null ? "Skipped" : `${Math.round(readAloudAccuracy * 100)}%`}</dd>
         </div>
-        <div className="rounded-xl bg-white/60 p-3">
+        <div className={`rounded-xl bg-white/60 p-3 ${motion.statCard}`}>
           <dt className="text-xs text-fog">Chapter Check</dt>
           <dd className="mt-1 text-xl font-semibold">
             {checkScore} of {checkMax}
           </dd>
         </div>
-        <div className="rounded-xl bg-white/60 p-3">
+        <div className={`rounded-xl bg-white/60 p-3 ${motion.statCard}`}>
           <dt className="text-xs text-fog">Words flagged</dt>
           <dd className="mt-1 text-xl font-semibold">{flaggedCount}</dd>
         </div>

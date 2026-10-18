@@ -1,4 +1,5 @@
 import { LEVELS, ORIGINAL_LEVEL, type GradingResult, type Level, type ProgressView } from "../types";
+import motion from "./ReadingMotion.module.css";
 
 export const RESULT_LABEL: Record<GradingResult | "reading", string> = {
   "fully-understood": "Fully understood",
@@ -57,9 +58,9 @@ export function LevelLineChart({ line }: { line: ProgressView["levelLine"] }) {
       ))}
       <circle cx={W - RIGHT + 14} cy={levelY(ORIGINAL_LEVEL)} r={13} fill="var(--color-glow)" opacity={0.25} />
       <circle cx={W - RIGHT + 14} cy={levelY(ORIGINAL_LEVEL)} r={5} fill="var(--color-glow)" />
-      <path d={path} fill="none" stroke="var(--color-light)" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
+      <path pathLength={1} d={path} fill="none" stroke="var(--color-light)" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" className={motion.levelLine} />
       {points.map((p) => (
-        <g key={p.chapterNumber}>
+        <g key={p.chapterNumber} className={p.chapterNumber === latest?.chapterNumber ? motion.latestPoint : undefined}>
           <title>{`Chapter ${p.chapterNumber}: Level ${p.level}, ${RESULT_LABEL[p.result ?? "reading"]}`}</title>
           <circle cx={p.x} cy={p.y} r={18} fill="transparent" />
           <ResultMarker result={p.result} cx={p.x} cy={p.y} />
