@@ -35,6 +35,16 @@ Copy evidence holds only text/timing events, browser identity, and OCI region. I
 
 Live testing found that token timestamps can restart after final results. The spike records transcription bounds and an utterance number, keeps first-seen words separate between utterances, and suppresses derived delays after the first final result until their clock origin is calibrated. Raw timestamps remain available; do not interpret a timestamp reset as a network delay or compare raw word bounds across utterances to infer a hesitation.
 
+## Isolated-word latency measurement
+
+Use **Run word latency probe**, keep quiet for the one-second microphone baseline, say **father** once when prompted, then stay quiet. Keep the page visible. The microphone stops automatically after a complete measurement or 20 seconds. Repeat three times without reloading; numeric results accumulate in memory and are included by Copy evidence.
+
+The probe inspects the SDK's existing 16 kHz PCM frames and immediately discards the decoded samples. It records a sound-energy endpoint estimate on the browser's `performance.now()` timeline, first matching recognition, DOM mutation, and two nested animation-frame callbacks. Where supported and actually observed, Element Timing supplies text render/presentation timing too. The microphone's reported input-latency setting is metadata, not a calibrated correction. No additional microphone stream or audio recording is created.
+
+The result separates speech-end-to-recognition, speech-end-to-DOM, and speech-end-to-second-rendering-opportunity estimates. Optional browser render/presentation fields remain null if no entry arrives. None relies on OCI word clock continuity. Quiet phonemes, ambient noise, capture buffering, gain control, and callback scheduling make the energy endpoint approximate; animation frames do not prove physical display presentation. Trials hidden during measurement, stopped early, containing the wrong final words before completion, or continuing in sound after display are inconclusive. The measurement uses the first matching partial; it does not wait for final recognition. Connection or microphone failures are retained as inconclusive trials. This instrument narrows the local latency question but does not itself certify acoustic-to-visible or deployed latency.
+
+The smoke test uses a separate temporary Vite cache as well as an ephemeral port, so validation cannot replace the live page's optimized Oracle dependency.
+
 ## Checks
 
 ```powershell

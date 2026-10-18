@@ -37,6 +37,15 @@
     </div>
     <p id="status" role="status">Ready. Live checks have not been run.</p>
   </section>
+  <section aria-labelledby="probe-heading">
+    <h2 id="probe-heading">Isolated-word latency probe</h2>
+    <p>Run in a quiet room. Wait for the prompt, say <strong>father</strong> once, then stay quiet. Keep this page visible. The microphone stops automatically after the result or after 20 seconds.</p>
+    <button id="probe">Run word latency probe</button>
+    <p id="probe-prompt" role="status">Ready for an isolated-word measurement.</p>
+    <p id="probe-word" style="font-size:32px;min-height:48px" aria-live="polite"></p>
+    <pre id="probe-result">No probe yet.</pre>
+    <p>Measures from a locally estimated microphone speech end to recognition, DOM update, and a second rendering opportunity. Browser element render/presentation timings are included when available. Energy detection and microphone buffering add uncertainty; rendering callbacks do not prove physical screen presentation. No audio is retained. Probe results stay in memory across trials until this page reloads.</p>
+  </section>
   <section aria-labelledby="checks-heading">
     <h2 id="checks-heading">Three checks</h2>
     <ul>

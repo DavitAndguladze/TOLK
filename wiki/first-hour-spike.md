@@ -34,6 +34,18 @@ The experiment is in `src/listening/spike/` on `r1/listening-spike`; run instruc
 
 To finish #5, validate spoken-word-to-visible-word latency with a confirmed clock origin and verify on the deployed HTTPS app with R6's authenticated token route. Preserve the timing limitation when integrating; do not infer session-wide hesitation or latency from resetting raw timestamps. Local streaming and word fields are evidenced, but latency and deployed acceptance remain open.
 
+### Isolated-word follow-up, 20:46–20:47 CDT
+
+The local probe now estimates the sound endpoint directly from the SDK's existing PCM frames, independently of OCI timestamps. The Reader ran ten attempts saying only “father”; four were measured and six were inconclusive (missing sound endpoint, wrong recognized words, or early Stop). All attempts are retained in the [numeric evidence](../docs/research/evidence/r1-isolated-word-latency.json), with no audio retained.
+
+| Estimate from local sound endpoint | Measured attempts | Median | p95 / maximum |
+|---|---|---|---|
+| First matching recognition callback | 4 | 450.5 ms | 513 ms |
+| DOM update | 4 | 451.5 ms | 514 ms |
+| Second rendering opportunity | 4 | 457.5 ms | 522 ms |
+
+The last three attempts had second-rendering-opportunity estimates of 345, 423, and 492 ms. This is stronger local responsiveness evidence than subtracting OCI timestamps, but the endpoint is approximate: PCM frames were 64 ms, the device reported 10 ms input latency, and gain control/noise affects detection. Nested animation frames do not establish physical screen presentation; optional browser render/presentation fields were unavailable. The sample is small and includes rejected attempts, so it does not certify the under-one-second or deployed acceptance check. The probe records first matching partial latency, not final recognition latency. A future calibrated observation and R6's deployed HTTPS route remain needed.
+
 The first live token also exposed an expiry conversion bug: Oracle's realtime JWT `exp` was an epoch-millisecond value, and multiplying by 1000 produced a far-future date. A failing token-route regression reproduced it; the corrected route passes that regression and a live check that expiry falls within the next day. The standalone spike now has six passing Node checks, including a regression that suppresses later-utterance delay estimates when the clock origin is unknown. Its smoke server uses an ephemeral port and awaited cleanup; two concurrent suites passed after fixing the fixed-port collision.
 
 Session 3 contained six final callbacks and 112 final-word events. [Aggregate numeric clock evidence](../docs/research/evidence/r1-session-3-clocks.json) shows that token bounds moved backwards while callback time advanced. The previously reported 4080 ms gap compared different callbacks and does not establish the real pause duration; the maximum gap within one final callback was 780 ms. The spike now records transcription bounds and utterance identity, and displays later delays as unavailable rather than inventing an offset. No transcript from that longer session is included in the shared evidence.
