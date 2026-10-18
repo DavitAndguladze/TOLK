@@ -84,7 +84,8 @@ export function buildChapterVersion(
   });
   return {
     ...metadata, bookId: chapter.bookId, chapterId: chapter.id, chapterNumber: chapter.number,
-    levelScore: candidate.levelScore, status: "generating", text: sentences.map((row) => row.text).join(" "),
+    // Stabilize MySQL JSON precision before the score enters the fidelity digest.
+    levelScore: Math.round(candidate.levelScore * 100) / 100, status: "generating", text: sentences.map((row) => row.text).join(" "),
     sentences, tokens: tokenize(sentences.map((row) => row.text)), reinforcedWords,
   };
 }
