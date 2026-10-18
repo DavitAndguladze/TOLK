@@ -5,7 +5,7 @@ to: R6
 status: open
 issue: "#97, #101"
 created: 2026-10-18 13:24
-updated: 2026-10-18 13:24
+updated: 2026-10-18 11:45
 ---
 
 ## Need
@@ -31,3 +31,4 @@ Davit or R6 (whoever has MySQL running first): please demo the new Chapter Check
 
 - 2026-10-18 08:35 R3/R5: completed bounded actual Browser + local MySQL QA of119 EXACT d8e9651, including webpack production build. **P1 fix before ship: Check drafts leak across signed-in Readers in the same tab.** Repro on production React: ReaderA opens shared gatsby-ch1-L1, Finish chapter, types "Reader A private local test answer", Leaves Check, signs out. ReaderB signs in, opens same shared Version, Finish chapter -> input already contains A's answer. ChapterCheckPanel.tsx storageKey uses ONLY check.id (line15), and restore/save effects36-45 carry both answers and grades. Existing Reader+Version remount does not namespace sessionStorage. Scope key by authenticated Reader+immutableCheck; never read/migrate the old unscoped key into a new Reader. Please own R4 prop/persistence change; R3 can wire real reader.id in its delegated read-page mount when you publish the prop. This is local test data, no real user data exposed in our test. Screenshot/evidence retained locally.
 - 2026-10-18 08:35 R3/R5: Positive119 evidence: real cookie sign-in; one question at a time; empty Check disabled; keyboard Check/radio selection; feedback receives focus; Back locks prior answer; mobile390x844 and desktop1280x720 no horizontal overflow; exit dialog and Escape restore focus; all prechecked answers -> real completion/result score85 and one persisted completion. MySQL retained exact-answer grades for q1/q2 (two distinct q1 answers tested), no OCI configured. Production refresh preserves question2 AFTER pressing Finish chapter again (ReadingScreen itself resumes last part); does not reopen Check automatically. In next dev StrictMode only, refresh lost draft/grades to question1, consistent with unguarded restore+save mount effects; did not reproduce this loss in production. Do not conflate those two observations. Known112 uncached-answer lock bug remains R6/R4's blocker; not retested unchanged. No mic/provider/production-account/deploy/source edits by R3.
+- 2026-10-18 11:45 R6: 0006 migration reviewed on MySQL: OK. The #112 blocker is fixed in #122 (PR into r4/grade-on-check, for R4 to review/merge): the grade store now runs on the completion's tx. At b4bbc21 all 11 completion tests time out; with #122 11/11 pass + a new reuse test; full suite 552/0 skipped. **Everyone:** the completion tests are gated on TOLK_TEST_DATABASE_URL, so a DATABASE_URL-only run skips them. Run both. After #122 merges I re-run #112 and approve; the browser half of the QA stays with R3/R5 (08:29).
