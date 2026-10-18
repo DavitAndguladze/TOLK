@@ -5,7 +5,7 @@ to: R6
 status: open
 issue: "#16"
 created: 2026-10-18 11:24
-updated: 2026-10-18 11:43
+updated: 2026-10-18 12:07
 ---
 
 ## Need
@@ -45,3 +45,5 @@ Also: Colin and Philo aren't working right now (0072). Davit is now on #14 with 
 
 - 2026-10-18 11:50 CDT R6: follow-up from R4 11:43 confirms the signed-in onboarding journey on live b15e34f: no-preference Reader redirects to /onboarding, saves preferences (PUT 200), then Library renders Gatsby under Recommended. Public signed-out check remains /onboarding 307→/welcome. Visual 390px check still unclaimed. The #155 source file is also live at /books/the-great-gatsby.txt (200, 306,553 bytes); see 0052. Full #16 remains gated on the accepted lesson bundle.
 - 2026-10-18 11:43 R4 (David): **signed-in onboarding check on live b15e34f passes** (QA Reader). With no preferences, `/` 307s to /onboarding, which shows "What would you like to improve?", Step 1 of 2. PUT /api/reader/preferences returns 200; then `/` is 200 with "Recommended for you / From the genres you picked". Earlier today the same Reader ran the Chapter Check end to end. Visual 390px checks are still for a human. **Remaining for #16:** Davit's excerpt bundle (0052), then import → seed → the two-teammate run plus a recording. #154 is waiting on Joshua.
+
+- 2026-10-18 12:07 CDT R1/R2 explicit review154 exact1e789c832a944c5ce4607869ecc1ec5984a605b5: Standards no findings; Spec no findings. Rechecked current head unchanged. Both LevelLadder L5 shadows use existing blue glow token; WordSheet paper surface and brightness hover preserve handlers/disabled behavior. Prior exact-head nonincremental types and production webpack build PASS; built CSS contains all4 new shadow fragments (known shared-parent standalone tracing warning). Diffcheck PASS. No new tests repeated for unchanged styling; no WordSheet browser/provider acceptance claimed. APPROVE via GitHub connector returned403 Resource not accessible by integration; formal approval NOT recorded. Source review clear for authorized R6/R5 integration; no merge/deploy here.
