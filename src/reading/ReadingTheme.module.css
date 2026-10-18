@@ -1,8 +1,9 @@
 .surface {
   color: var(--color-ink);
-  background: #fbfdff;
+  /* The frame's own cream, so the reading screen matches the Library and fills the frame (#127). */
+  background: var(--color-mist);
   font-family: var(--font-atkinson), system-ui, sans-serif;
-  min-height: 100dvh;
+  min-height: 100%;
 }
 
 .text {
@@ -15,7 +16,7 @@
 .controls {
   border-top: 1px solid var(--color-hairline);
   border-radius: 1.75rem 1.75rem 0 0;
-  background: #f5faff;
+  background: var(--color-paper);
   box-shadow: 0 -6px 28px rgb(36 95 165 / 8%);
 }
 
@@ -47,3 +48,26 @@
 }
 
 .legend p { margin-top: 0.5rem; }
+
+/* End of Chapter: a centered message that fades away, then the Chapter Check opens.
+   Fixed inside PhoneFrame (its transform makes it the containing block), so it centers on the phone screen. */
+.endIntro {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+  background: var(--color-mist);
+  animation: end-intro 2200ms ease-in-out forwards;
+}
+
+/* Opacity only, so it stays gentle under reduced motion. */
+@keyframes end-intro {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; }
+}
