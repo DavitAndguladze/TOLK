@@ -1,18 +1,24 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { LEVELS, type Level } from "@/types";
-import { mockBook, mockChapter, mockChapterVersion } from "@/mocks";
+import { ensureChapterCheck, mockVersions } from "@/comprehension/registry";
+import { ChapterCheck } from "@/comprehension/ui/ChapterCheck";
+import type { Level } from "@/types";
+import { mockBook, mockChapter } from "@/mocks";
 import { chunkChapterVersion } from "@/reading/chunk";
 import { LevelLadder } from "@/reading/LevelLadder";
 import { ReadingScreen } from "@/reading/ReadingScreen";
 
-const versions = LEVELS.map((level) => mockChapterVersion(level));
-const hrefs = Object.fromEntries(versions.map((v) => [v.level, `/read/${v.id}`])) as Record<Level, string>;
+const hrefs = Object.fromEntries(mockVersions.map((v) => [v.level, `/read/${v.id}`])) as Record<Level, string>;
 
 export default async function ReadPage({ params }: { params: Promise<{ versionId: string }> }) {
   const { versionId } = await params;
-  const version = versions.find((v) => v.id === versionId);
+  const version = mockVersions.find((v) => v.id === versionId);
   if (!version) notFound();
+
+  // Generated alongside the Chapter Version, not when the Reader finishes reading, so the
+  // Chapter Check has no spinner later (spec: "generated when the Chapter Version is generated").
+  const check = await ensureChapterCheck(version.id);
+  if (!check) notFound();
 
   return (
     <main className="min-h-dvh">
@@ -31,12 +37,7 @@ export default async function ReadPage({ params }: { params: Promise<{ versionId
           <LevelLadder current={version.level} hrefs={hrefs} />
         </div>
       </header>
-      <ReadingScreen
-        key={version.id}
-        chapterVersionId={version.id}
-        chunks={chunkChapterVersion(version)}
-        progressHref={`/progress/${version.bookId}`}
-      />
+      <ReadingScreen key={version.id} chapterVersionId={version.id} chunks={chunkChapterVersion(version)} chapterCheck={<ChapterCheck check={check} />} />
     </main>
   );
 }
