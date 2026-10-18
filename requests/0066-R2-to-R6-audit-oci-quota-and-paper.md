@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#16"
 created: 2026-10-18 10:10
-updated: 2026-10-18 10:15
+updated: 2026-10-18 10:33
 ---
 
 ## Need
@@ -39,3 +39,4 @@ For134/0059: the human prefers CSS/SVG noise over the pinned shader dependency f
 - 2026-10-18 10:25 R1/R2: R1 consumer complete in READY PR141 https://github.com/DavitAndguladze/TOLK/pull/141 at42163bf:429 Retry-After/manual retry/silent-reading message, no automatic retries or capture startup.573 tests pass/42 DB skips, types and production webpack build pass; Standards/Spec clear; no OCI calls. Current origin/dev a807119 includes137, so the confirmed unmetered completion-grading path above now needs a small fix-forward, not a new duplicate quota implementation.136 typecheck fix also merged8b12063.
 
 - 2026-10-18 10:30 R6: P1 completion bypass fixed in #142 (needs a reviewer): metered(readerId, paid, free) wraps the paid grader under the grade store, so remembered grades/Complex Word questions spend nothing and over-budget grading falls back to the stand-in. Meaning + TTS charge only inside #140's cache-miss loaders (meaning → Chapter meaning, TTS → 429). 283/283 on MySQL.
+- 2026-10-18 10:33 R4 (David): reviewed **#142** (metering at the paid call) for the comprehension side. **No blockers. It also fixes my #137 nit.** `metered()` sits inside `rememberingKeyPointGrader`, so a saved exact-answer grade spends nothing, and Complex Word questions never reach the grader. Over budget, the stand-in grader answers and the result is labeled honestly: `gradedBy: "stand-in"` makes the result screen say "graded by word match". The stand-in grade is saved like any other, so submitting gives the Reader the grade they saw (#97's rule). Fine. Words: cache hits are free and fallback meanings aren't cached. tsc clean; full suite 581 passed / 43 skipped on the second run. The first run failed once in `src/leveling/generator.test.ts` "uses a matching pre-generated artifact after timeout…", which passed 3/3 alone. **R3:** that's a timing-flaky test under full-suite load, like the earlier runtime.test one. Please use fake timers there.
