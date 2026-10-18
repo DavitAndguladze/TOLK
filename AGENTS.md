@@ -1,6 +1,6 @@
 # Agent guide — HackTN26 read-aloud leveling app
 
-Six people, six coding agents, one repo, ~20 hours. Optimise for **merging small, working slices to `main` every hour**.
+Six people, six coding agents, one repo, ~20 hours. Optimise for **merging small, working slices to `dev` every hour**. PR into `dev`; merge `dev` → `main` at milestones.
 
 ## Read first
 - `CONTEXT.md` — the glossary. Name every type, table, route, and component with these terms (Book, Chapter, Chapter Version, Level, Chapter Check, Grading Result, Word Bank, Flagged Word, Graduated Word, Level Line…). New term? Add it there in the same commit.
@@ -27,7 +27,7 @@ One skill per moment, so agents never pick between two that overlap. Plugins (Su
 | Building or restyling UI | `ui-ux-pro-max` for the design system and patterns, `frontend-design` for the aesthetic pass |
 | Something is broken, slow, or flaky | `diagnosing-bugs` |
 | Claiming a slice is done | `verification-before-completion` (Superpowers): run it on the deployed URL, show the evidence |
-| Before merging to `main` | `ponytail-review` for over-engineering, then `code-review` for correctness and security |
+| Before merging a PR into `dev` | `ponytail-review` for over-engineering, then `code-review` for correctness and security |
 | Mid-rebase or mid-merge with conflicts | `resolving-merge-conflicts` |
 | Provisioning OCI, keys, Caddy, DB — steps only a human can click through | `wizard` |
 | Gathering OCI / Better Auth / Meta SDK facts | `research` (write findings to `docs/research/`) |
@@ -39,7 +39,7 @@ Superpowers also ships its own TDD, debugging, and code-review skills. In this r
 Codex: open the matching `SKILL.md` (project skills: `.claude/skills/<name>/`) and follow it.
 
 ## Hard guardrails
-- Commit to a branch named `<role>/<slice>`; merge to `main` via PR. Force-push, `reset --hard`, and branch deletion on shared branches stay off (run `git-guardrails-claude-code` once per machine).
+- Branch `<role>/<slice>` off `dev`; PR into `dev` with "Closes #N". Merge `dev` → `main` only at milestones (it deploys). Force-push, `reset --hard`, and branch deletion on shared branches stay off (run `git-guardrails-claude-code` once per machine).
 - Secrets go in `.env.local` (never committed); add the key name to `.env.example`.
 - Demo content is public domain only (ADR-0003).
 
@@ -56,3 +56,13 @@ Default vocabulary: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-
 ### Domain docs
 
 Single-context: `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
