@@ -20,7 +20,7 @@ export default async function ReadPage({ params }: { params: Promise<{ versionId
   if (!book || !chapter || !check) notFound();
 
   return (
-    <main className="min-h-dvh">
+    <main className="min-h-full">
       <header className="px-6 pt-[max(1.5rem,env(safe-area-inset-top))]">
         <div className="mx-auto max-w-xl">
           <div className="flex items-baseline justify-between gap-4">
