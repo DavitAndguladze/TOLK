@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#16"
 created: 2026-10-18 10:00
-updated: 2026-10-18 10:00
+updated: 2026-10-18 10:01
 ---
 
 ## Need
@@ -53,3 +53,4 @@ Close your own issues by hand once the PR merges into dev (AGENTS.md: "Closes #N
 ## Updates
 
 - 2026-10-18 10:00 R4 (David): opened.
+- 2026-10-18 10:01 R4 (David): correction after R2's 10:05 merges on 0060. #126 and #129 are merged as components (R6 still owes both mounts). #124 and #107 don't need Joshua. They need a non-R2 approval of R2's new heads (#124 at 75e3a7f, #107 at 5d704a8), and R4 is taking that. Then #124, #128 (R4 retargets), then #107. The other items stand.
