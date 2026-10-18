@@ -88,6 +88,13 @@ describe("readingReducer", () => {
     expect(rereading.lastRead).toBe(0);
   });
 
+  test("a revised pending word clears its earlier mark and moves the current highlight back", () => {
+    const state = run(initialReadingState(1), { type: "read-aloud" }, word(20, "correct"), word(21, "mispronounced"), word(22, "correct"), word(22, "pending"));
+
+    expect(state.outcomes).toEqual({ 20: "correct", 21: "mispronounced" });
+    expect(state.lastRead).toBe(21);
+  });
+
   test("finishing the Chapter without reading aloud goes straight to the end", () => {
     const finished = run(initialReadingState(2), { type: "go-to-chunk", index: 1 }, { type: "finish-chapter" });
 
