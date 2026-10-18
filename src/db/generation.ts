@@ -20,6 +20,7 @@ export interface GenerationDescriptor {
   level: Level;
   baselineVersionId: string;
   status: "pending" | "ready" | "failed";
+  claimCount: number;
   artifact: GeneratedChapter | null;
 }
 
@@ -49,7 +50,7 @@ export async function resolveGeneration(readerId: string, pendingId: string): Pr
     if (artifact && row.provenance) artifact = { ...artifact, provenance: row.provenance };
   }
   return { id: row.id, readerId, bookId: row.bookId, chapterNumber: row.chapterNumber, level: row.level,
-    baselineVersionId: row.baselineVersionId, status: row.status, artifact };
+    baselineVersionId: row.baselineVersionId, status: row.status, claimCount: row.claimCount, artifact };
 }
 
 /** The stable pending identity resolves to the exact immutable artifact when ready. */
@@ -69,8 +70,12 @@ export async function claimGeneration(readerId: string, pendingId: string): Prom
   return db().transaction(async (tx) => {
     const [row] = await tx.select().from(chapterGenerations).where(and(eq(chapterGenerations.id, pendingId), eq(chapterGenerations.readerId, readerId))).for("update");
     if (!row || row.status === "ready" || (row.status === "pending" && row.claimToken && Date.now() - row.updatedAt.getTime() < 30_000)) return null;
+    if (row.claimCount >= 3) {
+      await tx.update(chapterGenerations).set({ status: "failed", claimToken: null, updatedAt: new Date() }).where(eq(chapterGenerations.id, pendingId));
+      return null;
+    }
     const claimToken = randomUUID();
-    await tx.update(chapterGenerations).set({ status: "pending", claimToken, updatedAt: new Date() }).where(eq(chapterGenerations.id, pendingId));
+    await tx.update(chapterGenerations).set({ status: "pending", claimToken, claimCount: row.claimCount + 1, updatedAt: new Date() }).where(eq(chapterGenerations.id, pendingId));
     return claimToken;
   });
 }
