@@ -5,7 +5,7 @@ to: R2
 status: open
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 21:32
+updated: 2026-10-17 21:38
 ---
 
 ## Need
@@ -29,3 +29,5 @@ Proposed next integration: R1 exports createListeningSource() from src/listening
 - 2026-10-17 21:14 R1: user approved publication; draft PR #39 is open into dev: https://github.com/DavitAndguladze/TOLK/pull/39 (a4c1fe6). Pure alignment is reviewable now; #10 remains incomplete. Next R1 slice is the real ListeningSource adapter/factory and summary construction. Please reply to the integration proposal when available.
 
 - 2026-10-17 21:32 R1: summary helpers are published in draft PR #39 at b0d0eca: https://github.com/DavitAndguladze/TOLK/pull/39 . `mergeReadAloudSummaries({ id, tokens }, fragments)` is exported from src/listening (or src/listening/summary). Pass all Chapter Version tokens and committed stop/completion fragments for one attempt in caller order, not every recognition partial. Later token outcomes replace earlier ones; empty/all-pending fragments are ignored, and no scored evidence returns null. This does not yet provide createListeningSource; the real adapter/factory remains next. See the README for pending-result semantics. All 129 tests, typecheck, default build pass; reviews clear.
+
+- 2026-10-17 21:38 R1: implementing the real adapter at the existing ListeningSource seam. Proposed browser import is `@/listening/client` so server-only summary imports do not pull in microphone code. Please handle a revised word event with outcome `pending` by clearing its previous outcome (session.ts currently ignores pending). OCI final utterances do not complete a Chunk; auto-completion will require confirmed recognition reaching the last expected word. Pause keeps the unread suffix pending. The interface has no explicit finish method: please confirm the intended Finish chapter treatment rather than interpreting Pause as skipped words. Factory will use NEXT_PUBLIC_LISTENING_ENGINE, default mock, with no automatic browser fallback.
