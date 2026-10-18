@@ -46,12 +46,16 @@ async function submitAnswers(checkId: string, answers: ChapterCheckAnswers): Pro
 /** The `chapterCheck` slot ReadingScreen renders at the end of the Chapter (comms request 0005, PR #32).
  *  Once graded, it shows R2's ResultScreen in its place. */
 export function ChapterCheck({ check, readerId }: { check: ChapterCheckModel; readerId: string }) {
-  const [result, setResult] = useState<AnswersResult | null>(null);
+  // The response plus exactly what was submitted, so the result screen can review each answer (comms 0051).
+  const [done, setDone] = useState<{ result: AnswersResult; answers: ChapterCheckAnswers } | null>(null);
   // The reading R2 confirmed saved for this completion, or null for a silent read or a failed save,
   // so grading credits only this reading (comms 0024).
   const readAloudStartedAt = useConfirmedReadAloudStartedAt();
-  if (result) return <ResultScreen result={result} nextHref={result.nextVersionId && `/read/${result.nextVersionId}`} />;
+  if (done) return <ResultScreen result={done.result} nextHref={done.result.nextVersionId && `/read/${done.result.nextVersionId}`} check={check} answers={done.answers} />;
   return (
-    <ChapterCheckPanel check={check} readerId={readerId} gradeAnswer={(questionId, entry) => gradeAnswer(check.id, questionId, entry)} onSubmit={async (answers) => setResult(await submitAnswers(check.id, { ...answers, readAloudStartedAt }))} />
+    <ChapterCheckPanel check={check} readerId={readerId} gradeAnswer={(questionId, entry) => gradeAnswer(check.id, questionId, entry)} onSubmit={async (answers) => {
+      const submitted = { ...answers, readAloudStartedAt };
+      setDone({ result: await submitAnswers(check.id, submitted), answers: submitted });
+    }} />
   );
 }
