@@ -8,6 +8,7 @@ import { initialReadingState, readingReducer, unreadTokens } from "./session";
 import { createReadingAttempt } from "./read-aloud";
 import { ChapterReadAloud } from "./ChapterReadAloud";
 import motion from "./ReadingMotion.module.css";
+import theme from "./ReadingTheme.module.css";
 import { Button } from "./ui/Button";
 import { ProgressBar } from "./ui/ProgressBar";
 
@@ -156,7 +157,7 @@ function ChapterReadingScreen({
     const missed = tokens.filter((t) => state.outcomes[t.index] === "mispronounced" || state.outcomes[t.index] === "skipped");
     const practice = [...new Set(missed.map((t) => t.normalized).filter(Boolean))];
     return (
-      <section aria-live="polite" className="mx-auto max-w-xl animate-page-in px-6 pt-10 pb-12">
+      <section aria-live="polite" className={`${theme.surface} mx-auto max-w-xl animate-page-in px-6 pt-10 pb-12`}>
         <h2 className="font-book text-[1.75rem] leading-tight">You reached the end of the Chapter.</h2>
         {demoListening && source.current && <p className="mt-3 text-fog">Demo results are simulated. The microphone was not used.</p>}
         <p className="mt-3 text-lg text-fog">
@@ -192,7 +193,7 @@ function ChapterReadingScreen({
   const stuckWord = chunk.tokens.find((t) => t.index === state.stuckOn);
 
   return (
-    <>
+    <div className={theme.surface}>
       <section aria-label="Chapter text" className="px-6 pt-8 pb-72">
         {reviewSentence !== null && chunk.sentences.some(sentence => sentence.index === reviewSentence) && <p role="status" className="mx-auto mb-4 max-w-xl text-sm text-fog">Sentence {reviewSentence + 1} from your Chapter Check is highlighted. Reading aloud is optional.</p>}
         {resumedPart !== null && state.status === "ready" && state.chunkIndex === resumedPart - 1 && (
@@ -201,7 +202,7 @@ function ChapterReadingScreen({
             <button type="button" onClick={() => { setResumedPart(null); dispatch({ type: "go-to-chunk", index: 0 }); }} className="min-h-11 cursor-pointer text-sm font-semibold text-light underline underline-offset-4 outline-light focus-visible:outline-2 focus-visible:outline-offset-2">Start from the beginning</button>
           </div>
         )}
-        <p ref={passage} tabIndex={-1} key={chunk.index} className="mx-auto max-w-xl animate-page-in font-book text-[1.5625rem] leading-[1.7] text-pretty focus-visible:outline-2 focus-visible:outline-light">
+        <p ref={passage} tabIndex={-1} key={chunk.index} className={`${theme.text} mx-auto max-w-xl animate-page-in text-pretty focus-visible:outline-2 focus-visible:outline-light`}>
           {chunk.tokens.map((token, i) => (
             <Fragment key={token.index}>
               {i > 0 && " "}
@@ -216,9 +217,16 @@ function ChapterReadingScreen({
             </Fragment>
           ))}
         </p>
+        {onWordTap && <p className="mx-auto mt-6 max-w-xl text-center text-sm text-fog">{listening ? "Pause to tap a word for help." : "Tap a word for its meaning and pronunciation."}</p>}
+        <details className={`${theme.legend} mt-6`}>
+          <summary>What do the word marks mean?</summary>
+          <p><span className="font-semibold text-light">Blue words</span> {demoListening ? "show simulated clear reading" : "came through clearly"}. A blue background follows your current word.</p>
+          <p><span className={outcomeClass.mispronounced}>A wavy underline</span> means a word may need another try. <span className={outcomeClass.skipped}>A dotted underline</span> means it may have been skipped.</p>
+          <p>Unmarked words are still waiting. {demoListening ? "Demo marks advance automatically without using the microphone." : "These marks follow your voice."} The Chapter Check also helps decide your Grading Result.</p>
+        </details>
       </section>
 
-      <footer className="fixed inset-x-0 bottom-0 border-t border-hairline bg-mist/95 px-6 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur">
+      <footer className={`${theme.controls} fixed inset-x-0 bottom-0 px-6 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))]`}>
         <div className="mx-auto max-w-xl">
           {state.listeningError && <p role="alert" className="mb-3 rounded-xl border-l-4 border-gold bg-white/80 px-3 py-2 text-sm text-ink">{state.listeningError}</p>}
           {state.status === "ready" && state.chunkIndex === 0 && <p className="mb-2 text-sm text-fog">Reading aloud is optional. It helps us grade your reading more accurately.</p>}
@@ -293,6 +301,6 @@ function ChapterReadingScreen({
           </div>
         </div>
       </footer>
-    </>
+    </div>
   );
 }
