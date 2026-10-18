@@ -102,14 +102,47 @@ describe("Gatsby ingestion", () => {
     });
   });
 
-  it("repairs a model-hallucinated full name to whichever word(s) the Chapter actually uses verbatim", async () => {
-    // Nick's surname is never followed by his first name anywhere in the real Gutenberg text -
-    // the model keeps reaching for the famous book's canonical "Nick Carraway" from its training
-    // data instead of what Chapter 1 actually says.
+  it("rejects an invented multiword name even when one generic word occurs in the source", async () => {
+    await expect(ingestGatsby(source, { generateText: async (prompt) => {
+      const data = JSON.parse(prompt.split("DATA:\n")[1]);
+      return JSON.stringify({ ...metadata(data.number), requiredNames: ["New Amsterdam"] });
+    } }).then(() => "seed accepted")).rejects.toThrow("Names not present verbatim");
+  });
+
+  it("does not substitute a similar-looking word while preserving an unrelated definition", async () => {
+    const sentences = splitOriginalSentences(originals[0].originalText);
+    const index = sentences.findIndex((sentence) => /\bconscious\b/.test(sentence));
+    expect(index).toBeGreaterThanOrEqual(0);
+    await expect(ingestGatsby(source, { generateText: async (prompt) => {
+      const data = JSON.parse(prompt.split("DATA:\n")[1]);
+      const value = metadata(data.number);
+      if (data.number !== 1) return JSON.stringify(value);
+      return JSON.stringify({ ...value, complexWords: [{ word: "conscience", meaning: "The inner sense of moral right and wrong.",
+        originalSentenceIndex: index, quote: sentences[index] }, ...value.complexWords.slice(1)],
+        retainedWords: value.complexWords.slice(1).map((entry) => entry.word) });
+    } }).then(() => "seed accepted")).rejects.toThrow("is absent from its quote");
+  });
+
+  it("rejects a retained-word exception that names a different similar-looking source word", async () => {
+    const sentences = splitOriginalSentences(originals[0].originalText);
+    const index = sentences.findIndex((sentence) => /\bconscious\b/.test(sentence));
+    await expect(ingestGatsby(source, { generateText: async (prompt) => {
+      const data = JSON.parse(prompt.split("DATA:\n")[1]);
+      const value = metadata(data.number);
+      if (data.number !== 1) return JSON.stringify(value);
+      return JSON.stringify({ ...value, retainedWords: [...value.retainedWords, "conscience"],
+        retainedWordEvidence: [{ word: "conscience", originalSentenceIndex: index, quote: sentences[index],
+          reason: "Preserves the inner sense of moral right and wrong." }] });
+    } }).then(() => "seed accepted")).rejects.toThrow("conscience");
+  });
+
+  it("requests corrected exact names instead of inventing a shorter name policy", async () => {
+    let chapterOneReplies = 0;
     const content = await ingestGatsby(source, { generateText: async (prompt) => {
       const data = JSON.parse(prompt.split("DATA:\n")[1]);
       const value = metadata(data.number);
-      return JSON.stringify(data.number === 1 ? { ...value, requiredNames: [...value.requiredNames, "Nick Carraway"] } : value);
+      if (data.number !== 1) return JSON.stringify(value);
+      return JSON.stringify({ ...value, requiredNames: chapterOneReplies++ === 0 ? ["Nick Carraway"] : ["Gatsby", "Nick", "Carraway"] });
     } });
     expect(content.policies["gatsby-full-ch1"].requiredNames).toEqual(["Gatsby", "Nick", "Carraway"]);
   });
@@ -126,47 +159,40 @@ describe("Gatsby ingestion", () => {
     expect(content.chapters[0].complexWords.map((entry) => entry.word)).toEqual(["younger", "vulnerable", "turning"]);
   });
 
-  it("repairs a Complex Word's dictionary form to the quote's actual inflected form", async () => {
-    // Real observed, repeated model behavior: it names "peremptory" (the lemma) for a quote that
-    // actually reads "peremptorily" at that exact source index.
-    const peremptorilyIndex = splitOriginalSentences(originals[0].originalText)
-      .findIndex((sentence) => sentence.includes("peremptorily"));
-    expect(peremptorilyIndex).toBeGreaterThanOrEqual(0);
+  it("recovers through a corrected source word, contextual meaning and retained-word echo", async () => {
+    const index = splitOriginalSentences(originals[0].originalText).findIndex((sentence) => sentence.includes("peremptorily"));
+    expect(index).toBeGreaterThanOrEqual(0);
+    let chapterOneReplies = 0;
     const content = await ingestGatsby(source, { generateText: async (prompt) => {
       const data = JSON.parse(prompt.split("DATA:\n")[1]);
       const value = metadata(data.number);
       if (data.number !== 1) return JSON.stringify(value);
-      const sentence = splitOriginalSentences(originals[0].originalText)[peremptorilyIndex];
-      const complexWords = [{ word: "peremptory", meaning: "commanding, allowing no refusal",
-        originalSentenceIndex: peremptorilyIndex, quote: sentence }, ...value.complexWords.slice(1)];
-      // Omit the lemma from retainedWords too - the separate retainedWords-repair fix adds the
-      // final (repaired) word back in, so this only needs to avoid a stale unevidenced leftover.
-      return JSON.stringify({ ...value, complexWords, retainedWords: complexWords.slice(1).map((entry) => entry.word) });
+      const corrected = chapterOneReplies++ > 0;
+      const complexWords = [{ word: corrected ? "peremptorily" : "peremptory",
+        meaning: corrected ? "In a commanding way, allowing no refusal." : "Commanding, allowing no refusal.",
+        originalSentenceIndex: index, quote: splitOriginalSentences(originals[0].originalText)[index] }, ...value.complexWords.slice(1)];
+      return JSON.stringify({ ...value, complexWords, retainedWords: complexWords.map((entry) => entry.word) });
     } });
-    expect(content.chapters[0].complexWords[0].word).toBe("peremptorily");
+    expect(content.chapters[0].complexWords[0]).toEqual({ word: "peremptorily", meaning: "In a commanding way, allowing no refusal." });
+    expect(content.policies["gatsby-full-ch1"].retainedWords).toContain("peremptorily");
+    expect(content.policies["gatsby-full-ch1"].retainedWords).not.toContain("peremptory");
   });
 
-  it("repairs a retained-word exception's dictionary form the same way, and keeps retainedWords consistent", async () => {
-    // Real observed model behavior: it names "peremptory" in a retainedWordEvidence citation
-    // whose own quote only contains "peremptorily" at that index.
-    const peremptorilyIndex = splitOriginalSentences(originals[0].originalText)
-      .findIndex((sentence) => sentence.includes("peremptorily"));
+  it("recovers retained-word evidence only after the model supplies the exact source word", async () => {
+    const index = splitOriginalSentences(originals[0].originalText).findIndex((sentence) => sentence.includes("peremptorily"));
+    let chapterOneReplies = 0;
     const content = await ingestGatsby(source, { generateText: async (prompt) => {
       const data = JSON.parse(prompt.split("DATA:\n")[1]);
       const value = metadata(data.number);
       if (data.number !== 1) return JSON.stringify(value);
-      const sentence = splitOriginalSentences(originals[0].originalText)[peremptorilyIndex];
-      return JSON.stringify({ ...value, retainedWords: [...value.retainedWords, "peremptory"],
-        retainedWordEvidence: [{ word: "peremptory", originalSentenceIndex: peremptorilyIndex, quote: sentence,
+      const word = chapterOneReplies++ === 0 ? "peremptory" : "peremptorily";
+      return JSON.stringify({ ...value, retainedWords: [...value.retainedWords, word],
+        retainedWordEvidence: [{ word, originalSentenceIndex: index, quote: splitOriginalSentences(originals[0].originalText)[index],
           reason: "Shows Daisy's commanding tone." }] });
     } });
-    expect(content.policies["gatsby-full-ch1"].retainedWords).toEqual(expect.arrayContaining(["peremptorily"]));
+    expect(content.policies["gatsby-full-ch1"].retainedWords).toContain("peremptorily");
     expect(content.policies["gatsby-full-ch1"].retainedWords).not.toContain("peremptory");
-    expect(content.policies["gatsby-full-ch1"].retainedWordEvidence).toEqual([{
-      word: "peremptorily", originalSentenceIndex: peremptorilyIndex,
-      quote: splitOriginalSentences(originals[0].originalText)[peremptorilyIndex],
-      reason: "Shows Daisy's commanding tone.",
-    }]);
+    expect(content.policies["gatsby-full-ch1"].retainedWordEvidence?.[0].word).toBe("peremptorily");
   });
 
   it("still rejects a Complex Word whose quote shares nothing with it", async () => {

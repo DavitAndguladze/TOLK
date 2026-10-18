@@ -34,7 +34,7 @@ async function main() {
   const chat = createOciChat();
   if (!chat) throw new Error("OCI configuration or its private-key file is missing. Set the existing OCI_* variables from .env.example; never commit credentials.");
 
-  const [{ ingestGatsby }, { createChapterGenerator }, { generateGatsbySeed }, { generateChapterCheck }, { createOciChapterCheckGenerator }] = await Promise.all([
+  const [{ ingestGatsby }, { createChapterGenerator, MAX_OFFLINE_GENERATION_ATTEMPTS }, { generateGatsbySeed }, { generateChapterCheck }, { createOciChapterCheckGenerator }] = await Promise.all([
     import("../src/leveling/ingestion.ts"),
     import("../src/leveling/generator.ts"),
     import("../src/leveling/seed.ts"),
@@ -63,7 +63,7 @@ async function main() {
     budgetMs: 300_000,
     // Bootstrapping has no fallback of its own and a generous 5-minute budget per artifact; spend
     // more of it on self-correction instead of giving up after the live default's 2 attempts.
-    maxAttempts: 5,
+    maxAttempts: MAX_OFFLINE_GENERATION_ATTEMPTS,
     policyForChapter: (chapter) => ({ vocabulary, requiredNames: content.policies[chapter.id].requiredNames,
       retainedWords: content.policies[chapter.id].retainedWords,
       retainedWordEvidence: content.policies[chapter.id].retainedWordEvidence }),

@@ -33,24 +33,6 @@ function contains(source: string, word: string): boolean {
   return new RegExp(`(?<![\\p{L}\\p{N}])${word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\p{L}\\p{N}])`, "iu").test(source.replace(/\s+/g, " "));
 }
 
-/**
- * The model sometimes names a Complex Word's dictionary/lemma form (e.g. "peremptory") when the
- * quoted source actually uses an inflected form ("peremptorily") - a real, repeated failure seen
- * live, not a one-off. Find the actual quoted token sharing a long common prefix with the given
- * word and use that instead of failing a correct citation over the word's exact ending.
- */
-function inflectedWordInQuote(quote: string, word: string): string | null {
-  const lower = word.toLowerCase();
-  const tokens = quote.match(/[\p{L}]+(?:['’-][\p{L}]+)*/gu) ?? [];
-  for (const token of tokens) {
-    const other = token.toLowerCase();
-    let shared = 0;
-    while (shared < lower.length && shared < other.length && lower[shared] === other[shared]) shared++;
-    if (shared >= 6 && shared >= Math.min(lower.length, other.length) - 3) return token;
-  }
-  return null;
-}
-
 function sourceQuote(sentence: string, quote: string): string | null {
   if (sentence.includes(quote)) return quote;
   // Models normalize curly quotes and capitalize excerpts; retain the actual source spelling.
@@ -110,25 +92,14 @@ DATA:\n${JSON.stringify({ ...original, originalText: undefined,
           if (!record(row) || !text(row.word) || !text(row.meaning) || !/^[\p{L}]+(?:['’-][\p{L}]+)*$/u.test(row.word)) {
             throw new Error(`Invalid contextual Complex Word for ${original.id}`);
           }
-          if (contains(evidence.quote, row.word)) return { word: row.word, meaning: row.meaning.trim() };
-          const inflected = inflectedWordInQuote(evidence.quote, row.word);
-          if (!inflected) throw new Error(`Complex Word ${JSON.stringify(row.word)} is absent from its quote at source index ${evidence.originalSentenceIndex}; use the exact inflected word found there, not a dictionary form.`);
-          return { word: inflected, meaning: row.meaning.trim() };
+          if (!contains(evidence.quote, row.word)) throw new Error(`Complex Word ${JSON.stringify(row.word)} is absent from its quote at source index ${evidence.originalSentenceIndex}; use the exact source word and its contextual meaning.`);
+          return { word: row.word, meaning: row.meaning.trim() };
         });
         if (new Set(keyPoints.map((point) => point.text.toLowerCase())).size !== keyPoints.length
           || new Set(complexWords.map((word) => word.word.toLowerCase())).size !== complexWords.length) {
           throw new Error(`Duplicate metadata for ${original.id}`);
         }
-        // The model sometimes reaches for a famous character's full name from its training data
-        // instead of what this exact Chapter uses (e.g. "Nick Carraway" when the text only ever
-        // says "Nick" or "Carraway" alone) - the prompt already asks for "a surname alone if that
-        // is all the source uses", so repair a multi-word miss to whichever of its words actually
-        // appear verbatim, rather than failing a correct extraction over a cosmetic join.
-        const names = Array.isArray(value.requiredNames) ? value.requiredNames.flatMap((name) => {
-          if (!text(name) || contains(original.originalText, name)) return [name];
-          const present = name.trim().split(/\s+/).filter((word) => contains(original.originalText, word));
-          return present.length ? present : [name];
-        }) : value.requiredNames;
+        const names = value.requiredNames;
         const retained = value.retainedWords;
         if (Array.isArray(names)) {
           const absent = names.filter((name) => text(name) && !contains(original.originalText, name));
@@ -142,17 +113,11 @@ DATA:\n${JSON.stringify({ ...original, originalText: undefined,
         if (value.retainedWordEvidence !== undefined && !Array.isArray(value.retainedWordEvidence)) {
           throw new Error(`Invalid retained-word evidence for ${original.id}`);
         }
-        // Same dictionary-vs-inflected-form bias as above, now for a retained-word citation
-        // instead of a Complex Word: repair the word to what its own quote actually contains,
-        // and carry that exact rename into retainedWords so the two stay consistent.
-        const renamed = new Map<string, string>();
         const retainedWordEvidence = (value.retainedWordEvidence as unknown[] | undefined)?.map((row) => {
           const evidence = citation(row);
           if (!record(row) || !text(row.word)) throw new Error(`Retained-word evidence is missing its word for ${original.id}: ${JSON.stringify(row)}`);
           if (!text(row.reason)) throw new Error(`Retained-word evidence for ${JSON.stringify(row.word)} is missing its reason in ${original.id}`);
-          const word = contains(evidence.quote, row.word) ? row.word : inflectedWordInQuote(evidence.quote, row.word) ?? row.word;
-          if (word !== row.word) renamed.set(row.word, word);
-          return { word, reason: row.reason.trim(), ...evidence };
+          return { word: row.word, reason: row.reason.trim(), ...evidence };
         });
         // The prompt asks the model to echo every extracted Complex Word into retainedWords too,
         // but it inconsistently drops some; validateRetainedWordPolicy already treats a Complex
@@ -163,7 +128,7 @@ DATA:\n${JSON.stringify({ ...original, originalText: undefined,
         // validateRetainedWordPolicy's own single-word check with no chapter context; it is an
         // optional extra allowance, not required content, so dropping one loses nothing essential.
         const singleWord = (word: string) => /^[\p{L}]+(?:['’-][\p{L}]+)*$/u.test(word);
-        const repairedRetained = [...new Set([...retained.map((word) => renamed.get(word) ?? word).filter(singleWord),
+        const repairedRetained = [...new Set([...retained.filter(singleWord),
           ...complexWords.map((entry) => entry.word)])];
         const retainedIssues = validateRetainedWordPolicy(chapter, { retainedWords: repairedRetained, retainedWordEvidence });
         if (retainedIssues.length) throw new Error(`${original.id}: ${retainedIssues.map((issue) => issue.message).join("; ")}`);

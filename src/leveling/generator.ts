@@ -40,6 +40,8 @@ export interface GeneratedChapter extends ChapterArtifact {
     fallbackReason?: "timeout" | "generation-failed";
   };
 }
+export const MAX_OFFLINE_GENERATION_ATTEMPTS = 5;
+
 export interface ChapterGeneratorOptions {
   generateText: TextGenerator;
   generateCheck: ChapterCheckGenerator;
@@ -47,7 +49,7 @@ export interface ChapterGeneratorOptions {
   evaluateFidelity?: FidelityEvaluator;
   /** Includes rewriting, Check generation, fidelity review, retries and fallback lookup. */
   budgetMs?: number;
-  /** Live attempts before falling back (default 2, keeping live Reader-facing latency bounded). Raise for a budget-rich offline run (e.g. bootstrapping fallbacks with no fallback of its own) so unused budget buys more self-correction instead of an early give-up. Still bounded by budgetMs regardless. */
+  /** Shared offline generation only; live Reader generation always permits at most two attempts. */
   maxAttempts?: number;
   fallback?: (chapter: Chapter, level: Level, options: { signal: AbortSignal }) => Promise<ChapterArtifact | null>;
 }
@@ -202,6 +204,10 @@ DATA:\n${JSON.stringify({ level: context.level, spec: LEVEL_SPECS[context.level]
 
 /** The returned object implements the shared seam; additional methods support offline seed output. */
 export function createChapterGenerator(options: ChapterGeneratorOptions): GatsbyChapterGenerator {
+  const offlineAttempts = options.maxAttempts ?? 2;
+  if (!Number.isInteger(offlineAttempts) || offlineAttempts < 1 || offlineAttempts > MAX_OFFLINE_GENERATION_ATTEMPTS) {
+    throw new Error(`Offline generation attempts must be an integer from 1 to ${MAX_OFFLINE_GENERATION_ATTEMPTS}`);
+  }
   const evaluate = options.evaluateFidelity ?? createModelFidelityEvaluator(options.generateText);
   async function attempt(context: ChapterVersionContext, bounded: AbortSignal, attempts: number, state: RewriteState): Promise<GeneratedChapter> {
     const policy = options.policyForChapter(context.original);
@@ -246,7 +252,7 @@ export function createChapterGenerator(options: ChapterGeneratorOptions): Gatsby
     let failure: unknown;
     let attempts = 0;
     const state: RewriteState = { drafts: [], feedback: [] };
-    while (attempts < (options.maxAttempts ?? 2) && !live.aborted) {
+    while (attempts < (context.readerId === null ? offlineAttempts : 2) && !live.aborted) {
       attempts++;
       const controller = new AbortController();
       try {
