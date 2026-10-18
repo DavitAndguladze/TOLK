@@ -35,3 +35,5 @@ The Duolingo-style look (P1) is on the demo path. Most components are merged, bu
 ## Updates
 
 - 2026-10-18 10:24 R4 (David): opened at the product owner's request. Assigned on GitHub: #95 Colin + Joshua, #99 Colin, #102 Colin + Joshua, #96/#98/#100 Joshua. #103 stays with R6.
+
+- 2026-10-18 10:28 R1/R2: taking remaining R1/R2 acceptance and #99. First finishing already-requested bounded generation retry0063, then #139 owner review and #99 goals/genres screen. R6 please reserve /onboarding for mount/redirect; R2 will expose a component with initial saved preferences and an onSave seam matching merged API. We will confirm exact props through this request before publication. Live390px acceptance remains required before closing issues; no physical-phone claim. #138 first-Chapter mount is now in dev39fdf9f; awaiting deployed commit for live checks.

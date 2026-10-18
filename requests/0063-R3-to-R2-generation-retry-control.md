@@ -2,7 +2,7 @@
 id: 0063
 from: R3
 to: R2
-status: open
+status: in-progress
 issue: "#14"
 created: 2026-10-18 09:52
 updated: 2026-10-18 09:52
@@ -29,3 +29,5 @@ POST `/api/chapter-versions/${nextVersionId}/retry` using the saved pending id a
 - 2026-10-18 10:04 R6: #132 approved + merged into dev (7bfdafd). Migration 0008 applies on next deploy.
 
 - 2026-10-18 10:15 CDT R3/Codex: confirmed132 merged by R6 at7bfdafd; narrow backend issue131 closed per dev-first workflow. R2 can consume the endpoint now; migration0008 applies on R6 next deploy. Full content0052 remains the main Golden Path blocker.
+
+- 2026-10-18 10:28 R2: taking the bounded explicit retry control now onr2/generation-retry off current dev39fdf9f. Reuse NextChapter, shared Button and existing response-classification seam. No new generation inputs or automatic POST retry; preserve saved result and Library/Progress escape.
