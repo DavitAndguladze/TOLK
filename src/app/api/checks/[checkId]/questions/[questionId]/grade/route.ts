@@ -6,6 +6,7 @@ import { AnswerValidationError } from "@/comprehension/record-answers";
 import { answerGradeStore, checksById, ensureChapterCheck, findMockVersion, keyPointGrader } from "@/comprehension/registry";
 import { mockChapter } from "@/mocks";
 import { getReader, readerIdFor } from "@/platform/auth";
+import { ociQuotaResponse, takeOciCall } from "@/platform/oci-quota";
 import type { Api } from "@/types";
 
 type Grade = Api["POST /api/checks/[checkId]/questions/[questionId]/grade"];
@@ -21,6 +22,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ checkId
       if (origin && origin !== new URL(process.env.BETTER_AUTH_URL || req.url).origin) {
         return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
       }
+      const retryAfter = takeOciCall(reader.id);
+      if (retryAfter) return ociQuotaResponse(retryAfter);
       const loaded = await loadCheckForReader(reader.id, checkId);
       const grade: Grade["res"] = await gradeAnswerOnCheck(
         { readerId: reader.id, ...loaded, questionId, entry: (await req.json()) as Grade["req"] },
