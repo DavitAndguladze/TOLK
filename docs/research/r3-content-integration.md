@@ -24,7 +24,7 @@ R6 must persist the ready version and Check together, scope access to the authen
 
 - R4: #52's grounded OCI Check factory and #57's native-import/response/logging fixes are integrated and wired into the CLI. Its deterministic fallback still has to pass R3's separate fidelity gate. Optional per-call JSON object mode is requested on `comms` 0016 after live TEXT-mode replies included explanatory prose and multiple JSON candidates.
 - R6: MySQL/auth schema, seed import, durable completion, duplicate submission protection, history persistence, pending/ready/failed storage and version route (0017). R6 delegated the pure three-Chapter Level rule to R4 on 0021; R6 retains review and persistence.
-- R5/R6: contextual vocabulary graduation and Word Bank persistence (0018).
+- R5/R6: Philo now owns R5 as well as R3. The Word Bank predicate follows #41's contextual-answer-only rule, including later-Chapter and no-flag conditions; pronunciation and partial answers do not graduate. R6 still supplies durable Word Bank persistence and completion-level deduplication (0018). The pure updater does not deduplicate repeated active-word sightings by itself.
 - R2: saved reading position, bounded full-Chapter navigation, fallback labels, display-only Level ladder and updated progression copy (0015). Existing next-version polling is reused.
 
 The bundle is content only. The returning-reader account still needs two coherent completed L1 Chapters, a bookmark near the end of full Chapter 3, a normal live Check, and Chapter 4 selected by the real three-result rule. No seeded learning outcomes, durable persistence, live OCI latency, or deployed journey are implied by the local unit tests.

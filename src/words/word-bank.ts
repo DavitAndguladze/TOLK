@@ -19,8 +19,8 @@ export function updateWordBank(bank: WordBankEntry[], chapter: ChapterEvidence):
   const { chapterNumber } = chapter;
   const flagged = new Set(chapter.flagged);
   const seen = new Set(chapter.seen);
-  // Spec #2 and #13: read or answered correctly. #41 proposes answered correctly only (comms request 0018).
-  const knewIt = new Set([...chapter.readCorrectly, ...chapter.answeredCorrectly]);
+  // Spec #41: correct pronunciation alone does not demonstrate contextual understanding.
+  const knewIt = new Set(chapter.answeredCorrectly);
   const entries = new Map(bank.map((entry) => [entry.word, { ...entry }]));
 
   for (const entry of entries.values()) {

@@ -89,7 +89,7 @@ How a Chapter Version reuses a Word Bank word: plain reuse, a context clue, or a
 _Avoid_: Weaving, injection
 
 **Graduated Word**:
-A Word Bank word the Reader later read or answered correctly. It leaves the Word Bank and appears in its original form from then on.
+A Word Bank word the Reader answers fully correctly in a contextual vocabulary question in a later Chapter, without flagging it again in that Chapter. Correct pronunciation alone does not qualify. It leaves the Word Bank and appears in its original form from then on. See spec amendment #41.
 _Avoid_: Mastered, learned word
 
 **Words Learned**:
