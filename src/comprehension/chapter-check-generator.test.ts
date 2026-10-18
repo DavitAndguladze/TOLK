@@ -143,4 +143,41 @@ describe("generateChapterCheck", () => {
 
     expect(check.questions.filter((q) => q.kind === "complex-word")).toEqual([]);
   });
+
+  describe("Key Point prompts", () => {
+    const levels = [1, 2, 3, 4, 5] as const;
+
+    test("don't ask by position, which the text never gives", async () => {
+      for (const level of levels) {
+        const check = await generateChapterCheck(mockChapter, mockChapterVersion(level));
+        for (const q of check.questions.filter((q) => q.kind === "key-point")) {
+          expect(q.prompt).not.toMatch(/\b(first|second|third|\dth)\b/i);
+        }
+      }
+    });
+
+    test("point at the part of the served text that answers, without giving the answer away", async () => {
+      for (const level of levels) {
+        const version = mockChapterVersion(level);
+        const check = await generateChapterCheck(mockChapter, version);
+        for (const q of check.questions.filter((q) => q.kind === "key-point")) {
+          const sentence = version.sentences.find((s) => s.index === q.answerSentenceIndex)!.text;
+          const keyPoint = mockChapter.keyPoints.find((kp) => kp.id === q.keyPointId)!;
+          const words = sentence.split(/\s+/);
+          const cues = [words.slice(0, 3).join(" "), words.slice(-3).join(" ")]; // the start, or the end for a repeat
+          expect(cues.some((cue) => q.prompt.includes(cue))).toBe(true);
+          expect(q.prompt).not.toContain(sentence);
+          expect(q.prompt).not.toContain(keyPoint.text);
+        }
+      }
+    });
+
+    test("differ from each other within a Check", async () => {
+      for (const level of levels) {
+        const check = await generateChapterCheck(mockChapter, mockChapterVersion(level));
+        const prompts = check.questions.filter((q) => q.kind === "key-point").map((q) => q.prompt);
+        expect(new Set(prompts).size).toBe(prompts.length);
+      }
+    });
+  });
 });

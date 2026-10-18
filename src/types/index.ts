@@ -358,6 +358,8 @@ export interface Api {
   "POST /api/chapter-versions/[versionId]/flags": { req: { word: string; tokenIndex: number }; res: { flagged: FlaggedWord; meaning: string } };
   "DELETE /api/chapter-versions/[versionId]/flags/[tokenIndex]": { req: void; res: { ok: true } };
   "GET /api/chapter-versions/[versionId]/check": { req: void; res: ChapterCheck };
+  /** Grades one answer when the Reader presses Check (#97); submitting the Check reuses this grade for the same answer. */
+  "POST /api/checks/[checkId]/questions/[questionId]/grade": { req: ChapterCheckAnswers["answers"][number]; res: QuestionGrade };
   "POST /api/checks/[checkId]/answers": { req: ChapterCheckAnswers; res: { session: SessionResult; decision: LevelDecision; wordBank: WordBankUpdate; nextVersionId: string | null } };
   "GET /api/progress?bookId": { req: void; res: ProgressView };
   "POST /api/speech/token": { req: void; res: { token: string; region: string; compartmentId: string; expiresAt: string } };

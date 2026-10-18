@@ -1,11 +1,4 @@
 .surface {
-  --color-ink: #0b1946;
-  --color-fog: #4d6088;
-  --color-light: #1764df;
-  --color-glow: #bedcff;
-  --color-gold: #94620b;
-  --color-hairline: #cddff3;
-  --color-mist: #f5faff;
   color: var(--color-ink);
   background: #fbfdff;
   font-family: var(--font-atkinson), system-ui, sans-serif;
@@ -24,16 +17,6 @@
   border-radius: 1.75rem 1.75rem 0 0;
   background: #f5faff;
   box-shadow: 0 -6px 28px rgb(36 95 165 / 8%);
-}
-
-.primary {
-  background: #1764df;
-  border-bottom-color: #104aad;
-  box-shadow: 0 4px 12px rgb(23 100 223 / 14%);
-}
-
-.primary:hover {
-  background: #1256c4;
 }
 
 .legend {

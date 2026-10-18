@@ -9,10 +9,10 @@ import { createReadingAttempt } from "./read-aloud";
 import { ChapterReadAloud } from "./ChapterReadAloud";
 import motion from "./ReadingMotion.module.css";
 import theme from "./ReadingTheme.module.css";
+import { Button } from "./ui/Button";
+import { ProgressBar } from "./ui/ProgressBar";
 
-const button =
-  "min-h-13 cursor-pointer rounded-2xl border-b-4 text-base font-semibold transition-[transform,background-color,border-color] outline-light focus-visible:outline-2 focus-visible:outline-offset-2 active:translate-y-0.5 disabled:cursor-not-allowed disabled:active:translate-y-0 motion-reduce:transition-none";
-const stepButton = `${button} grid w-13 place-items-center border border-b-4 border-hairline bg-white/80 text-ink hover:bg-white disabled:bg-transparent disabled:text-fog/50`;
+const stepButton = "w-13 shrink-0 px-0";
 const demoListening = (process.env.NEXT_PUBLIC_LISTENING_ENGINE ?? "mock") === "mock";
 
 const outcomeClass: Record<WordOutcome, string> = {
@@ -177,7 +177,6 @@ function ChapterReadingScreen({
   }
 
   const stuckWord = chunk.tokens.find((t) => t.index === state.stuckOn);
-  const position = chunks.length > 1 ? state.chunkIndex / (chunks.length - 1) : 0;
 
   return (
     <div className={theme.surface}>
@@ -230,11 +229,8 @@ function ChapterReadingScreen({
                 </>
               )}
             </p>
-            <span className="ml-3 shrink-0 tabular-nums">{Math.round(position * 100)}%</span>
           </div>
-          <div role="progressbar" aria-label="Chapter position" aria-valuemin={1} aria-valuemax={chunks.length} aria-valuenow={state.chunkIndex + 1} aria-valuetext={`Part ${state.chunkIndex + 1} of ${chunks.length}`} className="mt-3 h-3 overflow-hidden rounded-full border border-hairline bg-white/80">
-            <div className="h-full origin-left rounded-full bg-light motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out" style={{ transform: `scaleX(${position})` }} />
-          </div>
+          <div className="mt-3"><ProgressBar label="Chapter position" value={state.chunkIndex} max={chunks.length - 1} /></div>
           {state.status === "ready" && state.chunkIndex === 0 && (
             <button
               type="button"
@@ -250,40 +246,42 @@ function ChapterReadingScreen({
             </button>
           )}
           <div className="mt-3 flex gap-3">
-            <button
+            <Button
               type="button"
+              variant="secondary"
               aria-label="Previous part"
               disabled={!positionReady || listening || state.chunkIndex === 0}
               onClick={() => dispatch({ type: "go-to-chunk", index: state.chunkIndex - 1 })}
               className={stepButton}
             >
               <Icon d="m15 18-6-6 6-6" />
-            </button>
+            </Button>
             {!state.silent && (
-              <button
+              <Button
                 type="button"
                 onClick={() => dispatch({ type: listening ? "pause" : "read-aloud" })}
                 disabled={!positionReady}
-                className={`${button} ${theme.primary} flex flex-1 items-center justify-center gap-2 text-white`}
+                className="min-w-0 flex-1"
               >
                 <Icon d={listening ? PAUSE : MIC} />
                 {listening ? "Pause" : demoListening ? state.status === "paused" ? "Resume demo" : "Play demo" : state.status === "paused" ? "Resume" : "Read aloud"}
-              </button>
+              </Button>
             )}
             {state.chunkIndex === chunks.length - 1 ? (
-              <button type="button" aria-label="Finish chapter" disabled={!positionReady || listening} onClick={() => dispatch({ type: "finish-chapter" })} className={stepButton}>
+              <Button type="button" variant="secondary" aria-label="Finish chapter" disabled={!positionReady || listening} onClick={() => dispatch({ type: "finish-chapter" })} className={stepButton}>
                 <Icon d="M20 6 9 17l-5-5" />
-              </button>
+              </Button>
             ) : (
-              <button
+              <Button
                 type="button"
+                variant="secondary"
                 aria-label="Next part"
                 disabled={!positionReady || listening}
                 onClick={() => dispatch({ type: "go-to-chunk", index: state.chunkIndex + 1 })}
                 className={stepButton}
               >
                 <Icon d="m9 18 6-6-6-6" />
-              </button>
+              </Button>
             )}
           </div>
         </div>

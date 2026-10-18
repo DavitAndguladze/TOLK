@@ -1,6 +1,7 @@
 import { ORIGINAL_LEVEL, type Book, type ProgressView } from "../types";
 import { celebratesOriginal } from "./levelLine";
 import { LevelLineChart, RESULT_LABEL, ResultMarker } from "./LevelLineChart";
+import { Card } from "./ui/Card";
 
 const SOURCE_LABEL = { wrong: "Missed", flagged: "Flagged" } as const;
 
@@ -22,10 +23,10 @@ export function ProgressScreen({ book, progress }: { book: Book; progress: Progr
 
       <section className="mt-8">
         <h2 className="text-lg font-semibold">Level Line</h2>
-        <p className="mt-1 text-sm text-fog">Each Chapter is written one Level closer to the original.</p>
-        <div className="mt-4">
+        <p className="mt-1 text-sm text-fog">The Level for each Chapter, from L1 support to the original at L5.</p>
+        <Card className="mt-4">
           <LevelLineChart line={levelLine} />
-        </div>
+        </Card>
         <ol className="mt-4 divide-y divide-hairline border-y border-hairline text-sm">
           {levelLine.map((p) => (
             <li key={p.chapterNumber} className="grid grid-cols-[1.25rem_5.5rem_4.5rem_1fr] items-center gap-2 py-2.5">

@@ -5,6 +5,7 @@ import { ScoreCountUp } from "./ScoreCountUp";
 import { resultHeadline } from "./result";
 import motion from "./ReadingMotion.module.css";
 import theme from "./ReadingTheme.module.css";
+import { Card } from "./ui/Card";
 
 export type AnswersResult = Api["POST /api/checks/[checkId]/answers"]["res"];
 
@@ -29,20 +30,20 @@ export function ResultScreen({ result, nextHref }: { result: AnswersResult; next
         {resultHeadline(grading)}
       </h2>
 
-      <div className={`mt-5 rounded-2xl border border-hairline bg-white/60 p-4 ${motion.scoreCard}`}>
+      <Card className={`mt-5 ${motion.scoreCard}`}>
         <p className="text-sm text-fog">Chapter score</p>
         <p className="mt-1 font-book text-4xl font-semibold text-ink">
           <ScoreCountUp score={grading.score} />
           <span aria-hidden="true" className="ml-1 text-sm font-normal text-fog">out of 100</span>
         </p>
-      </div>
+      </Card>
 
-      <div className="mt-6 rounded-2xl border border-hairline bg-white/60 px-4 pt-4 pb-4">
+      <Card className="mt-6">
         <p className="text-sm text-fog">Next Chapter</p>
         <LevelChange from={decision.from} to={decision.to} />
         <p className="mt-3">{decision.explanation}</p>
         <p className="mt-3 text-sm text-fog">L1 gives the most support. L5 is the author’s original text. Your Level can change by one step between Chapters, using your last three completed Chapters at this Level.</p>
-      </div>
+      </Card>
 
       <h3 className="mt-8 font-semibold">What this was based on</h3>
       <dl className="mt-2 grid grid-cols-3 gap-2">
