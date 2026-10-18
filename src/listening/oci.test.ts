@@ -131,6 +131,30 @@ test("an expired Reader sign-in explains recovery and does not request the micro
   expect(Context.latest.closed).toBe(true);
 });
 
+test("a speech quota limit explains the wait and keeps the microphone off", async () => {
+  install();
+  const microphone = vi.fn();
+  const socket = vi.fn();
+  const fetchToken = vi.fn(async () => new Response("private response", { status: 429, headers: { "Retry-After": "45" } }));
+  vi.stubGlobal("navigator", { mediaDevices: { getUserMedia: microphone } });
+  vi.stubGlobal("fetch", fetchToken);
+  vi.stubGlobal("WebSocket", socket);
+  const source = createListeningSource({ engine: "oci-realtime" });
+  await expect(source.start(chunk, () => {})).rejects.toThrow("Try again in 45 seconds, or keep reading silently");
+  expect(fetchToken).toHaveBeenCalledTimes(1);
+  expect(microphone).not.toHaveBeenCalled();
+  expect(socket).not.toHaveBeenCalled();
+  expect(Context.latest.closed).toBe(true);
+});
+
+test("a quota response without a usable delay offers a safe manual retry", async () => {
+  install();
+  vi.stubGlobal("fetch", vi.fn(async () => new Response("private details", { status: 429, headers: { "Retry-After": "not-a-delay" } })));
+  const source = createListeningSource({ engine: "oci-realtime" });
+  await expect(source.start(chunk, () => {})).rejects.toThrow("Wait a moment and try again, or keep reading silently");
+  expect(Context.latest.closed).toBe(true);
+});
+
 test("denied microphone permission releases OCI resources and the same source can retry", async () => {
   install();
   vi.stubGlobal("navigator", { mediaDevices: { getUserMedia: async () => { throw new DOMException("Not allowed", "NotAllowedError"); } } });
