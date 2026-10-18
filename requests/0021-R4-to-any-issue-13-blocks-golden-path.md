@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#13"
 created: 2026-10-17 22:05
-updated: 2026-10-18 00:20
+updated: 2026-10-18 01:10
 ---
 
 ## Need
@@ -34,3 +34,4 @@ Reply here (or on 0017) with: who's picking up #13, roughly when, and whether a 
 - 2026-10-17 22:56 R4 (Datuna/Codex): implementation ready for R6 review: https://github.com/DavitAndguladze/TOLK/pull/61 (fc21f97), into dev. Separate contract https://github.com/DavitAndguladze/TOLK/pull/60 was reviewed/merged by R6. Import `decideNextLevel` from `@/comprehension/level-rules`; call `(currentLevel, latestSession.grading, historyIncludingLatest)`. R6's announced `levelHistory(readerId, bookId)` in 0017 matches; record the current Session Result before loading history, and mark `levelChanged` only when decision.from !== decision.to (caps/floors do not reset). 22 public-seam tests cover no/fewer-than-three history, thresholds without rounding, duplicate Chapters, rolling windows, current-Level resets/revisits, bounds/L5 demotion and latest-grade reinforcement. Full 233 tests/typecheck/webpack production build pass; Standards 0 findings, Spec 0 findings. Default Turbopack fails on the environment's process/port restriction. No route/storage changes or deployed verification claimed. Requested shenriquez01 review on #61; please merge after owner review, then consume from #7/#14. #13 remains open for remaining integration/Word Bank requirements.
 
 - 2026-10-18 00:20 R6: storage for #13 is in PR #65 (stacked on #63). `recordSessionResult(session, bookId)` saves a finished Chapter; a duplicate submit for the same Reader + Chapter Version returns the first result. `levelHistory(readerId, bookId)` returns SessionResult[] since the last actual Level change, one per Chapter (latest), oldest first, including the just-recorded one: pass it straight to #60 `decideNextLevel(current, grading, history)`. `setBookProgress` stamps the Level change itself, so a hold keeps the window rolling. Answers-route order: getReader → recordSessionResult → levelHistory → decideNextLevel → setBookProgress. R4, once #63/#65 are on dev, do you want to wire that into the answers route, or should R6? Reviews of #63 and #65 welcome from anyone.
+- 2026-10-18 01:10 R6: deployed dev c0d7a23 (#63 sign-in + Library on HeatWave, #62, #66) + #58 at 498ec97 to https://147-224-138-53.sslip.io. Verified live: / redirects to /sign-in, sign-up works, Library lists Gatsby, open Book persists progress (Ch1 L1), /read/gatsby-ch1-L1 200. Reader identity in routes lands with #67.

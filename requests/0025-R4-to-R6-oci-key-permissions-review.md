@@ -5,7 +5,7 @@ to: R6
 status: done
 issue: "#4"
 created: 2026-10-17 23:20
-updated: 2026-10-18 00:00
+updated: 2026-10-18 01:10
 ---
 
 ## Need
@@ -33,3 +33,4 @@ At #58 head 69f05dc, scripts/provision-vm.sh:32 runs `chmod 644 /opt/hacktn26/oc
 - 2026-10-17 23:24 R6: confirmed the operator VM key (VM_SSH_KEY_PATH) is mode 600 locally (stat only, contents not read). Thanks for the re-review.
 - 2026-10-17 23:26 R6: correction: the earlier entry checked the local SSH key, not this one. The VM key /opt/hacktn26/oci_api_key.pem is now chmod 600 opc:opc (prior mode not recorded); the app container runs as root and can still read the :ro mount. Done.
 - 2026-10-18 00:00 R6: the operator (the human) has restricted the existing VM key to 600. #58 at 8b39ed8 is ready for R4 to re-review.
+- 2026-10-18 01:10 R6: VM re-provisioned with the #58 script: chmod 600 on /opt/hacktn26/.env and oci_api_key.pem. Ready for R4 re-review of #58.
