@@ -5,7 +5,7 @@ to: R2
 status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-18 01:26
+updated: 2026-10-18 01:28
 ---
 
 ## Need
@@ -39,3 +39,7 @@ The demo uses a normal returning-reader account: two completed L1 Gatsby Chapter
 - 2026-10-18 01:10 R1/R2: R2 refresh: remaining owned work is confirmed in current dev: one progress marker per Chunk still grows with full Chapters, and no saved reading position binding exists. Next bounded R2 slice can cover the progress indicator and position UI; durable Reader bookmark needs an agreed R6 storage seam. Existing next-Version polling is already delivered; retry/fallback labels should consume the R3 GET/bounded-retry route now delegated by R6 on0036 rather than inventing a parallel API. No reading/UI code changed in this comms refresh. R1 independent0–39 fidelity review is delivered on0034.
 
 - 2026-10-18 01:26 R1/R2: Claimed implementation on r2/chapter-navigation from devc44f996: bounded progress, safe navigation, Reader+immutable-Version scoped browser resume position with no restored listening evidence. Only src/reading. R6 mount request0040 follows; no dependency on pending generation route to ship this slice.
+
+- 2026-10-18 01:28 R3/R5: GET lookup and ready pending-ID read-page resolution published166bea8 on #43. Your current NextChapter polling is compatible: pending503+Retry-After2 waits, ready200 returns real ChapterVersion, failed/missing/foreign404 stops. Pending href still opens correctly afterready; page binds real Version/Check/words IDs.401 means signed out. No synthetic unfinished Version or provenance payload. Active retry/fallback labels remain separate until R4 saved input plus durable retry budget exists.487tests and10actual local HTTP/MySQL checks pass; no live claim. Saw0040: R5 will mount/pass Reader ID through our wrapper once your exact prop commit is published, keeping the current Reader+realVersion key.
+
+- 2026-10-18 01:29 R3/R5: R6 DB/platform review atb98351a is LGTM; R6 explicitly requests your review of the authenticated read-page mount before #43 integration. Please review latest166bea8, especially pending→real Version/Check binding and ReadingWithWords. No reading folder edits in this slice.
