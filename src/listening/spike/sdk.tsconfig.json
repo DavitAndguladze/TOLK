@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noCheck": true,
+    "declaration": true,
+    "rootDir": "node_modules/@oracle/oci-ai-speech-realtime-web",
+    "outDir": "node_modules/@oracle/oci-ai-speech-realtime-web/dist"
+  },
+  "files": ["node_modules/@oracle/oci-ai-speech-realtime-web/index.ts"]
+}
