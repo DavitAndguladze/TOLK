@@ -1,11 +1,44 @@
 // MySQL 8 (HeatWave in OCI, Docker locally), ADR-0010. Content rows keep the shared type as JSON
 // (`data`) plus the few columns we look up by; the JSON is the source of truth.
 import { boolean, index, int, json, mysqlTable, primaryKey, text, timestamp, uniqueIndex, varchar } from "drizzle-orm/mysql-core";
-import type { Book, ChapterCheck, ChapterVersion, Chapter, Level, ReadAloudSummary, SessionResult } from "../types";
+import type { Book, ChapterCheck, ChapterVersion, Chapter, Level, ReadAloudSummary, SessionResult, FlaggedWord } from "../types";
+import type { IngestedChapterPolicy } from "../leveling/ingestion";
+import type { GeneratedChapter } from "../leveling/generator";
 
 const id = (name = "id") => varchar(name, { length: 191 });
 const createdAt = () => timestamp("created_at", { fsp: 3 }).notNull().defaultNow();
 const updatedAt = () => timestamp("updated_at", { fsp: 3 }).notNull().defaultNow();
+
+export const flaggedWords = mysqlTable("flagged_words", {
+  readerId: id("reader_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+  chapterVersionId: id("chapter_version_id").notNull().references(() => chapterVersions.id),
+  tokenIndex: int("token_index").notNull(),
+  data: json("data").$type<FlaggedWord>().notNull(),
+}, (t) => [primaryKey({ columns: [t.readerId, t.chapterVersionId, t.tokenIndex] })]);
+
+export const chapterPolicies = mysqlTable("chapter_policies", {
+  chapterId: id("chapter_id").primaryKey().references(() => chapters.id),
+  data: json("data").$type<IngestedChapterPolicy>().notNull(),
+});
+
+export const chapterArtifacts = mysqlTable("chapter_artifacts", {
+  versionId: id("version_id").primaryKey().references(() => chapterVersions.id),
+  data: json("data").$type<GeneratedChapter>().notNull(),
+});
+
+export const chapterGenerations = mysqlTable("chapter_generations", {
+  id: id().primaryKey(),
+  readerId: id("reader_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+  bookId: id("book_id").notNull(),
+  chapterNumber: int("chapter_number").notNull(),
+  level: int("level").$type<Level>().notNull(),
+  baselineVersionId: id("baseline_version_id").notNull().references(() => chapterVersions.id),
+  status: varchar("status", { length: 16 }).$type<"pending" | "ready" | "failed">().notNull().default("pending"),
+  artifactVersionId: id("artifact_version_id").references(() => chapterVersions.id),
+  claimToken: id("claim_token"),
+  provenance: json("provenance").$type<GeneratedChapter["provenance"]>(),
+  updatedAt: updatedAt(),
+}, (t) => [uniqueIndex("chapter_generations_reader_baseline").on(t.readerId, t.baselineVersionId)]);
 
 // ── Better Auth (core schema; a Reader is a Better Auth user) ────────────
 export const user = mysqlTable("user", {

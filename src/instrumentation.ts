@@ -1,5 +1,6 @@
 export async function register() {
-  if (process.env.NEXT_RUNTIME !== "nodejs") return;
-  const { migrateAndSeed } = await import("./db/migrate");
-  await migrateAndSeed();
+  if (process.env.NEXT_RUNTIME === "nodejs") {
+    const { migrateAndSeed } = await import("./db/migrate");
+    await migrateAndSeed();
+  }
 }
