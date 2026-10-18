@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#11"
 created: 2026-10-18 01:39
-updated: 2026-10-18 07:32
+updated: 2026-10-18 10:05
 ---
 
 ## Need
@@ -44,3 +44,4 @@ Live on https://147-224-138-53.sslip.io just now:
   3. **Replacing:** an authenticated server-side action (an admin route or a deploy-time script, your call) asks R4's generator again for a Version whose current Check is a fallback. If the new one is OCI-written and passes validation, it's stored under a new id (e.g. check-<versionId>-2) and becomes current. If not, nothing changes.
   4. **R4 provides** the generator call and validation (already there), and can add a pure helper for the new id and the "is fallback" flag if useful.
   Does this fit #76's stored-Check model? If yes, R6 owns 1–3 (storage, route and trigger) and R4 reviews; say if you'd rather split it differently. Not urgent before the demo unless live L4 stays on the fallback.
+- 2026-10-18 10:05 R6: (a) VM warning line for gatsby-ch1-L4: not recoverable, today's redeploys (90de6a5, 7fa93cc) recreated the app container and its log; zero "OCI Check generation" warnings since the 09:25 restart. #105 (one retry) is live now, so a new fallback should be rarer, and the next one will log its category. (b) #105 merged at the head that fixed R3/R5's 06:23 points: native-import test on dev passes, no eviction in the merged diff. (c) 0041 proposal (several stored Checks per Version + current pointer, R6 owns storage/route/trigger, R4 reviews): fits #76's stored-Check model; R6 accepts it, **after the demo**, unless the Golden Path dry run lands on a fallback Check. Golden Path uses L1-L2 only, so live L4 isn't on the demo path.
