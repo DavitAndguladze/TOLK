@@ -116,6 +116,56 @@ export const mockChapterCheck: ChapterCheck = {
   ],
 };
 
+/** Same two Key Points and a level-appropriate vocabulary question, one Check per Level 2-5 (L1 is mockChapterCheck above). */
+const CHECKS_BY_LEVEL: Record<Exclude<Level, 1>, ChapterCheck> = {
+  2: {
+    id: "check-gatsby-ch1-L2",
+    chapterVersionId: "gatsby-ch1-L2",
+    questions: [
+      { id: "q1", kind: "key-point", prompt: "What advice did Nick's father give him?", keyPointId: "kp1", answerSentenceIndex: 2 },
+      { id: "q2", kind: "key-point", prompt: "Why does his father say Nick shouldn't judge people?", keyPointId: "kp2", answerSentenceIndex: 3 },
+      { id: "q3", kind: "complex-word", prompt: "What does 'judging' mean in this chapter?", word: "judging", choices: ["the act of deciding someone is bad", "to sing loudly", "to forget"], answerSentenceIndex: 2 },
+    ],
+  },
+  3: {
+    id: "check-gatsby-ch1-L3",
+    chapterVersionId: "gatsby-ch1-L3",
+    questions: [
+      { id: "q1", kind: "key-point", prompt: "What advice did Nick's father give him?", keyPointId: "kp1", answerSentenceIndex: 2 },
+      { id: "q2", kind: "key-point", prompt: "Why does his father say Nick shouldn't judge people?", keyPointId: "kp2", answerSentenceIndex: 3 },
+      { id: "q3", kind: "complex-word", prompt: "What does 'criticizing' mean in this chapter?", word: "criticizing", choices: ["pointing out what's wrong with someone", "to sing loudly", "to forget"], answerSentenceIndex: 2 },
+    ],
+  },
+  4: {
+    id: "check-gatsby-ch1-L4",
+    chapterVersionId: "gatsby-ch1-L4",
+    questions: [
+      { id: "q1", kind: "key-point", prompt: "What advice did Nick's father give him?", keyPointId: "kp1", answerSentenceIndex: 1 },
+      { id: "q2", kind: "key-point", prompt: "Why does his father say Nick shouldn't judge people?", keyPointId: "kp2", answerSentenceIndex: 2 },
+      { id: "q3", kind: "complex-word", prompt: "What does 'vulnerable' mean in this chapter?", word: "vulnerable", choices: ["easily hurt or affected", "to sing loudly", "to forget"], answerSentenceIndex: 0 },
+    ],
+  },
+  5: {
+    id: "check-gatsby-ch1-L5",
+    chapterVersionId: "gatsby-ch1-L5",
+    questions: [
+      { id: "q1", kind: "key-point", prompt: "What advice did Nick's father give him?", keyPointId: "kp1", answerSentenceIndex: 1 },
+      { id: "q2", kind: "key-point", prompt: "Why does his father say Nick shouldn't judge people?", keyPointId: "kp2", answerSentenceIndex: 1 },
+      { id: "q3", kind: "complex-word", prompt: "What does 'advantages' mean in this chapter?", word: "advantages", choices: ["things that give you a better chance", "to sing loudly", "to forget"], answerSentenceIndex: 1 },
+    ],
+  },
+};
+
+/** The Chapter Check for any Level of the demo Chapter (gatsby-ch1): L1 reuses mockChapterCheck, L2-L5 are hand-authored to match VERSIONS. */
+export function mockChapterCheckFor(level: Level): ChapterCheck {
+  return level === 1 ? mockChapterCheck : CHECKS_BY_LEVEL[level];
+}
+
+export const mockChapterCheckL2 = CHECKS_BY_LEVEL[2];
+export const mockChapterCheckL3 = CHECKS_BY_LEVEL[3];
+export const mockChapterCheckL4 = CHECKS_BY_LEVEL[4];
+export const mockChapterCheckL5 = CHECKS_BY_LEVEL[5];
+
 export const mockQuestionGrades: QuestionGrade[] = [
   { questionId: "q1", grade: 2, feedback: "Right: don't be quick to judge people.", rereadSentenceIndex: null, rereadSentence: null },
   {
