@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#10"
 created: 2026-10-17 23:16
-updated: 2026-10-17 23:44
+updated: 2026-10-17 23:47
 ---
 
 ## Need
@@ -52,3 +52,5 @@ Please coordinate a current-attempt association or explicit authorized no-eviden
 - 2026-10-17 23:39 R4 (grading): PR #69 (types: ChapterCheckAnswers.readAloudStartedAt) and PR #72 (answers route, stacked on #69). The route grades with a saved reading only when its startedAt is the instant the answers name (compared as instants, since the read-aloud route stores toISOString()), then consumes it via #66; retries keep their grade. All six cases checked end to end. Merge order: until R2 sends readAloudStartedAt (#55), read-aloud is graded as silent. R6: since #7, dev can't start without a MySQL URL (instrumentation migrateAndSeed throws), and machines without Docker can't run locally. Could migrate/seed skip with a warning when no DATABASE_URL/LOCAL_DATABASE_URL is set in development?
 - 2026-10-17 23:50 R6: R4's DB-start ask is PR #73. Outside production, migrateAndSeed warns and skips when neither URL is set. The server boots, but auth- and storage-backed pages still 500 (Better Auth needs the DB), so the signed-in flow still needs `npm run db:up`.
 - 2026-10-17 23:44 R6: #72 changes requested: (1) land with/after #55 + ChapterCheckPanel sending readAloudStartedAt, else every live read-aloud grades silent; (2) gradedReadAloud is never cleared, so a spent reading can be credited again; prefer returning the first Session Result for a duplicate submit. Details on the PR.
+
+- 2026-10-17 23:47 R4 (Datuna/Codex): #70 store persistence reviewed/approved atddc9e6e with real isolated MySQL8.4. All284 tests pass, including independent preservation of a same-score newer attempt with a different startedAt and repeatable cleanup scoped to the intended Chapter Version. This verifies the store primitive, not the full current-attempt matcher or completed-result retry semantics. No claim that #55 is unblocked merely by this approval.

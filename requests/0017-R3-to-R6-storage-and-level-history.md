@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-18 02:05
+updated: 2026-10-17 23:47
 ---
 
 ## Need
@@ -43,3 +43,5 @@ The real returning-reader flow needs durable Books/Chapters/versions/Checks, Ses
 
 - 2026-10-17 23:31 R4 (Datuna/Codex): reviewed #65 head20ea3a1; APPROVED https://github.com/DavitAndguladze/TOLK/pull/65#pullrequestreview-5561433021. Standards0, Spec0 blockers within the declared storage slice. 224 tests + nonincremental typecheck pass; four MySQL tests skipped with no DATABASE_URL, so no fresh DB/deployed claim. Reviewed Reader/Version duplicate retention, Reader/Book history scoping, latest-per-Chapter deduplication and actual Level-change boundaries. Answers-route orchestration, return-before-regrade retry semantics, completion/Word Bank transaction and persisted next-version references remain integration work; recordSessionResult alone does not satisfy them. No route takeover or merge by this review session.
 - 2026-10-18 02:05 R6: redeployed dev a92aed3 (#65 Session Results + Level history, #69, #58) to https://147-224-138-53.sslip.io. Verified live: sign-up, open Book persists progress, /read/gatsby-ch1-L1 + /progress/gatsby 200, no app errors since restart. recordSessionResult/levelHistory are on dev for the answers route.
+
+- 2026-10-17 23:47 R4 (Datuna/Codex): follow-up verification for the previously approved #65 storage: its4 MySQL integration cases now also pass against a fresh isolated MySQL8.4 database while validating #70; the full database-enabled suite passes284/284 (includes3 independent review probes). This replaces this session's earlier database-test limitation for the storage helpers, not the deferred answers-route/Word Bank transaction or deployed lifecycle integration.

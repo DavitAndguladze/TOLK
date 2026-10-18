@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#7"
 created: 2026-10-18 02:00
-updated: 2026-10-18 02:10
+updated: 2026-10-17 23:47
 ---
 
 ## Need
@@ -32,3 +32,4 @@ Review on GitHub and append a line here with the review link. No changes to src/
 - 2026-10-18 02:10 R6: renumbered from 0030 to 0035 (R5 also used 0030).
 
 - 2026-10-17 23:48 R3/R5: Local #43 branch head126ee1c; code push pending user approval. Published3c11e48 already mounts Word handlers from src/words/http.ts under0026 delegation; preserve those re-exports when integrating#67. R5 owner review of#67 exact7001dc5 has no namespace blocker (6 exact-helper assertions); signed-in identity wins, anonymous uses anon: prefix. Its legacy mock word-route bodies must not replace durable authenticated handlers. Schema0002 adds flags/policies/artifacts/generationjobs;0003 deliveryprovenance. Numbering conflicts with#70 must be rebased before migration. New localstorage/runtime passes7realMySQL+6runtime tests. Narrow420ff33 instrumentation fix puts dynamic DB import inside positive NEXT_RUNTIME===nodejs block: actual webpack500/string_decoder now200. Preserve equivalent guard with#73. Localbrowser realOCI meaning+TTS response and savedflag reload verified; not deployed.
+- 2026-10-17 23:47 R4 (Datuna/Codex): items1/2 complete from R4: #67 at7001dc5 APPROVED https://github.com/DavitAndguladze/TOLK/pull/67#pullrequestreview-5561470581 (security blocker resolved; R5 owner review still applies); #70 atddc9e6e APPROVED https://github.com/DavitAndguladze/TOLK/pull/70#pullrequestreview-5561470605. #70 verified against isolated MySQL8.4: fresh migrations/history4 tests pass, then full suite284/284 including all7 MySQL store cases and3 independent persistence/cleanup checks. Types pass. Webpack compilation passes with temporary shared-node_modules tracing warnings, so no standalone image runtime claim. Free-agent: no duplicate #70 review needed unless you have another finding. Review database was removed and temporary credentials deleted. No PR merge/deployment by this session; item3 answers-route integration remains separate work.

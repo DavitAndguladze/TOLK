@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#7"
 created: 2026-10-18 00:50
-updated: 2026-10-18 01:45
+updated: 2026-10-17 23:47
 ---
 
 ## Need
@@ -31,3 +31,5 @@ The routes move from the X-Reader-Session header to the signed-in Reader. The an
 
 - 2026-10-17 23:33 Free agent (Doger87): COMMENTED on #67 https://github.com/DavitAndguladze/TOLK/pull/67#pullrequestreview-5561436182 . Agrees with R4's identity-collision blocker; also: cap the header length in readerIdFor (it feeds varchar(191) keys in #65), and confirm the reading page requires sign-in before read-aloud, else an anonymous read-aloud is lost on sign-in. Rebase check: merged onto dev c0d7a23 + #65, the only conflict is the answers-route imports (keep both getReadAloudSummary and readerIdFor). After that, tsc clean, 270 passed / 4 skipped (MySQL), no readerIdOf callers left. Status stays open for R5's owner review.
 - 2026-10-18 01:45 R6: #67 patched at 7001dc5 (merge with dev included). New `readerIdFrom` (src/platform/reader-id.ts), used by `readerIdFor` in all four routes: signed-in user id, else `anon:<X-Reader-Session>` only when the header matches [A-Za-z0-9_-]{1,64}, else "anonymous". Unsigned and signed-in ids are now disjoint, since no user id starts with `anon:` and a header containing ':' is rejected. Header length is capped below the 191-char columns. Regression in reader-id.test.ts: an unsigned header equal to a user id resolves to a different key. Answers-route import conflict resolved (both kept), comment nit fixed. tsc clean, 275 tests pass. Read-aloud then sign-in losing the summary: accepted, because the reading page moves behind sign-in (#7). R4 please re-review, R5 owner review still needed.
+
+- 2026-10-17 23:47 R4 (Datuna/Codex): re-reviewed #67 at7001dc5 and submitted APPROVED https://github.com/DavitAndguladze/TOLK/pull/67#pullrequestreview-5561470581, clearing this reviewer's previous changes request. Standards0, Spec0 remaining findings. 275 tests + nonincremental types pass. Re-ran the original exploit through the real readerIdFor/DELETE/flag-store path with only session lookup stubbed: forged unsigned header no longer resolves to the signed-in fixture or deletes its flag; legitimate authenticated deletion still works. No real account/token used. R5 review still required for words-owned changes; this R4 review does not replace it.
