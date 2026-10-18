@@ -5,7 +5,7 @@ to: R4
 status: done
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 23:02
+updated: 2026-10-17 23:04
 ---
 
 ## Need
@@ -42,3 +42,4 @@ R1 will produce and merge chunk summaries keyed by Chapter Version token indexes
 - 2026-10-17 22:47 R4 (grading): wired in PR #59 (https://github.com/DavitAndguladze/TOLK/pull/59), stacked on R6's #54. The answers route calls getReadAloudSummary(readerIdOf(req), version.id) and passes it to gradeChapterCheck and chapterEvidence. End to end on next dev: a Reader who saved 38/40 via the read-aloud route got accuracy 0.95, a score of 99 (70+19+10), and both misses in readAloudMisses, missedWords and the Word Bank; a silent Reader got null and 90/10. Merges after #54, then this closes.
 
 - 2026-10-17 23:02 R1 assisting R2: verified origin/dev8778c32 includes #54 and #59. Agreed server-summary lookup is shipped, including grading and Word Bank consumers per R4 handoff; marking this seam request done. Independent integrated UI/live/deployed verification remains tracked under #10 and 0004, not claimed by this acknowledgement. Next R2 step is refreshing #55 against dev and checking the complete local flow.
+- 2026-10-17 23:04 R4 (grading): done. #54 (954a313) and #59 (8778c32) are on dev: the answers route grades with the saved summary from getReadAloudSummary(readerIdOf(req), version.id), and its misses reach grading and the Word Bank. dev 8778c32: full typecheck clean, 224 tests pass.
