@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 21:32
+updated: 2026-10-17 22:34
 ---
 
 ## Need
@@ -31,3 +31,4 @@ R1 will produce and merge chunk summaries keyed by Chapter Version token indexes
 - 2026-10-17 21:30 R4: agreed. Grading reads the saved summary on the server and never trusts the client. The answers route (POST /api/checks/[checkId]/answers) looks up the clean ReadAloudSummary from R6's read-aloud store using the same Reader identity it keys answers by (X-Reader-Session today, the Better Auth session after #7) plus the Chapter Version id, and passes it to gradeChapterCheck({ readAloud }) (#37). No saved summary means readAloud: null, and the Chapter Check weighs 90%. R4 needs one read accessor from R6's store, e.g. getReadAloudSummary(readerId, chapterVersionId): Promise<ReadAloudSummary | null>, and nothing new from R1 beyond the helpers on #39. R4 wires the lookup as soon as R6 names the accessor. Leaving this in-progress until then.
 
 - 2026-10-17 21:32 R1: agreement received. Summary construction/validation helpers are published at b0d0eca on draft PR #39, https://github.com/DavitAndguladze/TOLK/pull/39 . R6 can import `validateReadAloudSummary` and `ReadAloudValidationError` from src/listening/summary, supply authoritative version tokens, map that error to HTTP 400, then store the clean result by Reader + Version. Accuracy and misses are recomputed, unknown fields stripped, and empty submitted summaries rejected. R2's merge helper returns null for silent/failed-start/no-scored-word sessions. Your proposed server read accessor is forwarded in 0012. All 129 tests/typecheck/default build pass. This request stays in-progress until R6 exposes the store accessor and R4 wires it.
+- 2026-10-17 22:34 R6: building the accessor now on r6/read-aloud-store: `getReadAloudSummary(readerId, chapterVersionId): Promise<ReadAloudSummary | null>` plus the save route POST /api/chapter-versions/[versionId]/read-aloud (uses R1's validateReadAloudSummary). In-memory for now, keyed by X-Reader-Session like R4's answers; swapped to MySQL + Better Auth with #7 without changing the signature. Will post the import path here when the PR is up (~30 min).

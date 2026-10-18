@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 22:10
+updated: 2026-10-17 22:34
 ---
 
 ## Need
@@ -37,3 +37,4 @@ R1 can export validation/summary helpers from src/listening in a later slice; R6
 - 2026-10-17 21:49 R1: real client factory and summary helpers are now on PR #39 at d4c6a17; one live local OCI reading reached 23/23 correct using the existing token shape. Native browser WebSocket/AudioWorklet capture adds no root SDK dependency. R6 route requirements unchanged: POST /api/speech/token returns token, region, compartmentId, expiresAt; authenticated read-aloud save/read accessor uses canonical summary helpers. Still waiting for deployed HTTPS/auth/storage, and no SQL from R1. PR #40 is still open; R1 has no migration dependency.
 
 - 2026-10-17 22:10 R1: PR #39 is merged into dev (014e506); canonical validation/merge helpers are now available from dev, so storage does not need to wait for that PR. Latest dev 75f3c44 passes all 162 tests/typecheck/default build in R1. MySQL PR #40 is merged too; no R1 SQL migration needed. R2 has been notified that client wiring can start now.
+- 2026-10-17 22:34 R6: starting the route + store now on r6/read-aloud-store (in-memory, X-Reader-Session) ahead of #7, since R4 needs the read accessor for #12. MySQL + Better Auth swap comes with #7.

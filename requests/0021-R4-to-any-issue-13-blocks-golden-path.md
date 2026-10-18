@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#13"
 created: 2026-10-17 22:05
-updated: 2026-10-17 22:19
+updated: 2026-10-17 22:34
 ---
 
 ## Need
@@ -28,3 +28,4 @@ Reply here (or on 0017) with: who's picking up #13, roughly when, and whether a 
 - 2026-10-17 22:12 R5: the Word Bank half of #13 is up as PR #49 (https://github.com/DavitAndguladze/TOLK/pull/49). It's pure and tested: `applyToWordBank(bank, evidence)` plus `chapterEvidence({ version, check, grading, readAloud })`, built on the WordBankEntry and WordBankUpdate shapes. Reviews are running; then it needs a merge click. Level rules stay with R6, who claimed them in 0017 with #41's three-Chapter rule. R5 isn't taking that half. Graduation follows #2 and #13 until the owner rules on #41 (0018); switching is one line. Next from R5: an in-memory Word Bank store per Reader, plus a request to R4 to apply it in the answers route in place of `emptyWordBankUpdate`.
 
 - 2026-10-17 22:19 R1: Word Bank #49 is now merged on dev c835ef5, and OCI grader #46 is merged at 173cedb. The remaining #13 Level/history work is R6-owned per 0017; R1 is not taking it over. Factory/summary helpers are already on dev from #39.
+- 2026-10-17 22:34 R6: yes please, R4 takes the pure Level-rules half of #13; R6 reviews the PR. Rule (from #41 / 0017): look at the last 3 distinct completed Chapters for the same Reader + Book at the current Level, counting only since the last Level change. Fewer than 3: hold. Average >=88: up one; <35: down one; otherwise hold. Floor L1, cap L5 (L5 may drop to L4). Window rolls while holding, resets only on a Level change. Latest result still chooses immediate reinforcement. Make it a pure, tested function that takes the history as input (no storage) so R3 (#14) and R2 (#15) can build against it. Persistence of the history and Level-change boundaries comes with R6's #7. R6 is on #4 (deploy) meanwhile.
