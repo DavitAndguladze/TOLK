@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getChapterCompletion } from "@/comprehension/complete-chapter";
 import { ChapterCheck } from "@/comprehension/ui/ChapterCheck";
 import { getBook, getChapter, getChapterCheck } from "@/db";
 import { resolveReaderVersion } from "@/leveling/reader-version";
@@ -14,8 +15,9 @@ export default async function ReadPage({ params }: { params: Promise<{ versionId
   const { version } = await resolveReaderVersion(reader.id, versionId);
   if (!version) notFound();
   // #76 moved the durable answers route to the stored Check, so the page shows that same one.
-  const [book, chapter, check] = await Promise.all([
+  const [book, chapter, check, completed] = await Promise.all([
     getBook(version.bookId), getChapter(version.bookId, version.chapterNumber), getChapterCheck(version.id),
+    getChapterCompletion(reader.id, version.id), // already finished: show the saved result again, never a fresh Check (0076)
   ]);
   if (!book || !chapter || !check) notFound();
 
@@ -36,7 +38,7 @@ export default async function ReadPage({ params }: { params: Promise<{ versionId
           <LevelLadder current={version.level} />
         </div>
       </header>
-      <ReadingWithWords key={`${reader.id}:${version.id}`} chapterVersionId={version.id} readerId={reader.id} chunks={chunkChapterVersion(version)} chapterCheck={<ChapterCheck check={check} readerId={reader.id} />} />
+      <ReadingWithWords key={`${reader.id}:${version.id}`} chapterVersionId={version.id} readerId={reader.id} chunks={chunkChapterVersion(version)} chapterCheck={<ChapterCheck check={check} readerId={reader.id} completed={completed} />} />
     </main>
   );
 }

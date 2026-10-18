@@ -45,9 +45,11 @@ async function submitAnswers(checkId: string, answers: ChapterCheckAnswers): Pro
 
 /** The `chapterCheck` slot ReadingScreen renders at the end of the Chapter (comms request 0005, PR #32).
  *  Once graded, it shows R2's ResultScreen in its place. */
-export function ChapterCheck({ check, readerId }: { check: ChapterCheckModel; readerId: string }) {
+export function ChapterCheck({ check, readerId, completed = null }: { check: ChapterCheckModel; readerId: string; completed?: AnswersResult | null }) {
   // The response plus exactly what was submitted, so the result screen can review each answer (comms 0051).
-  const [done, setDone] = useState<{ result: AnswersResult; answers: ChapterCheckAnswers } | null>(null);
+  // `completed` is this Reader's saved completion, so a refresh shows the same result instead of a fresh Check (0076).
+  // The submitted answers aren't stored with it, so a restored result shows grades and feedback without the answer review.
+  const [done, setDone] = useState<{ result: AnswersResult; answers?: ChapterCheckAnswers } | null>(completed && { result: completed });
   // The reading R2 confirmed saved for this completion, or null for a silent read or a failed save,
   // so grading credits only this reading (comms 0024).
   const readAloudStartedAt = useConfirmedReadAloudStartedAt();
