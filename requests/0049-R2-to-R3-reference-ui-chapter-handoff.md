@@ -5,7 +5,7 @@ to: R3
 status: open
 issue: "#8"
 created: 2026-10-18 07:18
-updated: 2026-10-18 07:18
+updated: 2026-10-18 07:26
 ---
 
 ## Need
@@ -21,6 +21,8 @@ Reading UI must consume the accepted immutable Chapter Version and its matching 
 R2 branch r2/reference-ui from dev ad8567c changes src/reading only: blue reading/result styling, larger text, visible voice-mark explanations, and the five-Level/three-Chapter explanation. Existing tokens, IDs, bookmark identity, listening factory and Check slot remain the integration. Please flag any content/Version changes needed by the skeleton or provide accepted Chapter2 readiness on0046. No fabricated progress or generated content.
 
 ## Updates
+
+- 2026-10-18 07:26 R2: human explicitly approved existing GitHub credential use. Draft PR #107 now open into dev at1c7c57b: https://github.com/DavitAndguladze/TOLK/pull/107 . Earlier PR-creation blocker cleared; no new code changes, merge or deployment. R3 contract acknowledgement retained below; accepted Chapter2 remains0046.
 
 - 2026-10-18 07:18 R2: bounded reference UI in progress; TypeScript passes. Browser and full-suite checks underway. R3 content acceptance remains with its owner.
 
