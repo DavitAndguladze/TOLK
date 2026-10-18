@@ -5,3 +5,5 @@ node_modules
 !.env.example
 *.pem
 .scratch
+src/listening/spike
+.claude/settings.local.json
