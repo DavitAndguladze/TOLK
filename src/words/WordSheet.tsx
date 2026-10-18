@@ -28,8 +28,9 @@ function displayWord(token: Token): string {
 /**
  * Opens when the Reader taps a word. Tapping a word flags it (CONTEXT.md: Flagged Word), so the
  * sheet flags it on open, shows its in-context meaning, plays it aloud, and lets the Reader unflag it.
+ * Preview Levels offer meaning and pronunciation without adding flags to an unscored Version.
  */
-export function WordSheet({ chapterVersionId, token, flagScope, onClose }: { chapterVersionId: string; token: Token; flagScope: FlagScope; onClose: () => void }) {
+export function WordSheet({ chapterVersionId, token, flagScope, onClose, canFlag = true }: { chapterVersionId: string; token: Token; flagScope: FlagScope; onClose: () => void; canFlag?: boolean }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const flagged = useFlaggedWords(chapterVersionId, flagScope).has(token.index);
@@ -49,7 +50,7 @@ export function WordSheet({ chapterVersionId, token, flagScope, onClose }: { cha
   }, []);
 
   useEffect(() => {
-    if (isFlagged(chapterVersionId, token.index, flagScope)) return;
+    if (!canFlag || isFlagged(chapterVersionId, token.index, flagScope)) return;
     let live = true;
     setSaving(true);
     flagWord(chapterVersionId, token, flagScope).then(
@@ -60,7 +61,7 @@ export function WordSheet({ chapterVersionId, token, flagScope, onClose }: { cha
       live = false;
     };
     // Keyed on the index, not the Token object, so a re-render never re-flags a word the Reader just unflagged.
-  }, [chapterVersionId, token.index, flagScope]);
+  }, [chapterVersionId, token.index, flagScope, canFlag]);
 
   useEffect(() => {
     const request = new AbortController();
@@ -74,6 +75,7 @@ export function WordSheet({ chapterVersionId, token, flagScope, onClose }: { cha
   }, [chapterVersionId, token.index, meaningAttempt]);
 
   async function toggleFlag() {
+    if (!canFlag) return;
     setFlagFailed(false);
     setSaving(true);
     try {
@@ -140,10 +142,10 @@ export function WordSheet({ chapterVersionId, token, flagScope, onClose }: { cha
             <Icon d={SPEAKER} />
             {speech === "loading" ? "Loading voice…" : speech === "playing" ? "Stop voice" : speech === "failed" ? "Retry voice" : "Hear it"}
           </button>
-          <button type="button" onClick={toggleFlag} disabled={saving} className={`${button} border border-hairline bg-white/60 text-ink hover:bg-white`}>
+          {canFlag && <button type="button" onClick={toggleFlag} disabled={saving} className={`${button} border border-hairline bg-white/60 text-ink hover:bg-white`}>
             <Icon d={FLAG} />
             {saving ? "Saving…" : flagged ? "Unflag" : "Flag"}
-          </button>
+          </button>}
         </div>
         {speech === "failed" && <p role="alert" className="mt-3 text-sm text-ink">
           {browserVoice ? "Browser voice couldn’t play." : "OCI pronunciation couldn’t play."}
@@ -151,7 +153,7 @@ export function WordSheet({ chapterVersionId, token, flagScope, onClose }: { cha
         </p>}
         {speech === "playing" && <p role="status" className="mt-3 text-sm text-fog">{browserVoice ? "Browser voice fallback" : "OCI Speech pronunciation"}</p>}
         <p aria-live="polite" className="mt-3 text-sm text-fog">
-          {saving ? "Saving your word…" : flagged ? "Flagged. It goes to your Word Bank, and you'll meet it again." : "Not flagged. It stays out of your Word Bank."}
+          {!canFlag ? "Return to your assigned Level to flag words." : saving ? "Saving your word…" : flagged ? "Flagged. It goes to your Word Bank, and you'll meet it again." : "Not flagged. It stays out of your Word Bank."}
         </p>
       </div>
     </dialog>

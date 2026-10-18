@@ -68,6 +68,6 @@ export function ReadingWithWords({ chapterVersionId: assignedId, readerId, chunk
       {failed ? <>Saved words couldn’t load. You can keep reading. <button type="button" onClick={() => setAttempt((n) => n + 1)} className="min-h-11 cursor-pointer font-semibold text-light underline outline-light focus-visible:outline-2">Retry saved words</button></> : "Loading saved words…"}
     </p>}
     <ReadingScreen chapterVersionId={chapterVersionId} readerId={readerId} chunks={chunks} chapterCheck={chapterCheck} completed={completed && !previewing} onWordTap={ready ? setSelected : undefined} flaggedTokenIndexes={ready ? flags : undefined} />
-    {selected && <WordSheet key={`${chapterVersionId}:${selected.index}`} chapterVersionId={chapterVersionId} token={selected} flagScope={flagScope} onClose={() => setSelected(null)} />}
+    {selected && <WordSheet key={`${chapterVersionId}:${selected.index}`} chapterVersionId={chapterVersionId} token={selected} flagScope={flagScope} canFlag={!previewing} onClose={() => setSelected(null)} />}
   </>;
 }
