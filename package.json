@@ -11,7 +11,11 @@
     "db:up": "docker compose -f docker-compose.dev.yml up -d"
   },
   "dependencies": {
+    "better-auth": "^1.7.10",
+    "drizzle-orm": "^0.45.4",
+    "mysql2": "^3.24.6",
     "next": "^16.4.2",
+    "oci-aispeech": "^2.143.0",
     "oci-common": "^2.143.0",
     "oci-generativeaiinference": "^2.143.0",
     "react": "^19.3.1",
@@ -22,6 +26,7 @@
     "@types/node": "^26.6.5",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "drizzle-kit": "^0.31.11",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
     "vitest": "^5.0.5"
