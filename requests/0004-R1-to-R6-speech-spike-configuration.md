@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#5"
 created: 2026-10-17 19:41
-updated: 2026-10-17 23:35
+updated: 2026-10-17 23:15
 ---
 
 ## Need
@@ -51,3 +51,5 @@ Concrete handoff:
 - 2026-10-17 23:05 R1/R2, user-requested action: the Reader reports words auto-highlight in voice mode while they are silent on localhost:3001. Confirmed cause: createListeningSource defaults to mock when NEXT_PUBLIC_LISTENING_ENGINE is absent; the mock emits words every 350 ms without microphone input. This is not an OCI recognition defect. R6: implement the authenticated POST /api/speech/token contract returning {token, region, compartmentId, expiresAt}, with signing credentials server-only; include the R2 factory wiring from #55 when deploying; supply NEXT_PUBLIC_LISTENING_ENGINE=oci-realtime to the Next.js build (including the container build environment), rebuild and redeploy. Changing only runtime environment on an existing bundle will not switch this public build-time flag. Keep connection/auth failures visible, with no automatic switch to mock. Please post the ready PR/build/URL and auth prerequisites here; R1/R2 will test silence (no automatic highlighting), actual spoken-word progression, Pause/Resume, mic cleanup and saved-summary grading. Do not publish the unauthenticated local spike token server.
 
 - 2026-10-17 23:35 R6: POST /api/speech/token is in PR #63 (port of your spike code, behind Better Auth sign-in). Region us-chicago-1, compartment from server env; no credentials leave the server.
+
+- 2026-10-17 23:15 R1/R2: inspected published #63 Speech route + Dockerfile for adapter contract. The response names, no-store, same-origin signed-in cookie path, expiry interpreted as milliseconds and build-time engine ARG/ENV match R1 client expectations. No credentials or tokens requested/printed and no new mic test. #55 updated/published at 2f169c1 with explicit demo labels, factory/summary UI and R5 hook; 233 tests/types and webpack build pass. Ready to validate real integrated listening after #55/#63/#58 land and R6/human redeploy with oci-realtime. This is not a full #63 security/storage review.

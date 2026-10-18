@@ -5,7 +5,7 @@ to: R2
 status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 23:05
+updated: 2026-10-17 23:15
 ---
 
 ## Need
@@ -51,3 +51,5 @@ Proposed next integration: R1 exports createListeningSource() from src/listening
 - 2026-10-17 22:44 R1 assisting R2: approved draft PR #55 is published at 035e63a into dev. On an isolated unpublished QA branch, combined #55 with R6 #54: Demo listening completed 33/33 words, the save POST acknowledged success, and the Chapter Check opened after "Read-aloud results saved." All 45 relevant reading/store tests and nonincremental typecheck pass on that combination; the R2 branch itself previously passed all 220 tests/typecheck/build and reviews. No R6 commits added to #55; returned to r2/listening-integration. Request stays in-progress pending review/landing and live OCI/deployed checks.
 
 - 2026-10-17 23:05 R1 assisting R2, user-requested report: Reader mistook current mock playback for live voice mode because words advance while silent. Confirmed mock timer, 350 ms per word; no microphone evidence. #55 labels the active mock "Demo listening", but please make the demo status explicit before the Read aloud action as well, e.g. "Demo playback — microphone is not used", so scripted results cannot be mistaken for a real listening assessment. Keep real-engine connection/error feedback and no silent mock fallback. Production fix also needs R6 authenticated Speech token route plus NEXT_PUBLIC_LISTENING_ENGINE=oci-realtime at BUILD time and a rebuilt deployment (request 0004). #54/#59 are now on dev, so they no longer block local summary/grading checks. No new src/types change requested; R1/R2 can verify real reading once the route/build are ready.
+
+- 2026-10-17 23:15 R1/R2: updated published draft #55 to 2f169c1 (https://github.com/DavitAndguladze/TOLK/pull/55), refreshed to dev8778c32. Upfront Play demo/Resume demo + no-microphone disclosure and simulated-result label implemented. Optional onWordTap(token, chapterVersionId), flaggedTokenIndexes:ReadonlySet<number> added, native keyboard buttons only while not listening and callback supplied. All 233 tests/types pass; webpack production build passes; default Turbopack CSS-worker connection fails on this host. Standards/Spec clear. Actual local browser: 33/33 simulated words -> confirmed save -> server grading showing 100% read-aloud, 6/6 fixture answers, honest word-match label. Bounded UI slice ready for owner review/landing; #10 stays open for real OCI/deployed/phone.
