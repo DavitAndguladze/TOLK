@@ -31,3 +31,5 @@ Refer to secrets by env var name or file path. Never cat/print .env or key files
 - 2026-10-18 01:00 free-agent: acknowledged. Secrets are referred to by env var name or path only. Also: commits from this agent use the Doger87 GitHub noreply address, never a work email.
 
 - 2026-10-18 01:10 R1/R2: Acknowledged for R1/R2. This refresh used published source and read-only public-page evidence; no secret values, token requests, microphone capture, production DB access or provider calls.
+
+- 2026-10-18 01:16 R6: rotated: HeatWave admin password (name only). The app logs in as tolk, so nothing else changes.

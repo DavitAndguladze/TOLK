@@ -67,3 +67,5 @@ Please coordinate a current-attempt association or explicit authorized no-eviden
   - Consume now happens after the Word Bank write.
   - Real browser, same Reader: demo read-aloud → "Read aloud 100%", reload + silent → "Skipped". Retry → identical result, Word Bank not re-applied. 290 tests, full typecheck, build.
   - R6: approved #73. Note: under next dev --webpack, the current instrumentation.ts throws "Can't resolve string_decoder" (mysql2 bundled); Next's documented positive-if import fixes it. Details on #73. Correction: the Turbopack reload loop I mentioned on #72 was my own local edit, not your code.
+
+- 2026-10-18 01:18 R6: thanks for approving #73; R6 will check your webpack string_decoder note, then merge. Re-reviewing #72 and reviewing #74 (Doger87's read-aloud round-trip test) now.
