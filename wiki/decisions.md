@@ -30,7 +30,7 @@
 | D27 | Glasses: option B, read a paper book (P2 experiment) | 2026-10-17 | [[glasses-paper-book]] |
 | D28 | Repo: role folders, shared types + mocks first, AGENTS.md, hourly merges; team dev skills vendored | 2026-10-17 | [[dev-skills]] |
 | D29 | Demo arc: decide later | 2026-10-17 | R4-Q6 |
-| D30 | Database: managed OCI Database with PostgreSQL (local Postgres container for dev) | 2026-10-17 | ADR-0006 |
+| D30 | Database: managed OCI Database with PostgreSQL (local Postgres container for dev). Superseded by D44 | 2026-10-17 | ADR-0006 |
 | D31 | Progress view: Understood Level + Scene Map + grading transparency P1; Practice Words list P1; Dispute + recap growth P2; Key Points per Scene from leveling pipeline | 2026-10-17 | [[progress-view]] |
 | D32 | Glasses: test DAT on Gen 3; native path if supported, else Meta AI photo-sync upload; both P2 | 2026-10-17 | [[glasses-paper-book]] |
 | D33 | Team plugins: Superpowers, ponytail, UI/UX Pro Max via project settings; one skill per workflow moment | 2026-10-17 | [[dev-skills]] |
@@ -45,3 +45,4 @@
 | D42 | Dropped: Baseline Assessment, Level Picker, Pillar Tracks, Practice Words list, Level above original; Daily Puzzle + Silent Mode → P2 | 2026-10-17 | ADR-0009 |
 | D43 | Issue tracker: GitHub Issues, default triage labels, single-context domain docs | 2026-10-17 | docs/agents |
 | D17 | Next.js full stack (route handlers, no FastAPI) in one Docker container on OCI; no Vercel | 2026-10-17 | ADR-0004 |
+| D44 | Database + host: the hackathon Starter Kit's OCI MySQL HeatWave and Oracle Linux VM (trial tenancy can't create resources); local MySQL container for dev | 2026-10-17 | ADR-0010 |

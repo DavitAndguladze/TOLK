@@ -1,6 +1,6 @@
 # Managed OCI Database with PostgreSQL instead of Autonomous Database
 
-Status: accepted (2026-10-17)
+Status: superseded by ADR-0010 (2026-10-17): the trial tenancy cannot create new resources, so we use the Starter Kit's MySQL HeatWave.
 
 The team chose Better Auth for accounts. Better Auth's built-in adapters cover PostgreSQL, MySQL, SQLite, and MSSQL (directly or via Prisma/Drizzle), not Oracle Database. A community Kysely Oracle dialect exists (`kysely-oracledb` 3.1.2) but is unproven with Better Auth's generated SQL. So all app data lives in one managed **OCI Database with PostgreSQL**, provisioned in the same VCN as the app VM. Every AI call (Speech, TTS, GenAI, Vision) still runs on OCI.
 

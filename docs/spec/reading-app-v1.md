@@ -169,7 +169,7 @@ Every AI call runs on OCI: Speech (listening, text-to-speech), Generative AI (re
   Cover: every row of the level table; L5 cap and L1 floor; no read-aloud summary; a word flagged then graduated two Chapters later; a graduated word flagged again.
 - **Seam 2, alignment:** expected tokens plus recognized words → per-word results and Read-aloud Misses. Cover correct, mispronounced, skipped, repeated, self-corrected words.
 - **Seam 3, chapter validator:** reject a two-Level jump, a changed name, a dropped Key Point, and a simplified Graduated Word; accept a faithful one-step rewrite.
-- **Seam 4, route integration:** against local Postgres with the AI gateway faked. Path: sign in → open Book → post read-aloud → flag a word → answer the Chapter Check → next Chapter Version ready one Level up → progress shows Level Line, Word Bank, Words Learned.
+- **Seam 4, route integration:** against local MySQL with the AI gateway faked. Path: sign in → open Book → post read-aloud → flag a word → answer the Chapter Check → next Chapter Version ready one Level up → progress shows Level Line, Word Bank, Words Learned.
 - **AI quality (evals, not unit tests):**
   - the grader against fixed answers per Chapter;
   - a human read of generated Gatsby Chapters 2–3 at each Level before the demo.

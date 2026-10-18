@@ -16,6 +16,6 @@ Open at build time (tunable): grading weights/thresholds, Chapter Check question
 - Rubric names privacy + human oversight; team deprioritized privacy (D16). Mitigation: one pitch line; Reader-as-authority (D12).
 - OCI realtime browser client not on npm under an obvious name → spike must locate it.
 - Meta DAT did not list Ray-Ban Meta Gen 3 as supported (Sept 2026).
-- Managed PostgreSQL lives in a private subnet → dev uses local container or SSH tunnel.
+- MySQL HeatWave lives in a private subnet → dev uses the local MySQL container or an SSH tunnel through the VM (ADR-0010).
 - Flow doc removes the Level Picker; rubric's 'learner agency' now rests on Book choice, flagging, and transparency.
 - Per-Reader generation latency: hidden behind the result screen; fallback versions for the demo.
