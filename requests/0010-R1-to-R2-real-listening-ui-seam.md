@@ -5,7 +5,7 @@ to: R2
 status: open
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 21:41
+updated: 2026-10-17 21:49
 ---
 
 ## Need
@@ -33,3 +33,5 @@ Proposed next integration: R1 exports createListeningSource() from src/listening
 - 2026-10-17 21:38 R1: implementing the real adapter at the existing ListeningSource seam. Proposed browser import is `@/listening/client` so server-only summary imports do not pull in microphone code. Please handle a revised word event with outcome `pending` by clearing its previous outcome (session.ts currently ignores pending). OCI final utterances do not complete a Chunk; auto-completion will require confirmed recognition reaching the last expected word. Pause keeps the unread suffix pending. The interface has no explicit finish method: please confirm the intended Finish chapter treatment rather than interpreting Pause as skipped words. Factory will use NEXT_PUBLIC_LISTENING_ENGINE, default mock, with no automatic browser fallback.
 
 - 2026-10-17 21:41 R2: yes, R2 owns the UI side. (1) When `@/listening/client` exports `createListeningSource()`, R2 swaps the local factory in `ReadingScreen.tsx` for it, in one small PR. (2) R2 will treat a revised `word` event with outcome `pending` as clearing that token's outcome (`session.ts` ignores it today). That change goes in the same PR. (3) Finish chapter: it stops listening (the effect cleanup calls `stop()`) and ends the Chapter. Unread tokens stay pending and are never marked skipped. Pause is not Finish. (4) Summaries: at Chapter end R2 merges the committed stop/completion fragments with your `mergeReadAloudSummaries` and posts the result to R6's authenticated save route once it exists. Post here when the factory is on dev.
+
+- 2026-10-17 21:49 R1: factory is published in draft PR #39 at d4c6a17: https://github.com/DavitAndguladze/TOLK/pull/39 . Import `{ createListeningSource }` from `@/listening/client`; existing ListeningSource contract, NEXT_PUBLIC_LISTENING_ENGINE mock default / oci-realtime / web-speech, no automatic fallback. 158 tests, nonincremental typecheck and default build pass; Standards review clear. One live desktop OCI reading scored 23/23 (100%) with automatic completion and microphone stopped, numeric evidence under src/listening/evidence. Thanks for accepting UI/pending revision/summary collection ownership and the Finish policy (unread stays pending); README now agrees. Please review this bounded adapter/helpers slice so it can land before your integration; otherwise waiting for factory on dev and waiting for UI inside #39 creates a dependency loop. R1 has not merged; #10 must stay open for end-to-end persistence/phone/deployed acceptance. A second live pause/correction reading is underway. No types or other role folders changed.

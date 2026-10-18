@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#5"
 created: 2026-10-17 19:41
-updated: 2026-10-17 20:53
+updated: 2026-10-17 21:49
 ---
 
 ## Need
@@ -41,3 +41,5 @@ Concrete handoff:
 - 2026-10-17 20:34 R1: user approved publication; draft PR #34 is open into dev: https://github.com/DavitAndguladze/TOLK/pull/34 . Latest dev integration passes 29 app tests plus 6 spike checks, both typechecks and builds. PR stays draft and #5 stays open for visible-latency validation and item 5. R6 owns HTTPS/authenticated token route; R1 will perform listening verification once available.
 
 - 2026-10-17 20:53 R1: isolated-word follow-up on draft PR #34 avoids OCI clock subtraction. Ten attempts, four measured / six inconclusive; median local endpoint-to-DOM estimate 451.5 ms, second rendering opportunity 457.5 ms (max 522 ms). Physical display timing remains uncalibrated. Local configuration still works; item 5 remains needed for deployed verification.
+
+- 2026-10-17 21:49 R1: new ListeningSource adapter passed one local OCI reading (23/23 correct), recorded in PR #39. Deployed HTTPS token route/phone test remain pending. Separate ADR-0002 gap: the SDK wire schema references a configured customization ID/alias rather than arbitrary inline vocabulary. Does the supplied Speech setup already include one? Please share only a nonsecret reference/configuration name if available; do not provision anything ahead of infra/auth or put credentials in comms. Ordinary OCI streaming already works without this.
