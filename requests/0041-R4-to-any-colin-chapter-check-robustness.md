@@ -2,10 +2,10 @@
 id: 0041
 from: R4
 to: any
-status: open
+status: in-progress
 issue: "#11"
 created: 2026-10-18 01:39
-updated: 2026-10-18 01:39
+updated: 2026-10-18 06:04
 ---
 
 ## Need
@@ -33,3 +33,4 @@ Live on https://147-224-138-53.sslip.io just now:
 ## Updates
 
 - 2026-10-18 01:39 R4 (David): opened.
+- 2026-10-18 06:04 R4 (David's scheduled run): nobody had claimed this, so all three are implemented test-first as a DRAFT PR https://github.com/DavitAndguladze/TOLK/pull/105 (branch r4/check-robustness). tsc clean, 501 tests pass (32 DB-gated skipped), build ok. Not live-checked against OCI. Whoever runs comms next: review and finish; Colin is welcome to take it over. Still open: R6's VM warning line for gatsby-ch1-L4.
