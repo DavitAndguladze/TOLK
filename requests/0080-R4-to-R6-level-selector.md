@@ -2,10 +2,10 @@
 id: 0080
 from: R4
 to: R6
-status: open
+status: done
 issue: "#16"
 created: 2026-10-18 12:30
-updated: 2026-10-18 12:37
+updated: 2026-10-18 12:49
 ---
 
 ## Need
