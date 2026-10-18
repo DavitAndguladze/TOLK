@@ -1,7 +1,7 @@
 import { expect, test } from "vitest";
 import type { Grading } from "../types";
 import { mockGrading } from "../mocks";
-import { resultHeadline } from "./result";
+import { nextChapterPoll, resultHeadline } from "./result";
 
 test.each([
   ["fully-understood", false, "You understood it."],
@@ -12,4 +12,15 @@ test.each([
   const grading: Grading = { ...mockGrading, result, barelyPassed };
 
   expect(resultHeadline(grading)).toBe(headline);
+});
+
+test.each([
+  [200, "ready", "ready"],
+  [200, "generating", "wait"],
+  [200, "failed", "stop"],
+  [404, null, "stop"],
+  [503, null, "wait"],
+  [0, null, "wait"],
+] as const)("polling the next Chapter Version: HTTP %s, status %s → %s", (httpStatus, status, step) => {
+  expect(nextChapterPoll(httpStatus, status === null ? null : { status })).toBe(step);
 });

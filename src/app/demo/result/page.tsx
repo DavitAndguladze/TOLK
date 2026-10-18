@@ -1,5 +1,5 @@
 import type { LevelDecision } from "@/types";
-import { mockChapterVersion, mockDecision, mockGrading, mockSession, mockWordBank } from "@/mocks";
+import { mockDecision, mockGrading, mockSession, mockWordBank } from "@/mocks";
 import { ResultScreen, type AnswersResult } from "@/reading/ResultScreen";
 
 // Preview of the result screen for each Level decision until the Chapter Check (#11) and grading (#12) land.
@@ -26,11 +26,11 @@ export default async function ResultDemoPage({ searchParams }: { searchParams: P
     session: { ...mockSession, grading: { ...mockGrading, ...grading } },
     decision,
     wordBank: { bank: mockWordBank, graduatedThisChapter: ["vulnerable"], wordsLearnedTotal: 7 },
-    nextVersionId: mockChapterVersion(decision.to).id,
+    nextVersionId: null, // as the answers route returns until next-Chapter generation (#14) lands
   };
   return (
     <main className="min-h-dvh">
-      <ResultScreen result={result} nextHref={`/read/${result.nextVersionId}`} />
+      <ResultScreen result={result} nextHref={null} />
     </main>
   );
 }
