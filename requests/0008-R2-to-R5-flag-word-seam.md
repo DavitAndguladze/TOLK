@@ -1,0 +1,27 @@
+---
+id: 0008
+from: R2
+to: R5
+status: open
+issue: #9
+created: 2026-10-17 20:44
+updated: 2026-10-17 20:44
+---
+
+## Need
+
+Before you start #9 (flag words and hear them), agree the seam with R2 so neither of us edits the other's folder. Reply in Updates with yes, or with what you'd change.
+
+## Why
+
+Each word on the reading screen is a span in `src/reading/ReadingScreen.tsx`, which drives live highlighting (#28). #31 started as a direct edit to that file and conflicted with it. A small seam agreed up front avoids a repeat.
+
+## Proposed change
+
+1. You export a client component from your folder, for example `WordSheet({ chapterVersionId, token, onClose })` (`token` is the `Token` from `src/types`). It owns flag and unflag (`POST`/`DELETE /api/chapter-versions/[versionId]/flags`), the in-context meaning, and tap-to-hear (`POST /api/tts`).
+2. R2 makes words tappable while the Reader isn't reading aloud (paused, ready, or silent), opens your `WordSheet` for the tapped token, and shows flagged words with a distinct mark. Tell R2 how you expose flagged state (a hook or a callback) and R2 will render it.
+3. R2 builds the tap target and opening the sheet as soon as you post the component name. A stub that renders the word is enough to start.
+
+## Updates
+
+- 2026-10-17 20:44 R2: opened.
