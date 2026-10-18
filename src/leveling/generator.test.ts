@@ -203,6 +203,30 @@ describe("ChapterGenerator", () => {
     expect(peak).toBeGreaterThan(1);
   });
 
+  it("carries documented exceptions into later passages and verifies their global source citations", async () => {
+    const next = input();
+    next.original.originalText += " He went home.".repeat(400) + " He felt vulnerable.";
+    const settings = dependencies();
+    const evidence = { word: "vulnerable", originalSentenceIndex: 403, quote: "He felt vulnerable.",
+      reason: "Preserves his exposure to harm, which feeling bad would lose." };
+    let suppliedEvidence = false;
+    const generator = createChapterGenerator({ ...settings,
+      policyForChapter: () => ({ ...settings.policyForChapter(), retainedWords: ["hope", "vulnerable"], retainedWordEvidence: [evidence] }),
+      generateText: async (prompt) => {
+        const data = JSON.parse(prompt.split("DATA:\n")[1]);
+        if (data.sentences.some((row: { originalSentenceIndex: number }) => row.originalSentenceIndex === 403)) {
+          suppliedEvidence = data.retainedWordEvidence?.some((row: { word: string; reason: string }) => row.word === "vulnerable" && row.reason === evidence.reason);
+        }
+        return JSON.stringify({ level: 1, levelScore: 20, sentences: data.sentences, reinforcedWords: [] });
+      },
+    });
+    const result = await generator.generate(next);
+    expect(result.version.text).toBe(next.original.originalText);
+    expect(suppliedEvidence).toBe(true);
+    expect(() => verifyChapterArtifact(result, { ...next, level: 1, reinforcement: "context-clue" },
+      { ...settings.policyForChapter(), retainedWords: ["hope", "vulnerable"], retainedWordEvidence: [evidence] })).not.toThrow();
+  });
+
   it("maps passage reinforcement to the final Chapter sentence index", async () => {
     const next = input();
     next.original.originalText += " He went home.".repeat(400) + " He felt hope.";

@@ -3,6 +3,7 @@ import { describe, expect, test } from "vitest";
 import { GATSBY_BOOK, parseGatsby } from "./gatsby.ts";
 import { splitOriginalSentences } from "./content.ts";
 import type { IngestedGatsby } from "./ingestion.ts";
+import { validateRetainedWordPolicy } from "./validation.ts";
 
 const source = readFileSync(new URL("../data/gatsby/pg64317.txt", import.meta.url), "utf8");
 
@@ -15,6 +16,7 @@ describe("Gatsby ingestion source", () => {
     expect(content.chapters.map((chapter) => splitOriginalSentences(chapter.originalText).length)).toEqual([362, 308, 388, 373]);
     for (const chapter of content.chapters) {
       const policy = content.policies[chapter.id];
+      expect(validateRetainedWordPolicy(chapter, policy)).toEqual([]);
       const sentences = splitOriginalSentences(chapter.originalText);
       expect(policy.originalEvidence.keyPoints.map((point) => point.keyPointId)).toEqual(chapter.keyPoints.map((point) => point.id));
       expect(policy.originalEvidence.complexWords.map((word) => word.word)).toEqual(chapter.complexWords.map((word) => word.word));

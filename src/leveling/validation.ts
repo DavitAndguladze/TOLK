@@ -16,13 +16,23 @@ export interface ContentValidationPolicy {
   /** Pinned frequency ranks; numeric quantities/dates are not English vocabulary words. */
   vocabulary: { source: string; ranks: Readonly<Record<string, number>> };
   requiredNames: readonly string[];
-  /** Explicit vocabulary exemptions, alongside proper names and Graduated Words. */
+  /** Complex Words plus individually documented source words needed to preserve meaning. */
   retainedWords: readonly string[];
+  /** Required for each retained word outside the Chapter's Complex Words; optional for legacy policies. */
+  retainedWordEvidence?: readonly RetainedWordEvidence[];
   /** Separately supplied evidence, never the generator's self-reported validity flag. */
   keyPointEvidence: {
     source: string;
     points: readonly { keyPointId: string; sentenceIndex: number; quote: string }[];
   };
+}
+
+export interface RetainedWordEvidence {
+  word: string;
+  originalSentenceIndex: number;
+  quote: string;
+  /** The specific detail or meaning a simpler replacement would lose. */
+  reason: string;
 }
 
 export interface ValidationResult {
@@ -60,6 +70,44 @@ function hasName(text: string, name: string): boolean {
   return new RegExp(`(?<![\\p{L}\\p{N}])${escaped}(?![\\p{L}\\p{N}])`, "u").test(text);
 }
 
+export function containsSourceWord(text: string, word: string): boolean {
+  return text.match(/[\p{L}\p{N}]+(?:['’-][\p{L}\p{N}]+)*/gu)?.includes(word) ?? false;
+}
+
+/** Source attestation permits a named word, never a blanket waiver of the Level's vocabulary target. */
+export function validateRetainedWordPolicy(
+  original: Chapter,
+  policy: Pick<ContentValidationPolicy, "retainedWords" | "retainedWordEvidence">,
+): ValidationResult["issues"] {
+  const invalid = (message: string) => ({ code: "retained-word-policy", message });
+  const singleWord = (word: unknown): word is string => nonempty(word) && /^[\p{L}]+(?:['’-][\p{L}]+)*$/u.test(word);
+  const evidence = policy.retainedWordEvidence ?? [];
+  if (!Array.isArray(policy.retainedWords) || !policy.retainedWords.every(singleWord) || !Array.isArray(evidence)) {
+    return [invalid("Retained vocabulary must list individual words and source evidence")];
+  }
+  const issues: ValidationResult["issues"] = [];
+  const sentences = splitOriginalSentences(original.originalText);
+  const attested = new Set<string>();
+  for (const row of evidence) {
+    if (!record(row) || !singleWord(row.word) || !nonempty(row.reason) || !nonempty(row.quote)
+      || typeof row.originalSentenceIndex !== "number" || !Number.isInteger(row.originalSentenceIndex)
+      || !sentences[row.originalSentenceIndex]?.includes(row.quote)
+      || !containsSourceWord(sentences[row.originalSentenceIndex].toLowerCase(), row.word.toLowerCase())
+      || !containsSourceWord(row.quote.toLowerCase(), row.word.toLowerCase()) || !policy.retainedWords.includes(row.word)
+      || attested.has(row.word.toLowerCase())) {
+      issues.push(invalid("Each retained-word exception needs a unique listed word, exact source citation, and meaning-preservation reason"));
+    } else {
+      attested.add(row.word.toLowerCase());
+    }
+  }
+  for (const word of policy.retainedWords) {
+    if (!attested.has(word.toLowerCase()) && !original.complexWords.some((entry) => entry.word === word)) {
+      issues.push(invalid(`Retained word needs source evidence and a reason: ${word}`));
+    }
+  }
+  return issues;
+}
+
 function versionShape(value: unknown): value is ChapterVersion {
   if (!record(value)) return false;
   return nonempty(value.id) && nonempty(value.bookId) && nonempty(value.chapterId)
@@ -91,6 +139,8 @@ export function validateChapterVersion(
     ? { ...input, level: input.decision.to, reinforcement: input.decision.reinforcement }
     : input;
   const { original, baseline } = context;
+  const retainedIssues = validateRetainedWordPolicy(original, policy);
+  issues.push(...retainedIssues);
   if (value.bookId !== original.bookId || value.chapterId !== original.id || value.chapterNumber !== original.number
     || value.readerId !== context.readerId || value.baselineVersionId !== (baseline?.id ?? null)) {
     issue("identity", "Chapter Version identity does not match the requested Chapter, Reader, or baseline");
@@ -145,15 +195,22 @@ export function validateChapterVersion(
     else {
       const exemptions = new Set([
         ...policy.requiredNames.flatMap((name) => words(`${name} ${name}'s ${name}’s`)),
-        ...context.graduatedWords.flatMap(words), ...policy.retainedWords.flatMap(words),
+        ...context.graduatedWords.flatMap(words), ...(retainedIssues.length ? [] : policy.retainedWords
+          .filter((word) => original.complexWords.some((entry) => entry.word === word)).flatMap(words)),
         ...[...reinforced].flatMap(words),
       ]);
+      const documented = retainedIssues.length ? [] : policy.retainedWordEvidence ?? [];
       const outsideTarget = [...new Set(expectedTokens.filter((token) =>
         !/^\d+(?:,\d{3})*(?:\.\d+)?$/.test(token.text.replace(/^["'“‘(]+|["'”’).,!?;:]+$/gu, "")))
-        .map((token) => token.normalized).filter(Boolean))].filter((word) => {
-        const rank = policy.vocabulary.ranks[word];
-        return !exemptions.has(word) && (!Number.isInteger(rank) || rank < 1 || rank > spec.maxWordRank!);
-      });
+        .filter((token) => {
+          const word = token.normalized;
+          const rank = policy.vocabulary.ranks[word];
+          const source = value.sentences[token.sentenceIndex].originalText;
+          const retainedHere = documented.some((entry) => words(entry.word)[0] === word
+            && containsSourceWord(token.text.toLowerCase(), entry.word.toLowerCase())
+            && containsSourceWord(source.toLowerCase(), entry.word.toLowerCase()));
+          return word && !exemptions.has(word) && !retainedHere && (!Number.isInteger(rank) || rank < 1 || rank > spec.maxWordRank!);
+        }).map((token) => token.normalized))];
       if (outsideTarget.length) issue("vocabulary", `Words missing or outside the frequency target: ${outsideTarget.join(", ")}`);
     }
   }

@@ -143,6 +143,62 @@ test("requires an explicit frequency source instead of silently waiving vocabula
   expect(validateChapterVersion(version, input, policy).issues).toContainEqual(expect.objectContaining({ code: "vocabulary" }));
 });
 
+test("rejects a retained word outside the Chapter Check vocabulary without source evidence", () => {
+  const { version, input, policy } = setup();
+  policy.retainedWords = ["kept"];
+  expect(validateChapterVersion(version, input, policy).issues)
+    .toContainEqual(expect.objectContaining({ code: "retained-word-policy" }));
+});
+
+test("allows an exact source word with documented meaning loss while still rejecting unlisted forms", () => {
+  const { version, input, policy } = setup();
+  policy.vocabulary.ranks = { ...policy.vocabulary.ranks, kept: 1001 };
+  policy.retainedWords = ["kept"];
+  const documented = { ...policy, retainedWordEvidence: [{
+    word: "kept", originalSentenceIndex: 2, quote: "Nick kept that advice.",
+    reason: "Preserves that Nick continued to hold the advice.",
+  }] };
+  expect(validateChapterVersion(version, input, documented).valid).toBe(true);
+  replaceSentence(version, 2, "Nick kept that advice mysteriously.");
+  expect(validateChapterVersion(version, input, documented).issues)
+    .toContainEqual(expect.objectContaining({ code: "vocabulary", message: expect.stringContaining("mysteriously") }));
+  replaceSentence(version, 2, "Nick k-ept that advice.");
+  expect(validateChapterVersion(version, input, documented).issues)
+    .toContainEqual(expect.objectContaining({ code: "vocabulary", message: expect.stringContaining("kept") }));
+});
+
+test.each([
+  { reason: " " }, { quote: "Nick" }, { quote: "Nick kept a secret." }, { originalSentenceIndex: 1 },
+  { originalSentenceIndex: -1 }, { word: "keep" }, { word: "kept that" },
+])("rejects invalid retained-word source evidence: %j", (change) => {
+  const { version, input, policy } = setup();
+  policy.retainedWords = ["kept"];
+  policy.retainedWordEvidence = [{ word: "kept", originalSentenceIndex: 2, quote: "Nick kept that advice.",
+    reason: "Preserves that Nick continued to hold the advice.", ...change }];
+  expect(validateChapterVersion(version, input, policy).issues)
+    .toContainEqual(expect.objectContaining({ code: "retained-word-policy" }));
+});
+
+test("does not use a documented source-word exception in an unrelated original passage", () => {
+  const { version, input, policy } = setup();
+  policy.vocabulary.ranks = { ...policy.vocabulary.ranks, kept: 1001 };
+  policy.retainedWords = ["kept"];
+  policy.retainedWordEvidence = [{ word: "kept", originalSentenceIndex: 2, quote: "Nick kept that advice.",
+    reason: "Preserves that Nick continued to hold the advice." }];
+  replaceSentence(version, 0, "Nick felt vulnerable at Tom's house. Nick kept advice.");
+  expect(validateChapterVersion(version, input, policy).issues)
+    .toContainEqual(expect.objectContaining({ code: "vocabulary", message: expect.stringContaining("kept") }));
+});
+
+test.each(["Tom's house", "Tom"])("does not attest a bare word using a possessive source form quoted as %s", (quote) => {
+  const { version, input, policy } = setup();
+  policy.retainedWords = ["Tom"];
+  policy.retainedWordEvidence = [{ word: "Tom", originalSentenceIndex: 0, quote,
+    reason: "Preserves the host's identity." }];
+  expect(validateChapterVersion(version, input, policy).issues)
+    .toContainEqual(expect.objectContaining({ code: "retained-word-policy" }));
+});
+
 test.each([
   { reinforcedWords: [] },
   { reinforcedWords: [{ word: "vulnerable", reinforcement: "inline-definition", sentenceIndex: 0 }] },

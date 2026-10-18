@@ -53,6 +53,23 @@ describe("Gatsby ingestion", () => {
     expect(first.policies["gatsby-ch1"].retainedWords).toEqual(["younger", "vulnerable", "turning"]);
   });
 
+  it("retains individually documented source words beyond Check vocabulary without losing their rationale", async () => {
+    const content = await ingestGatsby(source, { generateText: async (prompt) => {
+      const data = JSON.parse(prompt.split("DATA:\n")[1]);
+      const value = metadata(data.number);
+      return JSON.stringify(data.number === 1 ? { ...value, retainedWords: [...value.retainedWords, "advice"],
+        retainedWordEvidence: [{ word: "advice", originalSentenceIndex: 0, quote: "my father gave me some advice",
+          reason: "Preserves that the father's words were guidance for Nick." }],
+      } : value);
+    } });
+    expect(content.policies["gatsby-ch1"].retainedWords).toEqual(["younger", "vulnerable", "turning", "advice"]);
+    expect(content.policies["gatsby-ch1"].retainedWordEvidence).toEqual([{
+      word: "advice", originalSentenceIndex: 0, quote: "my father gave me some advice",
+      reason: "Preserves that the father's words were guidance for Nick.",
+    }]);
+    expect(content.chapters[0].complexWords.map((entry) => entry.word)).not.toContain("advice");
+  });
+
   it.each([
     ["missing Key Points", { ...metadata(1), keyPoints: [] }],
     ["absent contextual word", { ...metadata(1), complexWords: [{ ...metadata(1).complexWords[0], word: "hallucination" }, ...metadata(1).complexWords.slice(1)] }],
@@ -60,6 +77,15 @@ describe("Gatsby ingestion", () => {
     ["wrong source index", { ...metadata(1), keyPoints: [{ ...metadata(1).keyPoints[0], originalSentenceIndex: 1 }, ...metadata(1).keyPoints.slice(1)] }],
     ["arbitrary exemption", { ...metadata(1), retainedWords: ["younger", "complicated"] }],
     ["missing vocabulary exemption", { ...metadata(1), retainedWords: [] }],
+    ["invented exception quote", { ...metadata(1), retainedWords: [...metadata(1).retainedWords, "advice"], retainedWordEvidence: [
+      { word: "advice", originalSentenceIndex: 0, quote: "He gave good advice.", reason: "Preserves the father's guidance." },
+    ] }],
+    ["exception without rationale", { ...metadata(1), retainedWords: [...metadata(1).retainedWords, "advice"], retainedWordEvidence: [
+      { word: "advice", originalSentenceIndex: 0, quote: "my father gave me some advice", reason: " " },
+    ] }],
+    ["unlisted exception", { ...metadata(1), retainedWordEvidence: [
+      { word: "advice", originalSentenceIndex: 0, quote: "my father gave me some advice", reason: "Preserves the father's guidance." },
+    ] }],
   ])("rejects %s before producing usable seed data", async (_, value) => {
     await expect(ingestGatsby(source, { generateText: async () => JSON.stringify(value) })).rejects.toThrow();
   });

@@ -59,7 +59,8 @@ async function main() {
     generateCheck,
     budgetMs: 300_000,
     policyForChapter: (chapter) => ({ vocabulary, requiredNames: content.policies[chapter.id].requiredNames,
-      retainedWords: content.policies[chapter.id].retainedWords }),
+      retainedWords: content.policies[chapter.id].retainedWords,
+      retainedWordEvidence: content.policies[chapter.id].retainedWordEvidence }),
   });
   console.log("Generating shared L1 Chapter 1 and 12 validated fallback versions. Offline generation uses a five-minute budget per version.");
   const seed = await generateGatsbySeed(content, generator, { signal: controller.signal });
