@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { db } from "../db/client";
 import * as schema from "../db/schema";
 import type { Reader } from "../types";
+import { readerIdFrom } from "./reader-id";
 
 function create() {
   return betterAuth({
@@ -36,10 +37,10 @@ export async function requireReader(): Promise<Reader> {
 }
 
 /**
- * Who a route handler is acting for: the signed-in Reader's id, falling back to the per-browser
- * X-Reader-Session header while the reading page, flags and answers move onto sign-in (#7).
+ * Who a route handler is acting for: the signed-in Reader, else the per-browser X-Reader-Session id
+ * (namespaced, see readerIdFrom) while the reading page, flags and answers move onto sign-in (#7).
  */
 export async function readerIdFor(req: Request): Promise<string> {
   const session = await auth().api.getSession({ headers: req.headers });
-  return session?.user.id ?? req.headers.get("x-reader-session") ?? "anonymous";
+  return readerIdFrom(session?.user.id, req.headers.get("x-reader-session"));
 }

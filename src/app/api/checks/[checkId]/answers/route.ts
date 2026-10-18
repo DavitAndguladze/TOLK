@@ -7,6 +7,7 @@ import {
 import { submitCheckAnswers } from "@/comprehension/service";
 import { mockChapter } from "@/mocks";
 import { readerIdFor } from "@/platform/auth";
+import { getReadAloudSummary } from "@/platform/registry";
 import type { Api, ChapterCheckAnswers } from "@/types";
 import { flagStore } from "@/words/registry";
 import { chapterEvidence } from "@/words/word-bank";
@@ -20,7 +21,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ checkId
   if (!check || !version) return NextResponse.json({ error: "Chapter Check not found" }, { status: 404 });
 
   // Chapter 1's L1 version (and its check) is shared across every Reader (ADR-0008); key storage
-  // by a per-browser session id so one Reader's submission can't overwrite another's.
+  // by Reader (signed in, or a namespaced per-browser id) so one Reader's submission can't overwrite another's.
   const sessionId = await readerIdFor(req);
   const storageKey = `${check.id}:${sessionId}`;
 
@@ -29,15 +30,16 @@ export async function POST(req: Request, { params }: { params: Promise<{ checkId
     await submitCheckAnswers(check, submission, answersStore, storageKey);
     const answers = (await answersStore.get(storageKey))!;
     const flaggedWords = flagStore.flaggedWords(sessionId, version.id);
+    // The clean summary R6's read-aloud route saved for this Reader and Version (comms 0011). Null
+    // when they read silently, so the Chapter Check and Flagged Words weigh 90%/10% between them.
+    const readAloud = await getReadAloudSummary(sessionId, version.id);
 
-    // No read-aloud summary reaches the server yet (waiting on R6's accessor, comms 0011), so the
-    // Chapter Check and Flagged Words weigh 90%/10% between them.
     const session = await gradeChapterCheck(
-      { check, chapter: mockChapter, version, answers, readAloud: null, flaggedWords, readerId: sessionId },
+      { check, chapter: mockChapter, version, answers, readAloud, flaggedWords, readerId: sessionId },
       { keyPointGrader, now: () => new Date() },
     );
     sessionResults.set(storageKey, session);
-    const evidence = chapterEvidence({ version, check, grading: session.grading, readAloud: null });
+    const evidence = chapterEvidence({ version, check, grading: session.grading, readAloud });
 
     const res: Api["POST /api/checks/[checkId]/answers"]["res"] = {
       session,
