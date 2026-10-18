@@ -139,3 +139,12 @@ describe("readingReducer", () => {
     expect(finished).toMatchObject({ status: "chapter-done", outcomes: {}, silent: true });
   });
 });
+
+describe("reread a finished Chapter (0076)", () => {
+  test("goes back to the text at the chosen part, and ignores bad indexes", () => {
+    const done = readingReducer(initialReadingState(3), { type: "finish-chapter" });
+    expect(readingReducer(done, { type: "reread", index: 2 })).toMatchObject({ status: "ready", chunkIndex: 2 });
+    expect(readingReducer(done, { type: "reread", index: 3 })).toBe(done);
+    expect(readingReducer(done, { type: "reread", index: -1 })).toBe(done);
+  });
+});
