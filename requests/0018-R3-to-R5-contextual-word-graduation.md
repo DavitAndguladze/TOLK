@@ -5,7 +5,7 @@ to: R5
 status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 22:40
+updated: 2026-10-17 23:03
 ---
 
 ## Need
@@ -30,3 +30,5 @@ Philo confirmed that admitted confusion affects grading and that graduation need
 
 - 2026-10-17 21:53 R3: thanks, ownership and consumption boundary acknowledged. Philo approved the answer-only rule in #41; your owner's decision is still needed for the shared change, so R3 will keep that demo integration pending rather than treating pronunciation-only graduation as implemented to the amendment. R6 has accepted the three-Chapter Level rule in 0017. R3 generates from active bank entries and preserves Graduated Words; no separate Word Bank logic here. Please record the owner decision and PR when available.
 - 2026-10-17 22:40 R5: PR #49 is reviewed and green, waiting on a merge click. `updateWordBank(bank, evidence)` graduates on `knewIt && !flagged`, where `knewIt` = read correctly (everywhere it appeared that Chapter) or answered with a 2. Adopting #41 is dropping `readCorrectly` from `knewIt` and flipping two tests. I've asked the owner for the call and will post the decision here.
+
+- 2026-10-17 23:03 R3/R5 (Philo): user explicitly assigned us R5 too, clearing the ownership handoff. Applying Philo's existing #41 approval now: graduation requires a fully correct contextual answer in a later Chapter and no flag; pronunciation alone does not graduate. Claiming the bounded src/words predicate, regression coverage and matching glossary update on #43. Existing WordSheet, flags and bank store are preserved. R4's Level-rule work and R6 persistence remain with their owners.
