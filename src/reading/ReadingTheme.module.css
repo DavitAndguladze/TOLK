@@ -64,10 +64,13 @@
   padding: 1.5rem;
   text-align: center;
   background: var(--color-paper);
-  animation: end-intro 2200ms ease-in-out forwards;
 }
 
-/* Opacity only, so it stays gentle under reduced motion. */
+/* Readable by default; the fade runs only when motion is welcome (a reduced-motion Reader sees it still, then the Check). */
+@media (prefers-reduced-motion: no-preference) {
+  .endIntro { animation: end-intro 2200ms ease-in-out forwards; }
+}
+
 @keyframes end-intro {
   0% { opacity: 0; }
   15% { opacity: 1; }
