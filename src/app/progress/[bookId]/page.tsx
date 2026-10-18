@@ -1,11 +1,14 @@
 import { notFound } from "next/navigation";
-import { mockBook, mockProgress } from "@/mocks";
+import { getProgressView } from "@/comprehension/progress";
+import { getBook } from "@/db";
+import { requireReader } from "@/platform/auth";
 import { ProgressScreen } from "@/reading/ProgressScreen";
 
-// Mock data until the progress API lands (#12, #13).
 export default async function ProgressPage({ params }: { params: Promise<{ bookId: string }> }) {
   const { bookId } = await params;
-  if (bookId !== mockProgress.bookId) notFound();
+  const reader = await requireReader();
+  const [book, progress] = await Promise.all([getBook(bookId), getProgressView(reader.id, bookId)]);
+  if (!book || !progress) notFound();
 
-  return <ProgressScreen book={mockBook} progress={mockProgress} />;
+  return <ProgressScreen book={book} progress={progress} />;
 }
