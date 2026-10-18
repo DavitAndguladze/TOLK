@@ -190,6 +190,12 @@ export interface ChapterCheck {
 
 export interface ChapterCheckAnswers {
   answers: { questionId: string; answer: string; via: "spoken" | "typed" }[];
+  /**
+   * The `startedAt` of the read-aloud summary saved for this completion of the Chapter, or null
+   * (or absent) when the Reader read silently or the save failed. Grading uses a saved summary only
+   * when it matches, so an older reading is never credited (comms 0024).
+   */
+  readAloudStartedAt?: string | null;
 }
 
 export interface QuestionGrade {
