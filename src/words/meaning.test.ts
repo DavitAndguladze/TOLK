@@ -1,5 +1,6 @@
 import { describe, expect, test, vi } from "vitest";
 import { mockChapter, mockChapterVersion } from "../mocks";
+import { takeOciCall } from "../platform/oci-quota";
 import { NO_MEANING, createWordMeaning, meaningOf } from "./meaning";
 
 describe("meaning of a flagged word", () => {
@@ -77,5 +78,18 @@ describe("meaning of a flagged word", () => {
     const define = createWordMeaning(() => new Promise(() => {}), 5);
     expect(await define(mockChapterVersion(1), 5, mockChapter)).toEqual({ meaning: NO_MEANING, source: "unavailable" });
     await expect(define(mockChapterVersion(1), -1, mockChapter)).rejects.toThrow("No such word");
+  });
+
+  test("a cache hit spends no OCI budget, and an over-budget Reader gets the Chapter's meaning", async () => {
+    const readerId = `quota-${Math.random()}`;
+    const chat = vi.fn(async () => '{"meaning":"The narrator\'s male parent."}');
+    const define = createWordMeaning(chat);
+    const version = mockChapterVersion(1);
+    await define(version, 5, mockChapter, readerId);
+    for (let i = 0; i < 40; i++) await define(version, 5, mockChapter, readerId);
+    expect(chat).toHaveBeenCalledOnce();
+    while (takeOciCall(readerId) === null); // spend the rest of the minute's budget
+    expect(await define(version, 6, mockChapter, readerId)).not.toHaveProperty("source", "oci-generative-ai");
+    expect(chat).toHaveBeenCalledOnce();
   });
 });

@@ -1,5 +1,6 @@
 import type { Chapter, ChapterVersion } from "../types";
 import { askWithDeadline, type Chat } from "../comprehension/oci-key-point-grader";
+import { takeOciCall } from "../platform/oci-quota";
 import { cacheSuccessful } from "./request-cache";
 
 export const NO_MEANING = "A short meaning isn't available right now. You can keep reading and try again.";
@@ -17,12 +18,13 @@ export interface WordMeaning {
 /** Routes pass an authorized Version; neither the word nor its context comes from the request body. */
 export function createWordMeaning(chat: Chat | null, timeoutMs = 8000) {
   const cached = cacheSuccessful<WordMeaning>(256, (value) => value.source === "oci-generative-ai");
-  return async (version: Pick<ChapterVersion, "id" | "tokens" | "sentences">, tokenIndex: number, chapter: Pick<Chapter, "complexWords">): Promise<WordMeaning> => {
+  return async (version: Pick<ChapterVersion, "id" | "tokens" | "sentences">, tokenIndex: number, chapter: Pick<Chapter, "complexWords">, readerId?: string): Promise<WordMeaning> => {
     const token = version.tokens.find((item) => item.index === tokenIndex);
     const sentence = version.sentences.find((item) => item.index === token?.sentenceIndex);
     if (!Number.isSafeInteger(tokenIndex) || !token?.normalized || !sentence) throw new RangeError("No such word in this Chapter Version");
     return cached(JSON.stringify([version.id, tokenIndex]), async () => {
-      if (chat) {
+      // Only a cache miss spends the Reader's OCI budget; over it, they get the Chapter's own meaning.
+      if (chat && !(readerId && takeOciCall(readerId) !== null)) {
         try {
           const text = await askWithDeadline(chat, [
             "Explain the selected word as used in this sentence to a reader learning English.",
