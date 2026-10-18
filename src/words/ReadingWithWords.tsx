@@ -8,7 +8,7 @@ import { createFlagScope, disposeFlags, loadFlags, useFlaggedWords } from "./fla
 import { WordSheet } from "./WordSheet";
 
 /** Server parents pass serializable reading data and the Chapter Check slot. */
-export function ReadingWithWords({ chapterVersionId, chunks, chapterCheck }: { chapterVersionId: string; chunks: Chunk[]; chapterCheck?: ReactNode }) {
+export function ReadingWithWords({ chapterVersionId, readerId, chunks, chapterCheck }: { chapterVersionId: string; readerId?: string; chunks: Chunk[]; chapterCheck?: ReactNode }) {
   const [flagScope] = useState(createFlagScope);
   const flags = useFlaggedWords(chapterVersionId, flagScope);
   const [selected, setSelected] = useState<Token | null>(null);
@@ -31,7 +31,7 @@ export function ReadingWithWords({ chapterVersionId, chunks, chapterCheck }: { c
     {!ready && <p role={failed ? "alert" : "status"} className="mx-auto max-w-xl px-6 pt-4 text-sm text-fog">
       {failed ? <>Saved words couldn’t load. You can keep reading. <button type="button" onClick={() => setAttempt((n) => n + 1)} className="min-h-11 cursor-pointer font-semibold text-light underline outline-light focus-visible:outline-2">Retry saved words</button></> : "Loading saved words…"}
     </p>}
-    <ReadingScreen chapterVersionId={chapterVersionId} chunks={chunks} chapterCheck={chapterCheck} onWordTap={ready ? setSelected : undefined} flaggedTokenIndexes={ready ? flags : undefined} />
+    <ReadingScreen chapterVersionId={chapterVersionId} readerId={readerId} chunks={chunks} chapterCheck={chapterCheck} onWordTap={ready ? setSelected : undefined} flaggedTokenIndexes={ready ? flags : undefined} />
     {selected && <WordSheet key={`${chapterVersionId}:${selected.index}`} chapterVersionId={chapterVersionId} token={selected} flagScope={flagScope} onClose={() => setSelected(null)} />}
   </>;
 }
