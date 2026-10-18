@@ -32,4 +32,29 @@ describe("read-aloud store", () => {
     await store.save("ana", summary("v1", 0.8));
     expect((await store.get("ana", "v1"))?.accuracy).toBe(0.8);
   });
+
+  test("a consumed summary is gone, so a silent reread of the same Chapter Version gets null", async () => {
+    const store = createInMemoryReadAloudStore();
+    await store.save("ana", summary("v1", 1));
+    const graded = (await store.get("ana", "v1"))!;
+    await store.consume("ana", graded);
+    expect(await store.get("ana", "v1")).toBeNull();
+  });
+
+  test("consuming an older summary keeps a newer save that landed meanwhile", async () => {
+    const store = createInMemoryReadAloudStore();
+    await store.save("ana", summary("v1", 0.5));
+    const graded = (await store.get("ana", "v1"))!;
+    await store.save("ana", summary("v1", 0.8));
+    await store.consume("ana", graded);
+    expect((await store.get("ana", "v1"))?.accuracy).toBe(0.8);
+  });
+
+  test("consuming only touches that Reader", async () => {
+    const store = createInMemoryReadAloudStore();
+    await store.save("ana", summary("v1", 0.9));
+    await store.save("ben", summary("v1", 0.4));
+    await store.consume("ana", (await store.get("ana", "v1"))!);
+    expect((await store.get("ben", "v1"))?.accuracy).toBe(0.4);
+  });
 });
