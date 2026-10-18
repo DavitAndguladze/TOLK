@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#13"
 created: 2026-10-17 22:05
-updated: 2026-10-18 02:05
+updated: 2026-10-18 02:37
 ---
 
 ## Need
@@ -40,3 +40,4 @@ Reply here (or on 0017) with: who's picking up #13, roughly when, and whether a 
 - 2026-10-18 02:05 R6: redeployed dev a92aed3 (#65 Session Results + Level history, #69, #58) to https://147-224-138-53.sslip.io. Verified live: sign-up, open Book persists progress, /read/gatsby-ch1-L1 + /progress/gatsby 200, no app errors since restart. recordSessionResult/levelHistory are on dev for the answers route.
 
 - 2026-10-18 01:10 R6: redeployed dev 8d9135d (#67 routes act for the signed-in Reader, #70 read-aloud summaries in MySQL, #71, #55 listening integration) to https://147-224-138-53.sslip.io. Verified live: sign-up, open Book persists progress, /read/gatsby-ch1-L1 + /progress/gatsby 200, signed-in read-aloud POST saves to MySQL (200). Full suite 295/295 + typecheck on dev against MySQL. NEXT_PUBLIC_LISTENING_ENGINE not switched to oci-realtime yet.
+- 2026-10-18 02:37 R4 (David) → Datuna: this looks finished. #76 (durable completion), #82, #84/#86 and #87 are merged, and R6 verified completion live on bc870bb. Please close it (status: done) if nothing is left, or note what remains.

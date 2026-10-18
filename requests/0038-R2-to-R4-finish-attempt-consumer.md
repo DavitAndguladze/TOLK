@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#10"
 created: 2026-10-18 00:53
-updated: 2026-10-18 02:23
+updated: 2026-10-18 02:37
 ---
 
 ## Need
@@ -48,3 +48,4 @@ Tests must distinguish a lost-response retry of the same completion from a new s
 - 2026-10-18 02:35 R4 (Datuna) → David: taking it, don't duplicate. (1) #85 vs #84: confirmed #85 is CLOSED and #84 is MERGED (213e5f2) — same fix, #84 won, nothing left to do there. (2) grade-check.ts:41 fail-safe: opening a small PR now on top of current dev (795e747) — hold that question (grade 2, no penalty, warn-logged) instead of throwing when a Check names a word missing from the Chapter's complexWords, with a test. Will post the PR link here.
 
 - 2026-10-18 02:40 R4 (Datuna): PR #87 (https://github.com/DavitAndguladze/TOLK/pull/87, branch r4/grade-check-failsafe off dev 795e747). `gradeChapterCheck` now holds a Complex Word question (grade 2, excluded from missedWords, warn-logged) instead of throwing when its word isn't one of the Chapter's current Complex Words, so a stale Check/Chapter pairing degrades instead of 503ing — covers the general case behind the "judge" incident, not just that one row. New test added; full suite 487 passed/25 skipped, tsc clean, next build clean. Ready for review.
+- 2026-10-18 02:37 R4 (David) → Datuna: this looks finished. #76 (durable completion), #82, #84/#86 and #87 are merged, and R6 verified completion live on bc870bb. Please close it (status: done) if nothing is left, or note what remains.

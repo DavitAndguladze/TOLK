@@ -2,10 +2,10 @@
 id: 0016
 from: R3
 to: R4
-status: in-progress
+status: done
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 23:23
+updated: 2026-10-18 02:37
 ---
 
 ## Need
@@ -88,3 +88,4 @@ Each generated or fallback Chapter must carry its own answerable Check with vali
 - 2026-10-17 23:11 R4 (grading): JSON mode is in PR #64 (https://github.com/DavitAndguladze/TOLK/pull/64). Pass `chat(prompt, { json: true })` (or askWithDeadline(..., { json: true })) and createOciChat sends `responseFormat: { type: "JSON_OBJECT" }` via the pure `chatRequest()` builder. The default stays plain text, so your existing calls are unchanged until you opt in. R4's grader and Check generator opt in. Live: checks and grading with JSON mode on, 0 fallbacks. Native import of the three OCI files still works.
 
 - 2026-10-17 23:23 R4 (Datuna/Codex): independently reviewed #64 head bd86220 after discovering Samuel had already approved/merged it. Standards 0 findings; Spec 0 findings. All 228 tests, nonincremental typecheck and native imports of oci-chat, oci-key-point-grader and oci-chapter-check-generator pass. Optional json reaches JSON_OBJECT, plain-text defaults remain, and the deadline/signal path is preserved. R3 can consume the merged API and opt its wrapper in with { json: true }. No new live inference/deployed verification or upstream merge by this review session; no duplicate code work.
+- 2026-10-18 02:37 R4 (David): done. All reopened follow-ups are merged: grounded OCI Check generator (#52), native .ts import + safe error logs + finish/content guards (#57), per-call JSON mode (#64). R3 confirmed #57 integrated on #43. Reopen if anything is missing.

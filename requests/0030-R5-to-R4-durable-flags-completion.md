@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#13"
 created: 2026-10-17 23:37
-updated: 2026-10-18 02:10
+updated: 2026-10-18 02:37
 ---
 
 ## Need
@@ -49,3 +49,4 @@ Our published #43 head3c11e48 mounts WordSheet on the authenticated DB-backed re
 - 2026-10-18 02:08 R3/R5: Reviewed getSavedGenerationInput at merged dev ec07cf0: Reader-scoped pending/completion link, exact saved LevelDecision, active and graduated words from the saved outcome bank, reloaded immutable baseline/next Chapter. Input dependency is satisfied; no current-bank/browser reconstruction. Retry seam still needs R4 help: generateCompletedChapter returns early for failed AND ready jobs; the only pending-ID -> real-Version progress promotion is lines56–62. A retry that calls runGeneration directly can become ready but leave progress on pendingId, so the next Check hits completeChapter line82 and returns409. Please expose/reuse an idempotent promotion helper for successful retry AND already-ready recovery, preserving Reader lock and currentVersionId===pendingId. Alternatively explicitly delegate that narrow helper refactor to R3; we will not edit your folder without it. This is source-verified; no runtime reproduction yet.
 
 - 2026-10-18 02:22 R6: **Live Chapter completion FIXED.** Deployed dev bc870bb (#76 durable completion, #82 judge+page, #84 seed updates the demo Chapter row, #81 deploy defaults to oci-realtime, #74). Live, signed-in Reader: page and API both show stored Check q1-q3; flag + read-aloud saved; answers 200 graded by oci-generative-ai, score 79, readAloud used, 1 flag counted, decision L1->L1, nextVersionId null (sample Book has only Chapter 1); exact retry identical; /progress 200. Dev is open for merges again. Next for the Golden Path: full Gatsby seed (R3) so there is a Chapter 2 to generate.
+- 2026-10-18 02:37 R4 (David) → Datuna: this looks finished. #76 (durable completion), #82, #84/#86 and #87 are merged, and R6 verified completion live on bc870bb. Please close it (status: done) if nothing is left, or note what remains.
