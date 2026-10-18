@@ -1,0 +1,123 @@
+@keyframes result-tile-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes result-celebrate {
+  0% {
+    transform: scale(0.97);
+  }
+
+  55% {
+    transform: scale(1.035);
+    text-shadow: 0 0 18px rgb(127 224 174 / 38%);
+  }
+
+  100% {
+    transform: scale(1);
+    text-shadow: none;
+  }
+}
+
+@keyframes level-up-reveal {
+  0% {
+    opacity: 0.75;
+    transform: scale(0.97);
+  }
+
+  65% {
+    opacity: 1;
+    transform: scale(1.025);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes level-down-reveal {
+  from {
+    opacity: 0.75;
+    transform: translateY(-3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes level-line-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes latest-point-reveal {
+  0% {
+    transform: scale(0.75);
+  }
+
+  70% {
+    transform: scale(1.08);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .resultHeadline {
+    animation: result-tile-in 420ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+  }
+
+  .celebratedHeadline {
+    animation: result-celebrate 650ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+    transform-origin: left center;
+  }
+
+  .scoreCard {
+    animation: result-tile-in 460ms cubic-bezier(0.2, 0.75, 0.25, 1) 80ms both;
+  }
+
+  .statCard {
+    animation: result-tile-in 420ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+  }
+
+  .statCard:nth-child(2) {
+    animation-delay: 70ms;
+  }
+
+  .statCard:nth-child(3) {
+    animation-delay: 140ms;
+  }
+
+  .levelUp[data-revealed="true"] {
+    animation: level-up-reveal 520ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+    transform-origin: center;
+  }
+
+  .levelDown[data-revealed="true"] {
+    animation: level-down-reveal 360ms ease-out both;
+  }
+
+  .levelLine {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: level-line-draw 850ms ease-out 100ms both;
+  }
+
+  .latestPoint {
+    animation: latest-point-reveal 360ms cubic-bezier(0.2, 0.75, 0.25, 1) 650ms both;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+}

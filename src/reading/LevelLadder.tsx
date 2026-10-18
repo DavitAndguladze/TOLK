@@ -21,7 +21,7 @@ export function LevelLadder({ current, hrefs }: { current: Level; hrefs?: Record
     <Wrapper aria-label={hrefs ? "Level" : label} role={hrefs ? undefined : "img"} className="mt-5">
       <ol className="relative flex justify-between">
         <li aria-hidden className="absolute inset-x-[22px] top-1/2 h-px -translate-y-1/2 bg-hairline">
-          <span className="block h-full bg-light/70 transition-[width] duration-700 ease-out" style={{ width: `${climbed}%` }} />
+          <span className="block h-full bg-light/70 motion-safe:transition-[width] motion-safe:duration-700 motion-safe:ease-out" style={{ width: `${climbed}%` }} />
         </li>
         {LEVELS.map((level) => (
           <li key={level} className="relative">
@@ -32,11 +32,11 @@ export function LevelLadder({ current, hrefs }: { current: Level; hrefs?: Record
                 aria-current={level === current ? "page" : undefined}
                 className="grid size-11 place-items-center rounded-full outline-light focus-visible:outline-2"
               >
-                <span className={`block rounded-full transition-all duration-500 ${dotClass(level, current)}`} />
+                <span className={`block rounded-full motion-safe:transition-all motion-safe:duration-500 ${dotClass(level, current)}`} />
               </Link>
             ) : (
               <span className="grid size-11 place-items-center">
-                <span className={`block rounded-full transition-all duration-500 ${dotClass(level, current)}`} />
+                <span className={`block rounded-full motion-safe:transition-all motion-safe:duration-500 ${dotClass(level, current)}`} />
               </span>
             )}
           </li>
