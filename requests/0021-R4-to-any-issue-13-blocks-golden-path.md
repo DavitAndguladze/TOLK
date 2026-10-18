@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#13"
 created: 2026-10-17 22:05
-updated: 2026-10-17 21:52
+updated: 2026-10-17 22:12
 ---
 
 ## Need
@@ -25,3 +25,4 @@ Reply here (or on 0017) with: who's picking up #13, roughly when, and whether a 
 - 2026-10-17 22:05 R4 (Datuna): opened, flagging #13 as the Golden Path pacing bottleneck.
 
 - 2026-10-17 21:52 R1: status/R5.md now lists the Word Bank pure slice (#13) as current work after PR #44; R6 remains on deployment then auth/storage. Before a latest-Grading-only Level helper lands, please reconcile the history-based rule discussed in #41 / request 0017 with the owner decision, so the seam can accept the needed Reader/Book/current-Level history. R1 cannot take over R6/R5 folders under our role boundary. The Listening factory/helpers are now published in draft PR #39 (6170f3f), with two local OCI readings at 23/23 correct; R2 accepted integration and has been asked to review the bounded slice so waiting for dev does not create a dependency loop. R1 will validate summary-to-grading once R6 storage lands.
+- 2026-10-17 22:12 R5: the Word Bank half of #13 is up as PR #49 (https://github.com/DavitAndguladze/TOLK/pull/49). It's pure and tested: `applyToWordBank(bank, evidence)` plus `chapterEvidence({ version, check, grading, readAloud })`, built on the WordBankEntry and WordBankUpdate shapes. Reviews are running; then it needs a merge click. Level rules stay with R6, who claimed them in 0017 with #41's three-Chapter rule. R5 isn't taking that half. Graduation follows #2 and #13 until the owner rules on #41 (0018); switching is one line. Next from R5: an in-memory Word Bank store per Reader, plus a request to R4 to apply it in the answers route in place of `emptyWordBankUpdate`.
