@@ -1,7 +1,7 @@
 import { expect, test } from "vitest";
 import type { Grading } from "../types";
 import { mockGrading } from "../mocks";
-import { chapterCheckReview, nextChapterPoll, nextChapterPollResponse, resultHeadline } from "./result";
+import { chapterCheckReview, nextChapterPoll, nextChapterPollResponse, nextChapterRetryResponse, resultHeadline } from "./result";
 import { mockSession } from "../mocks";
 
 test.each([
@@ -18,7 +18,7 @@ test.each([
 test.each([
   [200, "ready", "ready"],
   [200, "generating", "wait"],
-  [200, "failed", "stop"],
+  [200, "failed", "retry"],
   [401, null, "stop"],
   [403, null, "stop"],
   [429, null, "wait"],
@@ -40,6 +40,23 @@ test.each(["{", "{}", JSON.stringify({ status: "unexpected" })])(
 
 test("keeps retrying a pending 503 response", async () => {
   await expect(nextChapterPollResponse(new Response("", { status: 503 }))).resolves.toBe("wait");
+});
+
+test("an explicit generation retry resumes polling only for an active worker", async () => {
+  await expect(nextChapterRetryResponse(new Response("", { status: 202 }))).resolves.toBe("wait");
+  await expect(nextChapterRetryResponse(new Response("", { status: 503 }))).resolves.toBe("retry");
+  await expect(nextChapterRetryResponse(new Response("", { status: 409 }))).resolves.toBe("exhausted");
+  await expect(nextChapterRetryResponse(new Response(JSON.stringify({ status: "ready" }), { status: 200 }))).resolves.toBe("ready");
+});
+
+test.each([401, 403, 404])("an explicit retry stops on HTTP %s without preparing again", async status => {
+  await expect(nextChapterRetryResponse(new Response("private details", { status }))).resolves.toBe("stop");
+});
+
+test("a lost retry response permits only another explicit attempt", async () => {
+  await expect(nextChapterRetryResponse(null)).resolves.toBe("retry");
+  await expect(nextChapterRetryResponse(new Response("", { status: 429 }))).resolves.toBe("retry");
+  await expect(nextChapterRetryResponse(new Response("{}", { status: 200 }))).resolves.toBe("stop");
 });
 
 test("reviews real answers by question id and counts only fully correct answers", () => {

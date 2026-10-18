@@ -34,18 +34,27 @@ export function chapterCheckReview(session: SessionResult, check?: ChapterCheck,
 /**
  * One poll of the next Chapter Version (spec: the client polls while it generates). `httpStatus` 0 is a
  * network error. Non-retryable 4xx, failed generation, or unusable successful bodies stop; transient
- * errors and rate limits wait.
+ * errors and rate limits wait. Failed generation permits an explicit retry, never an automatic POST.
  */
-export function nextChapterPoll(httpStatus: number, version: unknown): "ready" | "wait" | "stop" {
+export function nextChapterPoll(httpStatus: number, version: unknown): "ready" | "wait" | "stop" | "retry" {
   const status = typeof version === "object" && version !== null && "status" in version ? version.status : null;
-  if ((httpStatus >= 400 && httpStatus < 500 && httpStatus !== 429) || status === "failed") return "stop";
+  if (httpStatus >= 400 && httpStatus < 500 && httpStatus !== 429) return "stop";
+  if (status === "failed") return "retry";
   if (status === "ready") return "ready";
   if (status === "generating") return "wait";
   return httpStatus >= 200 && httpStatus < 300 ? "stop" : "wait";
 }
 
 /** Parse and classify one next-Version response; malformed successful responses must not wait forever. */
-export async function nextChapterPollResponse(response: Response | null): Promise<"ready" | "wait" | "stop"> {
+export async function nextChapterPollResponse(response: Response | null) {
   const version = response?.ok ? await response.json().catch(() => null) : null;
   return nextChapterPoll(response?.status ?? 0, version);
+}
+
+/** A POST is always Reader initiated; only an active worker resumes GET polling. */
+export async function nextChapterRetryResponse(response: Response | null) {
+  if (response?.status === 202) return "wait" as const;
+  if (response?.status === 409) return "exhausted" as const;
+  if (!response || response.status === 429 || response.status >= 500) return "retry" as const;
+  return nextChapterPollResponse(response);
 }
