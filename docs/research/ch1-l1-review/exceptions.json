@@ -1883,6 +1883,120 @@
       "originalSentenceIndex": 17,
       "quote": "I never saw this great-uncle, but I’m supposed to look like him—with special reference to the rather hard-boiled painting that hangs in father’s office.",
       "reason": "Preserves the location of the portrait in Nick’s father’s office."
+    },
+    {
+      "word": "boasting",
+      "originalSentenceIndex": 8,
+      "quote": "And, after boasting this way of my tolerance, I come to the admission that it has a limit.",
+      "reason": "Preserves Nick acknowledging his own boast before undermining it."
+    },
+    {
+      "word": "tolerance",
+      "originalSentenceIndex": 8,
+      "quote": "And, after boasting this way of my tolerance, I come to the admission that it has a limit.",
+      "reason": "Preserves the capacity to tolerate other people rather than getting along with them."
+    },
+    {
+      "word": "marshes",
+      "originalSentenceIndex": 9,
+      "quote": "Conduct may be founded on the hard rock or the wet marshes, but after a certain point I don’t care what it’s founded on.",
+      "reason": "Preserves the unstable wet-ground foundation contrasted with hard rock."
+    },
+    {
+      "word": "wet",
+      "originalSentenceIndex": 9,
+      "quote": "Conduct may be founded on the hard rock or the wet marshes, but after a certain point I don’t care what it’s founded on.",
+      "reason": "Preserves the water-softened ground contrasted with the hard-rock foundation metaphor."
+    },
+    {
+      "word": "weather-beaten",
+      "originalSentenceIndex": 25,
+      "quote": "a weather-beaten cardboard bungalow",
+      "reason": "Preserves damage caused by exposure to weather; old alone does not express the cause or condition."
+    },
+    {
+      "word": "cardboard",
+      "originalSentenceIndex": 25,
+      "quote": "a weather-beaten cardboard bungalow",
+      "reason": "Preserves the flimsy cardboard-house image without inventing a claim that strong air could break the house."
+    },
+    {
+      "word": "bungalow",
+      "originalSentenceIndex": 25,
+      "quote": "a weather-beaten cardboard bungalow",
+      "reason": "Preserves the specified kind of house, which small old house does not identify."
+    },
+    {
+      "word": "wisdom",
+      "originalSentenceIndex": 26,
+      "quote": "muttered Finnish wisdom to herself",
+      "reason": "Preserves Nick’s characterization of her sayings as knowledge about life, rather than any words on that subject."
+    },
+    {
+      "word": "village",
+      "originalSentenceIndex": 28,
+      "quote": "West Egg village",
+      "reason": "Preserves the specific settlement type in the requested destination rather than changing it to a town."
+    },
+    {
+      "word": "helplessly",
+      "originalSentenceIndex": 29,
+      "quote": "he asked helplessly.",
+      "reason": "Preserves the helpless manner of asking rather than only the practical fact that the newcomer is lost."
+    },
+    {
+      "word": "pathfinder",
+      "originalSentenceIndex": 32,
+      "quote": "a guide, a pathfinder, an original settler",
+      "reason": "Preserves Nick’s inflated image of finding routes, distinct from merely directing someone along an already known route."
+    },
+    {
+      "word": "original",
+      "originalSentenceIndex": 32,
+      "quote": "an original settler",
+      "reason": "Preserves that Nick imagines himself among the earliest residents, rather than simply any settler."
+    },
+    {
+      "word": "settler",
+      "originalSentenceIndex": 32,
+      "quote": "an original settler",
+      "reason": "Preserves establishing a home in a place, which the candidate’s first-found-this-place wording confuses with discovering it."
+    },
+    {
+      "word": "breath-giving",
+      "originalSentenceIndex": 35,
+      "quote": "the young breath-giving air",
+      "reason": "Preserves the air’s life-giving breath image rather than reducing it to new air or asserting Nick has already become younger."
+    },
+    {
+      "word": "health",
+      "originalSentenceIndex": 35,
+      "quote": "so much fine health to be pulled down",
+      "reason": "Preserves health as something abundantly available from the air, rather than an already completed feeling of being young and well."
+    },
+    {
+      "word": "books",
+      "originalSentenceIndex": 37,
+      "quote": "reading many other books besides",
+      "reason": "Preserves the additional books he intends to read; other things changes the objects into unspecified topics."
+    },
+    {
+      "word": "well-rounded",
+      "originalSentenceIndex": 38,
+      "quote": "the “well-rounded man.”",
+      "reason": "Preserves the named ideal Nick ironically calls a specialist, rather than claiming knowledge of everything."
+    },
+    {
+      "word": "limited",
+      "originalSentenceIndex": 38,
+      "quote": "most limited of all specialists",
+      "reason": "Preserves Nick’s ironic limitation of the well-rounded specialist without inventing a factual claim about knowing little in every subject."
+    },
+    {
+      "word": "specialists",
+      "originalSentenceIndex": 38,
+      "quote": "most limited of all specialists",
+      "reason": "Preserves the paradox of calling the well-rounded man a specialist, which a generic statement about broad knowledge erases."
     }
   ]
 }

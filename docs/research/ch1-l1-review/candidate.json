@@ -90,6 +90,37 @@
           19
         ],
         "independentAcceptance": false
+      },
+      {
+        "date": "2026-10-18",
+        "originalSentenceIndexes": [
+          6,
+          8,
+          9,
+          20,
+          22,
+          24,
+          25,
+          26,
+          28,
+          29,
+          32,
+          34,
+          35,
+          37,
+          38,
+          39
+        ],
+        "reviewedSourceRange": [
+          20,
+          39
+        ],
+        "revisitedSourceIndexes": [
+          6,
+          8,
+          9
+        ],
+        "independentAcceptance": false
       }
     ]
   },
@@ -186,7 +217,7 @@
         "originalSentenceIndex": 5
       },
       {
-        "text": "When I wait to judge, I keep my hope alive.",
+        "text": "To wait before we judge takes hope without an end.",
         "originalSentenceIndex": 6
       },
       {
@@ -210,7 +241,7 @@
         "originalSentenceIndex": 7
       },
       {
-        "text": "I have said how well I get along with people.",
+        "text": "I have been boasting about my tolerance.",
         "originalSentenceIndex": 8
       },
       {
@@ -218,11 +249,15 @@
         "originalSentenceIndex": 8
       },
       {
-        "text": "People may act for a good or bad reason.",
+        "text": "The way people act may rest on hard rock.",
         "originalSentenceIndex": 9
       },
       {
-        "text": "At some point, I do not care about their reason.",
+        "text": "Or it may rest on wet marshes.",
+        "originalSentenceIndex": 9
+      },
+      {
+        "text": "After a point, I do not care which it is.",
         "originalSentenceIndex": 9
       },
       {
@@ -406,7 +441,11 @@
         "originalSentenceIndex": 19
       },
       {
-        "text": "The Middle West no longer felt like a warm centre.",
+        "text": "I once felt the Middle West was a warm centre.",
+        "originalSentenceIndex": 20
+      },
+      {
+        "text": "It felt like the centre of the world.",
         "originalSentenceIndex": 20
       },
       {
@@ -442,7 +481,7 @@
         "originalSentenceIndex": 22
       },
       {
-        "text": "Their faces were very serious and not quite sure.",
+        "text": "They looked very serious and not quite sure.",
         "originalSentenceIndex": 22
       },
       {
@@ -474,7 +513,7 @@
         "originalSentenceIndex": 24
       },
       {
-        "text": "We could share a house outside the city.",
+        "text": "We could share a house in a town.",
         "originalSentenceIndex": 24
       },
       {
@@ -486,11 +525,15 @@
         "originalSentenceIndex": 24
       },
       {
-        "text": "He found a small old house for 80 a month.",
+        "text": "He found a weather-beaten bungalow.",
         "originalSentenceIndex": 25
       },
       {
-        "text": "It looked as if strong air could break it.",
+        "text": "It was like a house made of cardboard.",
+        "originalSentenceIndex": 25
+      },
+      {
+        "text": "It was 80 a month.",
         "originalSentenceIndex": 25
       },
       {
@@ -518,7 +561,7 @@
         "originalSentenceIndex": 26
       },
       {
-        "text": "She muttered Finnish words about life to herself.",
+        "text": "She muttered Finnish wisdom to herself.",
         "originalSentenceIndex": 26
       },
       {
@@ -538,11 +581,11 @@
         "originalSentenceIndex": 27
       },
       {
-        "text": "\"How do I get to the town of West Egg?\"",
+        "text": "\"How do I get to West Egg village?\"",
         "originalSentenceIndex": 28
       },
       {
-        "text": "He asked as though he could not find his way.",
+        "text": "He asked helplessly.",
         "originalSentenceIndex": 29
       },
       {
@@ -558,7 +601,7 @@
         "originalSentenceIndex": 32
       },
       {
-        "text": "I felt like someone who had first found this place.",
+        "text": "I felt like a pathfinder and an original settler.",
         "originalSentenceIndex": 32
       },
       {
@@ -574,15 +617,15 @@
         "originalSentenceIndex": 34
       },
       {
-        "text": "They were growing as fast as things in a film.",
+        "text": "They were growing like things in a fast film.",
         "originalSentenceIndex": 34
       },
       {
-        "text": "Summer made me feel that life was starting again.",
+        "text": "I felt sure life was starting again with summer.",
         "originalSentenceIndex": 34
       },
       {
-        "text": "I had known that feeling before.",
+        "text": "I had felt that way before.",
         "originalSentenceIndex": 34
       },
       {
@@ -590,7 +633,7 @@
         "originalSentenceIndex": 35
       },
       {
-        "text": "The new air also made me feel young and well.",
+        "text": "The young, breath-giving air could give me so much health.",
         "originalSentenceIndex": 35
       },
       {
@@ -614,11 +657,15 @@
         "originalSentenceIndex": 36
       },
       {
-        "text": "I also wanted to read about many other things.",
+        "text": "I had a great plan: read many other books too.",
         "originalSentenceIndex": 37
       },
       {
-        "text": "I was interested in the art of words at college.",
+        "text": "I was interested in what people read and write.",
+        "originalSentenceIndex": 38
+      },
+      {
+        "text": "This was when I was in college.",
         "originalSentenceIndex": 38
       },
       {
@@ -634,11 +681,11 @@
         "originalSentenceIndex": 38
       },
       {
-        "text": "Again, I would be a man who knew about everything.",
+        "text": "Again, I would become a “well-rounded man.”",
         "originalSentenceIndex": 38
       },
       {
-        "text": "Such a man actually knows very little about each thing.",
+        "text": "Such a man is the most limited of all specialists.",
         "originalSentenceIndex": 38
       },
       {
@@ -646,7 +693,7 @@
         "originalSentenceIndex": 39
       },
       {
-        "text": "You understand life better by looking from one place.",
+        "text": "After all, life is better seen through a single window.",
         "originalSentenceIndex": 39
       },
       {
