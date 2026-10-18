@@ -12,8 +12,9 @@ function dotClass(level: Level, current: Level) {
   return level < current ? "size-2.5 bg-light/70" : "size-2.5 border border-fog/60 bg-mist";
 }
 
-/** Where a Chapter Version sits between L1 and the author's original. With `hrefs`, the dots are the temporary Level switch (#3). */
-export function LevelLadder({ current, hrefs }: { current: Level; hrefs?: Record<Level, string> }) {
+/** Where a Chapter Version sits between L1 and the author's original. With `hrefs`, the dots are the temporary Level switch (#3).
+ *  `showLabel={false}` drops the "Level N  label" line for callers that show a Level selector instead. */
+export function LevelLadder({ current, hrefs, showLabel = true }: { current: Level; hrefs?: Record<Level, string>; showLabel?: boolean }) {
   const climbed = ((current - 1) / (LEVELS.length - 1)) * 100;
   const label = `Level ${current}, ${LEVEL_SPECS[current].label}`;
   const Wrapper = hrefs ? "nav" : "div";
@@ -42,10 +43,10 @@ export function LevelLadder({ current, hrefs }: { current: Level; hrefs?: Record
           </li>
         ))}
       </ol>
-      <p className="flex items-baseline gap-2 px-1 text-sm">
+      {showLabel && <p className="flex items-baseline gap-2 px-1 text-sm">
         <span className="font-semibold">Level {current}</span>
         <span className="text-fog">{LEVEL_SPECS[current].label}</span>
-      </p>
+      </p>}
     </Wrapper>
   );
 }

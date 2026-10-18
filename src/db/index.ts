@@ -41,6 +41,14 @@ export async function getChapterVersion(id: string): Promise<ChapterVersion | nu
   return row?.data ?? null;
 }
 
+/** Every stored Version of one Chapter this Reader may read: shared ones (Reader null) and their own. */
+export async function listReadableVersions(readerId: string, bookId: string, chapterNumber: number): Promise<ChapterVersion[]> {
+  const rows = await db().select({ data: chapterVersions.data }).from(chapterVersions)
+    .where(and(eq(chapterVersions.bookId, bookId), eq(chapterVersions.chapterNumber, chapterNumber),
+      or(isNull(chapterVersions.readerId), eq(chapterVersions.readerId, readerId))));
+  return rows.map((row) => row.data);
+}
+
 export async function getChapterCheck(chapterVersionId: string): Promise<ChapterCheck | null> {
   const [row] = await db().select({ data: chapterChecks.data }).from(chapterChecks).where(eq(chapterChecks.chapterVersionId, chapterVersionId));
   return row?.data ?? null;
