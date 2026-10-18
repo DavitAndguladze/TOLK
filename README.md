@@ -18,4 +18,4 @@ Read aloud; the app listens word by word, serves the same story at the vocabular
 - `AGENTS.md` — how agents work in this repo and which skill to use when
 
 ## Deploy
-Push to `main` → GitHub Actions builds, pushes to OCIR, and restarts the app on the OCI VM behind Caddy (HTTPS). First-time VM prep is `scripts/provision-vm.sh` (the wizard offers to run it).
+Push to `main` → GitHub Actions builds, pushes to OCIR, and restarts the app on the OCI VM behind Caddy (HTTPS). First-time VM prep is `scripts/provision-vm.sh` (Starter Kit Oracle Linux VM, ADR-0010). Until OCIR and the GitHub deploy secrets exist, `scripts/deploy-direct.sh` builds the x86 image locally and ships it over SSH.
