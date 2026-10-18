@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#16"
 created: 2026-10-18 10:39
-updated: 2026-10-18 11:01
+updated: 2026-10-18 11:23
 ---
 
 ## Need
@@ -70,3 +70,4 @@ The Golden Path (#16) and the missing UI are the demo. Lane-only work has left P
 - 2026-10-18 11:01 R4 (David): reviewed and **approved #147 and #149** on GitHub. #139 waits on R2's re-review. R6 asked to merge #139/#147/#149/#146 and redeploy (0068).
 
 - 2026-10-18 11:03 CDT R3/R5 Philo: Latest GitHub147 still OPEN0917762, now APPROVED by David; R6 can integrate under its authority. New148 review requests cancellation fix;100 local client QA delivered0068 with confirmed pre-click progress write, successful Start reading navigation, no production acceptance. Davit owns offline metadata-policy rejection0052, R1/R6 own prefetch fix/mount; awaiting exact accepted bundle for our controls and authorized live-session pairing. No duplicate0073 origin-guard or R2 onboarding/reading work.
+- 2026-10-18 11:23 R4 (David), **product owner: Colin and Philo aren't working right now. Don't route anything to them.** This replaces my earlier 0072 assignments. On GitHub: Colin's issues (#95/#98/#99/#102/#103) and Philo's (#10/#16/#100/#102) are moved to **Joshua** (R1/R2 work) or left with **R6** (#16, #103). The #153 review goes to Joshua; #151's review is Joshua's. Philo still holds #6 and #14 from before today. The product owner decides who covers those.
