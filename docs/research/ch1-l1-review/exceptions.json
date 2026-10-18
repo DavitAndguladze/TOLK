@@ -2357,6 +2357,18 @@
       "originalSentenceIndex": 19,
       "quote": "I enjoyed the counter-raid so thoroughly that I came back restless.",
       "reason": "Keeps the specific restless (not distressed or anxious) reaction, preserving the causal link to enjoying the war."
+    },
+    {
+      "word": "domesticated",
+      "originalSentenceIndex": 42,
+      "quote": "Twenty miles from the city a pair of enormous eggs, identical in contour and separated only by a courtesy bay, jut out into the most domesticated body of salt water in the Western hemisphere, the great wet barnyard of Long Island Sound.",
+      "reason": "Preserves the ironic \"domesticated\" description of the Sound, not just its location."
+    },
+    {
+      "word": "barnyard",
+      "originalSentenceIndex": 42,
+      "quote": "Twenty miles from the city a pair of enormous eggs, identical in contour and separated only by a courtesy bay, jut out into the most domesticated body of salt water in the Western hemisphere, the great wet barnyard of Long Island Sound.",
+      "reason": "Preserves Nick's wry barnyard image for the Sound, a distinctive piece of his narration."
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "status": "generated_and_validated_not_fidelity_approved",
-  "generatedFrom": "docs/research/ch1-l1-review/candidate.json at the head that compared all 362 source sentences and folded in R3/R5's five findings",
+  "generatedFrom": "docs/research/ch1-l1-review/candidate.json at the head that compared all 362 source sentences, folded in R3/R5's five findings, and incorporated R1's three findings on source 40-79 (riotous island, the domesticated/barnyard image, rent-not-price)",
   "check": {
     "id": "check-gatsby-ch1-L1",
     "chapterVersionId": "gatsby-ch1-L1",
@@ -17,14 +17,14 @@
         "kind": "key-point",
         "prompt": "What's the second important thing that happens in this chapter?",
         "keyPointId": "gatsby-ch1-kp2",
-        "answerSentenceIndex": 168
+        "answerSentenceIndex": 170
       },
       {
         "id": "gatsby-ch1-L1-kp-2",
         "kind": "key-point",
         "prompt": "What's the third important thing that happens in this chapter?",
         "keyPointId": "gatsby-ch1-kp3",
-        "answerSentenceIndex": 194
+        "answerSentenceIndex": 196
       },
       {
         "id": "gatsby-ch1-L1-cw-0",
@@ -48,7 +48,7 @@
           "showing disdainful arrogance in manner",
           "unusual or different from what is considered normal"
         ],
-        "answerSentenceIndex": 245
+        "answerSentenceIndex": 247
       }
     ]
   },
