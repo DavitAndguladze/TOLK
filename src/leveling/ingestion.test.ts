@@ -111,7 +111,7 @@ describe("Gatsby ingestion", () => {
       const value = metadata(data.number);
       return JSON.stringify(data.number === 1 ? { ...value, requiredNames: [...value.requiredNames, "Nick Carraway"] } : value);
     } });
-    expect(content.policies["gatsby-ch1"].requiredNames).toEqual(["Gatsby", "Nick", "Carraway"]);
+    expect(content.policies["gatsby-full-ch1"].requiredNames).toEqual(["Gatsby", "Nick", "Carraway"]);
   });
 
   it("repairs retainedWords when the model drops Complex Words it already extracted", async () => {
@@ -122,7 +122,7 @@ describe("Gatsby ingestion", () => {
       const value = metadata(data.number);
       return JSON.stringify(data.number === 1 ? { ...value, retainedWords: value.retainedWords.slice(0, 1) } : value);
     } });
-    expect(content.policies["gatsby-ch1"].retainedWords).toEqual(expect.arrayContaining(["younger", "vulnerable", "turning"]));
+    expect(content.policies["gatsby-full-ch1"].retainedWords).toEqual(expect.arrayContaining(["younger", "vulnerable", "turning"]));
     expect(content.chapters[0].complexWords.map((entry) => entry.word)).toEqual(["younger", "vulnerable", "turning"]);
   });
 
@@ -160,9 +160,9 @@ describe("Gatsby ingestion", () => {
         retainedWordEvidence: [{ word: "peremptory", originalSentenceIndex: peremptorilyIndex, quote: sentence,
           reason: "Shows Daisy's commanding tone." }] });
     } });
-    expect(content.policies["gatsby-ch1"].retainedWords).toEqual(expect.arrayContaining(["peremptorily"]));
-    expect(content.policies["gatsby-ch1"].retainedWords).not.toContain("peremptory");
-    expect(content.policies["gatsby-ch1"].retainedWordEvidence).toEqual([{
+    expect(content.policies["gatsby-full-ch1"].retainedWords).toEqual(expect.arrayContaining(["peremptorily"]));
+    expect(content.policies["gatsby-full-ch1"].retainedWords).not.toContain("peremptory");
+    expect(content.policies["gatsby-full-ch1"].retainedWordEvidence).toEqual([{
       word: "peremptorily", originalSentenceIndex: peremptorilyIndex,
       quote: splitOriginalSentences(originals[0].originalText)[peremptorilyIndex],
       reason: "Shows Daisy's commanding tone.",
