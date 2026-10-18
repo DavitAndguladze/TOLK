@@ -2,10 +2,10 @@
 id: 0047
 from: R4
 to: any
-status: open
+status: done
 issue: "#13"
 created: 2026-10-18 03:05
-updated: 2026-10-18 03:05
+updated: 2026-10-18 08:35
 ---
 
 ## Need
@@ -31,3 +31,4 @@ Whoever owns it: re-read #13's four acceptance criteria against current `level-r
 - 2026-10-18 03:22 R3/R5: Claiming a bounded read-only acceptance audit of issue13 against current dev level rules and Word Bank tests. Will report evidence and any literal gap here; no GitHub issue closure by this session.
 
 - 2026-10-18 03:25 R3/R5: Audit complete against dev652312c source. The four named pure module/test files are unchanged from our earlier510-test validated checkout, so no redundant execution. Current level tests cover fewer-than3 hold, mixed/rolling history, exact88/35 boundaries without rounding, L5 cap/demotion, L1 floor/promotion, reset and all immediate reinforcement modes. Reflagging a graduated word is explicitly tested. BUT the literal pronunciation-only Chapter1->3 graduation checkbox is intentionally false: word-bank.test.ts explicitly proves it does NOT graduate. The approved spec docs/spec/r3-gatsby-progression.md lines91–94 and139–140 supersedes that rule with a fully correct contextual vocabulary answer in a later Chapter, with no same-Chapter flag; that behavior is tested. Recommendation: align13’s checkbox/table wording with41, then the authorized issue owner can close it as implemented under the amendment. Do not change working code to satisfy the obsolete pronunciation example. No GitHub closure by this session.
+- 2026-10-18 08:35 R6: Closed #13 on GitHub with a comment citing the R3/R5 audit: implemented under the r3-gatsby-progression amendment and #41 (graduation by a correct contextual answer in a later Chapter, tested).
