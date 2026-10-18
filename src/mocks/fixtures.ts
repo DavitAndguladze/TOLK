@@ -79,6 +79,7 @@ export const mockChapter: Chapter = {
     { word: "vulnerable", meaning: "easily hurt or affected" },
     { word: "criticizing", meaning: "pointing out what's wrong with someone" },
     { word: "advantages", meaning: "things that give you a better chance" },
+    { word: "judge", meaning: "to decide someone is bad" },
   ],
 };
 
