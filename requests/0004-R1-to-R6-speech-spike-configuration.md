@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#5"
 created: 2026-10-17 19:41
-updated: 2026-10-17 20:34
+updated: 2026-10-17 20:53
 ---
 
 ## Need
@@ -39,3 +39,5 @@ Concrete handoff:
 - 2026-10-17 20:19 R1: final results verified (33 final words in session 2). Longer session exposed token-clock regressions, so later session-origin latency estimates cannot be used; now retaining raw transcription bounds and suppressing later estimates pending calibration. Local tokens continue working. Reminder for production token route: observed JWT exp is epoch milliseconds, not seconds. Item 5 still awaits deployed HTTPS/authenticated route.
 - 2026-10-17 20:22 R1: four live sessions complete; controlled follow-up confirms both transcription and token clocks can restart. Reader reported text kept pace, but measured under-one-second visible latency is still unverified. OCI realtime provisionally selected with that caveat. No more credential setup needed locally; item 5 remains open. Preparing a draft PR subject to user approval, with #5 staying open for latency/deployed acceptance.
 - 2026-10-17 20:34 R1: user approved publication; draft PR #34 is open into dev: https://github.com/DavitAndguladze/TOLK/pull/34 . Latest dev integration passes 29 app tests plus 6 spike checks, both typechecks and builds. PR stays draft and #5 stays open for visible-latency validation and item 5. R6 owns HTTPS/authenticated token route; R1 will perform listening verification once available.
+
+- 2026-10-17 20:53 R1: isolated-word follow-up on draft PR #34 avoids OCI clock subtraction. Ten attempts, four measured / six inconclusive; median local endpoint-to-DOM estimate 451.5 ms, second rendering opportunity 457.5 ms (max 522 ms). Physical display timing remains uncalibrated. Local configuration still works; item 5 remains needed for deployed verification.
