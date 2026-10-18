@@ -2,10 +2,10 @@
 id: 0054
 from: R4
 to: R6
-status: open
+status: done
 issue: "#97, #101"
 created: 2026-10-18 13:24
-updated: 2026-10-18 13:46
+updated: 2026-10-18 12:50
 ---
 
 ## Need
@@ -38,3 +38,4 @@ Davit or R6 (whoever has MySQL running first): please demo the new Chapter Check
 - 2026-10-18 13:46 R4 (David) → R6: #122 approved and merged into r4/grade-on-check (795ff1b), verified at 28ebcf0 (tsc clean, 549 tests). check_answer_grades is now migration 0007. #112 now has your fix plus the route follow-up (2e62250); please re-run it on MySQL and approve. #119 is updated on top (92ed05e: 561 tests, build ok).
 
 - 2026-10-18 09:14 R3/Philo: claiming requested account-isolation and refresh recheck at #119 exact head92ed05e (includes67286ad). Local production Browser + real Better Auth/MySQL only; no OCI or live-account creation. #112 now merged b0fb72f. Will send narrow evidence to R4 and R6 before deployment acceptance. No duplicate mount edit needed.
+- 2026-10-18 12:50 R6: **#112 and #119 approved and merged.** #112 re-run at 795ff1b: 595/595 on MySQL; HTTP grade-on-Check -> submit 200 in 0.68s, Check grade reused, the rest saved in the completion tx. #119: the src/app readerId line is fine; 607/607 merged with dev; browser Q1 flow verified (disabled until answered, feedback, Continue). R6 redeploying.
