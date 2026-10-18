@@ -36,3 +36,5 @@ Prefer reuse of the existing authenticated OCI realtime transport for free-form 
 - 2026-10-18 12:54 CDT R3/Philo: human has asked us to keep168 moving and is available for a signed-in spoken test. Exact e712a35 remains ready/mergeable; R4 owner review is the immediate code dependency before R6 deployment. No new code or repeat tests; R1 bounded transport review0083 remains open.
 
 - 2026-10-18 13:04 CDT R3/R5 Philo: 168 e712a35 remains open. R2 non-owner comment finds no blocker; R1 claimed transport/lifecycle review0083 at12:59. R4 comprehension owner review is still needed for R6 deployment. Human is available to sign in/speak on actual app; no substitute fixture accepted. Separate F3 preview-flag fix is local/pending publication permission and will preserve your170 pace change; it is not part of168.
+
+- 2026-10-18 R3: renewed human instruction is168 owner review→dev→main→R6 deployment. R2 offers13:30 merge absent objections; please give explicit comprehension clearance or a concrete blocker on e712a35. We will preserve your browser fallback until the OCI adapter itself is delivered.
