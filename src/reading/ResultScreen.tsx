@@ -4,6 +4,7 @@ import { NextChapter } from "./NextChapter";
 import { ScoreCountUp } from "./ScoreCountUp";
 import { resultHeadline } from "./result";
 import motion from "./ReadingMotion.module.css";
+import theme from "./ReadingTheme.module.css";
 
 export type AnswersResult = Api["POST /api/checks/[checkId]/answers"]["res"];
 
@@ -22,9 +23,9 @@ export function ResultScreen({ result, nextHref }: { result: AnswersResult; next
   const toReview = grading.questionGrades.filter((q) => q.grade < 2);
 
   return (
-    <section aria-live="polite" className="mx-auto max-w-xl animate-page-in px-6 pt-8 pb-12">
+    <section aria-live="polite" className={`${theme.surface} mx-auto max-w-xl animate-page-in px-6 pt-8 pb-12`}>
       <p className="text-sm text-fog">Chapter {chapterNumber} result</p>
-      <h2 className={`mt-1 font-book text-[2rem] leading-tight ${motion.resultHeadline} ${grading.result === "fully-understood" ? motion.celebratedHeadline : ""}`}>
+      <h2 className={`${theme.heading} mt-1 text-[2rem] leading-tight ${motion.resultHeadline} ${grading.result === "fully-understood" ? motion.celebratedHeadline : ""}`}>
         {resultHeadline(grading)}
       </h2>
 
@@ -40,6 +41,7 @@ export function ResultScreen({ result, nextHref }: { result: AnswersResult; next
         <p className="text-sm text-fog">Next Chapter</p>
         <LevelChange from={decision.from} to={decision.to} />
         <p className="mt-3">{decision.explanation}</p>
+        <p className="mt-3 text-sm text-fog">L1 gives the most support. L5 is the author’s original text. Your Level can change by one step between Chapters, using your last three completed Chapters at this Level.</p>
       </div>
 
       <h3 className="mt-8 font-semibold">What this was based on</h3>
