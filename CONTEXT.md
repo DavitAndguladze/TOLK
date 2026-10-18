@@ -18,6 +18,7 @@ _Avoid_: Scene, section, page
 
 **Level**:
 One rung on the 5-step ladder a Chapter is written at: L1 (most simplified) to L5 (the author's original text).
+Under #41, a Level changes by at most one step using the last three distinct completed Chapters for the same Reader and Book at that Level, since the last actual Level change. Fewer than three holds; an average of at least 88 moves up, below 35 moves down. L1 and L5 are the bounds; L5 can move down.
 _Avoid_: Difficulty, grade, Lexile
 
 **Chapter Version**:
@@ -67,11 +68,11 @@ The short comprehension check after each Chapter, with questions on its Key Poin
 _Avoid_: Quiz, assessment, test
 
 **Grading Result**:
-The one result the AI gives per Chapter after combining Read-aloud Misses, Chapter Check answers, and Flagged Words: Fully understood, Partly understood, or Struggled. It sets the next Chapter's Level.
+The one result per Chapter after combining AI-graded Chapter Check answers, Read-aloud Misses, and Flagged Words: Fully understood, Partly understood, or Struggled. Its score contributes to the three-Chapter Level decision; the latest result sets immediate Reinforcement (#41).
 _Avoid_: Score, grade, pass/fail
 
 **Barely Passed**:
-A Fully understood Grading Result whose score sits just above the threshold. The next Chapter stays at the same Level instead of moving up.
+A Fully understood Grading Result whose score is 80–87. It uses plain Reinforcement; the three-Chapter average determines the next Level (#41).
 _Avoid_: Borderline, close call
 
 **Session Result**:
