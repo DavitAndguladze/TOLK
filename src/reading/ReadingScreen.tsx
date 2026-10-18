@@ -11,6 +11,7 @@ import { ChapterReadAloud } from "./ChapterReadAloud";
 const button =
   "min-h-13 cursor-pointer rounded-2xl text-base font-semibold transition outline-light focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:active:scale-100";
 const stepButton = `${button} grid w-13 place-items-center border border-hairline bg-white/60 text-ink hover:bg-white disabled:bg-transparent disabled:text-fog/50`;
+const demoListening = (process.env.NEXT_PUBLIC_LISTENING_ENGINE ?? "mock") === "mock";
 
 const outcomeClass: Record<WordOutcome, string> = {
   pending: "",
@@ -19,17 +20,18 @@ const outcomeClass: Record<WordOutcome, string> = {
   skipped: "text-fog underline decoration-fog/70 decoration-dotted decoration-2 underline-offset-[7px]",
 };
 
-function Word({ token, outcome, latest, stuck }: { token: Token; outcome: WordOutcome; latest: boolean; stuck: boolean }) {
-  return (
-    <span
-      className={`-mx-0.5 rounded-md px-0.5 transition-colors duration-200 ${outcomeClass[outcome]} ${
-        latest ? "bg-glow/45" : ""
-      } ${stuck ? "animate-pulse bg-gold/15 ring-2 ring-gold/60" : ""}`}
-    >
+function Word({ token, outcome, latest, stuck, flagged, onTap }: { token: Token; outcome: WordOutcome; latest: boolean; stuck: boolean; flagged: boolean; onTap?: () => void }) {
+  const className = `-mx-0.5 rounded-md px-0.5 transition-colors duration-200 ${outcomeClass[outcome]} ${latest ? "bg-glow/45" : ""} ${stuck ? "animate-pulse bg-gold/15 ring-2 ring-gold/60" : ""} ${flagged ? "bg-gold/15 ring-1 ring-gold/60" : ""}`;
+  const content = (
+    <>
       {token.text}
       {(outcome === "mispronounced" || outcome === "skipped") && <span className="sr-only"> ({outcome})</span>}
-    </span>
+      {flagged && <span className="sr-only"> (flagged)</span>}
+    </>
   );
+  return onTap ? (
+    <button type="button" onClick={onTap} className={`${className} cursor-pointer outline-light hover:bg-white/70 focus-visible:outline-2 focus-visible:outline-offset-2`}>{content}</button>
+  ) : <span className={className}>{content}</span>;
 }
 
 function Icon({ d }: { d: string }) {
@@ -42,15 +44,19 @@ function Icon({ d }: { d: string }) {
 const MIC = "M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3ZM19 11a7 7 0 0 1-14 0M12 18v3";
 const PAUSE = "M9 5v14M15 5v14";
 
-/** `chapterCheck` replaces the placeholder card when the Chapter ends (R4's Chapter Check, #11). */
+/** `chapterCheck` replaces the end card; a client parent supplies R5's word-tap callback and flags. */
 export function ReadingScreen({
   chapterVersionId,
   chunks,
   chapterCheck,
+  onWordTap,
+  flaggedTokenIndexes,
 }: {
   chapterVersionId: string;
   chunks: Chunk[];
   chapterCheck?: ReactNode;
+  onWordTap?: (token: Token, chapterVersionId: string) => void;
+  flaggedTokenIndexes?: ReadonlySet<number>;
 }) {
   const [state, dispatch] = useReducer(readingReducer, chunks.length, initialReadingState);
   const source = useRef<ReturnType<typeof createReadingAttempt>>(null);
@@ -100,6 +106,7 @@ export function ReadingScreen({
     return (
       <section aria-live="polite" className="mx-auto max-w-xl animate-page-in px-6 pt-10 pb-12">
         <h2 className="font-book text-[1.75rem] leading-tight">You reached the end of the Chapter.</h2>
+        {demoListening && source.current && <p className="mt-3 text-fog">Demo results are simulated. The microphone was not used.</p>}
         <p className="mt-3 text-lg text-fog">
           {tokens.some((t) => state.outcomes[t.index])
             ? `${clear} of ${tokens.length} words came through clearly.`
@@ -144,6 +151,8 @@ export function ReadingScreen({
                 outcome={state.outcomes[token.index] ?? "pending"}
                 latest={listening && token.index === state.lastRead}
                 stuck={token.index === state.stuckOn}
+                flagged={flaggedTokenIndexes?.has(token.index) ?? false}
+                onTap={!listening && onWordTap ? () => onWordTap(token, chapterVersionId) : undefined}
               />
             </Fragment>
           ))}
@@ -152,6 +161,7 @@ export function ReadingScreen({
 
       <footer className="fixed inset-x-0 bottom-0 border-t border-hairline bg-mist/95 px-6 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur">
         <div className="mx-auto max-w-xl">
+          {demoListening && !state.silent && <p className="mb-2 text-sm text-ink">Demo playback. Words advance automatically; the microphone is not used.</p>}
           <div className="flex items-center justify-between text-sm text-fog">
             <p aria-live="polite">
               {stuckWord ? (
@@ -202,7 +212,7 @@ export function ReadingScreen({
                 className={`${button} flex flex-1 items-center justify-center gap-2 bg-light text-white hover:bg-[#125f3f]`}
               >
                 <Icon d={listening ? PAUSE : MIC} />
-                {listening ? "Pause" : state.status === "paused" ? "Resume" : "Read aloud"}
+                {listening ? "Pause" : demoListening ? state.status === "paused" ? "Resume demo" : "Play demo" : state.status === "paused" ? "Resume" : "Read aloud"}
               </button>
             )}
             {state.chunkIndex === chunks.length - 1 ? (
