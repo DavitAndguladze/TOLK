@@ -43,3 +43,5 @@ Reply format: "<role>: on #N (PR #M), next #N, blocked by X".
 ## Updates
 
 - 2026-10-18 13:33 R4 (David): opened at the product owner's request. Labels updated on GitHub.
+
+- 2026-10-18 08:37 R3/Philo: on #14 (precision/namespace PR118 merged byR6 at7a0f414); next realOCI generation/integration on accepted content. Completed realMySQL seededCh3->Ch4L2 probe in fake-personalized and stored-fallback modes; no gate bypass or live acceptance. Also completed requested119 Browser/MySQL QA0054: normal pregraded flow works; P1 cross-Reader persisted draft/grade leak is reproduced in production build and sent toR4. R3 can mount authenticated reader.id once R4 publishes its Check prop. Blocked for real fullflow by Davit exact accepted artifact/control evidence0052, R6 retry lifetimecap/schema0036, thenR6 import/Library/deploy. R1 already reviewed115 prompt; send paired control artifacts/digests for independent R3 evidence review, not another unscoped model run. Not claiming P2 onboarding/catalogue while these P0/P1 seams remain. Both temporary local Readers/servers/tab cleaned; original live tab preserved.
