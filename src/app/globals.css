@@ -52,7 +52,7 @@
 }
 
 @theme inline {
-  --font-book: var(--font-newsreader), Georgia, serif;
+  --font-book: "Times New Roman", Times, serif;
   --font-ui: var(--font-atkinson), system-ui, sans-serif;
 }
 

@@ -1,16 +1,19 @@
 .surface {
   color: var(--color-ink);
-  /* The frame's own cream, so the reading screen matches the Library and fills the frame (#127). */
-  background: var(--color-mist);
+  /* One warm page colour for the whole read route, header included (src/app/read uses bg-paper too). */
+  background: var(--color-paper);
   font-family: var(--font-atkinson), system-ui, sans-serif;
   min-height: 100%;
 }
 
 .text {
-  font-family: inherit;
-  font-size: clamp(1.65rem, 4.8vw, 2.15rem);
-  line-height: 1.85;
-  overflow-wrap: anywhere;
+  /* A paragraph per screen reads like a book page: Times New Roman (--font-book), sized for running text. */
+  font-family: var(--font-book);
+  font-size: clamp(1.3rem, 4.4vw, 1.55rem);
+  line-height: 1.7;
+  letter-spacing: 0.005em;
+  hyphens: auto;
+  overflow-wrap: break-word;
 }
 
 .controls {
@@ -60,7 +63,7 @@
   gap: 0.75rem;
   padding: 1.5rem;
   text-align: center;
-  background: var(--color-mist);
+  background: var(--color-paper);
   animation: end-intro 2200ms ease-in-out forwards;
 }
 
