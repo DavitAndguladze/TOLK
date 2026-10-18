@@ -3,9 +3,11 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main>
-      <h1>TOLK</h1>
-      <Link href="/read">Open the mock Chapter</Link>
+    <main className="p-6">
+      <h1 className="font-book text-3xl">TOLK</h1>
+      <Link href="/read" className="mt-2 inline-block text-light underline underline-offset-4">
+        Open the mock Chapter
+      </Link>
     </main>
   );
 }
