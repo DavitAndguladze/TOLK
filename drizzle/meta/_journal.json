@@ -43,6 +43,27 @@
       "when": 1792304429071,
       "tag": "0005_chapter_completions",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1792329338817,
+      "tag": "0006_reader_preferences",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1792330667401,
+      "tag": "0007_check_answer_grades",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1792334479148,
+      "tag": "0008_generation_claim_budget",
+      "breakpoints": true
     }
   ]
 }

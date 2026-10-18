@@ -1,16 +1,19 @@
 import { after, NextResponse } from "next/server";
 import { completeChapter, CompletionError, generateCompletedChapter } from "@/comprehension/complete-chapter";
+import { rememberingKeyPointGrader } from "@/comprehension/answer-grades";
 import { completionKey } from "@/comprehension/completion-key";
 import { gradeChapterCheck } from "@/comprehension/grade-check";
 import { readAloudForAttempt } from "@/comprehension/read-aloud-attempt";
 import { AnswerValidationError } from "@/comprehension/record-answers";
 import {
-  answersStore, checksById, completedChecks, ensureChapterCheck, findMockVersion, holdLevel, keyPointGrader, recordWordBank,
+  answerGradeStore, answersStore, checksById, completedChecks, ensureChapterCheck, findMockVersion, holdLevel, keyPointGrader, recordWordBank,
   sessionResults,
 } from "@/comprehension/registry";
 import { submitCheckAnswers } from "@/comprehension/service";
 import { mockChapter } from "@/mocks";
+import { mockKeyPointGrader } from "@/comprehension/key-point-grader";
 import { getReader, readerIdFor } from "@/platform/auth";
+import { metered } from "@/platform/oci-quota";
 import { consumeReadAloudSummary, getReadAloudSummary } from "@/platform/registry";
 import type { Api, ChapterCheckAnswers } from "@/types";
 import { flagStore } from "@/words/registry";
@@ -25,7 +28,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ checkId
       return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
     }
     try {
-      const outcome = await completeChapter(reader.id, (await params).checkId, await req.json(), { keyPointGrader, now: () => new Date() });
+      const outcome = await completeChapter(reader.id, (await params).checkId, await req.json(), { keyPointGrader: metered(reader.id, keyPointGrader, mockKeyPointGrader), now: () => new Date() });
       after(async () => {
         try { await generateCompletedChapter(outcome); }
         catch (err) { console.warn("Chapter generation could not continue:", err instanceof Error ? err.name : "unknown"); }
@@ -68,7 +71,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ checkId
 
     const session = await gradeChapterCheck(
       { check, chapter: mockChapter, version, answers, readAloud, flaggedWords, readerId: sessionId },
-      { keyPointGrader, now: () => new Date() },
+      { keyPointGrader: rememberingKeyPointGrader(keyPointGrader, answerGradeStore, { readerId: sessionId, checkId: check.id }), now: () => new Date() },
     );
     sessionResults.set(storageKey, session);
     const evidence = chapterEvidence({ version, check, grading: session.grading, readAloud });

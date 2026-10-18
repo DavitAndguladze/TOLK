@@ -1,8 +1,8 @@
 // Storage for Books, Chapter Versions, Checks and Reader progress (#7). API agreed in comms 0017.
 import { and, asc, eq, gt, isNull, like, or, sql } from "drizzle-orm";
-import type { Book, BookProgress, Chapter, ChapterCheck, ChapterVersion, GradingResult, Level, SessionResult } from "../types";
+import type { Book, BookProgress, Chapter, ChapterCheck, ChapterVersion, GradingResult, Level, ReaderPreferences, SessionResult } from "../types";
 import { db } from "./client";
-import { bookProgress, books, chapterChecks, chapters, chapterVersions, sessionResults } from "./schema";
+import { bookProgress, books, chapterChecks, chapterCompletions, chapters, chapterVersions, readerPreferences, sessionResults } from "./schema";
 
 export { db } from "./client";
 export type DatabaseConnection = Pick<ReturnType<typeof db>, "select" | "insert">;
@@ -138,14 +138,31 @@ export async function listLibrary(readerId: string, q = ""): Promise<(Book & { p
 
 /** Where this Reader resumes a Book: their current Chapter Version, or the shared Chapter 1 at L1 for a new Reader. */
 export async function openBook(readerId: string, bookId: string): Promise<{ chapter: Pick<Chapter, "id" | "number" | "title">; version: ChapterVersion } | null> {
+  const opened = await resolveOpen(readerId, bookId);
+  if (!opened) return null;
+  const { progress, chapter, version } = opened;
+  if (!progress) await setBookProgress(readerId, { bookId, currentChapterNumber: version.chapterNumber, currentLevel: version.level, currentVersionId: version.id });
+  return { chapter: { id: chapter.id, number: chapter.number, title: chapter.title }, version };
+}
+
+/** What openBook would open, without recording anything. */
+async function resolveOpen(readerId: string, bookId: string) {
   const progress = await getBookProgress(readerId, bookId);
   let version = progress ? await getChapterVersion(progress.currentVersionId) : await sharedFirstChapter(bookId);
   if (!version && progress) version = await (await import("./generation")).getGenerationVersion(readerId, progress.currentVersionId);
   if (!version) return null;
   const chapter = await getChapter(bookId, version.chapterNumber);
-  if (!chapter) return null;
-  if (!progress) await setBookProgress(readerId, { bookId, currentChapterNumber: version.chapterNumber, currentLevel: version.level, currentVersionId: version.id });
-  return { chapter: { id: chapter.id, number: chapter.number, title: chapter.title }, version };
+  return chapter ? { progress, chapter, version } : null;
+}
+
+/** The first-Chapter intro (#100) for a Reader with no completed Chapter in any Book, else null. Records nothing. */
+export async function getFirstChapterIntro(readerId: string, bookId: string): Promise<{ bookTitle: string; chapterTitle: string; versionId: string; questionCount: number } | null> {
+  const [done] = await db().select({ id: chapterCompletions.chapterVersionId }).from(chapterCompletions).where(eq(chapterCompletions.readerId, readerId)).limit(1);
+  if (done) return null;
+  const [book, opened] = await Promise.all([getBook(bookId), resolveOpen(readerId, bookId)]);
+  const check = opened && (await getChapterCheck(opened.version.id));
+  if (!book || !opened || !check) return null;
+  return { bookTitle: book.title, chapterTitle: opened.chapter.title, versionId: opened.version.id, questionCount: check.questions.length };
 }
 
 async function sharedFirstChapter(bookId: string): Promise<ChapterVersion | null> {
@@ -154,4 +171,16 @@ async function sharedFirstChapter(bookId: string): Promise<ChapterVersion | null
     .from(chapterVersions)
     .where(and(eq(chapterVersions.bookId, bookId), eq(chapterVersions.chapterNumber, 1), eq(chapterVersions.level, 1), isNull(chapterVersions.readerId)));
   return row?.data ?? null;
+}
+
+/** The Reader's Reading Goals and Favourite Genres (#99), or null before onboarding. */
+export async function getReaderPreferences(readerId: string): Promise<ReaderPreferences | null> {
+  const [row] = await db().select({ data: readerPreferences.data }).from(readerPreferences).where(eq(readerPreferences.readerId, readerId));
+  return row?.data ?? null;
+}
+
+/** Replaces the Reader's picks; Back-then-Continue in onboarding just saves again. */
+export async function setReaderPreferences(readerId: string, preferences: ReaderPreferences): Promise<void> {
+  const values = { data: preferences, updatedAt: new Date() };
+  await db().insert(readerPreferences).values({ readerId, ...values }).onDuplicateKeyUpdate({ set: values });
 }

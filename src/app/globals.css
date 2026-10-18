@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
-/* Blue reference palette (#95, values from src/reading/ui/tokens.css); the Reader climbs toward the author's original at L5. */
+/* Blue reference palette (#95, values from src/reading/ui/tokens.css) on warm cream paper; the Reader climbs toward the author's original at L5. */
 @theme {
-  --color-mist: #f3f8ff;
+  --color-mist: #fbf3dc;
   --color-ink: #0b1946;
   --color-fog: #4d6088;
   --color-light: #1764df;
@@ -12,7 +12,13 @@
   --color-success: #146843;
   --color-warning: #94620b;
   --color-error: #b32c40;
-  --color-paper: #ffffff;
+  --color-paper: #fffbf1;
+  /* Book-spine shelf on the Library (decorative only, never text). */
+  --color-harbor: #2a6385;
+  --color-dusk: #5b8bb5;
+  --color-sky: #a5d4fb;
+  --color-sand: #e6d4a0;
+  --color-shelf: #8a5a34;
   --radius-control: 1rem;
   --radius-card: 1.5rem;
   --shadow-card: 0 4px 20px rgb(36 95 165 / 7%);
@@ -28,11 +34,19 @@
   --duration-reader-progress: 250ms;
 
   --animate-page-in: page-in 220ms ease-out;
+  --animate-spine-in: spine-in 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
 
   @keyframes page-in {
     from {
       opacity: 0;
       transform: translateY(6px);
+    }
+  }
+
+  @keyframes spine-in {
+    from {
+      transform: translateY(14px);
+      opacity: 0;
     }
   }
 }

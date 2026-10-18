@@ -37,7 +37,7 @@ test("meaning uses the authorized served sentence and rejects invalid tokens or 
   const response = await wordMeaning(new Request("https://tolk.test"), context());
   expect(await response.json()).toEqual({ meaning: "A father is a male parent.", source: "oci-generative-ai" });
   expect(response.headers.get("cache-control")).toBe("private, no-store");
-  expect(deps.define.mock.calls[0].slice(1)).toEqual([5, mockChapter]);
+  expect(deps.define.mock.calls[0].slice(1)).toEqual([5, mockChapter, "reader-a"]);
   for (const index of ["-1", "1.5", "", "99999"]) expect((await wordMeaning(new Request("https://tolk.test"), context(index))).status).toBe(400);
   deps.version.mockResolvedValue({ ...mockChapterVersion(1), status: "generating" });
   expect((await wordMeaning(new Request("https://tolk.test"), context())).status).toBe(404);

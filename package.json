@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit --incremental false",
     "test": "vitest run",
     "ingest:gatsby": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/ingest-gatsby.mjs",
     "demo:reader": "tsx --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/demo-reader.ts",

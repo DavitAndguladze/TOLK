@@ -2,6 +2,7 @@ import type { Api, Chapter, ChapterCheck, Grading, Level, LevelDecision, Session
 import { LEVELS } from "../types";
 import { mockChapter, mockChapterVersion } from "../mocks";
 import { type ChapterEvidence, updateWordBank } from "../words/word-bank";
+import { createInMemoryAnswerGradeStore, type AnswerGradeStore } from "./answer-grades";
 import { createInMemoryAnswersStore } from "./answers-store";
 import { generateChapterCheck, type ChapterCheckGenerator } from "./chapter-check-generator";
 import type { KeyPointGrader } from "./grade-check";
@@ -26,8 +27,13 @@ export const sessionResults = new Map<string, SessionResult>(); // keyed like an
 // The last answered completion per `${checkId}:${readerSessionId}`, so a retried submission gets the same
 // result without grading, spending a reading, or touching the Word Bank again. On globalThis like the
 // read-aloud store, so a hot reload can't lose it while the reading it spent stays spent.
-const shared = globalThis as typeof globalThis & { tolkCompletedChecks?: Map<string, { key: string; res: AnswersResponse }> };
+const shared = globalThis as typeof globalThis & {
+  tolkCompletedChecks?: Map<string, { key: string; res: AnswersResponse }>;
+  tolkAnswerGrades?: AnswerGradeStore;
+};
 export const completedChecks = (shared.tolkCompletedChecks ??= new Map());
+// Key Point grades from Check (#97) for the database-less demo; the MySQL store replaces it when a DB is configured.
+export const answerGradeStore = (shared.tolkAnswerGrades ??= createInMemoryAnswerGradeStore());
 export const wordBanks = new Map<string, WordBankEntry[]>(); // keyed by Reader session id
 
 // OCI Generative AI grades Key Point answers when .env.local configures it; the stand-in otherwise, and as its fallback.

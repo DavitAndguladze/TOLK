@@ -286,6 +286,28 @@ describe("ChapterGenerator", () => {
     expect(() => createChapterGenerator({ ...dependencies(), maxAttempts })).toThrow("attempt");
   });
 
+  it("allows five offline attempts for a shared artifact", async () => {
+    let failures = 4;
+    const result = await createChapterGenerator({ ...dependencies(), maxAttempts: 5,
+      generateText: async () => {
+        if (failures-- > 0) throw new Error("Transient test provider failure");
+        return JSON.stringify(draft);
+      } }).generatePreGenerated(chapter, 1);
+    expect(result.provenance).toMatchObject({ source: "pre-generated", personalized: false, attempts: 5 });
+    expect(result.check.chapterVersionId).toBe(result.version.id);
+  });
+
+  it("keeps live Reader generation to two attempts with the offline allowance configured", async () => {
+    const fallback = await createChapterGenerator(dependencies()).generatePreGenerated(chapter, 1);
+    const result = await createChapterGenerator({ ...dependencies(), maxAttempts: 5,
+      generateText: async () => "{}", fallback: async () => fallback }).generate(input());
+    expect(result.provenance).toMatchObject({ source: "pre-generated", attempts: 2, fallbackReason: "generation-failed" });
+  });
+
+  it.each([0, -1, 1.5, Infinity, 6])("rejects an invalid offline attempt bound %s", (maxAttempts) => {
+    expect(() => createChapterGenerator({ ...dependencies(), maxAttempts })).toThrow("attempt");
+  });
+
   it("reports a safe retry state when no valid fallback exists", async () => {
     const fallback = await createChapterGenerator(dependencies()).generatePreGenerated(chapter, 1);
     const wrong = structuredClone(fallback);

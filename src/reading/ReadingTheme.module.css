@@ -1,0 +1,49 @@
+.surface {
+  color: var(--color-ink);
+  background: #fbfdff;
+  font-family: var(--font-atkinson), system-ui, sans-serif;
+  min-height: 100dvh;
+}
+
+.text {
+  font-family: inherit;
+  font-size: clamp(1.65rem, 4.8vw, 2.15rem);
+  line-height: 1.85;
+  overflow-wrap: anywhere;
+}
+
+.controls {
+  border-top: 1px solid var(--color-hairline);
+  border-radius: 1.75rem 1.75rem 0 0;
+  background: #f5faff;
+  box-shadow: 0 -6px 28px rgb(36 95 165 / 8%);
+}
+
+.legend {
+  margin-inline: auto;
+  margin-bottom: 1.5rem;
+  max-width: 36rem;
+  border: 1px solid var(--color-hairline);
+  border-radius: 1rem;
+  background: #fff;
+  padding: 0.75rem 1rem;
+  color: var(--color-fog);
+  font-size: 0.875rem;
+}
+
+.legend summary {
+  min-height: 2.75rem;
+  display: list-item;
+  align-content: center;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.legend summary:focus-visible {
+  outline: 2px solid var(--color-light);
+  outline-offset: 4px;
+  border-radius: 0.25rem;
+}
+
+.legend p { margin-top: 0.5rem; }

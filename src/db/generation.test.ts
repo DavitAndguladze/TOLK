@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { and, eq, inArray } from "drizzle-orm";
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { generateChapterCheck } from "../comprehension/chapter-check-generator";
 import vocabulary from "../data/vocabulary/english-2018.json" with { type: "json" };
 import gatsbySource from "../data/gatsby/content.json" with { type: "json" };
@@ -8,6 +8,11 @@ import { mockBook, mockChapter, mockChapterCheck, mockChapterVersion } from "../
 import { chapterArtifactDigest, createChapterGenerator, type FidelityInput, type FidelityReview } from "../leveling/generator";
 import { generateGatsbySeed } from "../leveling/seed";
 import type { Chapter, NextChapterInput } from "../types";
+
+const authSession = vi.hoisted(() => ({ reader: null as { id: string } | null }));
+vi.mock("../platform/auth", () => ({ getReader: async () => authSession.reader }));
+
+afterEach(() => { vi.unstubAllEnvs(); authSession.reader = null; });
 
 const testDatabase = process.env.TOLK_TEST_DATABASE_URL;
 const sentences = ["Nick saw a light.", "He went home.", "He felt hope."];
@@ -51,6 +56,7 @@ describe.skipIf(!testDatabase)("persisted Chapter generation", () => {
   });
   afterAll(async () => {
     for (const { readerId, bookId } of owned) await content.db().transaction(async (tx) => {
+      await tx.delete(schema.user).where(eq(schema.user.id, readerId));
       await tx.delete(schema.chapterGenerations).where(eq(schema.chapterGenerations.readerId, readerId));
       await tx.delete(schema.sessionResults).where(eq(schema.sessionResults.readerId, readerId));
       const versions = await tx.select({ id: schema.chapterVersions.id }).from(schema.chapterVersions).where(eq(schema.chapterVersions.bookId, bookId));
@@ -231,6 +237,109 @@ describe.skipIf(!testDatabase)("persisted Chapter generation", () => {
     const late = await generator().generate(input);
     expect(await store.saveGeneratedChapter(id, late, retry, input)).toBe(false);
     expect(await content.getChapterVersion(late.version.id)).toBeNull();
+  });
+
+  it("allows only three lifetime claims even across concurrent retries and failed runs", async () => {
+    const { readerId, id } = await setup();
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const claims = await Promise.all([1, 2, 3].map(() => store.claimGeneration(readerId, id)));
+      expect(claims.filter(Boolean)).toHaveLength(1);
+      expect(await store.failGeneration(id, claims.find(Boolean)!)).toBe(true);
+    }
+    expect(await store.claimGeneration(readerId, id)).toBeNull();
+    expect(await store.resolveGeneration(readerId, id)).toMatchObject({ status: "failed", claimCount: 3 });
+  });
+
+  it("counts stale-worker recovery against the lifetime cap and fences every abandoned token", async () => {
+    const { readerId, id, input } = await setup();
+    const tokens: string[] = [];
+    for (let attempt = 0; attempt < 3; attempt++) {
+      tokens.push((await store.claimGeneration(readerId, id))!);
+      await content.db().update(schema.chapterGenerations).set({ updatedAt: new Date(Date.now() - 31_000) })
+        .where(eq(schema.chapterGenerations.id, id));
+    }
+    expect(new Set(tokens).size).toBe(3);
+    expect(await store.claimGeneration(readerId, id)).toBeNull();
+    expect(await store.resolveGeneration(readerId, id)).toMatchObject({ status: "failed", claimCount: 3 });
+    const artifact = await generator().generate(input);
+    for (const token of tokens) {
+      expect(await store.saveGeneratedChapter(id, artifact, token, input)).toBe(false);
+      expect(await store.failGeneration(id, token)).toBe(false);
+    }
+    expect(await content.getChapterVersion(artifact.version.id)).toBeNull();
+  });
+
+  it("authenticates a retry, uses only its saved completion, and promotes the exact ready Version", async () => {
+    const { readerId, bookId, id, seed, input } = await setup();
+    const { completeChapter, getChapterCompletion } = await import("../comprehension/complete-chapter");
+    const baseline = seed.sharedChapterOne;
+    const outcome = await completeChapter(readerId, baseline.check.id, { answers: baseline.check.questions.map((q) => ({ questionId: q.id,
+      via: "typed", answer: q.kind === "complex-word" ? input.original.complexWords[0].meaning : "Nick saw a light." })) },
+      { now: () => new Date(), keyPointGrader: async () => ({ grade: 2, feedback: "Yes.", gradedBy: "stand-in" }) });
+    expect(outcome.nextVersionId).toBe(id);
+    const { retryVersion } = await import("../leveling/retry-http");
+    const request = (origin = "https://tolk.test", pendingId = id) => retryVersion(new Request(`https://tolk.test/api/chapter-versions/${pendingId}/retry`, {
+      method: "POST", headers: { origin, "content-type": "application/json", "x-reader-session": readerId },
+      body: JSON.stringify({ readerId: "forged", level: 5, wordBank: ["forged"] }),
+    }), { params: Promise.resolve({ versionId: pendingId }) });
+    vi.stubEnv("BETTER_AUTH_URL", "https://tolk.test");
+    vi.stubEnv("OCI_PRIVATE_KEY_PATH", "/nonexistent-tolk-r3-test");
+    authSession.reader = null;
+    expect((await request()).status).toBe(401);
+    authSession.reader = { id: "foreign-reader" };
+    expect((await request()).status).toBe(404);
+    authSession.reader = { id: readerId };
+    expect((await request("https://foreign.test")).status).toBe(403);
+    expect((await store.resolveGeneration(readerId, id))?.claimCount).toBe(0);
+    expect((await request("https://tolk.test", "pending-missing")).status).toBe(404);
+    const active = (await store.claimGeneration(readerId, id))!;
+    const waiting = await request();
+    expect(waiting.status).toBe(202);
+    expect(waiting.headers.get("retry-after")).toBe("2");
+    expect((await store.resolveGeneration(readerId, id))?.claimCount).toBe(1);
+    await store.failGeneration(id, active);
+    const response = await request();
+    expect(response.status).toBe(200);
+    expect(response.headers.get("cache-control")).toBe("private, no-store");
+    const version = await response.json();
+    expect(version).toEqual(seed.fallbacks[0].version);
+    expect(await content.getChapterCheck(version.id)).toEqual(seed.fallbacks[0].check);
+    expect((await content.getBookProgress(readerId, bookId))?.currentVersionId).toBe(version.id);
+    expect(await getChapterCompletion(readerId, baseline.version.id)).toEqual(outcome);
+    expect((await store.resolveGeneration(readerId, id))?.claimCount).toBe(2);
+    expect(await (await request()).json()).toEqual(version);
+    expect((await store.resolveGeneration(readerId, id))?.claimCount).toBe(2);
+    vi.unstubAllEnvs();
+  });
+
+  it("stops retrying after the lifetime budget without changing the saved outcome or Word Bank", async () => {
+    const { readerId, id, seed, bookId, input } = await setup();
+    const { completeChapter, getChapterCompletion, getReaderWordBank } = await import("../comprehension/complete-chapter");
+    const { retryVersion } = await import("../leveling/retry-http");
+    const baseline = seed.sharedChapterOne;
+    const outcome = await completeChapter(readerId, baseline.check.id, { answers: baseline.check.questions.map((q) => ({ questionId: q.id,
+      via: "typed", answer: q.kind === "complex-word" ? q.choices!.find((choice) => choice !== input.original.complexWords[0].meaning)! : "Nick saw a light." })) },
+      { now: () => new Date(), keyPointGrader: async () => ({ grade: 2, feedback: "Yes.", gradedBy: "stand-in" }) });
+    const bank = await getReaderWordBank(readerId);
+    expect(bank.map((word) => word.word)).toContain("hope");
+    const invalid = structuredClone(seed.fallbacks[0]); invalid.fidelity.plotPreserved = false;
+    await content.db().update(schema.chapterArtifacts).set({ data: invalid }).where(eq(schema.chapterArtifacts.versionId, invalid.version.id));
+    vi.stubEnv("BETTER_AUTH_URL", "https://tolk.test");
+    vi.stubEnv("OCI_PRIVATE_KEY_PATH", "/nonexistent-tolk-r3-test");
+    authSession.reader = { id: readerId };
+    const request = () => retryVersion(new Request(`https://tolk.test/api/chapter-versions/${id}/retry`, { method: "POST" }),
+      { params: Promise.resolve({ versionId: id }) });
+    expect((await request()).status).toBe(503);
+    expect((await request()).status).toBe(503);
+    expect((await request()).status).toBe(409);
+    expect((await request()).status).toBe(409);
+    expect(await store.resolveGeneration(readerId, id)).toMatchObject({ status: "failed", claimCount: 3, artifact: null });
+    expect(await getChapterCompletion(readerId, baseline.version.id)).toEqual(outcome);
+    expect(await getReaderWordBank(readerId)).toEqual(bank);
+    expect((await content.getBookProgress(readerId, bookId))?.currentVersionId).toBe(id);
+    expect(await content.getChapterVersion(input.baseline.id)).toEqual(input.baseline);
+    expect(await content.levelHistory(readerId, bookId)).toHaveLength(1);
+    vi.unstubAllEnvs();
   });
 
   it("reclaims an abandoned attempt and preserves its baseline and saved completion on failure", async () => {

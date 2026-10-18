@@ -32,8 +32,8 @@ export async function getReader(): Promise<Reader | null> {
 }
 
 /** The signed-in Reader; otherwise redirects to sign in. */
-export async function requireReader(): Promise<Reader> {
-  return (await getReader()) ?? redirect("/sign-in");
+export async function requireReader(signedOutTo = "/sign-in"): Promise<Reader> {
+  return (await getReader()) ?? redirect(signedOutTo);
 }
 
 /**

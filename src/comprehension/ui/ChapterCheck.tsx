@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { ChapterCheck as ChapterCheckModel, ChapterCheckAnswers } from "../../types";
+import type { ChapterCheck as ChapterCheckModel, ChapterCheckAnswers, QuestionGrade } from "../../types";
 import { useConfirmedReadAloudStartedAt } from "../../reading/ChapterReadAloud";
 import { ResultScreen, type AnswersResult } from "../../reading/ResultScreen";
 import { ChapterCheckPanel } from "./ChapterCheckPanel";
@@ -23,6 +23,16 @@ function readerSessionId(): string {
   }
 }
 
+async function gradeAnswer(checkId: string, questionId: string, entry: ChapterCheckAnswers["answers"][number]): Promise<QuestionGrade> {
+  const res = await fetch(`/api/checks/${checkId}/questions/${questionId}/grade`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-Reader-Session": readerSessionId() },
+    body: JSON.stringify(entry),
+  });
+  if (!res.ok) throw new Error("Couldn't check answer");
+  return res.json();
+}
+
 async function submitAnswers(checkId: string, answers: ChapterCheckAnswers): Promise<AnswersResult> {
   const res = await fetch(`/api/checks/${checkId}/answers`, {
     method: "POST",
@@ -35,13 +45,17 @@ async function submitAnswers(checkId: string, answers: ChapterCheckAnswers): Pro
 
 /** The `chapterCheck` slot ReadingScreen renders at the end of the Chapter (comms request 0005, PR #32).
  *  Once graded, it shows R2's ResultScreen in its place. */
-export function ChapterCheck({ check }: { check: ChapterCheckModel }) {
-  const [result, setResult] = useState<AnswersResult | null>(null);
+export function ChapterCheck({ check, readerId }: { check: ChapterCheckModel; readerId: string }) {
+  // The response plus exactly what was submitted, so the result screen can review each answer (comms 0051).
+  const [done, setDone] = useState<{ result: AnswersResult; answers: ChapterCheckAnswers } | null>(null);
   // The reading R2 confirmed saved for this completion, or null for a silent read or a failed save,
   // so grading credits only this reading (comms 0024).
   const readAloudStartedAt = useConfirmedReadAloudStartedAt();
-  if (result) return <ResultScreen result={result} nextHref={result.nextVersionId && `/read/${result.nextVersionId}`} />;
+  if (done) return <ResultScreen result={done.result} nextHref={done.result.nextVersionId && `/read/${done.result.nextVersionId}`} check={check} answers={done.answers} />;
   return (
-    <ChapterCheckPanel check={check} onSubmit={async (answers) => setResult(await submitAnswers(check.id, { ...answers, readAloudStartedAt }))} />
+    <ChapterCheckPanel check={check} readerId={readerId} gradeAnswer={(questionId, entry) => gradeAnswer(check.id, questionId, entry)} onSubmit={async (answers) => {
+      const submitted = { ...answers, readAloudStartedAt };
+      setDone({ result: await submitAnswers(check.id, submitted), answers: submitted });
+    }} />
   );
 }
