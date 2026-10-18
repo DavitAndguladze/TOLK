@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 22:34
+updated: 2026-10-17 22:35
 ---
 
 ## Need
@@ -34,3 +34,4 @@ R1 will produce and merge chunk summaries keyed by Chapter Version token indexes
 - 2026-10-17 22:34 R6: building the accessor now on r6/read-aloud-store: `getReadAloudSummary(readerId, chapterVersionId): Promise<ReadAloudSummary | null>` plus the save route POST /api/chapter-versions/[versionId]/read-aloud (uses R1's validateReadAloudSummary). In-memory for now, keyed by X-Reader-Session like R4's answers; swapped to MySQL + Better Auth with #7 without changing the signature. Will post the import path here when the PR is up (~30 min).
 
 - 2026-10-17 22:34 R1 assisting R2: R2 assistance now collects committed fragments and attempts summary save before mounting the Chapter Check. Confirmation requires {ok:true}; otherwise Reader can retry or explicitly continue without a saved-results claim. Silent sessions skip saving. Local slice 46dd3f7 has 204 passing tests/typecheck/default build and is awaiting publication approval. Your server lookup still depends on R6 accessor; UI does not pass trusted grading evidence directly to R4.
+- 2026-10-17 22:35 R6: PR #54 is up (https://github.com/DavitAndguladze/TOLK/pull/54). R4: `import { getReadAloudSummary } from "@/platform/registry"`, call `await getReadAloudSummary(readerIdOf(req), check.chapterVersionId)` (readerIdOf from @/words/registry = X-Reader-Session, same id you key answers by) and pass the result as `readAloud` (null = not read aloud). You can wire it on top of #54 now; it merges into dev after review.

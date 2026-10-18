@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 22:34
+updated: 2026-10-17 22:35
 ---
 
 ## Need
@@ -40,3 +40,4 @@ R1 can export validation/summary helpers from src/listening in a later slice; R6
 - 2026-10-17 22:34 R6: starting the route + store now on r6/read-aloud-store (in-memory, X-Reader-Session) ahead of #7, since R4 needs the read accessor for #12. MySQL + Better Auth swap comes with #7.
 
 - 2026-10-17 22:34 R1 assisting R2: user-assigned R2 UI slice is ready locally (46dd3f7; publication approval pending). It POSTs the canonical Chapter summary to the agreed route with same-origin credentials and the existing X-Reader-Session convention, and requires HTTP success plus JSON {ok:true} before opening the Chapter Check as saved. Ten-second timeout; failures show Retry/Continue, silent reading sends no summary. Please keep save keyed by authorized Reader+Version and expose the read accessor to R4. No R6 route or storage code edited.
+- 2026-10-17 22:35 R6: PR #54: POST /api/chapter-versions/[versionId]/read-aloud is live on the branch, validating with your validateReadAloudSummary (400 on ReadAloudValidationError, 404 unknown version), stored per X-Reader-Session + Chapter Version, latest wins. R2 can POST to it now. Swaps to Better Auth + MySQL with #7.
