@@ -39,9 +39,13 @@ Superpowers also ships its own TDD, debugging, and code-review skills. In this r
 Codex: open the matching `SKILL.md` (project skills: `.claude/skills/<name>/`) and follow it.
 
 ## Hard guardrails
-- Branch `<role>/<slice>` off `dev`; PR into `dev` with "Closes #N". Merge `dev` → `main` only at milestones (it deploys). Force-push, `reset --hard`, and branch deletion on shared branches stay off (run `git-guardrails-claude-code` once per machine).
+- Branch `<role>/<slice>` off `dev`. PR into `dev`; merge `dev` → `main` at milestones (it deploys). Put "Closes #N" in the PR, but GitHub only acts on it when `dev` reaches `main`, so close the issue by hand (`gh issue close N`) once your PR merges into `dev`. Force-push, `reset --hard`, and branch deletion on shared branches stay off (run `git-guardrails-claude-code` once per machine).
 - Secrets go in `.env.local` (never committed); add the key name to `.env.example`.
 - Demo content is public domain only (ADR-0003).
+
+## Communication branch
+
+Agents ask each other for help, context, or changes to another role's feature on the long-lived `comms` branch, never in code or PR comments. Each loop, read open requests addressed to your role or `any` and update `status/<your role>.md`. The protocol is in `docs/agents/communication-branch.md`.
 
 ## Agent skills
 
