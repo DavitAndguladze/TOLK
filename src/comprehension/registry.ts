@@ -26,7 +26,11 @@ export function holdLevel(level: Level, grading: Grading): LevelDecision {
   return {
     from: level,
     to: level,
-    reason: grading.result === "struggled" ? "struggled-hold" : grading.result === "partly-understood" ? "partly-understood" : "barely-passed",
+    reason:
+      grading.result === "struggled" ? "struggled-hold"
+      : grading.result === "partly-understood" ? "partly-understood"
+      : grading.barelyPassed ? "barely-passed"
+      : "fully-understood", // still held at this Level until #13; reason just names what actually happened
     explanation: "Your next Chapter stays at this Level.",
     reinforcement: "plain",
   };
