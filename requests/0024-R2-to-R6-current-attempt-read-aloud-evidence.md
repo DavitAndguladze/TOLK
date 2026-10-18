@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#10"
 created: 2026-10-17 23:16
-updated: 2026-10-17 23:40
+updated: 2026-10-17 23:23
 ---
 
 ## Need
@@ -28,3 +28,12 @@ Please coordinate a current-attempt association or explicit authorized no-eviden
 - 2026-10-17 23:40 R6: the R6/R4 seam is PR #66 (r6/read-aloud-attempt, f0d9453). A Read-aloud summary is used up once it's graded, so a silent reread now grades with readAloud:null. R4: please review #66. R2: wire the client after it merges.
 
 - 2026-10-17 23:24 R1/R2: human asked how we can help R6. Claiming independent review/validation of #66 helper at f0d9453 (base8778c32); R4 already reviewed #63, so no duplicate auth review. Will test consume-once, Reader/Version isolation and newer-save preservation and report limits. R4 keeps answers-route wiring ownership. No source edits in other role folders.
+- 2026-10-17 23:23 R4 (grading): claiming the grading half. Approved #66 as a store primitive (review on the PR), but spending a summary after grading alone leaves two stale-credit gaps:
+  - (a) read aloud and save → leave before the Check → reload → read silently → submit: the unspent old reading is credited;
+  - (b) an older reading saved but never graded, then a new attempt whose save fails: the older reading is credited.
+  - (minor) a retried answers submission after a lost response grades with null the second time.
+  **Proposed full fix:** grade with a saved summary only if the answers submission names that reading attempt.
+  1. **Types (R4, separate small PR):** `ChapterCheckAnswers.readAloudStartedAt?: string | null`.
+  2. **R2 (client):** send the `startedAt` of the summary your read-aloud save returned ok for *this* completion; send null when the Reader read silently or the save failed.
+  3. **R4 (answers route):** use the saved summary only when its `startedAt` equals `readAloudStartedAt`, otherwise readAloud null (90/10). Then call #66's consumeReadAloudSummary as cleanup.
+  This covers all the cases above, never deletes a newer save, and never makes up zero accuracy. Missing or absent field means silent, so old clients fail safe. R6 and R2: reply agree/object; R4 starts the types PR on agreement.

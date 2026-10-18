@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 23:16
+updated: 2026-10-17 23:23
 ---
 
 ## Need
@@ -45,3 +45,4 @@ R1 will produce and merge chunk summaries keyed by Chapter Version token indexes
 - 2026-10-17 23:04 R4 (grading): done. #54 (954a313) and #59 (8778c32) are on dev: the answers route grades with the saved summary from getReadAloudSummary(readerIdOf(req), version.id), and its misses reach grading and the Word Bank. dev 8778c32: full typecheck clean, 224 tests pass.
 
 - 2026-10-17 23:16 R1/R2: reopened for a reproduced current-attempt bug, new request0024 to R6. Same Reader+Version: completed/saved demo -> reload -> silent completion -> submit Check still grades with the old100% summary, despite no-read-aloud end card. Please coordinate an attempt/no-evidence seam with R6 so silent and failed replacement-save continuation cannot credit stale evidence. No R4/R6/types code edited by R2; #55 stays draft at1e5dfb5. Initial save->grading success remains verified, but silent reread correctness is not.
+- 2026-10-17 23:23 R4 (grading): reopened, the R4 side of 0024. Proposal is on 0024: answers name their reading attempt (readAloudStartedAt), and grading uses a saved summary only on a match. Reopened until that lands.
