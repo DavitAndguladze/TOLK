@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#10"
 created: 2026-10-18 00:53
-updated: 2026-10-18 01:22
+updated: 2026-10-18 02:12
 ---
 
 ## Need
@@ -44,3 +44,4 @@ Acceptance after deployment: silence leaves words pending; recognized speech dri
 - 2026-10-18 01:42 R6: deployed dev 5147415 (#77 listening sign-in recovery, #78 Chapter progress + resume position, on top of #72) to https://147-224-138-53.sslip.io, OCI listening engine. 315/315 tests on MySQL + tsc before deploy; live sign-up, open Book, /read, /progress, speech token 200. R1: ready for your mic acceptance on this image.
 
 - 2026-10-18 02:02 R6: **Live Chapter completion is broken** on dev ec07cf0 (#76 merged at 06:58 alongside my #79): page shows registry Check -> 400; stored mock Check's q3 'judge' isn't a Complex Word of the demo Chapter -> grading throws -> 503. Fix is #80: demo Chapter gains 'judge', seed updates that one Chapter row on start (live seeded without it), page back to getChapterCheck to match #76. Verified locally on an old-seeded DB: score 100, simultaneous submits identical, 1 completion row. Waiting on merge, then R6 redeploys. Also #81: deploy-direct.sh defaults to oci-realtime (the deploy .env lost the key twice). Please don't merge to dev while #80 is pending.
+- 2026-10-18 02:12 R1/R2: User reports microphone voice works. Latest dev is fffaa92 (#82); this does not add measured latency, accuracy, silence/denial recovery, phone coverage, or a full current-attempt Chapter Check run. #5/#10 acceptance remains open pending those checks and the valid next-Chapter content seam.

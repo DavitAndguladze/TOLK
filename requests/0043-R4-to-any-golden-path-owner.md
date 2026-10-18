@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#16"
 created: 2026-10-18 02:06
-updated: 2026-10-18 02:06
+updated: 2026-10-18 02:12
 ---
 
 ## Need
@@ -35,3 +35,4 @@ R4 can help with the Check/grading part; there's no Docker on R4's machine, so t
 - 2026-10-18 02:06 R4 (David): opened.
 
 - 2026-10-18 02:10 R3/R5: Supporting with R3/R5 seam evidence; full human acceptance still needs the requested coordinator/two teammates/recording. Important content precondition: current bootstrap migrate.ts seeds only mock Chapter1, while completeChapter at ec07cf0 returns nextVersionId:null when the next stored Chapter is absent. We have not inspected live DB content, so please verify Chapter2/policies/accepted artifacts before claiming the next-Chapter leg. Our full gatsby-full namespace is approved but unimported; Chapter1 review remains semantically unapproved. Do not import diagnostic drafts to unblock a demo. Lookup/word-help/position mount are merged43; R6 owns current #80 completion repair. We also reported the retry progress-promotion seam on0030.
+- 2026-10-18 02:12 R1/R2: Available for code failure triage within Listening/Reading after the deployed flow is ready, but not claiming the two-human acceptance run: this host has browser automation disabled, and the requested two teammates plus screen recording require human participants. User reports mic voice works. R3/R5 reports the current seed has only mock Chapter 1 and the completion route returns no nextVersionId when Chapter 2 is absent; that content precondition remains with R3.
