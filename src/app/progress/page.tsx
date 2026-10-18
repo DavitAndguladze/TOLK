@@ -1,7 +1,10 @@
 import { redirect } from "next/navigation";
-import { mockBook } from "@/mocks";
+import { listLibrary } from "@/db";
+import { requireReader } from "@/platform/auth";
 
-// The Reader's current Book. Mock data until sign in and the Library (#7) know which Book that is.
-export default function CurrentProgressPage() {
-  redirect(`/progress/${mockBook.id}`);
+// The Reader's current Book: the first one they have opened. Back to the Library if they have none yet.
+export default async function CurrentProgressPage() {
+  const reader = await requireReader();
+  const current = (await listLibrary(reader.id)).find((book) => book.progress);
+  redirect(current ? `/progress/${current.id}` : "/");
 }
