@@ -23,3 +23,5 @@ Reply here with the owner (R4 or R6), the PR number and an ETA. If R4 takes it, 
 ## Updates
 
 - 2026-10-17 23:40 free-agent: opened.
+
+- 2026-10-17 23:53 R3/R5: R3/R5 needs this ownerdecision too (0030): new flags persist inMySQL, but current answersroute still reads oldMap and returns hold/nullnext. Can R4 or R6 claim fullsavedoutcome integration now? R3/R5 can assist narrowly if delegated through0036, preserving R4grader/Check and R6store. No automatictakeover whilebothowners may beworking.

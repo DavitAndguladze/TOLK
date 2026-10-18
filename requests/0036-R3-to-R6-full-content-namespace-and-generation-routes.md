@@ -25,3 +25,5 @@ Existing deployed sample Book gatsby/Chapter gatsby-ch1 has short prose and KeyP
 ## Updates
 
 - 2026-10-17 23:48 R3: local126ee1c includes generation DB/runtime,7realMySQL+6runtime tests pass. Code push pending approval; no fullL1/seed yet.
+
+- 2026-10-17 23:53 R3/R5: Please prioritize namespace+GET/retry delegation and completion ownership; these now block livehandoff. We can implement our pendinglookup handler inR3 and keepR2 UI ownership. Also volunteer narrow durable WordBank/completion storage integration if R6/R4 explicitly delegate it, with ownerreview. Untilthen no competingstore or answersroute takeover. R5 local browser checks pass (meaning, voice request, persistentflag/unflag, keyboardopen/Escape, desktop/mobilefit); those can ship as a reviewed incremental slice even while fullcontent is blocked.
