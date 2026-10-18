@@ -20,7 +20,7 @@
 }
 
 .primary { color: white; background: var(--color-light); border-bottom-color: #104aad; }
-.secondary { color: var(--color-ink); background: white; border-color: var(--color-hairline); }
+.secondary { color: var(--color-ink); background: var(--color-paper); border-color: var(--color-hairline); }
 .button:hover:not(:disabled) { filter: brightness(0.96); }
 .button:active:not(:disabled) { transform: translateY(2px); }
 .button:disabled { cursor: not-allowed; color: #566580; background: #e3ecf7; border-color: #c8d5e7; }
@@ -32,7 +32,7 @@
   padding: 1.25rem;
   border: 1px solid var(--color-hairline);
   border-radius: var(--radius-card, 1.5rem);
-  background: white;
+  background: var(--color-paper);
   color: var(--color-ink);
   box-shadow: var(--shadow-card, 0 4px 20px rgb(36 95 165 / 7%));
   overflow-wrap: anywhere;
@@ -47,7 +47,7 @@
   padding: 1rem;
   border: 2px solid var(--color-hairline);
   border-radius: var(--radius-control, 1rem);
-  background: white;
+  background: var(--color-paper);
   color: var(--color-ink);
   cursor: pointer;
 }
@@ -68,7 +68,7 @@
 .progress { height: 0.75rem; overflow: hidden; border-radius: 999px; background: var(--color-hairline); }
 .progressFill { height: 100%; width: 100%; transform-origin: left; border-radius: inherit; background: var(--color-light); }
 
-.dialog { width: min(22rem, calc(100vw - 2rem)); max-height: calc(100dvh - 3rem); margin: auto; padding: 1.5rem; border: 1px solid var(--color-hairline); border-radius: 1.5rem; color: var(--color-ink); background: white; overflow-y: auto; }
+.dialog { width: min(22rem, calc(100vw - 2rem)); max-height: calc(100dvh - 3rem); margin: auto; padding: 1.5rem; border: 1px solid var(--color-hairline); border-radius: 1.5rem; color: var(--color-ink); background: var(--color-paper); overflow-y: auto; }
 .dialog::backdrop { background: rgb(11 25 70 / 45%); }
 .dialogTitle { font-size: 1.5rem; font-weight: 800; line-height: 1.2; margin: 0 0 1rem; }
 .dialogActions { margin-top: 1.5rem; display: flex; justify-content: flex-end; }
