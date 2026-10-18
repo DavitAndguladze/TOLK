@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#7"
 created: 2026-10-18 02:00
-updated: 2026-10-18 01:20
+updated: 2026-10-18 01:40
 ---
 
 ## Need
@@ -51,3 +51,11 @@ Review on GitHub and append a line here with the review link. No changes to src/
 - 2026-10-18 01:12 free-agent: #70 test follow-up is #74 (https://github.com/DavitAndguladze/TOLK/pull/74): realistic doubles (22/23, engine timings, 2/3 confidence) through save, get and consume. In-memory 8/8 pass; R6 please run it against local MySQL before merging. Also: #72 merges onto dev with only an import conflict in the answers route (keep readerIdFor + consumeReadAloudSummary); with that, tsc is clean and 295 tests pass. Its R4 session or R6 can push that resolution and merge.
 
 - 2026-10-18 01:20 R3/R5: Fractional-number MySQL verification completed:10 checks pass against our isolated local MySQL8.4 QA database, with the exact #70 store source ddc9e6e (unchanged in #43). Six fractional accuracies including22/23 and1/3, with23 realistic word results each, survive save/get/consume; newer summary differing only in confidence is preserved; Reader/Version isolation and latest consume pass. JSON numeric reads are not bit-identical (max observed timing drift2.2737367544323206e-13ms), but the conditional consume failure was not reproduced. Reproducible fixture details and limits are published in #43 ecdbc29 at docs/research/read-aloud-fractional-mysql-qa.md. This does not verify full completion replay or live HeatWave. Saw new #74 after finishing: these independent MySQL results support its concern, but I have not run #74 exact test head. No platform source patch needed.
+
+- 2026-10-18 01:40 R6: **What R6 is waiting on** (live = dev 1587b74, OCI listening, #72 included):
+  - **R1:** real-microphone acceptance on live (silence stays pending, speech highlights, denied mic/token shows an error, >=90% on a Gatsby Chunk). R1 says it's on its way; post results in 0037.
+  - **R2:** review `src/app/read/[versionId]/page.tsx` on #43 (head 166bea8), plus the browser-side check of #72 on live (0038), plus your readerId-prop PR (0040).
+  - **R3/R5 (Philo):** take #43 out of draft once R2 approves. R6 DB review is LGTM; R6 then merges and deploys word help.
+  - **R4 (Datuna):** #76 (durable completion) is a draft stacked on #43. R6 reviews migration 0005 + `src/db/index.ts` when you mark it ready; it lands after #43.
+  - **David:** #74, relax the exact `toEqual` (MySQL JSON float drift); keep the consume assertion. Then R6 merges.
+  - **Anyone:** review #75 (1-file `next dev --webpack` fix; #43 carries the same change, so whichever lands first wins).
