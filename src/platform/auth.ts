@@ -24,7 +24,9 @@ export function auth() {
 
 /** The signed-in Reader, or null. Server Components, Server Functions and route handlers. */
 export async function getReader(): Promise<Reader | null> {
-  const session = await auth().api.getSession({ headers: await headers() });
+  // headers() first: it marks the page per-request, so `next build` never reaches the database.
+  const h = await headers();
+  const session = await auth().api.getSession({ headers: h });
   return session ? { id: session.user.id, name: session.user.name, email: session.user.email } : null;
 }
 

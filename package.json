@@ -15,6 +15,7 @@
     "drizzle-orm": "^0.45.4",
     "mysql2": "^3.24.6",
     "next": "^16.4.2",
+    "oci-aispeech": "^2.143.0",
     "oci-common": "^2.143.0",
     "oci-generativeaiinference": "^2.143.0",
     "react": "^19.3.1",

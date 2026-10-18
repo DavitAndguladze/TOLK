@@ -47,7 +47,7 @@ export default async function Library({ searchParams }: { searchParams: Promise<
               <li key={book.id} className="border-b border-hairline">
                 {/* A plain <a>, not <Link>: opening a Book records progress, so it must never be prefetched. */}
                 <a
-                  href={`/books/${book.id}/open`}
+                  href={`/api/books/${book.id}/open`}
                   className="flex min-h-11 flex-col py-4 outline-light hover:bg-white/40 focus-visible:outline-2"
                 >
                   <span className="font-book text-[1.25rem] leading-snug font-medium">{book.title}</span>
