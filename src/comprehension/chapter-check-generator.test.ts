@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
-import { mockChapter, mockChapterVersion } from "../mocks";
+import { mockChapter, mockChapterVersion, tokenize } from "../mocks";
+import type { Chapter, ChapterVersion } from "../types";
 import { generateChapterCheck } from "./chapter-check-generator";
 
 describe("generateChapterCheck", () => {
@@ -55,5 +56,45 @@ describe("generateChapterCheck", () => {
     const check = await generateChapterCheck(mockChapter, version);
     const ids = check.questions.map((q) => q.id);
     expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  test("prioritizes Complex Words that actually appear in this Chapter Version's text", async () => {
+    // Chapter-level Complex Words may not survive simplification into a lower Level's rewritten
+    // text (that's the point of simplifying) - when only some of them do, prefer those.
+    const chapter: Chapter = {
+      id: "ch-x",
+      bookId: "book-x",
+      number: 1,
+      title: "Chapter X",
+      originalText: "ignored for this test",
+      keyPoints: [],
+      complexWords: [
+        { word: "absentone", meaning: "m1" },
+        { word: "present", meaning: "m2" },
+        { word: "absenttwo", meaning: "m3" },
+      ],
+    };
+    const sentenceText = "The word present appears here.";
+    const version: ChapterVersion = {
+      id: "ver-x",
+      readerId: null,
+      bookId: "book-x",
+      chapterId: "ch-x",
+      chapterNumber: 1,
+      level: 1,
+      levelScore: 0,
+      status: "ready",
+      text: sentenceText,
+      sentences: [{ index: 0, text: sentenceText, originalText: sentenceText }],
+      tokens: tokenize([sentenceText]),
+      reinforcedWords: [],
+      baselineVersionId: null,
+      generatedAt: "2026-01-01T00:00:00Z",
+    };
+
+    const check = await generateChapterCheck(chapter, version);
+    const words = check.questions.filter((q) => q.kind === "complex-word").map((q) => q.word);
+
+    expect(words).toContain("present");
   });
 });

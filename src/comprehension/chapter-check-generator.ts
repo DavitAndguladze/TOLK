@@ -23,6 +23,19 @@ function complexWordChoices(target: ComplexWord, all: ComplexWord[]): string[] {
 }
 
 /**
+ * Complex Words are Chapter-level (the author's original vocabulary) and may not appear in a
+ * heavily simplified Chapter Version's rewritten text - that's the point of simplifying. Put
+ * words that do appear in this Version first, so the question matches what the Reader actually
+ * read whenever possible; a Level too simplified to contain any still falls back to the
+ * Chapter's full list (answerSentenceIndex still links correctly via the sentence's originalText).
+ */
+function prioritizeWordsInVersion(words: ComplexWord[], version: ChapterVersion): ComplexWord[] {
+  const present = new Set(version.tokens.map((t) => t.normalized));
+  const [inVersion, notInVersion] = [words.filter((w) => present.has(w.word.toLowerCase())), words.filter((w) => !present.has(w.word.toLowerCase()))];
+  return [...inVersion, ...notInVersion];
+}
+
+/**
  * Deterministic stand-in for the AI gateway's "generate Chapter Check" call: 2-3 Key Point
  * questions, 1-2 Complex Word questions. Real OCI Generative AI swaps in later behind this
  * same signature - keep the shape (not the prose) the thing tests depend on.
@@ -42,14 +55,16 @@ export const generateChapterCheck: ChapterCheckGenerator = async (chapter, versi
     answerSentenceIndex: bestMatchingSentence(version.sentences, kp.text),
   }));
 
-  const complexWordQuestions = chapter.complexWords.slice(0, complexWordCount).map((cw, i) => ({
-    id: `${version.id}-cw-${i}`,
-    kind: "complex-word" as const,
-    prompt: `What does '${cw.word}' mean in this chapter?`,
-    word: cw.word,
-    choices: complexWordChoices(cw, chapter.complexWords),
-    answerSentenceIndex: bestMatchingSentence(version.sentences, cw.word),
-  }));
+  const complexWordQuestions = prioritizeWordsInVersion(chapter.complexWords, version)
+    .slice(0, complexWordCount)
+    .map((cw, i) => ({
+      id: `${version.id}-cw-${i}`,
+      kind: "complex-word" as const,
+      prompt: `What does '${cw.word}' mean in this chapter?`,
+      word: cw.word,
+      choices: complexWordChoices(cw, chapter.complexWords),
+      answerSentenceIndex: bestMatchingSentence(version.sentences, cw.word),
+    }));
 
   return {
     id: `check-${version.id}`,

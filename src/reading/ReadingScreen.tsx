@@ -1,14 +1,31 @@
 "use client";
 
 import { useState } from "react";
+import { ChapterCheckPanel } from "@/comprehension/ui/ChapterCheckPanel";
+import type { ChapterCheck, ChapterCheckAnswers } from "@/types";
 import type { Chunk } from "./chunk";
 
 const button =
   "min-h-13 cursor-pointer rounded-2xl px-4 text-base font-semibold transition outline-light focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:active:scale-100";
 
-export function ReadingScreen({ chunks }: { chunks: Chunk[] }) {
+async function submitCheckAnswers(checkId: string, answers: ChapterCheckAnswers) {
+  const res = await fetch(`/api/checks/${checkId}/answers`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(answers),
+  });
+  if (!res.ok) throw new Error("Couldn't save answers");
+}
+
+export function ReadingScreen({ chunks, check }: { chunks: Chunk[]; check: ChapterCheck }) {
   const [index, setIndex] = useState(0);
+  const [phase, setPhase] = useState<"reading" | "check">("reading");
   const chunk = chunks[index];
+  const lastChunk = index === chunks.length - 1;
+
+  if (phase === "check") {
+    return <ChapterCheckPanel check={check} onSubmit={(answers) => submitCheckAnswers(check.id, answers)} />;
+  }
 
   return (
     <>
@@ -41,11 +58,10 @@ export function ReadingScreen({ chunks }: { chunks: Chunk[] }) {
             </button>
             <button
               type="button"
-              disabled={index === chunks.length - 1}
-              onClick={() => setIndex(index + 1)}
-              className={`${button} bg-light text-white hover:bg-[#125f3f] disabled:bg-hairline disabled:text-fog`}
+              onClick={() => (lastChunk ? setPhase("check") : setIndex(index + 1))}
+              className={`${button} bg-light text-white hover:bg-[#125f3f]`}
             >
-              Next part
+              {lastChunk ? "Finish chapter" : "Next part"}
             </button>
           </div>
         </div>
