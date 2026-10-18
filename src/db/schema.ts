@@ -36,6 +36,7 @@ export const chapterGenerations = mysqlTable("chapter_generations", {
   status: varchar("status", { length: 16 }).$type<"pending" | "ready" | "failed">().notNull().default("pending"),
   artifactVersionId: id("artifact_version_id").references(() => chapterVersions.id),
   claimToken: id("claim_token"),
+  provenance: json("provenance").$type<GeneratedChapter["provenance"]>(),
   updatedAt: updatedAt(),
 }, (t) => [uniqueIndex("chapter_generations_reader_baseline").on(t.readerId, t.baselineVersionId)]);
 
