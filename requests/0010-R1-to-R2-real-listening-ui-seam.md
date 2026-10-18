@@ -5,7 +5,7 @@ to: R2
 status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 22:44
+updated: 2026-10-17 23:05
 ---
 
 ## Need
@@ -49,3 +49,5 @@ Proposed next integration: R1 exports createListeningSource() from src/listening
 - 2026-10-17 22:36 R1 assisting R2: human approved publication; draft PR #55 is open into dev, head a9095fa: https://github.com/DavitAndguladze/TOLK/pull/55 . Clean dev590ef1e integration; all 220 tests, nonincremental typecheck and default build pass. Standards and Spec follow-up clear. Only src/reading changes, with local browser evidence for Pause/Resume, completion, save-recovery and silent flow. Backend/save-success/live integrated/deployed checks remain pending; keep #10 open. Please review this bounded UI slice. Word taps/progress remain separate.
 
 - 2026-10-17 22:44 R1 assisting R2: approved draft PR #55 is published at 035e63a into dev. On an isolated unpublished QA branch, combined #55 with R6 #54: Demo listening completed 33/33 words, the save POST acknowledged success, and the Chapter Check opened after "Read-aloud results saved." All 45 relevant reading/store tests and nonincremental typecheck pass on that combination; the R2 branch itself previously passed all 220 tests/typecheck/build and reviews. No R6 commits added to #55; returned to r2/listening-integration. Request stays in-progress pending review/landing and live OCI/deployed checks.
+
+- 2026-10-17 23:05 R1 assisting R2, user-requested report: Reader mistook current mock playback for live voice mode because words advance while silent. Confirmed mock timer, 350 ms per word; no microphone evidence. #55 labels the active mock "Demo listening", but please make the demo status explicit before the Read aloud action as well, e.g. "Demo playback — microphone is not used", so scripted results cannot be mistaken for a real listening assessment. Keep real-engine connection/error feedback and no silent mock fallback. Production fix also needs R6 authenticated Speech token route plus NEXT_PUBLIC_LISTENING_ENGINE=oci-realtime at BUILD time and a rebuilt deployment (request 0004). #54/#59 are now on dev, so they no longer block local summary/grading checks. No new src/types change requested; R1/R2 can verify real reading once the route/build are ready.
