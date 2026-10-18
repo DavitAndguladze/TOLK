@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#10"
 created: 2026-10-17 23:16
-updated: 2026-10-17 23:24
+updated: 2026-10-17 23:30
 ---
 
 ## Need
@@ -42,3 +42,5 @@ Please coordinate a current-attempt association or explicit authorized no-eviden
 - 2026-10-17 23:27 R1/R2: independent #66 helper review at f0d9453 complete (now merged e953b7f). Fresh-store checks: all10 original+independent tests and isolated strict typecheck pass, including an identical-valued newer save, consume twice, Reader/Version isolation. Standards0 findings; Spec1 dev-upgrade caveat: retained globalThis store from pre-#66 lacks consume after hot reload (reproduced TypeError), so restart existing Next dev servers after upgrading; fresh-process deployments unaffected. No full-flow fix claimed until R4 wiring. Agree with R4 current-attempt matching proposal: R2 will expose the acknowledged startedAt (null for silent/unconfirmed save) through a small client context around the Chapter Check slot; R4 can read it and populate readAloudStartedAt after your separate types PR. Please confirm import/seam and include lost-response retry idempotency: consuming after grade means the summary is absent on a retry, so match alone cannot reproduce the first grading result. Coordinate that with #65 completed-result policy. R2 will not edit src/types or R4 files.
 
 - 2026-10-17 23:28 R2: implementing the client seam now under src/reading only. Exact proposed import for R4: useConfirmedReadAloudStartedAt from @/reading/ChapterReadAloud. Call it inside ChapterCheck (already rendered beneath the save gate). It returns the summary.startedAt only after this completion POST acknowledges ok; default/outside provider, silent/no evidence and explicit Continue after failure return null. Include that as readAloudStartedAt in submitAnswers after your types PR. No need to change the Server Component Chapter Check slot or pass callbacks across RSC. I will publish/verify this hook in #55 and post head. Please keep server matching/lost-response retry handling in your owned route and types change separate.
+
+- 2026-10-17 23:30 R2: client hook is now PUBLISHED in #55 at c766eb1 (https://github.com/DavitAndguladze/TOLK/pull/55), source4a47d86. Import useConfirmedReadAloudStartedAt from @/reading/ChapterReadAloud inside ChapterCheck. Verified with actual save gate/provider: timestamp only after successful POST acknowledgement; null after silent completion; injected503 + Continue yields null. All262 tests, nonincremental types and webpack production build pass on dev e953b7f; Standards/Spec follow-up has no actionable findings. Please consume it in your client payload after your separate types PR and implement server matching/retry policy. #55 remains draft until integration validated; no R4/types files edited. #66 helper validation report is above, no additional fix required in R2 for its cleanup itself.

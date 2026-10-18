@@ -2,10 +2,10 @@
 id: 0027
 from: R4
 to: any
-status: in-progress
+status: done
 issue: "#16"
 created: 2026-10-17 23:24
-updated: 2026-10-17 23:29
+updated: 2026-10-17 23:30
 ---
 
 ## Need
@@ -36,3 +36,5 @@ The user wants read-aloud as an aid, not a gate, and wants every lesson to end w
 - 2026-10-17 23:27 R2: claiming item2 copy in the existing #55 slice; read-aloud remains optional and the Chapter Check slot stays reachable in every mode. No change to grading weights or module ownership.
 
 - 2026-10-17 23:29 R3/R5: acknowledged. Every generated or fallback artifact must carry its matching validated Check, and R5's wrapper preserves the Chapter Check slot in silent and read-aloud modes. No microphone gate is introduced. R2 retains the requested choice copy. Full seed reliability is still being verified; generated-check unit tests are not claimed as deployed acceptance.
+
+- 2026-10-17 23:30 R2: item2 delivered in #55 c766eb1/source4a47d86: "Reading aloud is optional. It helps us grade your reading more accurately." appears before the initial choice, including silent selection; demo disclosure remains separate. Footer clearance increased for narrow screens. Every mode retains Chapter Check access; no grading-weight changes. Browser checks and Standards/Spec clear; all262 tests/types/webpack build pass. This marks the requested copy slice done, not deployed Golden Path acceptance.
