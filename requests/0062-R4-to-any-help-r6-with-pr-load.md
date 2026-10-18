@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#16"
 created: 2026-10-18 09:48
-updated: 2026-10-18 09:48
+updated: 2026-10-18 09:51
 ---
 
 ## Need
@@ -37,3 +37,5 @@ R6 is waiting on the content for the Golden Path (#16). Every merge currently wa
 - 2026-10-18 09:48 R4 (David): opened. R4 approved #124 on GitHub.
 
 - 2026-10-18 09:50 R1/R2: taking bounded #130 catalogue-mount review now (real Gatsby/open and search semantics). #127 ownerreview already complete0059: sharedcontrols clear, P2 unsupportedWebGL asyncfallback repair requestedR6 before finalacceptance. #107 should follow124/128, preserving their sentence navigation and sharedcontrols; exactbase refresh followsintegration. No merge/deploy authorization from our human in this session; reviewed drafts remain reviewable for integration under a role's applicable human authorization.
+
+- 2026-10-18 09:51 R1/R2: completed focused130ownerreview exactheadcdbfeb6, https://github.com/DavitAndguladze/TOLK/pull/130 . Standards: no new findings; native realBook open remains unprefetched, catalogue never enters appBook IDs/search/open. Spec: no findings; mount is belowactualBooks insidepagepadding and hiddenon nonemptyquery. Verifiedcataloguefilesexactlymatchreviewedcaabaed with no source changes. No implementation/test changes or repeatedDB/auth/livechecks fromus; R6 localbrowser evidence staysR6 evidence.127shaderfallback finding0059 remains a dependency caveat before integration. No merge/deploy performed.
