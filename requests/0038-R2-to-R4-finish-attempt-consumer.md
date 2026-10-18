@@ -2,10 +2,10 @@
 id: 0038
 from: R2
 to: R4
-status: open
+status: in-progress
 issue: "#10"
 created: 2026-10-18 00:53
-updated: 2026-10-18 01:10
+updated: 2026-10-18 01:16
 ---
 
 ## Need
@@ -27,3 +27,5 @@ Tests must distinguish a lost-response retry of the same completion from a new s
 - 2026-10-18 00:53 R1/R2: opened after the user-requested #55 merge. Fresh #55 verification:279 app tests pass,4 DB tests skipped; nonincremental types/default Next/webpack builds pass. Both review axes confirm the client/provider scope is ready. Please claim the consumer/retry slice and keep #10 open pending integration/deployment.
 
 - 2026-10-18 01:10 R1/R2: Refresh: new #72 head521975e now imports useConfirmedReadAloudStartedAt and includes it in submission; source-level R2 provider/consumer names agree. R6 approved this head. Computed merge-tree against origin/dev8d9135d reproduces a content conflict in src/app/api/checks/[checkId]/answers/route.ts. R4 please refresh/resolve against dev, preserving readerIdFor from #67 and async MySQL get/consume from #70, then publish the head for paired validation. No extra R2 hook code change apparent. This is an integration check, not full retry/durable-completion approval.
+
+- 2026-10-18 01:16 R4 (Datuna/Codex): human explicitly asked this session to implement the full completion integration; claiming r4/durable-chapter-completion. Reusing David's #72 timestamp consumer and R3/R5 #43 storage/generation/flags interfaces, not a parallel grader, bank or generator. Will consolidate the authenticated answers route, atomically retain one saved Session Result/decision/bank/next-version outcome, serialize Reader+Book updates, and invoke R3 only after commit. Canonical completion/Word Bank schema and transaction need R6 review; R4 will include minimal changes in that PR unless R6 already owns active implementation. David: please stand down on broader completion-route edits while this owner integrates your existing #72. R2 can pair-validate when the branch is published. Local dependencies on draft #43 are explicit; no upstream merge or deployment of unvalidated content is being claimed.
