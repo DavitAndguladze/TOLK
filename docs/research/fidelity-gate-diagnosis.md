@@ -61,17 +61,57 @@ Level 1's 10-word/simple-vocabulary limits — two goals that may be close to mu
 Level 1 specifically, regardless of how carefully the rewrite is edited. Nobody has fixed this
 because nobody had isolated the review call from the generation failures before.
 
+## A prompt rewrite was tried, live, and reverted — this is the important part
+
+Rewrote `createModelFidelityEvaluator`'s prompt (`src/leveling/generator.ts`) to explicitly tell
+the model that stripping ornamentation for Level 1 is required and not a defect, with concrete
+examples of what should and shouldn't fail `tonePreserved`/`plotPreserved`, plus a `reasoning`
+field so a verdict's cause is visible without a second call.
+
+**It worked, almost too well:** three live calls in a row against the finished candidate returned
+`plotPreserved: true`, `tonePreserved: true`, and `verifyChapterArtifact` genuinely passed — the
+first pass in this whole project's history.
+
+**Then a control test exposed a real regression.** To check the rewritten prompt hadn't just
+become a rubber stamp, one Key Point's served text was deliberately broken — "Tom has **another**
+woman in New York" flipped to "Tom has **no other** woman in New York," a one-word negation that
+completely reverses a plot fact the Chapter Check depends on (`gatsby-ch1-kp4`). The rewritten
+prompt **missed it entirely**: `plotPreserved: true`, no objection raised, `reasoning: []`.
+
+Run as a fair A/B: the **original, unmodified prompt**, given the exact same planted error,
+**caught it** (`plotPreserved: false`, `tonePreserved: false`, `checkAnswerable: false`). So the
+relaxation that fixed the false-positive problem also introduced a false negative on a real,
+serious error — a straight regression, not a tradeoff worth taking for a safety gate.
+
+A second prompt revision tried to fix this by explicitly calling out negation/polarity flips as
+always-disqualifying, regardless of Level. Tested again on the same broken input: it did return
+`plotPreserved: false` this time, but its own cited reasoning never mentioned the actual planted
+error at all — it flagged three *other*, unrelated sentences for the same kind of harmless
+stylistic nitpicking the first rewrite was meant to eliminate (dropped quotation marks, "my story
+started" vs. "the history of the summer begins"). Getting the right boolean for the wrong reason
+isn't something to trust; it suggests the model isn't reliably doing an exhaustive, sentence-level
+comparison across a ~900-sentence candidate in one pass, no matter how the prompt is worded.
+
+**The `generator.ts` prompt change was reverted.** Nothing from this experiment is shipped —
+`dev`'s fidelity-gate prompt is unchanged. The one durable, low-risk improvement worth keeping is
+the lesson in this doc and the `reasoning` field idea (schema-only, not yet applied), not the
+specific wording tried here.
+
 ## What this means for #6
 
-This candidate's content quality is not the blocker — the gate's calibration for Level 1 is. Two
-honest paths forward, neither of which this session has decided unilaterally:
+This candidate's content quality is still not the blocker. But the fix isn't a quick prompt edit
+either — the evidence now points at a deeper issue: a single holistic review call may not reliably
+catch small, serious errors in a long chapter, and loosening it to stop false-positiving on style
+risks false-negativing on substance. Two honest paths forward, neither decided here:
 
-1. **Tighten the gate's prompt** to explicitly separate "inherent, unavoidable Level 1 compression"
-   from "an actual changed fact, relationship, or name" and ask it to only fail on the latter — then
-   re-test against this same candidate to see if a calibration fix is enough.
-2. **Accept that Level 1 can't pass an unmodified fidelity gate** and treat structural validation
-   plus careful human/independent review (what slices 1–10 already did) as the real acceptance bar
-   for Level 1 specifically, reserving the model fidelity gate for higher Levels where more of the
-   original's tone can coexist with the simplification.
+1. **A structurally different fidelity check** — e.g. one call per Key Point/sentence-group instead
+   of one call for the whole chapter, so the model has less to track per call and a planted error
+   has nowhere to hide among hundreds of other sentences. Untested; would need its own live
+   experiment before trusting it.
+2. **Accept that Level 1 can't reliably pass an LLM-based fidelity gate** and treat structural
+   validation plus careful, independent human/agent review (what slices 1–10 already did, and what
+   caught this project's actual errors so far) as the real acceptance bar for Level 1, reserving
+   the model gate for Levels closer to the original where tone has more room to survive.
 
-This is a product decision, not a coding one — surfacing it, not deciding it.
+This is a product and architecture decision, not something to patch with another prompt tweak
+and hope.
