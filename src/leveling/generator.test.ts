@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { generateChapterCheck } from "../comprehension/chapter-check-generator.ts";
 import { mockChapterVersion } from "../mocks/fixtures.ts";
 import vocabulary from "../data/vocabulary/english-2018.json" with { type: "json" };
@@ -248,14 +248,29 @@ describe("ChapterGenerator", () => {
     const next = input();
     next.wordBank = [{ word: "hope", source: "flagged", timesSeen: 1, graduated: false, addedInChapter: 1, graduatedInChapter: null }];
     const before = structuredClone(next);
-    const result = await createChapterGenerator({ ...dependencies(), budgetMs: 100,
-      generateText: () => new Promise(() => {}), fallback: async () => fallback,
-    }).generate(next);
-    expect(result.version.id).toBe(fallback.version.id);
-    expect(result.version.reinforcedWords).toEqual([]);
-    expect(result.check).toEqual(fallback.check);
-    expect(result.provenance).toEqual({ source: "pre-generated", personalized: false, attempts: 1, fallbackReason: "timeout" });
-    expect(next).toEqual(before);
+    vi.useFakeTimers();
+    // Native AbortSignal.timeout bypasses fake timers; control this clock boundary too.
+    const timeout = vi.spyOn(AbortSignal, "timeout").mockImplementation((milliseconds) => {
+      const controller = new AbortController();
+      setTimeout(() => controller.abort(new DOMException("Timed out", "TimeoutError")), milliseconds);
+      return controller.signal;
+    });
+    try {
+      const pending = createChapterGenerator({ ...dependencies(), budgetMs: 100,
+        generateText: () => new Promise(() => {}), fallback: async () => fallback,
+      }).generate(next);
+      await vi.advanceTimersByTimeAsync(90);
+      const result = await pending;
+      expect(result.version.id).toBe(fallback.version.id);
+      expect(result.version.reinforcedWords).toEqual([]);
+      expect(result.check).toEqual(fallback.check);
+      expect(result.provenance).toEqual({ source: "pre-generated", personalized: false, attempts: 1, fallbackReason: "timeout" });
+      expect(next).toEqual(before);
+    } finally {
+      timeout.mockRestore();
+      vi.clearAllTimers();
+      vi.useRealTimers();
+    }
   });
 
   it("stops after one retry and uses the fallback's own Check", async () => {
