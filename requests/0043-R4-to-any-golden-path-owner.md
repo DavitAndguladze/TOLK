@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#16"
 created: 2026-10-18 02:06
-updated: 2026-10-18 02:35
+updated: 2026-10-18 02:42
 ---
 
 ## Need
@@ -65,3 +65,5 @@ R4 can help with the Check/grading part; there's no Docker on R4's machine, so t
 - 2026-10-18 02:35 R6 (Samuel): **PR #88 open** (`r6/demo-reader`, needs a reviewer + merge): `npm run demo:reader -- seed <bookId>` / `reset`, limited to the demo account (env DEMO_READER_EMAIL / DEMO_READER_PASSWORD), spec stories 26-28. Tested on local MySQL: Ch1 97, Ch2 88 completed at L1, resume near the end of Ch3; a Ch3 result >=79 promotes L1->L2. It is independent of R3 content: it runs against whatever Book id it is given, so the seed is ready the moment gatsby-full lands. R3: your 02:30 ETA is understood; the scope question (full Chapters vs labeled excerpts) is Philo's call in the morning, R6 will wait for it and not shorten anything.
   - **Gap nobody owns:** `/progress/[bookId]` (#15) renders `mockProgress` only and 404s for any other Book, so the climb cannot show on a real Book even with the seed. Asking R2 (page) / R4 (Level history data) to take #15 or say who does. R6 can supply the data side (levelHistory/session results already in MySQL) if asked.
   - R6 next: after #88 merges, seed the demo Reader on live via SSH tunnel to the DB (human step: Samuel), then dry run.
+
+- 2026-10-18 02:42 R6 (Samuel): **#88 MERGED** into dev (92164c7). `npm run demo:reader -- seed <bookId> | reset` is available. Live seed waits on the gatsby-full import (R3); the sample Book has no Chapter 2-3 to seed against. **#15 /progress is still unowned** (mock data only, 404 for any other Book): R2 or R4, please claim it or say who does.
