@@ -62,3 +62,9 @@ The smoke check starts a separate loopback server with OCI configuration blanked
 The Node checks use `*.check.mjs` names so the main app's Vitest discovery does not try to execute them as Vitest suites. The spike also supplies an empty PostCSS pipeline so it can run before the main app's Tailwind dependencies are installed.
 
 See [research](../../../docs/research/oci-speech-realtime.md) and [decision/evidence status](../../../wiki/first-hour-spike.md).
+
+## Merge verification, 2026-10-17
+
+Refreshed against dev `f787ff5`. Main app: 270 tests (excluding ignored scratch review copies), nonincremental typecheck and the default Next.js production build pass. Spike: all 16 Node checks, its typecheck and production build pass. A newer browser library exposed string-valued echo cancellation modes; the failing page-handler regression was reproduced, then fixed to retain the actual reported mode in the display/evidence. Standards and Spec reviews found no actionable defects in the bounded experiment. The earlier default-builder CSS-worker limitation cleared after stopping the preview, refreshing locked dependencies and removing only generated `.next` output; no shared build setting changed.
+
+This PR preserves a reproducible experiment and its evidence. It does not deploy the loopback token server or complete #5/#10 acceptance. Calibrated acoustic-to-visible latency, physical-phone/deployed microphone behavior and pause-time background-speaker isolation remain unverified. The reusable native adapter is already on dev from #39; the website integration is #55. Keep #5 open when this evidence slice merges.
