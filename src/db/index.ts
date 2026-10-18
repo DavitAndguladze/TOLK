@@ -1,6 +1,6 @@
 // Storage for Books, Chapter Versions, Checks and Reader progress (#7). API agreed in comms 0017.
 import { and, asc, eq, gt, isNull, like, or, sql } from "drizzle-orm";
-import type { Book, BookProgress, Chapter, ChapterCheck, ChapterVersion, SessionResult } from "../types";
+import type { Book, BookProgress, Chapter, ChapterCheck, ChapterVersion, GradingResult, Level, SessionResult } from "../types";
 import { db } from "./client";
 import { bookProgress, books, chapterChecks, chapters, chapterVersions, sessionResults } from "./schema";
 
@@ -104,6 +104,21 @@ export async function levelHistory(readerId: string, bookId: string, connection:
     latest.set(chapterNumber, data);
   }
   return [...latest.values()];
+}
+
+/** The progress view's Level Line (#15): every Chapter this Reader has ever completed in this Book, oldest first. */
+export async function getLevelLine(readerId: string, bookId: string, connection: DatabaseConnection = db()): Promise<{ chapterNumber: number; level: Level; result: GradingResult }[]> {
+  const rows = await connection
+    .select({ chapterNumber: sessionResults.chapterNumber, level: sessionResults.level, data: sessionResults.data })
+    .from(sessionResults)
+    .where(and(eq(sessionResults.readerId, readerId), eq(sessionResults.bookId, bookId)))
+    .orderBy(asc(sessionResults.completedAt));
+  const latest = new Map<number, { chapterNumber: number; level: Level; result: GradingResult }>();
+  for (const { chapterNumber, level, data } of rows) {
+    latest.delete(chapterNumber); // re-insert so a re-read Chapter sorts by its latest result
+    latest.set(chapterNumber, { chapterNumber, level, result: data.grading.result });
+  }
+  return [...latest.values()].sort((a, b) => a.chapterNumber - b.chapterNumber);
 }
 
 /** The Library: every Book matching `q` by title or author, with this Reader's place in it. */
