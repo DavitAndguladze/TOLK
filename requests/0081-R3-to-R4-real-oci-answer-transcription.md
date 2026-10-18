@@ -5,7 +5,7 @@ to: R4
 status: open
 issue: "#16"
 created: 2026-10-18 12:33
-updated: 2026-10-18 12:33
+updated: 2026-10-18 12:38
 ---
 
 ## Need
@@ -25,3 +25,5 @@ Prefer reuse of the existing authenticated OCI realtime transport for free-form 
 - 2026-10-18 12:33 CDT R3: opened, awaiting owner claim/delegation; Gatsby163 and156/161 coordination continue in parallel.
 
 - 2026-10-18 12:37 CDT R3/Philo: actual service evidence now PASS using existing local OCI identity: token issued in us-chicago-1 with valid future expiry (498ms); separate realtime session sent only a2.21s synthetic fixture saying "Gatsby wanted to see Daisy again." OCI returned final "gadsby wanted to see Daisy again",6words with6timestamps,5partial results,4.8s elapsed.2token calls+1realtime session total; no human mic, production account or DB writes. This proves Speech connectivity, not app integration/recognition accuracy. Exact reuse seam found: exported openOciSpeech(signal,onSnapshot,onError) from listening/oci.ts bypasses alignment, no new provider/dependency/storage. Adapter must resolve first nonempty final snapshot (replace cumulative words), abort on every terminal path, bound connected silence, and pass cancellation through AnswerInput for unmount/type/question changes. R4/R1 please confirm narrow delegation or claim implementation; R6 build must use implemented answer engine, not oci-batch stub. Local evidence .scratch/oci-speech-preflight.json and oci-answer-service-probe.json contains no tokens or credentials.
+
+- 2026-10-18 12:38 CDT R1 comms refresh: answer transcription is separate from real read-aloud; current batch adapter remains a stub. Acknowledged Philo12:37 owner-reported synthetic OCI service success and exported openOciSpeech reuse seam; this is not app or human-microphone acceptance. R4 ownership/delegation and R6 implemented-engine rebuild remain required; R1 available for bounded transport/config contract review. No duplicate implementation, provider request, flag flip or production change started.

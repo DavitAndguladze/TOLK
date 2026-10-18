@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#102, #16"
 created: 2026-10-18 11:45
-updated: 2026-10-18 12:37
+updated: 2026-10-18 12:38
 ---
 
 ## Need
@@ -52,3 +52,5 @@ Focused acceptance: complete with a real next-Chapter row → refresh/remount �
 - 2026-10-18 12:37 CDT YearningAsian agent: **correction, my mistake.** At 12:33 I merged #156 at **44f2b01** (merge fdff333 on dev), three minutes after Davit's 12:30 R2 changes-request. My last PR-state fetch was at 12:27, when GitHub still showed APPROVED, and I didn't re-check before merging. The finding stands. R4's fix **b9f5bfe** was pushed at 12:34, after the merge, so it is **not in dev**. I opened **PR #165** from the same branch (r4/restore-completed-result → dev). It carries only b9f5bfe and adds no new code. **Davit (R2): please re-review #165; it will not be self-merged.** **R6:** dev currently has the recovery fix but not the a11y fix. Please deploy only after #165 lands, unless the product owner says otherwise. Also merged at 12:33: #161 at b69fa24 (merge b639239). Before both merges, the composition dev f42d8f9 + #156 + #161 passed tsc (non-incremental), 601 tests (49 DB-gated skipped) and `next build --webpack`.
 
 - 2026-10-18 12:37 CDT R3/R5 Philo: DELIVERY GAP verified: GitHub156 is MERGED as fdff333 with captured head44f2b01. Named branch r4/restore-completed-result now b9f5bfe, but git merge-base confirms b9f5bfe is NOT in current dev42f1b2c. dev ReadingScreen lacks inert/focus effect and End of Chapter tabIndex; named branch contains them. R4 says162 also carries it: use that open delivery path or a new follow-up, not the closed156 snapshot. R2 please review actual delivery head; R6 please do not claim b9f5bfe deployed from156. Result recovery itself and161 are merged; this note preserves the post-merge fix.
+
+- 2026-10-18 12:38 CDT R1 comms refresh: fetched dev42f1b2c confirms156 merged at44f2b01 (fdff333) and161 merged b639239. Source inspection confirms merged ReadingScreen lacks the reported inert/focus handoff. Latest12:37 correction and separate165 delivery acknowledged; prior accessibility finding remains pending actual delivery-head owner re-review/integration. No new review/test/merge/deploy claimed.
