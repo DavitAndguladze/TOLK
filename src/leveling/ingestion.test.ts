@@ -45,6 +45,27 @@ describe("Gatsby ingestion", () => {
     expect(getRequiredNameCandidates(["No—Gatsby turned out all right at the end;"])).not.toContain("No");
   });
 
+  it("keeps excerpt names whole instead of offering capitalized fragments", () => {
+    const candidates = getRequiredNameCandidates([
+      "Only Gatsby was exempt from my reaction.",
+      "My family lived in this Middle Western city.",
+      "The Carraways sent a substitute to the Civil War.",
+      "I graduated from New Haven and joined the Great War.",
+      "The Middle West seemed different.",
+      "All my aunts and uncles talked it over.",
+      "From West Egg came the Pole, and the Mulreadys.",
+      "The sign read George B. Wilson.",
+      "O. R. P. Schraeders and Don S. Schwartz came.",
+    ]);
+    expect(candidates).toEqual(expect.arrayContaining([
+      "Gatsby", "Carraways", "Civil War", "New Haven", "Great War", "Middle West",
+      "George B. Wilson", "O. R. P. Schraeders", "Don S. Schwartz", "West Egg",
+    ]));
+    for (const fragment of ["Only Gatsby", "Only", "My", "All", "Middle Western", "Middle", "Great", "Haven", "B.", "O. R"]) {
+      expect(candidates).not.toContain(fragment);
+    }
+  });
+
   it("gives the model explicit source indexes so it can cite an excerpt without counting sentences", async () => {
     const content = await ingestGatsby(source, { generateText: async (prompt) => {
       const data = promptData(prompt);
