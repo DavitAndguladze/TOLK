@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 import type { Chapter } from "../types";
-import { buildChapterVersion } from "./content.ts";
+import { buildChapterVersion, splitOriginalSentences } from "./content.ts";
 
 const chapter: Chapter = {
   id: "gatsby-ch2", bookId: "gatsby", number: 2, title: "Chapter 2",
@@ -72,4 +72,31 @@ test("rejects coerced reinforcement types from untrusted model output", () => {
     ],
     reinforcedWords: [{ word: "advice", reinforcement: ["plain"], sentenceIndex: 1 }],
   }, metadata)).toThrow(/Reinforced/);
+});
+
+test("joins Gutenberg hard wraps before creating canonical original sentence mappings", () => {
+  const original = {
+    ...chapter,
+    originalText: "In my younger and more vulnerable years my father gave me some advice\nthat I’ve been turning over in my mind ever since.\n\nTom gave Nick advice.\n",
+  };
+  const firstSentence = "In my younger and more vulnerable years my father gave me some advice that I’ve been turning over in my mind ever since.";
+  expect(splitOriginalSentences(original.originalText)).toEqual([firstSentence, "Tom gave Nick advice."]);
+  const version = buildChapterVersion(original, {
+    level: 1, levelScore: 10, reinforcedWords: [],
+    sentences: [
+      { text: "My father gave me advice.", originalSentenceIndex: 0 },
+      { text: "I still think about it.", originalSentenceIndex: 0 },
+      { text: "Tom gave Nick advice.", originalSentenceIndex: 1 },
+    ],
+  }, metadata);
+  expect(version.sentences[0].originalText).toBe(firstSentence);
+  expect(version.sentences[1].originalText).toBe(firstSentence);
+  const originalVersion = buildChapterVersion(original, null, { ...metadata, level: 5 });
+  expect(originalVersion.text).toBe(original.originalText);
+  expect(originalVersion.sentences.map((sentence) => sentence.text)).toEqual([firstSentence, "Tom gave Nick advice."]);
+});
+
+test("keeps paragraph boundaries without terminal punctuation while joining CRLF hard wraps", () => {
+  expect(splitOriginalSentences("Nick waited\r\nby the door\r\n \t\r\nTom arrived\r\nat dusk\r\n\r\n"))
+    .toEqual(["Nick waited by the door", "Tom arrived at dusk"]);
 });

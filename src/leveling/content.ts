@@ -18,8 +18,11 @@ export interface ChapterDraft {
 
 /** Use these same source rows in the generation prompt and original-sentence mappings. */
 export function splitOriginalSentences(text: string): string[] {
-  return Array.from(new Intl.Segmenter("en", { granularity: "sentence" }).segment(text),
-    ({ segment }) => segment.trim()).filter(Boolean);
+  const segmenter = new Intl.Segmenter("en", { granularity: "sentence" });
+  // Blank lines end paragraphs even without punctuation; single line breaks are physical wrapping.
+  return text.replace(/\r\n?/g, "\n").split(/\n[\t ]*\n/).flatMap((paragraph) =>
+    Array.from(segmenter.segment(paragraph.replace(/\s+/g, " ").trim()),
+      ({ segment }) => segment.trim()).filter(Boolean));
 }
 
 /** Assembly never marks a version ready; content, Check, and fidelity checks must run first. */
