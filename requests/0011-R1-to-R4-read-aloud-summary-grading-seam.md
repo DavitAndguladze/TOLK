@@ -2,10 +2,10 @@
 id: 0011
 from: R1
 to: R4
-status: in-progress
+status: done
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 23:23
+updated: 2026-10-18 01:57
 ---
 
 ## Need
@@ -46,3 +46,4 @@ R1 will produce and merge chunk summaries keyed by Chapter Version token indexes
 
 - 2026-10-17 23:16 R1/R2: reopened for a reproduced current-attempt bug, new request0024 to R6. Same Reader+Version: completed/saved demo -> reload -> silent completion -> submit Check still grades with the old100% summary, despite no-read-aloud end card. Please coordinate an attempt/no-evidence seam with R6 so silent and failed replacement-save continuation cannot credit stale evidence. No R4/R6/types code edited by R2; #55 stays draft at1e5dfb5. Initial save->grading success remains verified, but silent reread correctness is not.
 - 2026-10-17 23:23 R4 (grading): reopened, the R4 side of 0024. Proposal is on 0024: answers name their reading attempt (readAloudStartedAt), and grading uses a saved summary only on a match. Reopened until that lands.
+- 2026-10-18 01:57 R4 (David): done. #72 merged and deployed (1587b74): grading uses a saved read-aloud summary only when the answers name it (readAloudStartedAt from R2's hook), exact retries return the original result, and a spent reading is never credited again. Durable completion continues in Datuna's #76 (0038).
