@@ -63,12 +63,13 @@ export function ReadingScreen({ chapterVersionId, chunks }: { chapterVersionId: 
 
   if (state.status === "chapter-done") {
     const tokens = chunks.flatMap((c) => c.tokens);
+    const clear = tokens.filter((t) => state.outcomes[t.index] === "correct").length;
     const missed = tokens.filter((t) => state.outcomes[t.index] === "mispronounced" || state.outcomes[t.index] === "skipped");
     return (
       <section aria-live="polite" className="mx-auto max-w-xl animate-page-in px-6 pt-10 pb-12">
-        <h2 className="font-book text-[1.75rem] leading-tight">You read the whole Chapter aloud.</h2>
+        <h2 className="font-book text-[1.75rem] leading-tight">You reached the end of the Chapter.</h2>
         <p className="mt-3 text-lg text-fog">
-          {tokens.length - missed.length} of {tokens.length} words came through clearly.
+          {clear} of {tokens.length} words came through clearly.
         </p>
         {missed.length > 0 && (
           <>
