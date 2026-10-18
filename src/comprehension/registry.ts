@@ -1,6 +1,7 @@
-import type { Chapter, ChapterCheck, Grading, Level, LevelDecision, SessionResult, WordBankUpdate } from "../types";
+import type { Chapter, ChapterCheck, Grading, Level, LevelDecision, SessionResult, WordBankEntry, WordBankUpdate } from "../types";
 import { LEVELS } from "../types";
 import { mockChapter, mockChapterVersion } from "../mocks";
+import { type ChapterEvidence, updateWordBank } from "../words/word-bank";
 import { createInMemoryAnswersStore } from "./answers-store";
 import { generateChapterCheck, type ChapterCheckGenerator } from "./chapter-check-generator";
 import type { KeyPointGrader } from "./grade-check";
@@ -20,6 +21,7 @@ export const chapterCheckCache = new Map<string, Promise<ChapterCheck>>(); // ke
 export const checksById = new Map<string, ChapterCheck>(); // keyed by Chapter Check id
 export const answersStore = createInMemoryAnswersStore();
 export const sessionResults = new Map<string, SessionResult>(); // keyed like answersStore: `${checkId}:${readerSessionId}`
+export const wordBanks = new Map<string, WordBankEntry[]>(); // keyed by Reader session id
 
 // OCI Generative AI grades Key Point answers when .env.local configures it; the stand-in otherwise, and as its fallback.
 const ociChat = createOciChat();
@@ -47,8 +49,12 @@ export function holdLevel(level: Level, grading: Grading): LevelDecision {
   };
 }
 
-/** Stand-in until the Word Bank (#13) lands. */
-export const emptyWordBankUpdate: WordBankUpdate = { bank: [], graduatedThisChapter: [], wordsLearnedTotal: 0 };
+/** Applies one Chapter's evidence to a Reader's Word Bank and persists the result. */
+export function recordWordBank(readerId: string, evidence: ChapterEvidence): WordBankUpdate {
+  const update = updateWordBank(wordBanks.get(readerId) ?? [], evidence);
+  wordBanks.set(readerId, update.bank);
+  return update;
+}
 
 // Mock Chapter Versions until #04/#05 land real Book ingestion and a Chapter Version store.
 export const mockVersions = LEVELS.map((level) => mockChapterVersion(level));

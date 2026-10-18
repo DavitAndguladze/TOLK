@@ -2,12 +2,13 @@ import { NextResponse } from "next/server";
 import { gradeChapterCheck } from "@/comprehension/grade-check";
 import { AnswerValidationError } from "@/comprehension/record-answers";
 import {
-  answersStore, checksById, emptyWordBankUpdate, ensureChapterCheck, findMockVersion, holdLevel, keyPointGrader, sessionResults,
+  answersStore, checksById, ensureChapterCheck, findMockVersion, holdLevel, keyPointGrader, recordWordBank, sessionResults,
 } from "@/comprehension/registry";
 import { submitCheckAnswers } from "@/comprehension/service";
 import { mockChapter } from "@/mocks";
 import type { Api, ChapterCheckAnswers } from "@/types";
 import { flagStore, readerIdOf } from "@/words/registry";
+import { chapterEvidence } from "@/words/word-bank";
 
 export async function POST(req: Request, { params }: { params: Promise<{ checkId: string }> }) {
   const { checkId } = await params;
@@ -35,11 +36,12 @@ export async function POST(req: Request, { params }: { params: Promise<{ checkId
       { keyPointGrader, now: () => new Date() },
     );
     sessionResults.set(storageKey, session);
+    const evidence = chapterEvidence({ version, check, grading: session.grading, readAloud: null });
 
     const res: Api["POST /api/checks/[checkId]/answers"]["res"] = {
       session,
       decision: holdLevel(version.level, session.grading),
-      wordBank: emptyWordBankUpdate,
+      wordBank: recordWordBank(sessionId, evidence),
       nextVersionId: null, // the next Chapter Version is generated in #14
     };
     return NextResponse.json(res);
