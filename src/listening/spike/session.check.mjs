@@ -96,6 +96,19 @@ test("background reduction pauses audio until requested processing is applied an
   assert.match(p.elements.get("#microphone-settings").textContent, /Automatic gain: off/);
 });
 
+test("microphone settings preserve a browser-reported echo cancellation mode", async () => {
+  for (const mode of ["all", "remote-only"]) {
+    const p = page();
+    await p.start();
+    const session = p.sessions[0];
+    session.configureTrack = track => { track.getSettings = () => ({ echoCancellation: mode }); };
+    await session.grantMicrophone(p.states.RUNNING);
+    p.stop();
+    assert.match(p.elements.get("#microphone-settings").textContent, new RegExp(`Echo cancellation: ${mode}`));
+    assert.equal(p.evidence().find(event => event.event === "microphone-settings").echoCancellation, mode);
+  }
+});
+
 test("Stop during microphone processing never resumes the stopped stream", async () => {
   const p = page();
   await p.start();

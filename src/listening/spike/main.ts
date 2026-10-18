@@ -290,7 +290,7 @@ async function startListening(isProbe = false) {
         autoGainControl: settings?.autoGainControl ?? null,
       };
       record("microphone-settings", microphoneSettings);
-      const describe = (value: boolean | null) => value === null ? "unreported" : value ? "on" : "off";
+      const describe = (value: boolean | string | null) => value === null ? "unreported" : typeof value === "string" ? value : value ? "on" : "off";
       document.querySelector("#microphone-settings")!.textContent = `${processingNote}Noise suppression: ${describe(microphoneSettings.noiseSuppression)}. Echo cancellation: ${describe(microphoneSettings.echoCancellation)}. Automatic gain: ${describe(microphoneSettings.autoGainControl)}.`;
       if (probe) {
         probe.microphoneSettings = microphoneSettings;
