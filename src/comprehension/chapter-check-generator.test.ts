@@ -5,7 +5,7 @@ import { generateChapterCheck } from "./chapter-check-generator";
 
 describe("generateChapterCheck", () => {
   test("asks 2-3 Key Point questions and 1-2 Complex Word questions, tied to this Chapter Version", async () => {
-    const version = mockChapterVersion(1);
+    const version = mockChapterVersion(4); // vulnerable, criticizing and advantages all appear in L4
     const check = await generateChapterCheck(mockChapter, version);
 
     expect(check.chapterVersionId).toBe(version.id);
@@ -29,7 +29,7 @@ describe("generateChapterCheck", () => {
   });
 
   test("every complex-word question targets a real Complex Word and offers its meaning as a choice", async () => {
-    const version = mockChapterVersion(1);
+    const version = mockChapterVersion(4);
     const check = await generateChapterCheck(mockChapter, version);
     const byWord = new Map(mockChapter.complexWords.map((cw) => [cw.word, cw]));
 
@@ -43,7 +43,7 @@ describe("generateChapterCheck", () => {
 
   test("the correct meaning isn't always the first choice", async () => {
     // Regression: tapping the top option always scored before choices were rotated.
-    const version = mockChapterVersion(1);
+    const version = mockChapterVersion(4);
     const check = await generateChapterCheck(mockChapter, version);
     const byWord = new Map(mockChapter.complexWords.map((cw) => [cw.word, cw]));
     const complexWordQuestions = check.questions.filter((q) => q.kind === "complex-word");
@@ -53,7 +53,7 @@ describe("generateChapterCheck", () => {
   });
 
   test("complex-word choices have no duplicates", async () => {
-    const version = mockChapterVersion(1);
+    const version = mockChapterVersion(4);
     const check = await generateChapterCheck(mockChapter, version);
 
     for (const q of check.questions.filter((q) => q.kind === "complex-word")) {
@@ -78,9 +78,9 @@ describe("generateChapterCheck", () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  test("prioritizes Complex Words that actually appear in this Chapter Version's text", async () => {
-    // Chapter-level Complex Words may not survive simplification into a lower Level's rewritten
-    // text (that's the point of simplifying) - when only some of them do, prefer those.
+  test("only asks about Complex Words that appear in this Chapter Version's text", async () => {
+    // Chapter-level Complex Words may not survive simplification. One the Reader never saw can't
+    // be answered from the text (comms 0016), so absent words are left out.
     const chapter: Chapter = {
       id: "ch-x",
       bookId: "book-x",
@@ -115,6 +115,32 @@ describe("generateChapterCheck", () => {
     const check = await generateChapterCheck(chapter, version);
     const words = check.questions.filter((q) => q.kind === "complex-word").map((q) => q.word);
 
-    expect(words).toContain("present");
+    expect(words).toEqual(["present"]);
+  });
+
+  test("points each Key Point question at a served sentence that answers it, not at the author's original", async () => {
+    const keyPoint = "Nick's father told him not to criticize other people.";
+    const served = ["Nick sat on the porch.", "His father told him not to judge other people."];
+    const chapter: Chapter = { ...mockChapter, keyPoints: [{ id: "kp1", chapterId: mockChapter.id, text: keyPoint }], complexWords: [] };
+    const version: ChapterVersion = {
+      ...mockChapterVersion(1),
+      // Sentence 0's original quotes the Key Point word for word, but its served text says nothing about it.
+      sentences: [
+        { index: 0, text: served[0], originalText: keyPoint },
+        { index: 1, text: served[1], originalText: "Something else entirely." },
+      ],
+      tokens: tokenize(served),
+    };
+
+    const check = await generateChapterCheck(chapter, version);
+
+    expect(check.questions[0].answerSentenceIndex).toBe(1);
+  });
+
+  test("asks no Complex Word question when none of them appear in the text", async () => {
+    // Mock L1 is simplified past all three: no vulnerable, criticizing or advantages.
+    const check = await generateChapterCheck(mockChapter, mockChapterVersion(1));
+
+    expect(check.questions.filter((q) => q.kind === "complex-word")).toEqual([]);
   });
 });
