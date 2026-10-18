@@ -7,11 +7,16 @@ export type AnswersResult = Api["POST /api/checks/[checkId]/answers"]["res"];
 
 const SOURCE_LABEL = { "read-aloud": "Read aloud", "chapter-check": "Chapter Check", flagged: "Flagged" } as const;
 
+const GRADED_BY_LABEL = {
+  "oci-generative-ai": "Answers graded by OCI Generative AI.",
+  "stand-in": "Answers graded by word match (OCI Generative AI was unavailable).",
+} as const;
+
 /** What the Reader sees after the Chapter Check: the Grading Result, what it rests on, and the next Chapter's Level. */
 export function ResultScreen({ result, nextHref }: { result: AnswersResult; nextHref: string | null }) {
   const { grading, chapterNumber } = result.session;
   const { decision, wordBank } = result;
-  const { readAloudAccuracy, checkScore, checkMax, flaggedCount } = grading.basis;
+  const { readAloudAccuracy, checkScore, checkMax, flaggedCount, gradedBy } = grading.basis;
   const toReview = grading.questionGrades.filter((q) => q.grade < 2);
 
   return (
@@ -42,7 +47,7 @@ export function ResultScreen({ result, nextHref }: { result: AnswersResult; next
           <dd className="mt-1 text-xl font-semibold">{flaggedCount}</dd>
         </div>
       </dl>
-      <p className="mt-2 text-xs text-fog">Answers graded by OCI Generative AI.</p>
+      <p className="mt-2 text-xs text-fog">{GRADED_BY_LABEL[gradedBy]}</p>
 
       {toReview.length > 0 && (
         <>
