@@ -1,0 +1,15 @@
+@layer theme, base, components, utilities;
+@layer components {
+  .screen { display: flex; flex-direction: column; align-items: center; min-height: 100%; padding: max(1.5rem, env(safe-area-inset-top)) 1.5rem max(1.5rem, env(safe-area-inset-bottom)); background: var(--color-mist); color: var(--color-ink); text-align: center; }
+  .wordmark { align-self: flex-start; font-size: 1.65rem; font-weight: 800; letter-spacing: -0.04em; color: var(--color-light); }
+  .illustration { width: min(100%, 15rem); margin: 1rem auto 0.5rem; }
+  .book { display: block; width: 100%; height: auto; }
+  .heading { margin: 0; font-size: clamp(1.8rem, 5vw, 2.15rem); line-height: 1.16; font-weight: 800; letter-spacing: -0.025em; }
+  .heading:focus { outline: none; }
+  .description { max-width: 20rem; margin: 1rem 0 1.75rem; line-height: 1.6; color: var(--color-fog); }
+  .actions { display: grid; gap: 0.75rem; width: 100%; margin-top: auto; padding-top: 1rem; }
+  @media (prefers-reduced-motion: no-preference) {
+    .arrival { animation: book-arrive 700ms cubic-bezier(0.2, 0.75, 0.25, 1) both; }
+  }
+  @keyframes book-arrive { from { opacity: 0; transform: translateY(8px) scale(0.95); } to { opacity: 1; transform: none; } }
+}

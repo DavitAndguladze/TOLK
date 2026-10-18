@@ -16,7 +16,7 @@ export function SelectCard({ title, description, feedback, ...input }: SelectCar
       <span className={styles.selectText}>
         <span className={styles.selectTitle}>{title}</span>
         {description && <span className={styles.description}>{description}</span>}
-        {feedback && <span className={styles.feedback}>{feedback === "correct" ? "Correct" : "Try again"}</span>}
+        {feedback && <span className={styles.feedback}>{feedback === "correct" ? "Correct" : "Not quite"}</span>}
       </span>
     </label>
   );
