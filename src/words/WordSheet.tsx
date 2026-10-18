@@ -109,7 +109,7 @@ export function WordSheet({ chapterVersionId, token, flagScope, onClose }: { cha
       aria-labelledby={titleId}
       onClose={onClose}
       onClick={(e) => e.target === e.currentTarget && dialog.current?.close()}
-      className="fixed inset-x-0 top-auto bottom-0 m-0 w-full max-w-none animate-page-in rounded-t-3xl border-t border-hairline bg-mist p-0 text-ink shadow-[0_-12px_40px_rgb(20_32_27/0.18)] backdrop:bg-ink/35"
+      className="fixed inset-x-0 top-auto bottom-0 m-0 w-full max-w-none animate-page-in rounded-t-3xl border-t border-hairline bg-paper p-0 text-ink shadow-[0_-12px_40px_rgb(20_32_27/0.18)] backdrop:bg-ink/35"
     >
       <div className="mx-auto max-w-xl px-6 pt-5 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
         <div className="flex items-start justify-between gap-4">
@@ -136,7 +136,7 @@ export function WordSheet({ chapterVersionId, token, flagScope, onClose }: { cha
           </p>
         )}
         <div className="mt-5 flex gap-3">
-          <button type="button" onClick={speech === "playing" ? stopPlayback : () => void play()} disabled={speech === "loading"} className={`${button} bg-light text-white hover:bg-[#125f3f]`}>
+          <button type="button" onClick={speech === "playing" ? stopPlayback : () => void play()} disabled={speech === "loading"} className={`${button} bg-light text-white hover:brightness-95`}>
             <Icon d={SPEAKER} />
             {speech === "loading" ? "Loading voice…" : speech === "playing" ? "Stop voice" : speech === "failed" ? "Retry voice" : "Hear it"}
           </button>
