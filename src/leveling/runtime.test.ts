@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { generateChapterCheck } from "../comprehension/chapter-check-generator";
 import type { Chat } from "../comprehension/oci-key-point-grader";
 import vocabulary from "../data/vocabulary/english-2018.json" with { type: "json" };
@@ -83,9 +83,41 @@ describe("web generation runtime", () => {
   });
 
   it("bounds a stuck provider and still uses the stored fallback within the total budget", async () => {
-    const { next, store, setFallback } = fixture(); setFallback(await fallbackFor(next));
-    const result = await createGenerationRuntime({ store, chat: () => new Promise(() => {}), budgetMs: 100 }).run("pending-test", next);
-    expect(result?.artifact?.provenance.fallbackReason).toBe("timeout");
+    const { next, store, setFallback, counts } = fixture();
+    const fallback = await fallbackFor(next); setFallback(fallback);
+    // Native AbortSignal.timeout bypasses fake timers, so bridge only the clock boundary.
+    const timeout = vi.spyOn(AbortSignal, "timeout").mockImplementation((milliseconds) => {
+      const controller = new AbortController();
+      setTimeout(() => controller.abort(new DOMException("The operation was aborted due to timeout", "TimeoutError")), milliseconds);
+      return controller.signal;
+    });
+    try {
+      vi.useFakeTimers();
+      const cancelled = vi.fn();
+      const chat: Chat = (_, options) => {
+        options?.signal?.addEventListener("abort", cancelled, { once: true });
+        return new Promise(() => {});
+      };
+      const started = Date.now();
+      let completedAt = Infinity;
+      const running = createGenerationRuntime({ store, chat, budgetMs: 100 }).run("pending-test", next)
+        .then((result) => { completedAt = Date.now(); return result; });
+      await vi.advanceTimersByTimeAsync(89);
+      expect(counts()).toEqual({ saves: 0, failures: 0 });
+      expect(cancelled).not.toHaveBeenCalled();
+      await vi.advanceTimersByTimeAsync(10);
+      expect(completedAt - started).toBeLessThan(100);
+      const result = await running;
+      expect(result?.status).toBe("ready");
+      expect(result?.artifact?.version).toEqual(fallback.version);
+      expect(result?.artifact?.fidelity).toEqual(fallback.fidelity);
+      expect(result?.artifact?.provenance).toEqual({ source: "pre-generated", personalized: false, attempts: 1, fallbackReason: "timeout" });
+      expect(cancelled).toHaveBeenCalledOnce();
+      expect(counts()).toEqual({ saves: 1, failures: 0 });
+    } finally {
+      timeout.mockRestore();
+      vi.useRealTimers();
+    }
   });
 
   it("records failure when neither generation nor a valid stored fallback is available", async () => {
