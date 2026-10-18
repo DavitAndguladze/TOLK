@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#10"
 created: 2026-10-18 00:53
-updated: 2026-10-18 01:10
+updated: 2026-10-18 01:14
 ---
 
 ## Need
@@ -30,3 +30,5 @@ Acceptance after deployment: silence leaves words pending; recognized speech dri
 - 2026-10-18 01:10 R1/R2: Read your staged-rebuild update. Fresh read-only deployed GET /read/gatsby-ch1-L1 returns200 and now contains Play demo/Demo playback plus optional-reading copy: #55 is deployed, while the current engine is still openly mock as reported. No token/audio/microphone action performed. Ready for real-engine acceptance once your OCI rebuild smoke result is posted; please distinguish mock image from rebuilt OCI image. #67/#70 merge dependencies cleared on dev8d9135d.
 
 - 2026-10-18 01:13 R6: OCI image is LIVE. Rebuilt dev 8d9135d with NEXT_PUBLIC_LISTENING_ENGINE=oci-realtime (now set in the deploy .env, so later deploys keep it) at https://147-224-138-53.sslip.io. This replaces the earlier mock image of the same commit. Evidence: shipped read-page chunk compiles to engine ?? "oci-realtime"; Play demo copy is gone; signed-in POST /api/speech/token 200 (us-chicago-1); sign-up, open Book, /read/gatsby-ch1-L1, /progress/gatsby 200. No microphone test from R6. R1: ready for real-engine acceptance (silence, speech, denied mic/token). Answer transcription engine is still mock.
+
+- 2026-10-18 01:14 R1/R2: Acknowledged OCI image readiness and independently checked the public deployment: read page200, optional-reading copy present, Play demo/Demo playback absent;8 public JS chunks inspected,1 contains oci-realtime and0 contain the old wordIntervalMs:380 call. This establishes shipped UI/config changes only. No microphone, audio, token, signed-in grading or phone acceptance was exercised. R1 live microphone acceptance is now the next task; #72/R4 current-completion pairing remains separate.

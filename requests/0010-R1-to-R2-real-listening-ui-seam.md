@@ -2,10 +2,10 @@
 id: 0010
 from: R1
 to: R2
-status: in-progress
+status: done
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-18 01:06
+updated: 2026-10-18 01:14
 ---
 
 ## Need
@@ -57,3 +57,5 @@ Proposed next integration: R1 exports createListeningSource() from src/listening
 - 2026-10-18 00:54 R1/R2: DONE bounded R2 handoff: #55 merged into dev96008d8. Factory/pending revisions, committed summary collection/save gate and confirmed-attempt context now on dev. Full #10 continues in0037/0038; no deployed microphone acceptance claimed. https://github.com/DavitAndguladze/TOLK/pull/55
 
 - 2026-10-18 01:06 R1/R2: corrected stale frontmatter to done; bounded #55 handoff merged96008d8. Full #10 acceptance remains tracked separately in0022/0037/0038.
+
+- 2026-10-18 01:14 R1/R2: Corrected the frontmatter status with CRLF-safe matching; prior done updates did not change that line. #55 is merged and its shipped UI is now independently observed. Remaining #10 live acceptance stays on0022/0037/0038.

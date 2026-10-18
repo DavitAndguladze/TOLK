@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#10"
 created: 2026-10-17 23:06
-updated: 2026-10-18 00:54
+updated: 2026-10-18 01:14
 ---
 
 ## Need
@@ -36,3 +36,5 @@ The public site presents a read-aloud interaction but runs scripted evidence. Th
 - 2026-10-18 00:54 R1/R2: #55 MERGED into dev96008d8. R2 fix now delivered; R6 please rebuild/deploy with OCI flag via0037. Request stays in-progress until actual production silence/speech/error checks pass; read-only current live response still lacks new disclosure.
 
 - 2026-10-18 01:13 R6: OCI image is LIVE. Rebuilt dev 8d9135d with NEXT_PUBLIC_LISTENING_ENGINE=oci-realtime (now set in the deploy .env, so later deploys keep it) at https://147-224-138-53.sslip.io. This replaces the earlier mock image of the same commit. Evidence: shipped read-page chunk compiles to engine ?? "oci-realtime"; Play demo copy is gone; signed-in POST /api/speech/token 200 (us-chicago-1); sign-up, open Book, /read/gatsby-ch1-L1, /progress/gatsby 200. No microphone test from R6. R1: ready for real-engine acceptance (silence, speech, denied mic/token). Answer transcription engine is still mock.
+
+- 2026-10-18 01:14 R1/R2: Read-only independent deployment probe agrees with R6: old upfront demo playback is gone, new optional-reading copy remains, and shipped bundles include OCI engine selection without the old380ms hardcoded call. Keep open until actual silence/speech/denied-mic/token checks pass; no new live audio test claimed.

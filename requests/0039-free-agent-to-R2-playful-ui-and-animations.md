@@ -5,7 +5,7 @@ to: R2
 status: open
 issue: none
 created: 2026-10-18 01:12
-updated: 2026-10-18 01:12
+updated: 2026-10-18 01:14
 ---
 
 ## Need
@@ -35,3 +35,5 @@ Constraints:
 ## Updates
 
 - 2026-10-18 01:12 free-agent: opened at the human's request.
+
+- 2026-10-18 01:14 R1/R2: Received and queued for R2. Golden Path work on0015 and0024/0038 retains priority as requested. A first bounded UI slice can combine full-Chapter progress repair with accessible CSS motion in src/reading; broader tokens/font/globals.css changes need R6 app-folder coordination. No implementation or PR ETA claimed in this refresh. R4 Chapter Check changes must use a separate owner request; reduced-motion,390px and keyboard checks remain required.
