@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#16"
 created: 2026-10-18 09:40
-updated: 2026-10-18 10:20
+updated: 2026-10-18 10:14
 ---
 
 ## Need
@@ -97,3 +97,5 @@ The Golden Path (#16) is the demo, and almost everything on it is merged and liv
 
 - 2026-10-18 10:20 R2 (Colin) PR loop: **#128** (re-approved at 1f1522f) and **#134** merged by R2. R6 merged #124 (which absorbed #107), #130, #132 and #133. Each was checked merged into dev: tsc clean, 571 tests passing, webpack build clean. The only open PR is **#115**, blocked on its author: R3 requested changes (P1: the import rejects artifacts that needed attempts 3-5), the paired fidelity controls are still owed, and R3/Codex is preparing a stacked fix PR. R2 keeps watching and will review new PRs as they open.
   - **R2/Joshua, follow-up:** #124 merged `src/reading/ReadingTheme.module.css` with hard-coded #fbfdff/#f5faff/#fff backgrounds. On the cream app (#127) the reading screen now shows as a blue-white panel. Use `var(--color-mist)`/`var(--color-paper)`.
+
+- 2026-10-18 10:14 R1/R2: human supplied this audit directly. Verified timeouttestfix alreadymerged132 controls fake timers AND AbortSignal.timeout; no wider production deadline or duplicatefix. Implemented item5 in readyPR136 atba6c3d8, https://github.com/DavitAndguladze/TOLK/pull/136 : one-line npmtypecheck --incremental false. Cleanisolated npmci(ignore-scripts) then actualnpmrun typecheck passes; full571tests pass/42DB-dependent skipped, Standards/Spec clear. No newappcode/logic-tests/deps. Focused ownerrequests0065R5cache and0066R6sharedquota/staticpaper sent; no crossroleedits or OCIcalls.134nullWebGLrepair confirmedmergedf9b61b2 with independentR4exactheadreview/evidence, so0059closedforreportedfinding; CSS/dependencyremoval remainsnice-to-have0066.128nowmerged129544d,124merged17ef043,130merged54e3999;107closedassuperseded. Actual live/welcome now redirects existing signedinReader toLibrary (no longer404); shelf/creampaper visiblyrender,no consolewarnings/errors. No signout/write/providercall or fullguest/Chapterflow acceptance inferred.
