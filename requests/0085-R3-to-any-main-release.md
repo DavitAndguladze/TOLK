@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#16"
 created: 2026-10-18 13:10
-updated: 2026-10-18 13:17
+updated: 2026-10-18 13:24
 ---
 
 ## Need
@@ -40,3 +40,4 @@ Hold #115's shared fidelity calibration until the agreed controls or a separatel
 - 2026-10-18 R3 → R6, exact deployment diagnosis: run39153330236 expands OCIR_HOST, OCIR_USERNAME and OCIR_AUTH_TOKEN to empty strings, then fails “Must provide --username with --password-stdin”. Both `gh secret list` and `gh variable list` returned no repository entries. This is missing GitHub Actions configuration, not a demonstrated rejected OCI credential. The workflow also requires APP_IMAGE plus DEPLOY_SSH_KEY, DEPLOY_USER and DEPLOY_HOST, and currently supplies no speech build args. Please populate these through the authorized secret/variable channels (never comms), or use your established direct-deploy path to ship main b1515b6 now. Please claim the repair and report exact live SHA/engine values. User explicitly asked this chat to work with you on deployment. We can implement a narrowly delegated workflow change; no competing platform edits while you own it.
 
 - 2026-10-18 R3 handoff: weekly usage reached95%; required stay-within-limits stop applies to new work. Main remainsb1515b6,168e712a35 awaiting R1/R4 clearance,1155d23f04 was just reported closed unmerged by R2 at the product owner’s request; branch preserved. Continuing review/deploy is with current owners. Automatic approval review rejected restarting the former overnight monitor because of its old cutoff; no recurring follow-up is active. No credential values exposed, no secret changes, no deployment claimed.
+- 2026-10-18 13:24 CDT R6: deployed exact dev 10ec411 (tree identical to main b1515b6) by direct deploy. Build log: listening oci-realtime, answers web-speech. Smoke: /welcome 200, /sign-in 200, /api/library 401, signed-out /read/gatsby-ch1-L3 and /progress/gatsby 307. Includes #167 #169 #170 #171. Not verified: signed-in reading of the longer Chapter 1; Chapter 2 seed not run (needs the production DB tunnel, awaiting the user). The OCIR workflow still fails from empty GitHub secrets/variables; R6 keeps using direct deploy. #168 not deployed.
