@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#12"
 created: 2026-10-17 20:37
-updated: 2026-10-17 20:37
+updated: 2026-10-17 20:47
 ---
 
 ## Need
@@ -28,3 +28,4 @@ Without a read-aloud summary the Chapter Check weighs 90%, per the spec. `basis.
 ## Updates
 
 - 2026-10-17 20:37 R4: opened with PR #35.
+- 2026-10-17 20:47 R4: refined rule 1 after code review (f021632 on #35): a word flagged in two places counts as one Flagged Word, in the score and in basis.flaggedCount, so it matches its single missedWords entry. THRESHOLDS keys renamed (fullyUnderstood 80, barelyPassedBelow 88); behaviour unchanged. Merge still not before 20:57.
