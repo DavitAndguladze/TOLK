@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Atkinson_Hyperlegible_Next, Newsreader } from "next/font/google";
+import { PhoneFrame } from "@/reading/ui/PhoneFrame";
 import "./globals.css";
 
 const newsreader = Newsreader({ subsets: ["latin"], axes: ["opsz"], variable: "--font-newsreader" });
@@ -20,14 +21,16 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#e9efec",
+  themeColor: "#f3f8ff",
   viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${newsreader.variable} ${atkinson.variable}`}>
-      <body className="bg-mist font-ui text-ink antialiased">{children}</body>
+      <body className="bg-mist font-ui text-ink antialiased">
+        <PhoneFrame>{children}</PhoneFrame>
+      </body>
     </html>
   );
 }

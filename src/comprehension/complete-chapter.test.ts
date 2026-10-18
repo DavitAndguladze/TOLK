@@ -50,6 +50,22 @@ describe.skipIf(!process.env.TOLK_TEST_DATABASE_URL)("persisted Chapter completi
     expect((await database.levelHistory(f.readerId, f.bookId)).map((s) => s.id)).toEqual([first.session.id]);
   });
 
+  test("submitting reuses each Key Point grade from Check and saves the rest inside the completion (#97)", async () => {
+    const f = await fixture();
+    const { createMySqlAnswerGradeStore } = await import("./mysql-answer-grades");
+    const store = createMySqlAnswerGradeStore();
+    const [checked, ...unchecked] = f.current.check.questions.filter((q) => q.kind === "key-point");
+    const key = (questionId: string) => ({ readerId: f.readerId, checkId: f.current.check.id, questionId, answer: "His father gave advice." });
+    await store.save(key(checked.id), { grade: 1, feedback: "Seen on Check.", gradedBy: "stand-in" });
+    const graded: string[] = [];
+    const outcome = await completeChapter(f.readerId, f.current.check.id, f.answers, {
+      ...grading, keyPointGrader: async ({ question }) => { graded.push(question.id); return grading.keyPointGrader(); },
+    });
+    expect(graded.sort()).toEqual(unchecked.map((q) => q.id).sort());
+    expect(outcome.session.grading.questionGrades.find((g) => g.questionId === checked.id)?.feedback).toBe("Seen on Check.");
+    expect(await store.get(key(unchecked[0].id))).toEqual({ grade: 2, feedback: "Yes.", gradedBy: "stand-in" });
+  });
+
   test("concurrent submissions apply the durable flagged word and completion only once", async () => {
     const f = await fixture();
     const { saveFlag } = await import("../words/mysql-flags");

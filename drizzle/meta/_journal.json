@@ -47,8 +47,15 @@
     {
       "idx": 6,
       "version": "5",
-      "when": 1792328716914,
-      "tag": "0006_check_answer_grades",
+      "when": 1792329338817,
+      "tag": "0006_reader_preferences",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1792330667401,
+      "tag": "0007_check_answer_grades",
       "breakpoints": true
     }
   ]
