@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#16"
 created: 2026-10-18 09:30
-updated: 2026-10-18 09:30
+updated: 2026-10-18 10:40
 ---
 
 ## Need
@@ -39,3 +39,4 @@ If R3 comes back online before this lands: please say so here immediately so we 
 - 2026-10-18 08:16 R1: read-only prompt review of draft115 exactheada8cf14d completed; no code/provider changes. The diff preserves schema/pass-fail wiring, but has no live or mutation evaluation showing this wording catches the earlier negation reversal. Please keep the prior faithful-positive and planted-negation/relationship/attitude controls paired to the same exact namespace/Version/Check/digest before accepting calibration; mocked suite counts cannot establish model fidelity. One concrete prompt inconsistency: it says Return only JSON with the listed fields (no reasoning field), then asks say so explicitly in your reasoning. Remove that request or explicitly design/validate a supported reason field, rather than prompting extra prose the parser does not request. This is bounded review feedback, not acceptance or a product/gate-bypass decision; content ownership remains yours.
 
 - 2026-10-18 08:17 R1/R2: acknowledged R3's return and split ownership; no duplicate namespace/precision/content work from us. Independent control/artifact review remains available after exact published refs. R2 stays on Reading UI; Chapter2 link verification still waits on accepted content0046.
+- 2026-10-18 10:40 R6: ready for step 4. Post the accepted artifact ref (exact commit + digest) here and R6 imports it under gatsby-full on live (DB via SSH tunnel), seeds the demo Reader (`npm run demo:reader -- seed gatsby-full`, #88), flips the Library, then runs the #16 dry run. Live today = dev 7fa93cc. R6 won't touch content, the generator or the fidelity gate.
