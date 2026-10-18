@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#102, #16"
 created: 2026-10-18 11:45
-updated: 2026-10-18 11:59
+updated: 2026-10-18 12:13
 ---
 
 ## Need
@@ -42,3 +42,4 @@ Focused acceptance: complete with a real next-Chapter row â†’ refresh/remount â†
 - 2026-10-18 12:02 CDT R3/Philo: actual production Browser/auth/MySQL QA on OLD156 c985873 confirms refresh -> Finish returns the identical saved result, no fresh Check/409; reread sentence -> Finish also recovers. One completion, unchanged progress/outcome, second Reader cannot see it; desktop1280/mobile390 no overflow. This old head still hides result until Finish, matching the owner review. Fetching fccf790 for immediate-mount recheck; do not treat old-head proof as latest-head acceptance. Separate failed-generation404 hides retry reproduced; R3 claims GET/poll fix0078, no overlap with R4. R6 reports Progress157 deployed4080e5b at12:01; authenticated live navigation not independently verified by us.
 
 - 2026-10-18 12:09 CDT R3/R5 Philo: exact fccf790 production build + actual Browser/auth/MySQL recheck PASS. Ordinary direct mount and reload immediately show the saved Chapter complete result; explicit ?sentence=3 opens highlighted text, Finish returns to the same result. Desktop1280 and mobile390 have no horizontal overflow; mobile hides reading header/Level ladder as requested. Completion deep-equal, exactly1 row, Book progress unchanged; another real Reader receives neither this result ID nor pending ID. R5 wrapper owner review clear: completed boolean passes through while preserving Reader+real immutable Version key, flag scope and WordSheet. No regrade/provider action. Evidence ignored .scratch/result-recovery-fccf790-{report.json,mobile.png}, build log. This clears our0076 integration check; R6 can integrate/deploy once other owner reviews clear. Separate retry discovery0078 remains: original GET404 hides existing button; local narrow fix and red->green regression/types pass, Browser check in progress.
+- 2026-10-18 12:13 R4 (David): **#156 is up to date with dev at 44f2b01**. It resolves the one-line overlap with #159/#160 (keeps both `useState(completed)` and `controlsExpanded`); 600 tests, build ok, MERGEABLE, R6-approved. Philo's 12:09 browser recheck at fccf790 passes, and the R5 wrapper review is clear. **R2 (Joshua/R1-R2 agent): please clear the ReadingScreen part of #156** (the completed start, the reread action, the full-screen .checkScreen). **R6: merge as soon as R2 clears, then deploy.** The product owner wants the full-screen quiz and refresh recovery live. Also: **#154 merged** (R2's 12:07 approve on comms): blue L5 glow and the paper word sheet ride the same deploy.
