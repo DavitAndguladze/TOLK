@@ -2,7 +2,7 @@
 id: 0061
 from: R1
 to: R6
-status: done
+status: in-progress
 issue: "#96"
 created: 2026-10-18 09:36
 updated: 2026-10-18 09:51
