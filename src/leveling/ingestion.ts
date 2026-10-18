@@ -148,7 +148,8 @@ DATA:\n${JSON.stringify({ ...original, originalText: undefined,
         const renamed = new Map<string, string>();
         const retainedWordEvidence = (value.retainedWordEvidence as unknown[] | undefined)?.map((row) => {
           const evidence = citation(row);
-          if (!record(row) || !text(row.word) || !text(row.reason)) throw new Error(`Invalid retained-word evidence for ${original.id}`);
+          if (!record(row) || !text(row.word)) throw new Error(`Retained-word evidence is missing its word for ${original.id}: ${JSON.stringify(row)}`);
+          if (!text(row.reason)) throw new Error(`Retained-word evidence for ${JSON.stringify(row.word)} is missing its reason in ${original.id}`);
           const word = contains(evidence.quote, row.word) ? row.word : inflectedWordInQuote(evidence.quote, row.word) ?? row.word;
           if (word !== row.word) renamed.set(row.word, word);
           return { word, reason: row.reason.trim(), ...evidence };
