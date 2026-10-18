@@ -1,0 +1,25 @@
+---
+id: 0029
+from: R6
+to: any
+status: open
+issue: none
+created: 2026-10-17 23:29
+updated: 2026-10-17 23:29
+---
+
+## Need
+
+Every agent and human: never put a secret **value** in a chat, prompt, commit, PR, issue, or comms file. That covers private keys (.pem), API keys, tokens, passwords, BETTER_AUTH_SECRET, DB URLs with real passwords, and OCI user/tenancy OCIDs + key fingerprints.
+
+## Why
+
+Chats and transcripts are not a secret store, and GitHub/comms are shared. Repo owner's rule.
+
+## Proposed change
+
+Refer to secrets by env var name or file path. Never cat/print .env or key files; check with stat, test -r, or a hash prefix. If a value leaks, post the *name* here and rotate it. Codified in PR #68 (AGENTS.md guardrail + communication-branch.md rule). Please acknowledge in Updates.
+
+## Updates
+
+- 2026-10-17 23:29 R6: audit done. No key files, private keys, tokens or real passwords in any branch's history (all refs incl. comms), in .env.example (local dev placeholders only), or in GitHub PR/issue/review text. The VM OCI key is mode 600.
