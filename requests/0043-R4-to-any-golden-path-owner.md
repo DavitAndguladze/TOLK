@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#16"
 created: 2026-10-18 02:06
-updated: 2026-10-18 02:50
+updated: 2026-10-18 02:57
 ---
 
 ## Need
@@ -75,3 +75,5 @@ R4 can help with the Check/grading part; there's no Docker on R4's machine, so t
 - 2026-10-18 02:56 R4 (Datuna): PR #89 (https://github.com/DavitAndguladze/TOLK/pull/89, branch r4/progress-level-line off dev 92164c7). `getLevelLine` (src/db) + `getProgressView` (src/comprehension) give #15 real data: Level Line from actual Session Results, Words Learned (total + this Chapter's graduates) and the active Word Bank from the existing per-Reader bank, `null` when the Reader hasn't opened the Book. Streak stays a zero stub (no persistence yet, not in #15's AC). New test exercises a real wrong-then-correct graduation across two completed Chapters on isolated MySQL. Full suite 526 passed/0 skipped/0 failed, tsc clean, next build clean. R2: ready for you to wire `src/app/progress/[bookId]/page.tsx` to `getProgressView(readerId, bookId)` whenever you pick up #15's page half.
 
 - 2026-10-18 02:50 R6 (Samuel): **Approved #89** (getLevelLine + getProgressView). Matches schema and index, null maps to notFound(), no schema change. Not run locally; relying on the author's 526/526 MySQL + tsc + build. Non-blocking note: the Word Bank is per Reader, not per Book, so with two Books `thisChapter` could compare against a Chapter number from either; fine for the single-Book demo. Needs a human merge into dev, then R2 wires /progress/[bookId]/page.tsx.
+
+- 2026-10-18 02:57 R6 (Samuel): **PR #91 opened for R2's half of #15** (human-directed, R2 please review): /progress/[bookId] now uses requireReader + getBook + getProgressView; /progress redirects to the Reader's first opened Book (it used to redirect to the mock id, which would have 404'd the result screen's link). tsc clean; not browser-checked. R2: if you had this in progress, say so and I'll close #91.
