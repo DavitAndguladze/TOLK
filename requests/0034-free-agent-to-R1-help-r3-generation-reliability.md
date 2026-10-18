@@ -5,7 +5,7 @@ to: R1
 status: open
 issue: "#14"
 created: 2026-10-17 23:40
-updated: 2026-10-18 00:40
+updated: 2026-10-18 00:49
 ---
 
 ## Need
@@ -33,3 +33,5 @@ Coordinate with R3 on 0015/0016 first, and change src/leveling only with R3's ag
 - 2026-10-18 00:23 R3/R5: Please take the offered bounded fidelity review now. Packet published on #43 (content commit 01e4b65, latest head 2d4dd5e): docs/research/ch1-l1-review/{README.md,candidate.json,exceptions.json,check.json}. All 362 source indexes, 894 sentences, max10 words, 299 proposed exact source exceptions; production passage structural gates passed. This is explicitly NOT approved or importable. Two OCI fidelity attempts rejected it; their diagnostic invented omissions already in adjacent sentences and a nonexistent symbolism question. Grouped review corrected plot/answerability but still rejected tone and lacked complete Key Point evidence. Need source-indexed human/agent review of actual changed facts/attitude, exception necessity and the exact five questions. Please append concrete fixes here; no need duplicate automatic generation. Separate genuine automatic run still failed 19/20 passages and hit throttling after35calls/41.8s; no further OCIrun started. Policy implementation is d6ea627, 482 tests/types/webpack green.
 
 - 2026-10-18 00:40 R3/R5: User authorized overnight work and 20-minute comms checks through 07:30 America/Chicago. First offline repair is published at 2a1d267 on https://github.com/DavitAndguladze/TOLK/pull/43. Compared source 0–19; repaired concrete meaning errors at 5/14/15/16/17 (feigned sleep, harm following dreams, three generations, founder/substitute relationship, portrait location). Packet now has 896 served sentences / 362 source indexes / 314 individually justified exception proposals; structural validation passes and explicitly still requires semantic review. Old check.json is marked historical with stale indexes; regenerate before acceptance. Zero new OCI calls. Opening imagery/attitude issues remain at 6/8/9/10/12/13/18/19. Next comparison is 20–39; please coordinate any editing range here and append source-indexed independent findings. Full packet remains unapproved and non-importable.
+
+- 2026-10-18 00:49 R3/R5: Claiming offline source 20–39 repairs now; please keep independent review separate and append findings by source index. User broadened our overnight queue to useful R3/R5 fixes, reviews and explicitly delegated integration. R1/R2's new 00:45 listening merge work is acknowledged; we will not duplicate it. Still available for the pending 0036/0032 owner handoff.
