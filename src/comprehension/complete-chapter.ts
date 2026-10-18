@@ -6,13 +6,17 @@ import { chapterChecks, chapterCompletions, chapters, chapterVersions, readerWor
 import type { Api, ChapterCheckAnswers, NextChapterInput } from "../types";
 import { chapterEvidence, updateWordBank } from "../words/word-bank";
 import { listFlags } from "../words/mysql-flags";
+import { rememberingKeyPointGrader } from "./answer-grades";
 import { gradeChapterCheck } from "./grade-check";
+import { createMySqlAnswerGradeStore } from "./mysql-answer-grades";
 import { decideNextLevel } from "./level-rules";
 import { readAloudForAttempt } from "./read-aloud-attempt";
 import { AnswerValidationError, recordAnswers } from "./record-answers";
 import { runGeneration } from "../leveling/runtime";
 
 export type ChapterCompletion = Api["POST /api/checks/[checkId]/answers"]["res"];
+const answerGrades = createMySqlAnswerGradeStore();
+
 export class CompletionError extends Error {
   constructor(message: string, readonly status: number) { super(message); }
 }
@@ -103,7 +107,9 @@ export async function completeChapter(readerId: string, checkId: string, submiss
       .where(and(eq(readAloudSummaries.readerId, readerId), eq(readAloudSummaries.chapterVersionId, version.id)));
     const readAloud = readAloudForAttempt(submission.readAloudStartedAt, savedReading?.data ?? null);
     const session = await gradeChapterCheck({ check, chapter, version, answers, readAloud, readerId,
-      flaggedWords: [...new Set(flags.map((flag) => flag.word))] }, grading);
+      flaggedWords: [...new Set(flags.map((flag) => flag.word))] },
+      // Reuses each Key Point grade the Reader already saw on Check (#97), so every answer is graded once.
+      { ...grading, keyPointGrader: rememberingKeyPointGrader(grading.keyPointGrader, answerGrades, { readerId, checkId: check.id }) });
     session.id = randomUUID();
     await recordSessionResult(session, version.bookId, tx);
     const decision = decideNextLevel(version.level, session.grading, await levelHistory(readerId, version.bookId, tx));

@@ -1,11 +1,12 @@
 import { after, NextResponse } from "next/server";
 import { completeChapter, CompletionError, generateCompletedChapter } from "@/comprehension/complete-chapter";
+import { rememberingKeyPointGrader } from "@/comprehension/answer-grades";
 import { completionKey } from "@/comprehension/completion-key";
 import { gradeChapterCheck } from "@/comprehension/grade-check";
 import { readAloudForAttempt } from "@/comprehension/read-aloud-attempt";
 import { AnswerValidationError } from "@/comprehension/record-answers";
 import {
-  answersStore, checksById, completedChecks, ensureChapterCheck, findMockVersion, holdLevel, keyPointGrader, recordWordBank,
+  answerGradeStore, answersStore, checksById, completedChecks, ensureChapterCheck, findMockVersion, holdLevel, keyPointGrader, recordWordBank,
   sessionResults,
 } from "@/comprehension/registry";
 import { submitCheckAnswers } from "@/comprehension/service";
@@ -68,7 +69,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ checkId
 
     const session = await gradeChapterCheck(
       { check, chapter: mockChapter, version, answers, readAloud, flaggedWords, readerId: sessionId },
-      { keyPointGrader, now: () => new Date() },
+      { keyPointGrader: rememberingKeyPointGrader(keyPointGrader, answerGradeStore, { readerId: sessionId, checkId: check.id }), now: () => new Date() },
     );
     sessionResults.set(storageKey, session);
     const evidence = chapterEvidence({ version, check, grading: session.grading, readAloud });
