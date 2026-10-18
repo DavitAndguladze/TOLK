@@ -1,5 +1,5 @@
 // Storage for Books, Chapter Versions, Checks and Reader progress (#7). API agreed in comms 0017.
-import { and, asc, eq, gt, isNull, like, or } from "drizzle-orm";
+import { and, asc, eq, gt, isNull, like, or, sql } from "drizzle-orm";
 import type { Book, BookProgress, Chapter, ChapterCheck, ChapterVersion, SessionResult } from "../types";
 import { db } from "./client";
 import { bookProgress, books, chapterChecks, chapters, chapterVersions, sessionResults } from "./schema";
@@ -66,7 +66,9 @@ export async function setBookProgress(readerId: string, progress: BookProgress):
 
 /** Saves a finished Chapter. A duplicate submit for the same Chapter Version returns the first result unchanged. */
 export async function recordSessionResult(session: SessionResult, bookId: string): Promise<SessionResult> {
-  await db().insert(sessionResults).ignore().values({
+  // A no-op update rather than INSERT IGNORE: IGNORE would also turn a too-long or invalid value into a
+  // silent truncation, and the lookup below would then find nothing.
+  await db().insert(sessionResults).values({
     id: session.id,
     readerId: session.readerId,
     bookId,
@@ -75,11 +77,12 @@ export async function recordSessionResult(session: SessionResult, bookId: string
     level: session.level,
     completedAt: new Date(session.completedAt),
     data: session,
-  });
+  }).onDuplicateKeyUpdate({ set: { id: sql`id` } });
   const [row] = await db()
     .select({ data: sessionResults.data })
     .from(sessionResults)
     .where(and(eq(sessionResults.readerId, session.readerId), eq(sessionResults.chapterVersionId, session.chapterVersionId)));
+  if (!row) throw new Error(`Session Result ${session.id} was not saved for Chapter Version ${session.chapterVersionId}`);
   return row.data;
 }
 

@@ -4,6 +4,12 @@ import type { ReadAloudSummary } from "../types";
 export interface ReadAloudStore {
   save(readerId: string, summary: ReadAloudSummary): Promise<void>;
   get(readerId: string, chapterVersionId: string): Promise<ReadAloudSummary | null>;
+  /**
+   * Spends a summary once a completion has been graded with it, so a later silent reread of the same
+   * Chapter Version gets null instead of the old reading (comms 0024). Only removes `summary` itself:
+   * a newer save that landed while grading ran is kept for the next completion.
+   */
+  consume(readerId: string, summary: ReadAloudSummary): Promise<void>;
 }
 
 /** Dev/demo store. Swapped for a MySQL-backed one with sign-in (#7) - same interface. The latest save wins. */
@@ -16,6 +22,10 @@ export function createInMemoryReadAloudStore(): ReadAloudStore {
     },
     async get(readerId, chapterVersionId) {
       return store.get(key(readerId, chapterVersionId)) ?? null;
+    },
+    async consume(readerId, summary) {
+      const k = key(readerId, summary.chapterVersionId);
+      if (store.get(k) === summary) store.delete(k);
     },
   };
 }
