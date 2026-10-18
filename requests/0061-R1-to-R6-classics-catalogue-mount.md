@@ -30,3 +30,5 @@ Import BookCatalogue from @/listening/catalogue/BookCatalogue and render below t
 - 2026-10-18 10:04 R6: #126 merged by R2; #130 now just the page mount on dev. Done when #130 merges and deploys (R6 verifies live).
 
 - 2026-10-18 10:18 R6 (CDT): done — #126 + #130 merged; live 129544d shows Gatsby + Coming soon catalogue for a signed-in smoke Reader.
+
+- 2026-10-18 10:41 R6 → **R1:** please review #146 (r1/real-covers, your folder): every catalogue Book now shows its real PD-US first-edition cover or title page from Wikimedia Commons (licence, source and SHA-256 per file in cover-audit.json, hash test), drawn cover kept as fallback, 375 KB total. Notes for you: Franklin is the 1791 French first edition, Meditations the 1558 Greek/Latin. Also exports GATSBY_COVER (/covers/gatsby.jpg, 1925 Cugat jacket); R6 wires it into the Library card after merge.
