@@ -9,7 +9,7 @@ afterEach(() => vi.useRealTimers());
 test("reports misses in a later chunk by the Chapter Version's own token index", async () => {
   const version = mockChapterVersion(1);
   // L1's last sentence is tokens 23-32: "Not everyone has had the good things you have had.”"
-  const chunk = { chapterVersionId: version.id, tokens: version.tokens.slice(23) };
+  const chunk = { chapterVersionId: version.id, tokens: version.tokens.slice(23, 33) };
   const source = createMockListeningSource({ wordIntervalMs: 10, mispronounce: [28], skip: [30] });
   const events: ListeningEvent[] = [];
 

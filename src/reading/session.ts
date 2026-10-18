@@ -24,6 +24,8 @@ export type ReadingAction =
   | { type: "pause" }
   | { type: "go-to-chunk"; index: number }
   | { type: "restore-position"; index: number }
+  /** A "Reread sentence" link on a finished Chapter: back to the text at that part. */
+  | { type: "reread"; index: number }
   | { type: "finish-chapter" }
   | { type: "toggle-silent" }
   | { type: "listening"; event: ListeningEvent };
@@ -54,6 +56,9 @@ export function readingReducer(state: ReadingState, action: ReadingAction): Read
       if (state.status !== "ready" || Object.keys(state.outcomes).length) return state;
       if (!Number.isInteger(action.index) || action.index < 0 || action.index >= state.chunkCount) return state;
       return { ...state, chunkIndex: action.index };
+    case "reread":
+      if (state.status === "listening" || !Number.isInteger(action.index) || action.index < 0 || action.index >= state.chunkCount) return state;
+      return { ...state, chunkIndex: action.index, status: "ready", stuckOn: null };
     case "finish-chapter":
       return { ...state, status: "chapter-done", stuckOn: null };
     case "toggle-silent":

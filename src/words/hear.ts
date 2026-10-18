@@ -17,6 +17,9 @@ export async function hear(word: string, signal: AbortSignal, onPlaying: () => v
   if (!blob.size) throw new Error("Pronunciation is unavailable");
   const url = URL.createObjectURL(blob);
   audio.src = url;
+  // A one-word clip at full speed is over before it registers; slow it like the browser voice (rate 0.8), pitch kept.
+  audio.preservesPitch = true;
+  audio.playbackRate = 0.75;
   try {
     await new Promise<void>((resolve, reject) => {
       const stop = () => { audio.pause(); reject(signal.reason); };

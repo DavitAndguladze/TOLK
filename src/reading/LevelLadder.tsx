@@ -5,15 +5,16 @@ import { LEVEL_SPECS } from "../mocks";
 function dotClass(level: Level, current: Level) {
   if (level === ORIGINAL_LEVEL) {
     return level === current
-      ? "size-5 bg-light shadow-[0_0_0_6px_rgb(127_224_174/0.45),0_0_22px_6px_rgb(127_224_174/0.8)]"
-      : "size-3.5 bg-glow shadow-[0_0_0_5px_rgb(127_224_174/0.25),0_0_16px_4px_rgb(127_224_174/0.6)]";
+      ? "size-5 bg-light shadow-[0_0_0_6px_var(--color-glow),0_0_22px_6px_var(--color-glow)]"
+      : "size-3.5 bg-glow shadow-[0_0_0_5px_color-mix(in_srgb,var(--color-glow)_50%,transparent),0_0_16px_4px_var(--color-glow)]";
   }
   if (level === current) return "size-4 bg-light ring-4 ring-light/15";
   return level < current ? "size-2.5 bg-light/70" : "size-2.5 border border-fog/60 bg-mist";
 }
 
-/** Where a Chapter Version sits between L1 and the author's original. With `hrefs`, the dots are the temporary Level switch (#3). */
-export function LevelLadder({ current, hrefs }: { current: Level; hrefs?: Record<Level, string> }) {
+/** Where a Chapter Version sits between L1 and the author's original. With `hrefs`, the dots are the temporary Level switch (#3).
+ *  `showLabel={false}` drops the "Level N  label" line for callers that show a Level selector instead. */
+export function LevelLadder({ current, hrefs, showLabel = true }: { current: Level; hrefs?: Record<Level, string>; showLabel?: boolean }) {
   const climbed = ((current - 1) / (LEVELS.length - 1)) * 100;
   const label = `Level ${current}, ${LEVEL_SPECS[current].label}`;
   const Wrapper = hrefs ? "nav" : "div";
@@ -42,10 +43,10 @@ export function LevelLadder({ current, hrefs }: { current: Level; hrefs?: Record
           </li>
         ))}
       </ol>
-      <p className="flex items-baseline gap-2 px-1 text-sm">
+      {showLabel && <p className="flex items-baseline gap-2 px-1 text-sm">
         <span className="font-semibold">Level {current}</span>
         <span className="text-fog">{LEVEL_SPECS[current].label}</span>
-      </p>
+      </p>}
     </Wrapper>
   );
 }
