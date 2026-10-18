@@ -14,13 +14,13 @@ function review({ version, check, digest, chapter }: FidelityInput): FidelityRev
     keyPointEvidence: chapter.keyPoints.map((point, sentenceIndex) => ({ keyPointId: point.id, sentenceIndex, quote: version.sentences[sentenceIndex].text })),
     checkEvidence: check.questions.map((question) => ({ questionId: question.id, sentenceIndex: question.answerSentenceIndex, quote: version.sentences[question.answerSentenceIndex].text })) };
 }
-const generator = () => createChapterGenerator({ generateText: async (prompt) => {
+const generator = (levelScore?: number) => createChapterGenerator({ generateText: async (prompt) => {
   const data = JSON.parse(prompt.split("DATA:\n")[1]);
-  return JSON.stringify({ level: data.level, levelScore: data.level * 20, sentences: data.sentences, reinforcedWords: [] });
+  return JSON.stringify({ level: data.level, levelScore: levelScore ?? data.level * 20, sentences: data.sentences, reinforcedWords: [] });
 }, generateCheck: generateChapterCheck, evaluateFidelity: async (input) => review(input),
 policyForChapter: () => ({ requiredNames: ["Nick"], retainedWords: ["hope"], vocabulary }) });
 
-async function fixture() {
+async function fixture(levelScore?: number) {
   const readerId = randomUUID(), bookId = randomUUID();
   const chapters: Chapter[] = [1, 2, 3, 4].map((number) => ({ id: `${bookId}-ch${number}`, bookId, number, title: `Chapter ${number}`,
     originalText: sentences.join(" "), keyPoints: sentences.map((text, index) => ({ id: `${bookId}-ch${number}-kp${index}`, chapterId: `${bookId}-ch${number}`, text })),
@@ -29,7 +29,7 @@ async function fixture() {
     keyPoints: chapter.keyPoints.map((point, originalSentenceIndex) => ({ keyPointId: point.id, originalSentenceIndex, quote: sentences[originalSentenceIndex] })),
     complexWords: [{ word: "hope", originalSentenceIndex: 2, quote: sentences[2] }],
   } }]));
-  const seed = await generateGatsbySeed({ book: { id: bookId, title: "Test Book", author: "Test", sourceUrl: "https://example.com/fixture", chapterCount: 4 }, chapters, policies }, generator());
+  const seed = await generateGatsbySeed({ book: { id: bookId, title: "Test Book", author: "Test", sourceUrl: "https://example.com/fixture", chapterCount: 4 }, chapters, policies }, generator(levelScore));
   const input: NextChapterInput = { original: chapters[1], baseline: seed.sharedChapterOne.version, readerId,
     decision: { from: 1, to: 1, reason: "barely-passed", explanation: "Keep this Level.", reinforcement: "context-clue" }, wordBank: [], graduatedWords: [] };
   return { readerId, bookId, seed, input };
@@ -71,6 +71,23 @@ describe.skipIf(!testDatabase)("persisted Chapter generation", () => {
     const id = await store.startGeneration(data.readerId, data.bookId, 2, 1, data.input.baseline.id);
     return { ...data, id };
   }
+
+  it("persists a generated fractional Level Score without breaking immutable identity", async () => {
+    const { readerId, id, input } = await setup();
+    const token = (await store.claimGeneration(readerId, id))!;
+    const artifact = await generator(99.99999999999999).generate(input);
+    expect(await store.saveGeneratedChapter(id, artifact, token, input)).toBe(true);
+    expect((await store.resolveGeneration(readerId, id))?.artifact).toEqual(artifact);
+  });
+
+  it("loads a generated fractional Level Score seed with its original fidelity digest", async () => {
+    const { seed, bookId, readerId } = await fixture(99.99999999999999);
+    owned.push({ readerId, bookId });
+    await store.loadGatsbySeed(seed);
+    await store.loadGatsbySeed(seed);
+    expect(await content.getChapterVersion(seed.sharedChapterOne.version.id)).toEqual(seed.sharedChapterOne.version);
+    expect(await store.getFallbackArtifact(bookId, 2, 1)).toEqual(seed.fallbacks[0]);
+  });
 
   it("returns one stable pending ID under concurrent starts and scopes resolution to its Reader", async () => {
     const { readerId, bookId, input, id } = await setup();
