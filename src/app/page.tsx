@@ -8,7 +8,7 @@ import { SignOutButton } from "./SignOutButton";
 export default async function Library({ searchParams }: { searchParams: Promise<{ q?: string | string[] }> }) {
   // searchParams first: it marks the page dynamic, so `next build` never prerenders it (no database at build).
   const { q } = await searchParams;
-  const reader = await requireReader();
+  const reader = await requireReader("/welcome"); // a signed-out first open starts at Welcome (#98)
   const query = typeof q === "string" ? q : "";
   const books = await listLibrary(reader.id, query);
 
