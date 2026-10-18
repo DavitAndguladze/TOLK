@@ -26,3 +26,11 @@ Review fixes isolate client flags and queued writes per reading mount and accept
 The current answers route must consume `listFlags(readerId, versionId)` from the durable store, not the old process-local flag Map. The completion transaction must save and reuse the full outcome so Word Bank evidence is not applied twice. Those changes are coordinated with R4/R6 on comms0030/0032/0036.
 
 A fresh inspection of the public HTTPS read page still showed the sample text and no word controls. R6 deployment and a real live account/word-help check remain required. No microphone, pronunciation-quality, full-Chapter, complete Word Bank lifecycle or deployed persistence claim follows from the local checks.
+
+## Reader-scoped saved-position mount
+
+R2's navigation prop (783661b, now merged in dev 5147415) is passed from the authenticated read page through ReadingWithWords to ReadingScreen. The wrapper keeps its Reader plus resolved immutable Version key. Pending generation IDs are resolved before the bookmark identity is chosen; anonymous demo callers leave persistence disabled.
+
+The integrated branch passed 507 tests across 47 files with isolated real MySQL, nonincremental TypeScript and the webpack production build. In the integrated Browser against the actual local authenticated page, a disposable Reader opened the sample, moved to part 2 and reloaded: the page resumed at part 2. Keyboard activation of “Start from the beginning” returned to part 1, which persisted across another reload. Desktop 1280×720 and mobile 390×844 were readable without visible overflow; mobile document width and scroll width both measured 390px. The original production tab was untouched. The temporary tab, account and server were cleaned up.
+
+This browser check used the local mock listening build without starting playback or requesting a microphone. It verifies the mount and browser resume path, not production deployment, cross-device persistence or listening/complete-assessment acceptance.

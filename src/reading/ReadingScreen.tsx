@@ -9,8 +9,8 @@ import { createReadingAttempt } from "./read-aloud";
 import { ChapterReadAloud } from "./ChapterReadAloud";
 
 const button =
-  "min-h-13 cursor-pointer rounded-2xl text-base font-semibold transition outline-light focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:active:scale-100";
-const stepButton = `${button} grid w-13 place-items-center border border-hairline bg-white/60 text-ink hover:bg-white disabled:bg-transparent disabled:text-fog/50`;
+  "min-h-13 cursor-pointer rounded-2xl border-b-4 text-base font-semibold transition-[transform,background-color,border-color] outline-light focus-visible:outline-2 focus-visible:outline-offset-2 active:translate-y-0.5 disabled:cursor-not-allowed disabled:active:translate-y-0 motion-reduce:transition-none";
+const stepButton = `${button} grid w-13 place-items-center border border-b-4 border-hairline bg-white/80 text-ink hover:bg-white disabled:bg-transparent disabled:text-fog/50`;
 const demoListening = (process.env.NEXT_PUBLIC_LISTENING_ENGINE ?? "mock") === "mock";
 
 const outcomeClass: Record<WordOutcome, string> = {
@@ -44,25 +44,59 @@ function Icon({ d }: { d: string }) {
 const MIC = "M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3ZM19 11a7 7 0 0 1-14 0M12 18v3";
 const PAUSE = "M9 5v14M15 5v14";
 
-/** `chapterCheck` replaces the end card; a client parent supplies R5's word-tap callback and flags. */
-export function ReadingScreen({
-  chapterVersionId,
-  chunks,
-  chapterCheck,
-  onWordTap,
-  flaggedTokenIndexes,
-}: {
+interface ReadingScreenProps {
   chapterVersionId: string;
+  /** Supplied by the authenticated page. Without it, browser position storage is disabled. */
+  readerId?: string;
   chunks: Chunk[];
   chapterCheck?: ReactNode;
   onWordTap?: (token: Token, chapterVersionId: string) => void;
   flaggedTokenIndexes?: ReadonlySet<number>;
-}) {
+}
+
+/** A changed Reader or immutable Version starts a fresh session, including microphone cleanup. */
+export function ReadingScreen(props: ReadingScreenProps) {
+  return <ChapterReadingScreen key={JSON.stringify([props.readerId ?? null, props.chapterVersionId])} {...props} />;
+}
+
+function ChapterReadingScreen({
+  chapterVersionId,
+  readerId,
+  chunks,
+  chapterCheck,
+  onWordTap,
+  flaggedTokenIndexes,
+}: ReadingScreenProps) {
   const [state, dispatch] = useReducer(readingReducer, chunks.length, initialReadingState);
   const source = useRef<ReturnType<typeof createReadingAttempt>>(null);
   const [listeningLabel, setListeningLabel] = useState("Connecting…");
+  const [positionReady, setPositionReady] = useState(false);
+  const [resumedPart, setResumedPart] = useState<number | null>(null);
+  const positionKey = readerId ? `tolk-reading-position:${encodeURIComponent(readerId)}:${encodeURIComponent(chapterVersionId)}` : null;
   const chunk = chunks[state.chunkIndex];
   const listening = state.status === "listening";
+
+  useEffect(() => {
+    try {
+      if (positionKey) {
+        const tokenIndex: unknown = JSON.parse(localStorage.getItem(positionKey) ?? "null");
+        const index = typeof tokenIndex === "number" && Number.isInteger(tokenIndex)
+          ? chunks.findIndex(part => part.tokens.some(token => token.index === tokenIndex)) : -1;
+        if (index > 0) {
+          dispatch({ type: "restore-position", index });
+          setResumedPart(index + 1);
+        }
+      }
+    } catch { /* Unavailable or corrupt browser storage must never prevent reading. */ }
+    setPositionReady(true);
+    // Reader and Version changes remount this component; only restore once, before interaction.
+  }, []);
+
+  useEffect(() => {
+    if (!positionReady || !positionKey || !chunk?.tokens.length) return;
+    try { localStorage.setItem(positionKey, JSON.stringify(chunk.tokens[0].index)); }
+    catch { /* Reading still works when browser storage is full or disabled. */ }
+  }, [positionReady, positionKey, chunk]);
 
   useEffect(() => {
     if (!listening) return;
@@ -97,6 +131,8 @@ export function ReadingScreen({
     };
     // Restart only when listening starts or the Chunk changes, never on each word.
   }, [listening, state.chunkIndex]);
+
+  if (!chunk) return <p role="status" className="px-6 py-8 text-fog">This Chapter has no text ready to read yet.</p>;
 
   if (state.status === "chapter-done") {
     const tokens = chunks.flatMap((c) => c.tokens);
@@ -138,10 +174,17 @@ export function ReadingScreen({
   }
 
   const stuckWord = chunk.tokens.find((t) => t.index === state.stuckOn);
+  const position = chunks.length > 1 ? state.chunkIndex / (chunks.length - 1) : 0;
 
   return (
     <>
       <section aria-label="Chapter text" className="px-6 pt-8 pb-72">
+        {resumedPart !== null && state.status === "ready" && state.chunkIndex === resumedPart - 1 && (
+          <div className="mx-auto mb-6 max-w-xl rounded-2xl border border-hairline bg-white/70 px-4 py-3">
+            <p className="text-sm text-ink">Back at part {resumedPart}. Your place was saved on this device.</p>
+            <button type="button" onClick={() => { setResumedPart(null); dispatch({ type: "go-to-chunk", index: 0 }); }} className="min-h-11 cursor-pointer text-sm font-semibold text-light underline underline-offset-4 outline-light focus-visible:outline-2 focus-visible:outline-offset-2">Start from the beginning</button>
+          </div>
+        )}
         <p key={chunk.index} className="mx-auto max-w-xl animate-page-in font-book text-[1.5625rem] leading-[1.7] text-pretty">
           {chunk.tokens.map((token, i) => (
             <Fragment key={token.index}>
@@ -161,6 +204,7 @@ export function ReadingScreen({
 
       <footer className="fixed inset-x-0 bottom-0 border-t border-hairline bg-mist/95 px-6 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur">
         <div className="mx-auto max-w-xl">
+          {state.listeningError && <p role="alert" className="mb-3 rounded-xl border-l-4 border-gold bg-white/80 px-3 py-2 text-sm text-ink">{state.listeningError}</p>}
           {state.status === "ready" && state.chunkIndex === 0 && <p className="mb-2 text-sm text-fog">Reading aloud is optional. It helps us grade your reading more accurately.</p>}
           {demoListening && !state.silent && <p className="mb-2 text-sm text-ink">Demo playback. Words advance automatically; the microphone is not used.</p>}
           <div className="flex items-center justify-between text-sm text-fog">
@@ -176,11 +220,10 @@ export function ReadingScreen({
                 </>
               )}
             </p>
-            <ol aria-hidden className="flex gap-1.5">
-              {chunks.map((c) => (
-                <li key={c.index} className={`h-1 w-5 rounded-full ${c.index <= state.chunkIndex ? "bg-light" : "bg-hairline"}`} />
-              ))}
-            </ol>
+            <span className="ml-3 shrink-0 tabular-nums">{Math.round(position * 100)}%</span>
+          </div>
+          <div role="progressbar" aria-label="Chapter position" aria-valuemin={1} aria-valuemax={chunks.length} aria-valuenow={state.chunkIndex + 1} aria-valuetext={`Part ${state.chunkIndex + 1} of ${chunks.length}`} className="mt-3 h-3 overflow-hidden rounded-full border border-hairline bg-white/80">
+            <div className="h-full origin-left rounded-full bg-light motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out" style={{ transform: `scaleX(${position})` }} />
           </div>
           {state.status === "ready" && state.chunkIndex === 0 && (
             <button
@@ -200,7 +243,7 @@ export function ReadingScreen({
             <button
               type="button"
               aria-label="Previous part"
-              disabled={listening || state.chunkIndex === 0}
+              disabled={!positionReady || listening || state.chunkIndex === 0}
               onClick={() => dispatch({ type: "go-to-chunk", index: state.chunkIndex - 1 })}
               className={stepButton}
             >
@@ -210,21 +253,22 @@ export function ReadingScreen({
               <button
                 type="button"
                 onClick={() => dispatch({ type: listening ? "pause" : "read-aloud" })}
-                className={`${button} flex flex-1 items-center justify-center gap-2 bg-light text-white hover:bg-[#125f3f]`}
+                disabled={!positionReady}
+                className={`${button} flex flex-1 items-center justify-center gap-2 border-ink/30 bg-light text-white hover:bg-[#125f3f]`}
               >
                 <Icon d={listening ? PAUSE : MIC} />
                 {listening ? "Pause" : demoListening ? state.status === "paused" ? "Resume demo" : "Play demo" : state.status === "paused" ? "Resume" : "Read aloud"}
               </button>
             )}
             {state.chunkIndex === chunks.length - 1 ? (
-              <button type="button" aria-label="Finish chapter" disabled={listening} onClick={() => dispatch({ type: "finish-chapter" })} className={stepButton}>
+              <button type="button" aria-label="Finish chapter" disabled={!positionReady || listening} onClick={() => dispatch({ type: "finish-chapter" })} className={stepButton}>
                 <Icon d="M20 6 9 17l-5-5" />
               </button>
             ) : (
               <button
                 type="button"
                 aria-label="Next part"
-                disabled={listening}
+                disabled={!positionReady || listening}
                 onClick={() => dispatch({ type: "go-to-chunk", index: state.chunkIndex + 1 })}
                 className={stepButton}
               >
