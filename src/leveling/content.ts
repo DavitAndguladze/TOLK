@@ -21,6 +21,7 @@ export function splitOriginalSentences(text: string): string[] {
   const segmenter = new Intl.Segmenter("en", { granularity: "sentence" });
   // Blank lines end paragraphs even without punctuation; single line breaks are physical wrapping.
   return text.replace(/\r\n?/g, "\n").split(/\n[\t ]*\n/).flatMap((paragraph) => {
+    if (/^-{3,}$/u.test(paragraph.trim())) return []; // Gutenberg section rules are layout, not sentences.
     const sentences: string[] = [];
     let pending = "";
     for (const { segment } of segmenter.segment(paragraph.replace(/\s+/g, " ").trim())) {

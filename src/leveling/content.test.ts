@@ -105,3 +105,16 @@ test("keeps Gatsby titles and initials with their names instead of inventing sen
   expect(splitOriginalSentences("The eyes of Doctor T. J. Eckleburg are blue. Mr. Wilson waited.\n\nDaisy saw him."))
     .toEqual(["The eyes of Doctor T. J. Eckleburg are blue.", "Mr. Wilson waited.", "Daisy saw him."]);
 });
+
+test("excludes Gutenberg section rules from source mappings while preserving exact L5 text", () => {
+  const original = { ...chapter, originalText: "Nick waited.\r\n\r\n------------------------------------------------------------------------\r\n\r\nTom arrived.\r\n" };
+  expect(splitOriginalSentences(original.originalText)).toEqual(["Nick waited.", "Tom arrived."]);
+  const version = buildChapterVersion(original, {
+    level: 1, levelScore: 10, reinforcedWords: [],
+    sentences: [{ text: "Nick waited.", originalSentenceIndex: 0 }, { text: "Tom arrived.", originalSentenceIndex: 1 }],
+  }, metadata);
+  expect(version.sentences[1].originalText).toBe("Tom arrived.");
+  const exact = buildChapterVersion(original, null, { ...metadata, level: 5 });
+  expect(exact.text).toBe(original.originalText);
+  expect(exact.sentences).toHaveLength(2);
+});

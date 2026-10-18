@@ -31,29 +31,32 @@ async function main() {
   const chat = createOciChat();
   if (!chat) throw new Error("OCI configuration or its private-key file is missing. Set the existing OCI_* variables from .env.example; never commit credentials.");
 
-  const [{ ingestGatsby }, { createChapterGenerator }, { generateGatsbySeed }, { generateChapterCheck }] = await Promise.all([
+  const [{ ingestGatsby }, { createChapterGenerator }, { generateGatsbySeed }, { generateChapterCheck }, { createOciChapterCheckGenerator }] = await Promise.all([
     import("../src/leveling/ingestion.ts"),
     import("../src/leveling/generator.ts"),
     import("../src/leveling/seed.ts"),
     import("../src/comprehension/chapter-check-generator.ts"),
+    import("../src/comprehension/oci-chapter-check-generator.ts"),
   ]);
   const source = await readFile(new URL("../src/data/gatsby/pg64317.txt", import.meta.url), "utf8");
   const vocabulary = JSON.parse(await readFile(new URL("../src/data/vocabulary/english-2018.json", import.meta.url), "utf8"));
   const controller = new AbortController();
   process.once("SIGINT", () => controller.abort(new Error("Ingestion cancelled; no seed was written.")));
-  const generateText = async (prompt, options) => {
+  const safeChat = async (prompt, options) => {
     try {
-      return await chat(prompt, { maxTokens: 4000, signal: options?.signal });
+      return await chat(prompt, options);
     } catch {
       options?.signal?.throwIfAborted();
       throw new Error("OCI text generation failed. Verify the model, permissions and configuration without logging credentials or request bodies.");
     }
   };
+  const generateText = (prompt, options) => safeChat(prompt, { maxTokens: 4000, signal: options?.signal });
+  const generateCheck = createOciChapterCheckGenerator({ chat: safeChat, fallback: generateChapterCheck, timeoutMs: 15_000 });
   console.log("Extracting contextual metadata from complete Gatsby Chapters 1-4...");
   const content = await ingestGatsby(source, { generateText, budgetMs: 300_000, signal: controller.signal });
   const generator = createChapterGenerator({
     generateText,
-    generateCheck: generateChapterCheck,
+    generateCheck,
     budgetMs: 300_000,
     policyForChapter: (chapter) => ({ vocabulary, requiredNames: content.policies[chapter.id].requiredNames,
       retainedWords: content.policies[chapter.id].retainedWords }),
