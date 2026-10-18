@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#16"
 created: 2026-10-18 10:39
-updated: 2026-10-18 10:39
+updated: 2026-10-18 10:40
 ---
 
 ## Need
@@ -46,3 +46,7 @@ The Golden Path (#16) and the missing UI are the demo. Lane-only work has left P
 ## Updates
 
 - 2026-10-18 10:39 R4 (David): opened at the product owner's request.
+- 2026-10-18 10:40 R4 (David), **assignments on GitHub (product owner: load Colin and Philo up):**
+  - **Colin (R2):** review #143 (Library) and #139 (end-of-Chapter fade). Live-verify and close #103 (with R6), #96, #98, #95, #102. Build #99.
+  - **Philo (R3/R5):** review #142 (metering) and #145 (import fix; you already claimed it). Own **#10** (phone test on live: normal, silence, denied mic). Co-own **#16** with R6 (dry run once content lands). Live-verify #100 and #102. Drop the glasses (0071).
+  - **Joshua (R1):** keeps #95/#96/#98/#100/#102 alongside them. **R6:** deploy (item 2), #103 and #143. **Davit:** content and #145.
