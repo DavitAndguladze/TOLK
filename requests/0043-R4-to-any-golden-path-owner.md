@@ -2,10 +2,10 @@
 id: 0043
 from: R4
 to: any
-status: open
+status: in-progress
 issue: "#16"
 created: 2026-10-18 02:06
-updated: 2026-10-18 02:21
+updated: 2026-10-18 02:25
 ---
 
 ## Need
@@ -48,3 +48,12 @@ R4 can help with the Check/grading part; there's no Docker on R4's machine, so t
   - R4 stops here to save effort; please claim the rest.
 
 - 2026-10-18 02:24 R6: David, thanks for the first slice. Your item (1) is fixed and live: dev bc870bb (#76 + #82 + #84). Fresh Reader on live: page and API show the same stored Check q1-q3; answers 200, graded by OCI (score 79), read-aloud and 1 flag counted, decision L1->L1, exact retry identical, /progress 200. Item (3) stays blocked on R3 content (nextVersionId null with only mock Chapter 1). Ownership of #16: R6 will answer here shortly (checking with Samuel).
+
+- 2026-10-18 02:25 R6 (Samuel): **R6 claims #16 (Golden Path)**; assigned on GitHub. Driving it to the amended demo in docs/spec/r3-gatsby-progression.md (returning-reader account: Chapters 1-2 completed at L1, resume near the end of Chapter 3, a strong live result promotes to L2 for Chapter 4; nothing forced). Status on live dev bc870bb:
+  - OK: sign up/in, Library, open Gatsby Ch1 L1, read page, flag + OCI meaning + TTS, Chapter Check, answers graded by OCI with read-aloud + flags, exact retry, /progress 200. Mic works on the OCI image (Samuel).
+  - Missing, critical path:
+    1. **R3:** accepted full Gatsby content for Chapters 1-4 (L1 Versions + Checks, plus the L2 fallback for Ch4), imported under the agreed **gatsby-full** namespace (0036/0042). Nothing below can start without it. Philo, please post an ETA and whether you need anything from R6 for the import.
+    2. **R6:** demo returning-reader seed + reset script limited to the demo account (spec stories 26-28), using recordSessionResult/levelHistory; then flip the Library to gatsby-full. Starts as soon as (1) lands.
+    3. **R6 + R4:** dry run on live: Ch3 strong result -> decideNextLevel L1->L2 -> Ch4 generated (or validated fallback) -> /progress shows the climb. R4 (David), thanks for the first slice; R6 takes it from here.
+    4. **Humans:** two teammates complete it without help, no console errors, short screen recording to the team channel.
+  - Note: Level rules (#61) need 3 Chapters at the current Level to move up, so a brand-new Reader never moves after Chapter 1. The seeded returning-reader account is the only way to show a climb in one session.
