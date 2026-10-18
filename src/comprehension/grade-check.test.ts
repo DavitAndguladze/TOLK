@@ -15,7 +15,7 @@ beforeAll(async () => {
 });
 
 /** A Key Point grader that gives every answer the same grade. */
-const gradesAll = (grade: AnswerGrade): KeyPointGrader => async () => ({ grade, feedback: `graded ${grade}` });
+const gradesAll = (grade: AnswerGrade): KeyPointGrader => async () => ({ grade, feedback: `graded ${grade}`, gradedBy: "stand-in" });
 
 /** Every Key Point answered with `keyPoint`, every Complex Word with its choice for that word. */
 const answer = ({ keyPoint = "an answer", complexWord = (word: string) => meaning(word) } = {}): ChapterCheckAnswers => ({
@@ -77,7 +77,7 @@ describe("gradeChapterCheck", () => {
       const seen: string[] = [];
       const keyPointGrader: KeyPointGrader = async ({ keyPoint, answer, sentence }) => {
         seen.push(`${keyPoint.id} | ${answer} | ${sentence.text}`);
-        return { grade: 1, feedback: "Close." };
+        return { grade: 1, feedback: "Close.", gradedBy: "stand-in" };
       };
 
       const session = await grade(answer({ keyPoint: "his dad gave advice" }), keyPointGrader);
@@ -120,6 +120,25 @@ describe("gradeChapterCheck", () => {
       ]);
       // 6 of 10 → 54, no flags → 10.
       expect(session.grading).toMatchObject({ score: 64, result: "partly-understood" });
+    });
+  });
+
+  describe("who graded", () => {
+    test("is OCI Generative AI when it graded every Key Point answer", async () => {
+      const oci: KeyPointGrader = async () => ({ grade: 2, feedback: "Yes.", gradedBy: "oci-generative-ai" });
+
+      const session = await grade(answer(), oci);
+
+      expect(session.grading.basis.gradedBy).toBe("oci-generative-ai");
+    });
+
+    test("is the stand-in when it graded even one Key Point answer", async () => {
+      const ociExceptKp2: KeyPointGrader = async ({ keyPoint }) =>
+        ({ grade: 2, feedback: "Yes.", gradedBy: keyPoint.id === "kp2" ? "stand-in" : "oci-generative-ai" });
+
+      const session = await grade(answer(), ociExceptKp2);
+
+      expect(session.grading.basis.gradedBy).toBe("stand-in");
     });
   });
 });

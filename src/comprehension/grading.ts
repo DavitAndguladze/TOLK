@@ -46,6 +46,6 @@ export function combineGrading(input: GradingInput): Grading {
       ...missed(input.complexWordMisses, "chapter-check"),
       ...missed(input.flaggedWords, "flagged"),
     ],
-    basis: { readAloudAccuracy, checkScore, checkMax, flaggedCount },
+    basis: { readAloudAccuracy, checkScore, checkMax, flaggedCount, gradedBy: input.gradedBy },
   };
 }
