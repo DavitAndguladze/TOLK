@@ -1,4 +1,4 @@
-import type { Grading, GradingResult } from "../types";
+import type { ChapterCheck, ChapterCheckAnswers, Grading, GradingResult, SessionResult } from "../types";
 
 const HEADLINE: Record<GradingResult, string> = {
   "fully-understood": "You understood it.",
@@ -8,6 +8,25 @@ const HEADLINE: Record<GradingResult, string> = {
 
 /** Barely Passed reads as Fully understood here; the Level decision's explanation says "just barely". */
 export const resultHeadline = (grading: Grading): string => HEADLINE[grading.result];
+
+/** Join only the actual saved grades and supplied Check/answers; never infer a Reader's answer. */
+export function chapterCheckReview(session: SessionResult, check?: ChapterCheck, answers?: ChapterCheckAnswers) {
+  const grades = session.grading.questionGrades;
+  return {
+    fullyCorrect: grades.filter(question => question.grade === 2).length,
+    partlyCorrect: grades.filter(question => question.grade === 1).length,
+    total: grades.length,
+    questions: grades.map(grade => {
+      const question = check?.chapterVersionId === session.chapterVersionId
+        ? check.questions.find(question => question.id === grade.questionId) : undefined;
+      return {
+        ...grade,
+        prompt: question?.prompt ?? null,
+        answer: question ? answers?.answers.find(answer => answer.questionId === grade.questionId)?.answer ?? null : null,
+      };
+    }),
+  };
+}
 
 /**
  * One poll of the next Chapter Version (spec: the client polls while it generates). `httpStatus` 0 is a

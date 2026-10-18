@@ -1,8 +1,8 @@
-import type { Api } from "../types";
+import type { Api, ChapterCheck, ChapterCheckAnswers } from "../types";
 import { LevelChange } from "./LevelChange";
 import { NextChapter } from "./NextChapter";
 import { ScoreCountUp } from "./ScoreCountUp";
-import { resultHeadline } from "./result";
+import { chapterCheckReview, resultHeadline } from "./result";
 import motion from "./ReadingMotion.module.css";
 import { Card } from "./ui/Card";
 
@@ -16,11 +16,13 @@ const GRADED_BY_LABEL = {
 } as const;
 
 /** What the Reader sees after the Chapter Check: the Grading Result, what it rests on, and the next Chapter's Level. */
-export function ResultScreen({ result, nextHref }: { result: AnswersResult; nextHref: string | null }) {
+export function ResultScreen({ result, nextHref, check, answers }: { result: AnswersResult; nextHref: string | null; check?: ChapterCheck; answers?: ChapterCheckAnswers }) {
   const { grading, chapterNumber } = result.session;
   const { decision, wordBank } = result;
   const { readAloudAccuracy, checkScore, checkMax, flaggedCount, gradedBy } = grading.basis;
   const toReview = grading.questionGrades.filter((q) => q.grade < 2);
+  const review = chapterCheckReview(result.session, check, answers);
+  const hasAnswerContext = check?.chapterVersionId === result.session.chapterVersionId && answers !== undefined;
 
   return (
     <section aria-live="polite" className="mx-auto max-w-xl animate-page-in px-6 pt-8 pb-12">
@@ -28,6 +30,9 @@ export function ResultScreen({ result, nextHref }: { result: AnswersResult; next
       <h2 className={`mt-1 font-book text-[2rem] leading-tight ${motion.resultHeadline} ${grading.result === "fully-understood" ? motion.celebratedHeadline : ""}`}>
         {resultHeadline(grading)}
       </h2>
+      {review.total > 0 && (
+        <p className="mt-3 text-fog">Chapter Check: <strong className="text-ink">{review.fullyCorrect} of {review.total} fully correct.</strong>{review.partlyCorrect > 0 && ` ${review.partlyCorrect} ${review.partlyCorrect === 1 ? "answer was" : "answers were"} partly correct.`}</p>
+      )}
 
       <Card className={`mt-5 ${motion.scoreCard}`}>
         <p className="text-sm text-fog">Chapter score</p>
@@ -62,7 +67,23 @@ export function ResultScreen({ result, nextHref }: { result: AnswersResult; next
       </dl>
       <p className="mt-2 text-xs text-fog">{GRADED_BY_LABEL[gradedBy]}</p>
 
-      {toReview.length > 0 && (
+      {hasAnswerContext && review.questions.length > 0 ? (
+        <details className="mt-8 rounded-2xl border border-hairline bg-white px-4 py-2">
+          <summary className="min-h-11 cursor-pointer content-center font-semibold outline-light focus-visible:outline-2 focus-visible:outline-offset-2">Review answers</summary>
+          <ol className="divide-y divide-hairline">
+            {review.questions.map((question) => (
+              <li key={question.questionId} className="py-4">
+                <h3 className="font-semibold">{question.prompt ?? "Question text is unavailable in this view."}</h3>
+                <p className="mt-2 text-sm text-fog">Your answer</p>
+                <p className="whitespace-pre-wrap break-words">{question.answer === null ? "Your answer is unavailable in this view." : question.answer === "" ? "An empty answer was submitted." : question.answer}</p>
+                <p className="mt-3 text-sm font-semibold">{question.grade === 2 ? "Fully correct" : question.grade === 1 ? "Partly correct" : "Not quite"}</p>
+                <p className="mt-1">{question.feedback}</p>
+                {question.rereadSentence && <blockquote className="mt-3 border-l-4 border-light/40 pl-3 text-sm text-fog">Reread: “{question.rereadSentence}”</blockquote>}
+              </li>
+            ))}
+          </ol>
+        </details>
+      ) : toReview.length > 0 && (
         <>
           <h3 className="mt-8 font-semibold">Worth another look</h3>
           <ul className="mt-2 space-y-2">
