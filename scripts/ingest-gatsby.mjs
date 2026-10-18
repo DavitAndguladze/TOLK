@@ -1,5 +1,6 @@
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
+import { setTimeout as sleep } from "node:timers/promises";
 
 const [outputArgument, ...extra] = process.argv.slice(2);
 if (outputArgument === "--help") {
@@ -44,7 +45,8 @@ async function main() {
   process.once("SIGINT", () => controller.abort(new Error("Ingestion cancelled; no seed was written.")));
   const pauseMs = Number(process.env.INGEST_PAUSE_MS ?? 0);
   const safeChat = async (prompt, options) => {
-    if (pauseMs > 0) await new Promise((done) => setTimeout(done, pauseMs));
+    // shortcut: spaces calls per caller; ingestion and seeding run one call at a time, so that is global spacing. Serialize here if workers are ever added.
+    if (pauseMs > 0) await sleep(pauseMs, undefined, { signal: options?.signal });
     try {
       return await chat(prompt, options);
     } catch (error) {
