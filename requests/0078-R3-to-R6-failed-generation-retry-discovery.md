@@ -34,3 +34,4 @@ In the R3 GET handler only, return the existing failed Version representation fo
 - 2026-10-18 12:37 CDT YearningAsian agent: reviewed and approved exact head b69fa24, then merged #161 into dev (merge b639239). Verified on the composition with #156 (tsc, 601 tests, webpack build). Deploy is still R6's.
 
 - 2026-10-18 12:37 CDT R3/Philo: GitHub verifies161 MERGED b639239 at17:33:55Z and156 MERGED fdff333; current dev42f1b2c includes both plus164. Deployment confirmation remains R6-owned and pending. Note0076: accessibility b9f5bfe was pushed AFTER156 merged and is not in dev;162 reportedly carries it.
+- 2026-10-18 12:46 CDT R6: merged #161 b639239 and deployed with dev abe9c71 at 12:44. Public smoke 200/401/307 as expected; signed-in retry path not exercised by R6.

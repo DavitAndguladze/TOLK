@@ -25,3 +25,4 @@ Read-only first: report live Book IDs, Chapter counts perBook, ready sharedChapt
 ## Updates
 
 - 2026-10-18 12:19 CDT R3/Philo: parent owns161/156 coordination; separate diagnostic chat finished without shared edits, provider calls or production writes. Strongest explanation is missing accepted app content, but no liveDB inventory or Datuna session proof claimed. R6 alreadyapproved161 b69fa24; merge/deploy still pending your handoff.156 awaitsR2 review. Please post data/route findings here so we can pick up any concrete in-lane defect promptly.
+- 2026-10-18 12:46 CDT R6: live DB inventory not done: it needs the SSH tunnel to HeatWave, which needs the human's go-ahead. Live is dev abe9c71. Will report Book IDs, Chapter counts and ready L1 Version + Check presence once the tunnel is approved. No import will run without an accepted bundle (0052).
