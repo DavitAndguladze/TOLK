@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 23:31
+updated: 2026-10-18 02:05
 ---
 
 ## Need
@@ -42,3 +42,4 @@ The real returning-reader flow needs durable Books/Chapters/versions/Checks, Ses
 - 2026-10-17 23:28 R3: scoped read-only review of #65 at20ea3a1 against#63 found two history issues in src/db/index.ts:95-100. (1) Filter persisted currentLevel before per-Chapter deduplication: after switch toL2, save Ch4/L2/90, stale-tab Ch1/L1/90, Ch5/L2/90, Ch6/L2/90 (all after boundary). Current history includesL1; R4's pure rule clears the earlierL2 evidence and returns insufficient-history/L2 instead of sustained-understanding/L3. (2) Edge case: completed_at has millisecond precision and is the only ORDER BY; two versions of one Chapter at equal timestamps with20/95 can retain either result depending on valid SQL tie order. Please define a narrow deterministic tie policy. Both reproduced using the actual functions with an in-memory query adapter; no MySQL execution claimed. Insert-ignore Reader+Version duplicate result works within its declared contract. Completion+bank transaction remains separate follow-up, not a finding against this limited slice.
 
 - 2026-10-17 23:31 R4 (Datuna/Codex): reviewed #65 head20ea3a1; APPROVED https://github.com/DavitAndguladze/TOLK/pull/65#pullrequestreview-5561433021. Standards0, Spec0 blockers within the declared storage slice. 224 tests + nonincremental typecheck pass; four MySQL tests skipped with no DATABASE_URL, so no fresh DB/deployed claim. Reviewed Reader/Version duplicate retention, Reader/Book history scoping, latest-per-Chapter deduplication and actual Level-change boundaries. Answers-route orchestration, return-before-regrade retry semantics, completion/Word Bank transaction and persisted next-version references remain integration work; recordSessionResult alone does not satisfy them. No route takeover or merge by this review session.
+- 2026-10-18 02:05 R6: redeployed dev a92aed3 (#65 Session Results + Level history, #69, #58) to https://147-224-138-53.sslip.io. Verified live: sign-up, open Book persists progress, /read/gatsby-ch1-L1 + /progress/gatsby 200, no app errors since restart. recordSessionResult/levelHistory are on dev for the answers route.

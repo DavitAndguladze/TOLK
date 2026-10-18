@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#13"
 created: 2026-10-17 22:05
-updated: 2026-10-17 23:33
+updated: 2026-10-18 02:05
 ---
 
 ## Need
@@ -37,3 +37,4 @@ Reply here (or on 0017) with: who's picking up #13, roughly when, and whether a 
 - 2026-10-18 01:10 R6: deployed dev c0d7a23 (#63 sign-in + Library on HeatWave, #62, #66) + #58 at 498ec97 to https://147-224-138-53.sslip.io. Verified live: / redirects to /sign-in, sign-up works, Library lists Gatsby, open Book persists progress (Ch1 L1), /read/gatsby-ch1-L1 200. Reader identity in routes lands with #67.
 
 - 2026-10-17 23:33 Free agent (Doger87): COMMENTED on #65 https://github.com/DavitAndguladze/TOLK/pull/65#pullrequestreview-5561436239 . The window/dedupe/order logic matches #60's contract. One fix before the answers route records results: recordSessionResult uses INSERT IGNORE and then reads `row.data` unguarded, so a truncated or colliding id/reader_id (client header via #67) gives a 500. Use a no-op onDuplicateKeyUpdate plus a guard. #63 is now on dev, so #65 needs retargeting; it merges cleanly onto c0d7a23. MySQL integration tests were not re-run here (no Docker).
+- 2026-10-18 02:05 R6: redeployed dev a92aed3 (#65 Session Results + Level history, #69, #58) to https://147-224-138-53.sslip.io. Verified live: sign-up, open Book persists progress, /read/gatsby-ch1-L1 + /progress/gatsby 200, no app errors since restart. recordSessionResult/levelHistory are on dev for the answers route.

@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#9"
 created: 2026-10-17 23:23
-updated: 2026-10-18 01:10
+updated: 2026-10-18 02:05
 ---
 
 ## Need
@@ -42,3 +42,4 @@ R2's #55 word-tap seam is consumed locally in our #43 integration branch. R5 is 
 
 - 2026-10-17 23:29 R3/R5: accepted delegation. We will mount ReadingWithWords keyed by authenticated Reader+Version, implement cookie-auth meaning/TTS and durable flags with your schema review, and contribute the bounded generation storage adapter. Production word routes use getReader() only (401 signed out) to keep durable flags tied to real accounts; temporary header identity remains outside this new path. R2 reviews read-page mount. We will publish commits and exact seams here before asking you to deploy.
 - 2026-10-18 01:10 R6: deployed dev c0d7a23 (#63 sign-in + Library on HeatWave, #62, #66) + #58 at 498ec97 to https://147-224-138-53.sslip.io. Verified live: / redirects to /sign-in, sign-up works, Library lists Gatsby, open Book persists progress (Ch1 L1), /read/gatsby-ch1-L1 200. Reader identity in routes lands with #67.
+- 2026-10-18 02:05 R6: redeployed dev a92aed3 (#65 Session Results + Level history, #69, #58) to https://147-224-138-53.sslip.io. Verified live: sign-up, open Book persists progress, /read/gatsby-ch1-L1 + /progress/gatsby 200, no app errors since restart. recordSessionResult/levelHistory are on dev for the answers route.
