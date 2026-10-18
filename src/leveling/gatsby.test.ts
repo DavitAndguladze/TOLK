@@ -1,49 +1,34 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 import { GATSBY_BOOK, parseGatsby } from "./gatsby.ts";
-import { splitOriginalSentences } from "./content.ts";
-import type { IngestedGatsby } from "./ingestion.ts";
-import { validateRetainedWordPolicy } from "./validation.ts";
 
 const source = readFileSync(new URL("../data/gatsby/pg64317.txt", import.meta.url), "utf8");
 
 describe("Gatsby ingestion source", () => {
-  test("stored metadata cites the pinned complete originals with current sentence indexes", () => {
-    const content: IngestedGatsby = JSON.parse(readFileSync(new URL("../data/gatsby/content.json", import.meta.url), "utf8"));
-    const originals = parseGatsby(source).slice(0, 4);
-    expect(content.book).toEqual(GATSBY_BOOK);
-    expect(content.book.id).toBe("gatsby-full");
-    expect(content.chapters.map(({ keyPoints: _keyPoints, complexWords: _words, ...original }) => original)).toEqual(originals);
-    expect(content.chapters.map((chapter) => splitOriginalSentences(chapter.originalText).length)).toEqual([362, 308, 388, 373]);
-    for (const chapter of content.chapters) {
-      const policy = content.policies[chapter.id];
-      expect(chapter.keyPoints.every((point) => point.chapterId === chapter.id && point.id.startsWith(`${chapter.id}-kp`))).toBe(true);
-      expect(validateRetainedWordPolicy(chapter, policy)).toEqual([]);
-      const sentences = splitOriginalSentences(chapter.originalText);
-      expect(policy.originalEvidence.keyPoints.map((point) => point.keyPointId)).toEqual(chapter.keyPoints.map((point) => point.id));
-      expect(policy.originalEvidence.complexWords.map((word) => word.word)).toEqual(chapter.complexWords.map((word) => word.word));
-      for (const citation of [...policy.originalEvidence.keyPoints, ...policy.originalEvidence.complexWords]) {
-        expect(sentences[citation.originalSentenceIndex]).toContain(citation.quote);
-      }
-      for (const name of policy.requiredNames) expect(chapter.originalText.replace(/\s+/g, " ")).toContain(name);
-    }
+  test("uses a separate excerpt Book identity to preserve existing immutable full-book content", () => {
+    expect(GATSBY_BOOK.id).toBe("gatsby-excerpts");
+    expect(GATSBY_BOOK.title).toContain("Excerpts");
   });
 
-  test("extracts complete original Chapters rather than the table of contents", () => {
+  test("extracts clearly labeled opening excerpts at natural paragraph boundaries", () => {
     const chapters = parseGatsby(source);
     expect(chapters).toHaveLength(GATSBY_BOOK.chapterCount);
     expect(chapters.slice(0, 4).map((chapter) => chapter.number)).toEqual([1, 2, 3, 4]);
-    expect(chapters.slice(0, 4).map((chapter) => chapter.id)).toEqual(["gatsby-full-ch1", "gatsby-full-ch2", "gatsby-full-ch3", "gatsby-full-ch4"]);
+    expect(chapters.slice(0, 4).map((chapter) => chapter.id)).toEqual(["gatsby-excerpts-ch1", "gatsby-excerpts-ch2", "gatsby-excerpts-ch3", "gatsby-excerpts-ch4"]);
     expect(chapters[0].originalText).toMatch(/^In my younger and more vulnerable years/);
-    expect(chapters.at(-1)?.originalText.slice(-100)).toMatch(/borne back ceaselessly into\s+the past\.$/);
     for (const chapter of chapters) {
-      expect(chapter.originalText.split(/\s+/).length).toBeGreaterThan(2000);
+      const wordCount = chapter.originalText.split(/\s+/).length;
+      expect(wordCount).toBeGreaterThanOrEqual(800);
+      expect(wordCount).toBeLessThanOrEqual(1200);
+      expect(chapter.title).toBe(`Chapter ${chapter.number} (excerpt)`);
+      expect(chapter.originalText).not.toMatch(/\n\s*-{3,}\s*\n/);
+      expect(chapter.originalText).toMatch(/[.!?][”’\"]?$/);
       expect(chapter.originalText).not.toMatch(/Table of Contents|END OF THE PROJECT GUTENBERG/);
       expect(chapter.bookId).toBe(GATSBY_BOOK.id);
     }
   });
 
-  test("normalizes line endings without losing paragraph breaks or punctuation", () => {
+  test("normalizes line endings and keeps source punctuation in each excerpt", () => {
     const chapter = parseGatsby(source)[0];
     expect(chapter.originalText).not.toContain("\r");
     expect(chapter.originalText).toContain("\n\n");

@@ -1,14 +1,49 @@
 import type { Book, Chapter } from "../types";
 
 export const GATSBY_BOOK: Book = {
-  id: "gatsby-full",
-  title: "The Great Gatsby",
+  id: "gatsby-excerpts",
+  title: "The Great Gatsby (Excerpts)",
   author: "F. Scott Fitzgerald",
   sourceUrl: "https://www.gutenberg.org/ebooks/64317",
   chapterCount: 9,
 };
 
 export type OriginalChapter = Omit<Chapter, "keyPoints" | "complexWords">;
+
+const EXCERPT_TARGET_WORDS = 1_000;
+const EXCERPT_MIN_WORDS = 800;
+const EXCERPT_MAX_WORDS = 1_200;
+
+function openingExcerpt(chapterText: string, chapterNumber: number): string {
+  const paragraphs = chapterText
+    .replace(/^\s*-{3,}\s*$/gm, "")
+    .trim()
+    .split(/\n\s*\n/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
+  let excerpt = "";
+  let words = 0;
+  let lastValidExcerpt = "";
+  let lastValidWords = 0;
+
+  for (const paragraph of paragraphs) {
+    const candidate = excerpt ? `${excerpt}\n\n${paragraph}` : paragraph;
+    const candidateWords = candidate.split(/\s+/).length;
+    if (candidateWords > EXCERPT_MAX_WORDS) break;
+    excerpt = candidate;
+    words = candidateWords;
+    if (words >= EXCERPT_MIN_WORDS) {
+      lastValidExcerpt = excerpt;
+      lastValidWords = words;
+    }
+    if (words >= EXCERPT_TARGET_WORDS) break;
+  }
+
+  if (!lastValidExcerpt) {
+    throw new Error(`Gatsby Chapter ${chapterNumber} has no opening paragraph excerpt between ${EXCERPT_MIN_WORDS} and ${EXCERPT_MAX_WORDS} words.`);
+  }
+  return lastValidExcerpt;
+}
 
 /** The pinned Gutenberg edition includes a contents list before its nine original Chapters. */
 export function parseGatsby(source: string): OriginalChapter[] {
@@ -27,13 +62,14 @@ export function parseGatsby(source: string): OriginalChapter[] {
   }
 
   return headings.map((heading, index) => {
-    const originalText = body.slice(heading.index + heading[0].length, headings[index + 1]?.index ?? body.length).trim();
-    if (!originalText || originalText.split(/\s+/).length < 1000) throw new Error(`Gatsby Chapter ${index + 1} is incomplete.`);
+    const chapterText = body.slice(heading.index + heading[0].length, headings[index + 1]?.index ?? body.length).trim();
+    if (!chapterText || chapterText.split(/\s+/).length < 1000) throw new Error(`Gatsby Chapter ${index + 1} is incomplete.`);
+    const originalText = openingExcerpt(chapterText, index + 1);
     return {
       id: `${GATSBY_BOOK.id}-ch${index + 1}`,
       bookId: GATSBY_BOOK.id,
       number: index + 1,
-      title: `Chapter ${index + 1}`,
+      title: `Chapter ${index + 1} (excerpt)`,
       originalText,
     };
   });
