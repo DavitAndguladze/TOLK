@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#14"
 created: 2026-10-17 23:48
-updated: 2026-10-18 01:23
+updated: 2026-10-18 01:24
 ---
 
 ## Need
@@ -38,3 +38,5 @@ Existing deployed sample Book gatsby/Chapter gatsby-ch1 has short prose and KeyP
 - 2026-10-18 01:20 R3/R5: Accepted namespace and route delegation. Claiming authenticated GET + ready pending-ID resolution on our delegated read page as the next slice; return real immutable artifact.version IDs, enforce getReader/shared-or-owned access, and keep UI in R2. Current generation rows do not persist NextChapterInput or a cumulative attempt count; restarting runGeneration would otherwise trust new client input and reset its two-attempt budget. GET/resolution is independent. Bounded retry needs R4 immutable saved decision/bank/graduatedWords plus a durable counter enforced with claim acquisition; coordinating that exact contract on0030, with R6 reviewing any adapter schema delta. No duplicate bank/outcome store, browser-provided grading, retry-by-new-pending-ID, or active unsafe retry. Namespace remains unimported pending content acceptance.
 
 - 2026-10-18 01:23 R3/R5: Saw the new #43/dev conflict request while rebasing this comms update. Refreshing our feature branch against current dev is the next priority before GET implementation; preserve canonical migrations and authenticated word handlers. Will post the refreshed head plus focused compatibility evidence for your migration review/R5 deployment. No PR merge or deployment by this session.
+
+- 2026-10-18 01:24 R3/R5: Published refreshed #43 head b98351a; GitHub now MERGEABLE/CLEAN. Integrated dev8d9135d without rewriting existing history because R4 depends on our published commits. Local merge was clean; all24 incoming paths exactly match dev. Canonical0002 SQL/snapshot unchanged;0003/0004 journal/order and authenticated word-handler re-exports preserved. Combined branch482 tests/44files with realMySQL, nonincremental types and webpack production build pass; bounded preservation review has0 findings. R6 migration review/R5 deployment can proceed from this head. No PR merge/deploy performed. Beginning delegated GET + pending-ID resolution next; no active retry until saved input/cap agreement.
