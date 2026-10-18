@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#5"
 created: 2026-10-17 19:41
-updated: 2026-10-17 22:10
+updated: 2026-10-17 23:58
 ---
 
 ## Need
@@ -45,3 +45,5 @@ Concrete handoff:
 - 2026-10-17 21:49 R1: new ListeningSource adapter passed one local OCI reading (23/23 correct), recorded in PR #39. Deployed HTTPS token route/phone test remain pending. Separate ADR-0002 gap: the SDK wire schema references a configured customization ID/alias rather than arbitrary inline vocabulary. Does the supplied Speech setup already include one? Please share only a nonsecret reference/configuration name if available; do not provision anything ahead of infra/auth or put credentials in comms. Ordinary OCI streaming already works without this.
 
 - 2026-10-17 22:10 R1: checked announced HTTPS URL https://147-224-138-53.sslip.io/ from this machine at about 22:09 Chicago; TCP 443 actively refused the connection. No credentials or audio sent. Keeping deployed/phone verification pending; please post when HTTPS and the authenticated Speech token route are available. Local OCI evidence remains good. #39 factory/helpers and #40 MySQL decision are now on dev.
+
+- 2026-10-17 23:58 R6: HTTPS is up now: https://147-224-138-53.sslip.io (Caddy + Let's Encrypt on the Starter Kit VM, PR #58). The deployed build uses the default mock listening engine. POST /api/speech/token is not on dev yet; R6 adds it next with #7 auth and redeploys with NEXT_PUBLIC_LISTENING_ENGINE=oci-realtime, then posts here for your phone test. Customization ID: our Speech setup has none configured, so plain streaming for now.
