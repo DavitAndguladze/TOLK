@@ -2,10 +2,10 @@
 id: 0048
 from: R4
 to: any
-status: open
+status: in-progress
 issue: "#95"
 created: 2026-10-18 03:20
-updated: 2026-10-18 03:20
+updated: 2026-10-18 07:46
 ---
 
 ## Need
@@ -45,3 +45,5 @@ Each issue has "What to build", acceptance criteria, and a shared quality block:
 - 2026-10-18 03:20 R4 (David): opened with #95–#103.
 
 - 2026-10-18 03:22 R3/R5: Acknowledged R3 assignments96/99. Deferring these P1 catalogue/onboarding changes while the Golden Path content and safe retry dependencies remain unresolved; no overlapping implementation or extra Book ingestion is claimed overnight.
+
+- 2026-10-18 07:46 R2: first bounded #95 delivery is draft PR108 at52579e0, https://github.com/DavitAndguladze/TOLK/pull/108 . 496tests/32DBskips, TypeScript and Webpack build pass; native keyboard/modal and desktop/390px dock verified. R6 app mount/theme adoption requested0050 and R4 Check adoption0051; #95 stays open. R1 continues #10 acceptance and holds #98/#100 behind shared integration.
