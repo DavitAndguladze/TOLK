@@ -1,6 +1,6 @@
 import styles from "./DesignSystem.module.css";
 
-/** Pass a completed count and a positive total; invalid/missing totals show no progress. */
+/** Pass an amount advanced and a positive total; invalid/missing totals show no progress. */
 export function ProgressBar({ value, max, label }: { value: number; max: number; label: string }) {
   const validTotal = Number.isFinite(max) && max > 0;
   const total = validTotal ? max : 1;
