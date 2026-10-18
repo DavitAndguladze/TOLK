@@ -1,10 +1,30 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 import { GATSBY_BOOK, parseGatsby } from "./gatsby.ts";
+import { splitOriginalSentences } from "./content.ts";
+import type { IngestedGatsby } from "./ingestion.ts";
 
 const source = readFileSync(new URL("../data/gatsby/pg64317.txt", import.meta.url), "utf8");
 
 describe("Gatsby ingestion source", () => {
+  test("stored metadata cites the pinned complete originals with current sentence indexes", () => {
+    const content: IngestedGatsby = JSON.parse(readFileSync(new URL("../data/gatsby/content.json", import.meta.url), "utf8"));
+    const originals = parseGatsby(source).slice(0, 4);
+    expect(content.book).toEqual(GATSBY_BOOK);
+    expect(content.chapters.map(({ keyPoints: _keyPoints, complexWords: _words, ...original }) => original)).toEqual(originals);
+    expect(content.chapters.map((chapter) => splitOriginalSentences(chapter.originalText).length)).toEqual([362, 308, 388, 373]);
+    for (const chapter of content.chapters) {
+      const policy = content.policies[chapter.id];
+      const sentences = splitOriginalSentences(chapter.originalText);
+      expect(policy.originalEvidence.keyPoints.map((point) => point.keyPointId)).toEqual(chapter.keyPoints.map((point) => point.id));
+      expect(policy.originalEvidence.complexWords.map((word) => word.word)).toEqual(chapter.complexWords.map((word) => word.word));
+      for (const citation of [...policy.originalEvidence.keyPoints, ...policy.originalEvidence.complexWords]) {
+        expect(sentences[citation.originalSentenceIndex]).toContain(citation.quote);
+      }
+      for (const name of policy.requiredNames) expect(chapter.originalText.replace(/\s+/g, " ")).toContain(name);
+    }
+  });
+
   test("extracts complete original Chapters rather than the table of contents", () => {
     const chapters = parseGatsby(source);
     expect(chapters).toHaveLength(GATSBY_BOOK.chapterCount);
