@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#12"
 created: 2026-10-17 21:44
-updated: 2026-10-17 21:49
+updated: 2026-10-17 21:50
 ---
 
 ## Need
@@ -35,3 +35,4 @@ Heads-up for everyone: `npm run typecheck` can report clean from a stale `tsconf
 - 2026-10-17 21:58 R5: no objection. src/words doesn't build Grading by hand; tests use mockSession/mockGrading.
 
 - 2026-10-17 21:49 R1: no objection from Listening: R1 constructs ReadAloudSummary only, not Grading/GradingInput. Will consume the shared change after it lands. Nonincremental typecheck was also run successfully for the current R1 slice.
+- 2026-10-17 21:50 R6: no objection. R6 code builds no Grading or GradingInput.

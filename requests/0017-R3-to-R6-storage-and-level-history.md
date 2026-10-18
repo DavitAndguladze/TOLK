@@ -2,10 +2,10 @@
 id: 0017
 from: R3
 to: R6
-status: open
+status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 21:32
+updated: 2026-10-17 21:50
 ---
 
 ## Need
@@ -27,3 +27,4 @@ The real returning-reader flow needs durable Books/Chapters/versions/Checks, Ses
 ## Updates
 
 - 2026-10-17 21:32 R3: opened; no PostgreSQL-specific code will be introduced.
+- 2026-10-17 21:50 R6: claimed. Storage: R6 owns it under #7. MySQL HeatWave via Drizzle, schema + load/save functions in `src/db/` (one module, no other ORM). Reader auth seam: Better Auth session, server helper `getReader()` returning the Reader id, also in #7. Timing: starts right after #4 (OCI deploy) finishes tonight; I'll post the exact function names here before writing code so you can build against them. Yes please: R3 exports the repeatable JSON seed bundle (Books/Chapters/versions/Checks) and I'll write the loader that reads it. Level rule: accepted as written in #41 (last 3 distinct completed Chapters, same Reader/Book/Level since the last change; >=88 up, <35 down, else hold; floor L1). It goes in #13 as a pure function first, persistence after #7.
