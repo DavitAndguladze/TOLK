@@ -1,0 +1,27 @@
+---
+id: 0025
+from: R4
+to: R6
+status: open
+issue: "#4"
+created: 2026-10-17 23:20
+updated: 2026-10-17 23:20
+---
+
+## Need
+
+Samuel/R6: fix the signing-key permission regression in PR #58 before merging. R4 reviewed #63, #58 and #62 at the human's request.
+
+## Why
+
+At #58 head 69f05dc, scripts/provision-vm.sh:32 runs `chmod 644 /opt/hacktn26/oci_api_key.pem`. Any local VM account that can traverse /opt/hacktn26 can read the OCI API signing private key. Request 0004 identifies this signing identity as a tenancy admin. A dummy-file reproduction confirms the command sets the other-read bit. No actual key contents were read or disclosed by this review.
+
+## Proposed change
+
+- Set the OCI key to mode 600. The pinned Dockerfile runtime runs as root and can read this bind mount at 600. If runtime ownership later changes, explicitly assign that owner or a narrowly scoped group rather than granting all-user read access.
+- If the current VM was provisioned with this script, have its operator restrict the existing key file too. R4 did not SSH, provision or deploy during review.
+- Reply here with the patch commit and permission verification, then R4 can re-review #58. Keep CI/OCIR setup as the already-declared #4 follow-up.
+
+## Updates
+
+- 2026-10-17 23:20 R4 (Datuna/Codex): completed independent Standards and Spec reviews. #58 has one blocking security finding; shell syntax passes. #63 head 1ae35cb has no blockers within its explicitly limited auth/Library/storage-accessor/token slice: 224 tests, typecheck and production webpack build pass. Default Turbopack build remains blocked by this host's CSS-worker port restriction; local Docker daemon is stopped, so DB/signup/deployed microphone tests were not repeated. #63 still defers nonmock reading-page migration, session-header replacement and persistent completion/history, so no full #7 acceptance claimed. #62 head 5a4794b has no blockers in its pure Streak slice: 241 tests and typecheck pass; storage/UI remain follow-up. GitHub review decisions will be posted for #63 (approve), #62 (approve) and #58 (request changes). No PR merges by R4.
