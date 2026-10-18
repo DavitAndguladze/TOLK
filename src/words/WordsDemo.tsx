@@ -1,14 +1,21 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import type { ChapterVersion, Token } from "../types";
-import { useFlaggedWords } from "./flagged-words";
+import { createFlagScope, disposeFlags, useFlaggedWords } from "./flagged-words";
 import { WordSheet } from "./WordSheet";
 
 /** Stand-in for R2's tappable words (request 0008) so the WordSheet can be tried on its own. */
 export function WordsDemo({ version }: { version: ChapterVersion }) {
   const [tapped, setTapped] = useState<Token | null>(null);
-  const flagged = useFlaggedWords(version.id);
+  const [flagScope, setFlagScope] = useState(createFlagScope);
+  const flagged = useFlaggedWords(version.id, flagScope);
+  useEffect(() => {
+    const mounted = createFlagScope();
+    setFlagScope(mounted);
+    setTapped(null);
+    return () => disposeFlags(mounted);
+  }, [version.id]);
 
   return (
     <>
@@ -29,7 +36,7 @@ export function WordsDemo({ version }: { version: ChapterVersion }) {
           </Fragment>
         ))}
       </p>
-      {tapped && <WordSheet key={tapped.index} chapterVersionId={version.id} token={tapped} onClose={() => setTapped(null)} />}
+      {tapped && <WordSheet key={tapped.index} chapterVersionId={version.id} token={tapped} flagScope={flagScope} onClose={() => setTapped(null)} />}
     </>
   );
 }
