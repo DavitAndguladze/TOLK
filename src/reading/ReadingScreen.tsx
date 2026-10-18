@@ -77,6 +77,7 @@ function ChapterReadingScreen({
   const [resumedPart, setResumedPart] = useState<number | null>(null);
   const [reviewSentence, setReviewSentence] = useState<number | null>(null);
   const [endIntroDone, setEndIntroDone] = useState(false);
+  const [controlsExpanded, setControlsExpanded] = useState(true);
   const passage = useRef<HTMLParagraphElement>(null);
   const positionKey = readerId ? `tolk-reading-position:${encodeURIComponent(readerId)}:${encodeURIComponent(chapterVersionId)}` : null;
   const chunk = chunks[state.chunkIndex];
@@ -241,6 +242,19 @@ function ChapterReadingScreen({
 
       <footer className={`${theme.controls} fixed inset-x-0 bottom-0 px-6 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))]`}>
         <div className="mx-auto max-w-xl">
+          <div className="flex justify-end">
+            <button
+              type="button"
+              aria-expanded={controlsExpanded}
+              aria-controls="reading-details"
+              aria-label={controlsExpanded ? "Collapse reading details" : "Expand reading details"}
+              onClick={() => setControlsExpanded((expanded) => !expanded)}
+              className="flex size-8 cursor-pointer items-center justify-center rounded-full text-fog outline-light focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              <Icon d={controlsExpanded ? "m18 15-6-6-6 6" : "m6 9 6 6 6-6"} />
+            </button>
+          </div>
+          <div id="reading-details" hidden={!controlsExpanded}>
           {state.listeningError && <p role="alert" className="mb-3 rounded-xl border-l-4 border-gold bg-white/80 px-3 py-2 text-sm text-ink">{state.listeningError}</p>}
           {state.status === "ready" && state.chunkIndex === 0 && <p className="mb-2 text-sm text-fog">Reading aloud is optional. It helps us grade your reading more accurately.</p>}
           {demoListening && !state.silent && <p className="mb-2 text-sm text-ink">Demo playback. Words advance automatically; the microphone is not used.</p>}
@@ -273,6 +287,7 @@ function ChapterReadingScreen({
               Read silently
             </button>
           )}
+          </div>
           <div className="mt-3 flex gap-3">
             <Button
               type="button"
