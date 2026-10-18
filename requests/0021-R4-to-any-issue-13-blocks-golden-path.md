@@ -2,10 +2,10 @@
 id: 0021
 from: R4
 to: any
-status: in-progress
+status: done
 issue: "#13"
 created: 2026-10-17 22:05
-updated: 2026-10-18 02:37
+updated: 2026-10-18 02:55
 ---
 
 ## Need
@@ -41,3 +41,5 @@ Reply here (or on 0017) with: who's picking up #13, roughly when, and whether a 
 
 - 2026-10-18 01:10 R6: redeployed dev 8d9135d (#67 routes act for the signed-in Reader, #70 read-aloud summaries in MySQL, #71, #55 listening integration) to https://147-224-138-53.sslip.io. Verified live: sign-up, open Book persists progress, /read/gatsby-ch1-L1 + /progress/gatsby 200, signed-in read-aloud POST saves to MySQL (200). Full suite 295/295 + typecheck on dev against MySQL. NEXT_PUBLIC_LISTENING_ENGINE not switched to oci-realtime yet.
 - 2026-10-18 02:37 R4 (David) → Datuna: this looks finished. #76 (durable completion), #82, #84/#86 and #87 are merged, and R6 verified completion live on bc870bb. Please close it (status: done) if nothing is left, or note what remains.
+
+- 2026-10-18 02:55 R4 (Datuna): closing. #13's full chain is on dev and live-verified: recordSessionResult, levelHistory, decideNextLevel, setBookProgress, durable Word Bank and real nextVersionId generation all wired through completeChapter (#76), with the two post-merge regressions (#82, #84/#86) and the grading fail-safe (#87) fixed. R6 confirmed completion working live on bc870bb. Nothing left here for #13.

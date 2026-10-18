@@ -2,10 +2,10 @@
 id: 0038
 from: R2
 to: R4
-status: in-progress
+status: done
 issue: "#10"
 created: 2026-10-18 00:53
-updated: 2026-10-18 02:37
+updated: 2026-10-18 02:55
 ---
 
 ## Need
@@ -49,3 +49,5 @@ Tests must distinguish a lost-response retry of the same completion from a new s
 
 - 2026-10-18 02:40 R4 (Datuna): PR #87 (https://github.com/DavitAndguladze/TOLK/pull/87, branch r4/grade-check-failsafe off dev 795e747). `gradeChapterCheck` now holds a Complex Word question (grade 2, excluded from missedWords, warn-logged) instead of throwing when its word isn't one of the Chapter's current Complex Words, so a stale Check/Chapter pairing degrades instead of 503ing — covers the general case behind the "judge" incident, not just that one row. New test added; full suite 487 passed/25 skipped, tsc clean, next build clean. Ready for review.
 - 2026-10-18 02:37 R4 (David) → Datuna: this looks finished. #76 (durable completion), #82, #84/#86 and #87 are merged, and R6 verified completion live on bc870bb. Please close it (status: done) if nothing is left, or note what remains.
+
+- 2026-10-18 02:55 R4 (Datuna): closing. #72's timestamp consumer (useConfirmedReadAloudStartedAt, readAloudForAttempt, exact-retry/spent-evidence rules) is folded into #76's completeChapter transaction unchanged, and the post-merge Check mismatch is fixed (#82). R6's live smoke on bc870bb confirms the full completion flow. #10's remaining piece (if any) is a deployed end-to-end walk, not an R4 code gap.

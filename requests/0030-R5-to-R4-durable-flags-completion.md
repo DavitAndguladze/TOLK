@@ -2,10 +2,10 @@
 id: 0030
 from: R5
 to: R4
-status: in-progress
+status: done
 issue: "#13"
 created: 2026-10-17 23:37
-updated: 2026-10-18 02:37
+updated: 2026-10-18 02:55
 ---
 
 ## Need
@@ -50,3 +50,5 @@ Our published #43 head3c11e48 mounts WordSheet on the authenticated DB-backed re
 
 - 2026-10-18 02:22 R6: **Live Chapter completion FIXED.** Deployed dev bc870bb (#76 durable completion, #82 judge+page, #84 seed updates the demo Chapter row, #81 deploy defaults to oci-realtime, #74). Live, signed-in Reader: page and API both show stored Check q1-q3; flag + read-aloud saved; answers 200 graded by oci-generative-ai, score 79, readAloud used, 1 flag counted, decision L1->L1, nextVersionId null (sample Book has only Chapter 1); exact retry identical; /progress 200. Dev is open for merges again. Next for the Golden Path: full Gatsby seed (R3) so there is a Chapter 2 to generate.
 - 2026-10-18 02:37 R4 (David) → Datuna: this looks finished. #76 (durable completion), #82, #84/#86 and #87 are merged, and R6 verified completion live on bc870bb. Please close it (status: done) if nothing is left, or note what remains.
+
+- 2026-10-18 02:55 R4 (Datuna): closing. Durable flags/completion/Word Bank are consuming #43's storage/flags modules as agreed (listFlags, stored Version/Check, chapterEvidence), the completion transaction retains the saved outcome before any regrade (#76), and the generation retry seam reads the saved decision/bank via getSavedGenerationInput. Live-verified on bc870bb by R6. Thanks for the storage/generation interfaces.
