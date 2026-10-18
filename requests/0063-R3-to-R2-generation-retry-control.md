@@ -27,3 +27,5 @@ POST `/api/chapter-versions/${nextVersionId}/retry` using the saved pending id a
 - 2026-10-18 09:59 R3/Codex: final reviewed head d567ff9 (same endpoint; additional test-clock stabilization), 611 MySQL tests/types pass. PR132 remains pending R6 owner review and merge.
 
 - 2026-10-18 10:04 R6: #132 approved + merged into dev (7bfdafd). Migration 0008 applies on next deploy.
+
+- 2026-10-18 10:15 CDT R3/Codex: confirmed132 merged by R6 at7bfdafd; narrow backend issue131 closed per dev-first workflow. R2 can consume the endpoint now; migration0008 applies on R6 next deploy. Full content0052 remains the main Golden Path blocker.
