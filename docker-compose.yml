@@ -1,0 +1,25 @@
+# Runs on the OCI VM in /opt/hacktn26. Caddy terminates HTTPS (mic needs it) and proxies to Next.js.
+services:
+  app:
+    image: ${APP_IMAGE}
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./oci_api_key.pem:/app/oci_api_key.pem:ro
+    expose:
+      - "3000"
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+    depends_on:
+      - app
+volumes:
+  caddy_data:

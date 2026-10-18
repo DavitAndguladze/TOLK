@@ -1,0 +1,297 @@
+[
+ {
+  "n": 1,
+  "title": "Repo skeleton renders a mock Chapter Version",
+  "role": "R6 + R2",
+  "prio": "P0",
+  "blocked": [],
+  "what": "A Next.js mobile-first PWA where a teammate opens the reading screen and sees the mock Gatsby Chapter 1 at any Level (L1\u2013L5), split into readable chunks. Shared types, mocks, AGENTS.md, skills, and local Postgres are in place so every role can branch from it.",
+  "ac": [
+   "Dev server shows the mock Chapter Version; a temporary switch shows all 5 Levels",
+   "Shared types and mocks typecheck inside the app",
+   "Local Postgres starts from the dev compose file",
+   "Every teammate has cloned, installed the team plugins, and run the git guardrails skill"
+  ]
+ },
+ {
+  "n": 2,
+  "title": "OCI infrastructure live over HTTPS",
+  "role": "R6",
+  "prio": "P0",
+  "blocked": [],
+  "what": "The OCI setup wizard has run (compartment, API key, GenAI model, VCN, VM, managed PostgreSQL, OCIR, Better Auth secret). A hello page deploys from `main` and opens over HTTPS on a phone with the mic permission prompt.",
+  "ac": [
+   "Push to `main` deploys automatically",
+   "The sslip.io HTTPS URL loads on a phone and asks for the microphone",
+   "Managed PostgreSQL is ACTIVE and reachable from the VM"
+  ]
+ },
+ {
+  "n": 3,
+  "title": "Listening spike: browser to OCI Speech realtime",
+  "role": "R1",
+  "prio": "P0",
+  "blocked": [],
+  "what": "A throwaway page proves whether the browser can stream mic audio to OCI Speech realtime and get recognized words back with per-word timing and confidence, fast enough to follow a reader (wiki/first-hour-spike.md).",
+  "ac": [
+   "The three yes/no checks answered with evidence",
+   "Listening engine decision recorded in the wiki",
+   "Oracle realtime web client location (or alternative) written to docs/research/"
+  ]
+ },
+ {
+  "n": 4,
+  "title": "Book ingestion: Gatsby Chapters with Key Points, Complex Words, and a shared L1 Chapter 1",
+  "role": "R3",
+  "prio": "P0",
+  "blocked": [],
+  "what": "One command turns public-domain Gatsby into Chapters (original text = L5), extracts 3\u20135 Key Points and the Complex Words (with in-context meanings) per Chapter using OCI Generative AI, and generates the shared L1 version of Chapter 1 plus its Chapter Check. Output seeds the database.",
+  "ac": [
+   "At least Chapters 1\u20134 seeded with Key Points and Complex Words",
+   "Shared L1 Chapter 1 version passes the L1 sentence and word limits",
+   "Every rewritten sentence maps to its original sentence"
+  ]
+ },
+ {
+  "n": 5,
+  "title": "Sign in and Library: open a Book at the current Chapter",
+  "role": "R6",
+  "prio": "P0",
+  "blocked": [
+   1
+  ],
+  "what": "A new Reader signs up (Better Auth) and a returning Reader signs in; the Library lists Books with search by title or author; choosing a Book opens it at the Reader's current Chapter (Chapter 1 at L1 for a new Reader), loading the Chapter Version from the database.",
+  "ac": [
+   "Sign up, sign in, sign out work on the deployed URL",
+   "Library search filters by title and author",
+   "Each Book shows the Reader's current Chapter and Level",
+   "Opening a Book returns the right Chapter Version"
+  ]
+ },
+ {
+  "n": 6,
+  "title": "Live word highlighting against the mock listening stream",
+  "role": "R2",
+  "prio": "P0",
+  "blocked": [
+   1
+  ],
+  "what": "While the mock listening source 'reads' a chunk, each word lights up, mispronounced and skipped words are marked gently, and the Reader can pause and resume. Built only against the listening interface so the real engine drops in.",
+  "ac": [
+   "Correct, mispronounced, skipped, and pending states are distinct and readable on a phone",
+   "Chunk completion advances to the next chunk; Chapter end leads to the Chapter Check",
+   "Pause and resume keep the position"
+  ]
+ },
+ {
+  "n": 7,
+  "title": "Flag words and hear them: tap a word to flag it, see its meaning, hear it",
+  "role": "R5",
+  "prio": "P0",
+  "blocked": [
+   5
+  ],
+  "what": "Tapping any word while reading flags it (it goes straight to the Word Bank), shows a short in-context meaning from OCI Generative AI, and can play its pronunciation through OCI Speech TTS. Tapping again unflags it.",
+  "ac": [
+   "Flag persists for the Reader and Chapter Version",
+   "Meaning appears within about a second",
+   "Tap-to-hear plays the word via OCI TTS",
+   "Unflag removes it before grading"
+  ]
+ },
+ {
+  "n": 8,
+  "title": "Real listening drives highlighting and records Read-aloud Misses",
+  "role": "R1",
+  "prio": "P0",
+  "blocked": [
+   2,
+   3,
+   6
+  ],
+  "what": "Reading aloud on a phone at the deployed URL lights up words live. Speech is aligned to the Chapter Version text (ADR-0002) to produce per-word results and Read-aloud Misses (mispronounced or skipped), which are saved per Chapter Version. Engine chosen by flag.",
+  "ac": [
+   "Alignment is a pure function with tests: correct, mispronounced, skipped, repeated, self-corrected",
+   "A fluent reader scores \u226590% accuracy on a Gatsby chunk",
+   "Read-aloud summary is saved for the Chapter Version",
+   "Switching the flag to browser speech needs no other code change"
+  ]
+ },
+ {
+  "n": 9,
+  "title": "Chapter Check after the Chapter",
+  "role": "R4",
+  "prio": "P0",
+  "blocked": [
+   4,
+   5
+  ],
+  "what": "When the Reader finishes the Chapter, the Chapter Check opens in the same screen with questions on the Chapter's Key Points and Complex Words, written for this Chapter Version. Answers can be spoken or typed and are saved.",
+  "ac": [
+   "2\u20133 Key Point questions plus 1\u20132 Complex Word questions per Chapter Version",
+   "Opens with no route change or spinner",
+   "Spoken answers are transcribed; typed answers work",
+   "Answers stored against the Chapter Version"
+  ]
+ },
+ {
+  "n": 10,
+  "title": "AI grading: one Grading Result per Chapter",
+  "role": "R4",
+  "prio": "P0",
+  "blocked": [
+   7,
+   9
+  ],
+  "what": "Submitting the Chapter Check grades each answer 0\u20132 with OCI Generative AI, then a pure combiner merges question grades, read-aloud accuracy, and Flagged Words into a score, a Grading Result (Fully understood / Partly understood / Struggled), the Barely Passed flag, and missed words. The Reader sees the result, what it was based on, and feedback that links each miss to the sentence that answers it.",
+  "ac": [
+   "Combiner is pure and tested at every threshold, with and without a read-aloud summary",
+   "Session Result saved with Read-aloud Misses, answers, and Grading",
+   "Result screen shows the basis (accuracy, check score, flags) and the OCI service that graded it",
+   "Missed questions link to their sentence"
+  ]
+ },
+ {
+  "n": 11,
+  "title": "Level rules and Word Bank lifecycle",
+  "role": "R6 + R5",
+  "prio": "P0",
+  "blocked": [
+   1
+  ],
+  "what": "Two pure modules on the shared types. Level rules map the current Level and Grading to the next Level (one step at most, L5 cap, L1 floor) with a reason line and Reinforcement style. The Word Bank adds missed and flagged words, counts times seen, graduates words read or answered correctly in a later Chapter, and keeps the Words Learned total.",
+  "ac": [
+   "Every row of the level table is covered by a test",
+   "L5 cap and L1 floor tested",
+   "A word flagged in Chapter 1 and read correctly in Chapter 3 graduates in Chapter 3",
+   "A graduated word flagged again returns to the bank"
+  ]
+ },
+ {
+  "n": 12,
+  "title": "Generate the next Chapter one Level step closer to the original",
+  "role": "R3",
+  "prio": "P0",
+  "blocked": [
+   4,
+   10,
+   11
+  ],
+  "what": "On Chapter Check submit, OCI Generative AI writes Chapter N+1 for this Reader from its original text, the Chapter N version, the Level decision, and the Word Bank. It reinforces bank words (plain, context clue, or inline definition), keeps Graduated Words original, and keeps plot, names, and tone. The new version stores its Level Score and its own Chapter Check. A validator guards it, with a demo fallback.",
+  "ac": [
+   "Output never more than one Level from the baseline (validator tested)",
+   "Names and Key Points preserved; Graduated Words left original (validator tested)",
+   "Ready within ~20s or the fallback version is served",
+   "Client polls and opens Chapter N+1 when ready"
+  ]
+ },
+ {
+  "n": 13,
+  "title": "Progress view: Level Line, Words Learned, Word Bank",
+  "role": "R2",
+  "prio": "P0",
+  "blocked": [
+   10,
+   11
+  ],
+  "what": "A progress screen per Book shows the Level Line (Level per Chapter climbing toward L5, with each Grading Result), the Words Learned total with this Chapter's graduates, and the active Word Bank with source and times seen. Reaching L5 shows 'Now reading the original'.",
+  "ac": [
+   "Level Line renders from Session Results",
+   "Words Learned and graduates match the Word Bank module",
+   "Word Bank shows source and times seen",
+   "L5 celebration appears once"
+  ]
+ },
+ {
+  "n": 14,
+  "title": "Golden Path on the deployed URL",
+  "role": "All",
+  "prio": "P0",
+  "blocked": [
+   8,
+   12,
+   13
+  ],
+  "what": "End to end on a phone at the deployed URL: sign in \u2192 Library \u2192 Gatsby Chapter 1 at L1 \u2192 read aloud with live highlighting \u2192 flag a word \u2192 Chapter Check \u2192 Grading Result \u2192 Chapter 2 generated one Level up with the flagged word reinforced \u2192 progress shows the climb.",
+  "ac": [
+   "Two teammates complete it without help",
+   "No console errors on the path",
+   "Short screen recording posted to the team channel"
+  ]
+ },
+ {
+  "n": 15,
+  "title": "Demo hardening",
+  "role": "All",
+  "prio": "P0",
+  "blocked": [
+   14
+  ],
+  "what": "The demo is safe to run on stage: a seeded demo Reader with three Chapters of history (L1 \u2192 L2 \u2192 L3), a one-command reset, pre-generated fallback versions for the next Chapters, and a backup screen recording.",
+  "ac": [
+   "Reset runs in one command",
+   "Fallback versions exist for Gatsby Chapters 2\u20134 at each Level",
+   "Backup video saved on two laptops",
+   "Three rehearsals done before 1pm Sunday"
+  ]
+ },
+ {
+  "n": 16,
+  "title": "Streak",
+  "role": "R6",
+  "prio": "P1",
+  "blocked": [
+   10
+  ],
+  "what": "A Streak counts consecutive days the Reader completed at least one Chapter Check and shows on the progress view.",
+  "ac": [
+   "Streak increments once per local day",
+   "A missed day resets it",
+   "Tested as a pure function"
+  ]
+ },
+ {
+  "n": 17,
+  "title": "Second Book in the Library",
+  "role": "R3",
+  "prio": "P1",
+  "blocked": [
+   4
+  ],
+  "what": "A Sherlock Holmes story (public domain) runs through Book ingestion so the Library has a choice and search has something to find.",
+  "ac": [
+   "Chapters, Key Points, Complex Words, and shared L1 Chapter 1 seeded",
+   "Human spot-check of the L1 text"
+  ]
+ },
+ {
+  "n": 18,
+  "title": "Silent reading fallback",
+  "role": "R4",
+  "prio": "P2",
+  "blocked": [
+   10
+  ],
+  "what": "A Reader can skip reading aloud; grading then uses the Chapter Check and Flagged Words only (Check weighted 90%).",
+  "ac": [
+   "Toggle on the reading screen",
+   "Grading without a read-aloud summary matches the combiner tests"
+  ]
+ },
+ {
+  "n": 19,
+  "title": "Glasses: read a paper page",
+  "role": "R5",
+  "prio": "P2",
+  "blocked": [
+   8,
+   9
+  ],
+  "what": "Check whether Meta's toolkit sees the Ray-Ban Meta Gen 3. Either a tiny native app or Meta AI photo-sync upload sends a page photo; OCI Vision reads the text; the Reader reads it aloud with listening and gets a Chapter Check generated on the fly (wiki/glasses-paper-book.md).",
+  "ac": [
+   "Toolkit support result recorded in the wiki",
+   "A photographed page becomes a readable Paper Page",
+   "One Chapter Check generated from the page text"
+  ]
+ }
+]
