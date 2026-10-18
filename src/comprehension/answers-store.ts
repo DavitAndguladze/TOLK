@@ -6,7 +6,7 @@ export interface AnswersStore {
   get(checkId: string): Promise<ChapterCheckAnswers | null>;
 }
 
-/** Dev/demo store. Swap for a Postgres-backed implementation once #05's DB lands - same interface. */
+/** Dev/demo store. Swap for a MySQL-backed implementation once the MySQL HeatWave database lands (R6 #40) - same interface. */
 export function createInMemoryAnswersStore(): AnswersStore {
   const store = new Map<string, ChapterCheckAnswers>();
   return {
