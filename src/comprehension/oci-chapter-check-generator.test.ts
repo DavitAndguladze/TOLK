@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import { mockChapter, mockChapterVersion } from "../mocks";
 import { generateChapterCheck } from "./chapter-check-generator";
 import { createOciChapterCheckGenerator } from "./oci-chapter-check-generator";
@@ -63,6 +63,23 @@ describe("createOciChapterCheckGenerator", () => {
       };
 
       expect(await generateWith(failing)).toEqual(await generateChapterCheck(mockChapter, version));
+    });
+
+    test("and logs only the error's kind and status, never its message (it can carry request details)", async () => {
+      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+      const failing: Chat = async () => {
+        throw Object.assign(new Error("POST https://inference... Authorization: Signature keyId=ocid1.tenancy.secret"), {
+          statusCode: 429,
+          serviceCode: "TooManyRequests",
+        });
+      };
+
+      await generateWith(failing);
+
+      const logged = warn.mock.calls.flat().map(String).join(" ");
+      warn.mockRestore();
+      expect(logged).toContain("429 TooManyRequests");
+      expect(logged).not.toContain("Signature");
     });
 
     test("when OCI Generative AI doesn't answer in time, and tells the call to stop", async () => {

@@ -1,55 +1,26 @@
 import { describe, expect, test } from "vitest";
-import type { responses } from "oci-generativeaiinference";
-import { replyFrom } from "./oci-chat";
+import { replyText } from "./oci-chat";
 
-/** A minimal GENERIC chat response with one choice, shaped like the real SDK response. */
-function response(choice: { finishReason: string; content: { type: string; text?: string }[] | undefined }): responses.ChatResponse {
-  return {
-    chatResult: {
-      chatResponse: {
-        apiFormat: "GENERIC",
-        choices: [{ index: 0, finishReason: choice.finishReason, message: { role: "ASSISTANT", content: choice.content } }],
-      },
-    },
-  } as unknown as responses.ChatResponse;
-}
+/** An OCI GENERIC chat response, shaped like the SDK's (finishReason values seen live: "stop", "length"). */
+const response = ({ finishReason = "stop", content = [{ type: "TEXT", text: '{"grade": 2}' }] as object[] } = {}) => ({
+  chatResult: { chatResponse: { apiFormat: "GENERIC", choices: [{ index: 0, finishReason, message: { role: "ASSISTANT", content } }] } },
+});
 
-describe("replyFrom", () => {
-  test("returns the joined text of a cleanly finished reply", () => {
-    const reply = replyFrom(response({ finishReason: "stop", content: [{ type: "TEXT", text: "Yes, " }, { type: "TEXT", text: "that's it." }] }));
-    expect(reply).toBe("Yes, that's it.");
+describe("replyText", () => {
+  test("is the reply's text when OCI finished it normally", () => {
+    const text = replyText(response({ content: [{ type: "TEXT", text: '{"grade": ' }, { type: "TEXT", text: "2}" }] }));
+
+    expect(text).toBe('{"grade": 2}');
   });
 
-  test("rejects a reply cut off by the token limit", () => {
-    expect(() => replyFrom(response({ finishReason: "length", content: [{ type: "TEXT", text: "Yes, that's" }] }))).toThrow(/finishReason/);
-  });
-
-  test("rejects a content-filtered reply", () => {
-    expect(() => replyFrom(response({ finishReason: "content_filter", content: [{ type: "TEXT", text: "" }] }))).toThrow(/finishReason/);
-  });
-
-  test("rejects non-text content", () => {
-    expect(() => replyFrom(response({ finishReason: "stop", content: [{ type: "IMAGE" }] }))).toThrow(/non-text/);
-  });
-
-  test("rejects an empty content list", () => {
-    expect(() => replyFrom(response({ finishReason: "stop", content: [] }))).toThrow(/non-text/);
-  });
-
-  test("rejects a blank reply", () => {
-    expect(() => replyFrom(response({ finishReason: "stop", content: [{ type: "TEXT", text: "   " }] }))).toThrow(/empty reply/);
-  });
-
-  test("rejects a response with no choices", () => {
-    const empty = { chatResult: { chatResponse: { apiFormat: "GENERIC", choices: [] } } } as unknown as responses.ChatResponse;
-    expect(() => replyFrom(empty)).toThrow(/no choice/);
-  });
-
-  test("rejects a null response", () => {
-    expect(() => replyFrom(null)).toThrow(/no chat result/);
-  });
-
-  test("rejects a response with no chatResult (e.g. a streamed response)", () => {
-    expect(() => replyFrom(new ReadableStream())).toThrow(/no chat result/);
+  test.each<[string, unknown, RegExp]>([
+    ["was cut off at maxTokens", response({ finishReason: "length" }), /cut off/],
+    ["was stopped for another reason (e.g. a content filter)", response({ finishReason: "content_filter" }), /content_filter/],
+    ["has a part that isn't text", response({ content: [{ type: "IMAGE", imageUrl: {} }] }), /not text/],
+    ["is empty", response({ content: [{ type: "TEXT", text: "  " }] }), /empty/],
+    ["has no choices", { chatResult: { chatResponse: { apiFormat: "GENERIC", choices: [] } } }, /no reply/],
+    ["is a stream or nothing", null, /no reply/],
+  ])("throws when the reply %s", (_, reply, message) => {
+    expect(() => replyText(reply)).toThrow(message);
   });
 });

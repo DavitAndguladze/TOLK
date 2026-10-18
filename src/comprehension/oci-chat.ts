@@ -1,29 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { Region, SimpleAuthenticationDetailsProvider } from "oci-common";
-import { GenerativeAiInferenceClient, type models, type responses } from "oci-generativeaiinference";
-import type { Chat } from "./oci-key-point-grader.ts";
-
-/**
- * The model's reply text from a chat response, or throws when it isn't a trustworthy complete
- * reply: no choice, cut off before finishing - "stop" is the only finishReason that means the
- * model stopped on its own, not a length/content-filter/tool-call cutoff - or content that isn't
- * plain text.
- */
-export function replyFrom(response: responses.ChatResponse | ReadableStream<Uint8Array> | null): string {
-  if (!response || !("chatResult" in response)) throw new Error("OCI Generative AI returned no chat result");
-  const choice = "choices" in response.chatResult.chatResponse ? response.chatResult.chatResponse.choices[0] : undefined;
-  if (!choice) throw new Error("OCI Generative AI returned no choice");
-  if (choice.finishReason.toLowerCase() !== "stop") {
-    throw new Error(`OCI Generative AI did not finish cleanly (finishReason: ${choice.finishReason})`);
-  }
-  const content = choice.message.content ?? [];
-  if (content.length === 0 || content.some((c) => c.type !== "TEXT")) {
-    throw new Error("OCI Generative AI returned non-text content");
-  }
-  const reply = content.map((c) => (c as models.TextContent).text ?? "").join("");
-  if (!reply.trim()) throw new Error("OCI Generative AI returned an empty reply");
-  return reply;
-}
+import { GenerativeAiInferenceClient, type models } from "oci-generativeaiinference";
+import type { Chat } from "./oci-key-point-grader";
 
 /**
  * One-prompt chat with OCI Generative AI's on-demand model (OCI_GENAI_MODEL_ID in OCI_GENAI_REGION),
@@ -60,7 +38,26 @@ export function createOciChat(env: NodeJS.ProcessEnv = process.env): Chat | null
     });
     // The SDK can't cancel an HTTP call, so an abort only stops waiting for it.
     const aborted = new Promise<never>((_, reject) => signal?.addEventListener("abort", () => reject(signal.reason), { once: true }));
-    const response = await Promise.race([request, aborted]);
-    return replyFrom(response);
+    return replyText(await Promise.race([request, aborted]));
   };
 }
+
+/**
+ * The text of a GENERIC chat response, only if OCI finished it normally (finishReason "stop") and
+ * every part is text. A reply cut off at maxTokens ("length") or stopped for any other reason
+ * throws, so callers fall back instead of parsing half an answer (comms 0016).
+ */
+export function replyText(response: unknown): string {
+  const choice = (response as { chatResult?: { chatResponse?: { choices?: models.ChatChoice[] } } } | null)?.chatResult?.chatResponse?.choices?.[0];
+  if (!choice) throw ociReplyError("OCI Generative AI sent no reply");
+  if (choice.finishReason === "length") throw ociReplyError("OCI Generative AI's reply was cut off at maxTokens");
+  if (choice.finishReason !== "stop") throw ociReplyError(`OCI Generative AI stopped its reply early (${choice.finishReason})`);
+
+  const parts = choice.message.content ?? [];
+  if (parts.some((part) => part.type !== "TEXT")) throw ociReplyError("OCI Generative AI's reply is not text");
+  const text = parts.map((part) => (part as models.TextContent).text ?? "").join("");
+  if (!text.trim()) throw ociReplyError("OCI Generative AI's reply is empty");
+  return text;
+}
+
+const ociReplyError = (message: string) => Object.assign(new Error(message), { name: "OciReply" });
