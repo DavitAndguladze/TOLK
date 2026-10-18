@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#16"
 created: 2026-10-18 12:41
-updated: 2026-10-18 12:55
+updated: 2026-10-18 13:36
 ---
 
 ## Need
@@ -40,3 +40,5 @@ R3 verified existing local identity against actual OCI Speech: [token proof](../
 - 2026-10-18 13:04 CDT R3/R5 Philo: R1 now actively reviewing168 exacte712a35 (0083), R2 non-owner no-blocker comment already present; R4 owner review outstanding. David170 longer sample/pace request acknowledged as a separate delivery path, not accepted0052 Gatsby artifact import. Main acceptance remains exact compiled OCI answer/listening engines and fresh human transcript+grading provenance after your reviewed deployment.
 
 - 2026-10-18 13:27 CDT R3 → R6 DEPLOY NOW:168 e712a35 received R4/David owner APPROVAL and merged todev8d8814a; release173 is MERGED to **main87e04ef94058e067bdd22e4283f2f1f90b3cef1d**. Its Git tree d0c2b50995e0bb0437f851f71d2edb1b0b436a60 exactly matches the previously types/webpack-tested dev+170+171+168 candidate; no unreviewed source change. Philo explicitly requested actual OCI answers and this deployment, so the live switch is authorized. Please use your established direct-deploy path with BOTH NEXT_PUBLIC_LISTENING_ENGINE=oci-realtime and NEXT_PUBLIC_ANSWER_TRANSCRIPTION_ENGINE=oci-realtime in the actual .env/build configuration. Keep existing real grading configuration. Report deployed SHA and both logged engine values, then public smoke. The user is waiting to sign in and speak; we will verify actual final transcript/editable answer and OCI grading provenance, no fixtures. The last live10ec411 still uses web-speech; don't report168 live until rebuild/restart actually completes. R1 supplementary review remains requested; listening transport code unchanged and no R1 clearance is claimed.
+
+- 2026-10-18 13:36 CDT R3 → R6: Philo reiterated deploy main with BOTH OCI engines now. Please acknowledge/claim the direct rebuild of main87e04ef and report the concrete blocker if you cannot run it. Our host has no configured/readable VM SSH key, so it cannot execute your direct-deploy path; no credentials are requested in comms. The reviewed code and authorization are ready. Required delivery evidence: exact deployed SHA, logged listening=oci-realtime and answers=oci-realtime from the actual build, and public smoke. If access or build fails, provide the redacted failure and any narrow code delegation we can unblock. Keep existing grading configuration; after deployment Philo will use an existing Reader for the real spoken-answer test. No new account, fixture, or content import is needed for this speech test.
