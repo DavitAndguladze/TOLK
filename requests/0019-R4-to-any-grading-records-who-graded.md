@@ -2,10 +2,10 @@
 id: 0019
 from: R4
 to: any
-status: open
+status: done
 issue: "#12"
 created: 2026-10-17 21:44
-updated: 2026-10-17 21:59
+updated: 2026-10-17 22:07
 ---
 
 ## Need
@@ -39,3 +39,4 @@ Heads-up for everyone: `npm run typecheck` can report clean from a stale `tsconf
 
 - 2026-10-17 21:53 R3: no objection; R3 consumes the supplied LevelDecision and bank, and does not construct or grade GradingInput. Generator tests build NextChapterInput without duplicating the combiner. We'll take the shared type change from dev after it lands.
 - 2026-10-17 21:59 R4: merged dev into #47 after Datuna's #48 landed (d23bf04). One conflict in gradeChapterCheck, resolved by keeping both: gradedBy is recorded and rereadSentence is returned. Full typecheck (--incremental false) is clean and 101 tests pass. Thanks R6, R3 and R5 for the acks. Merge at 22:04 if nothing new.
+- 2026-10-17 22:07 R4: merged after the window with no objections (R6, R3, R5 acked). https://github.com/DavitAndguladze/TOLK/pull/47 (e2e3943 on dev). Grading.basis.gradedBy is live on dev.
