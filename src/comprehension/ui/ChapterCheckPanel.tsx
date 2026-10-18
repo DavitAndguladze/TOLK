@@ -115,6 +115,7 @@ export function ChapterCheckPanel({ check, readerId, gradeAnswer, onSubmit, tran
           <p className="rounded-control border border-hairline bg-paper p-4 font-ui text-base text-ink">{answer?.value}</p>
         ) : (
           <AnswerInput
+            key={`${key}:${question.id}`}
             via={answer?.via ?? "typed"}
             onToggleVia={(via) => dispatch({ type: "answer", value: "", via })} // switching mode starts a fresh answer, doesn't relabel the old one
             value={answer?.value ?? ""}

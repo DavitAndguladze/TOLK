@@ -1,41 +1,57 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { AnswerInputProps } from "./types";
 
-const toggle = "min-h-9 cursor-pointer rounded-full px-3 text-sm font-semibold transition outline-light focus-visible:outline-2";
+const toggleStyle = "min-h-9 cursor-pointer rounded-full px-3 text-sm font-semibold transition outline-light focus-visible:outline-2";
 const toggleOn = "bg-light text-white";
 const toggleOff = "border border-hairline bg-white/60 text-fog";
 
 export function AnswerInput({ via, onToggleVia, value, onChange, transcriber }: AnswerInputProps) {
   const [recording, setRecording] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const capture = useRef<AbortController | null>(null);
+  useEffect(() => () => capture.current?.abort(), [via]);
+
+  function toggle(next: "spoken" | "typed") {
+    capture.current?.abort();
+    capture.current = null;
+    setRecording(false);
+    setError(null);
+    onToggleVia(next);
+  }
 
   async function record() {
-    if (!transcriber) return;
+    if (!transcriber || capture.current) return;
+    const controller = new AbortController();
+    capture.current = controller;
     setRecording(true);
     setError(null);
     try {
-      onChange(await transcriber.transcribe());
+      const text = await transcriber.transcribe(undefined, controller.signal);
+      if (!controller.signal.aborted) onChange(text);
     } catch {
-      setError("Couldn't hear that - try typing instead.");
+      if (!controller.signal.aborted) setError("Couldn't hear that - try typing instead.");
     } finally {
-      setRecording(false);
+      if (capture.current === controller) {
+        capture.current = null;
+        setRecording(false);
+      }
     }
   }
 
   return (
     <div>
       <div className="flex gap-2">
-        <button type="button" onClick={() => onToggleVia("typed")} aria-pressed={via === "typed"} className={`${toggle} ${via === "typed" ? toggleOn : toggleOff}`}>
+        <button type="button" onClick={() => toggle("typed")} aria-pressed={via === "typed"} className={`${toggleStyle} ${via === "typed" ? toggleOn : toggleOff}`}>
           Type
         </button>
         <button
           type="button"
-          onClick={() => onToggleVia("spoken")}
+          onClick={() => toggle("spoken")}
           aria-pressed={via === "spoken"}
           disabled={!transcriber}
-          className={`${toggle} ${via === "spoken" ? toggleOn : toggleOff} disabled:cursor-not-allowed disabled:opacity-50`}
+          className={`${toggleStyle} ${via === "spoken" ? toggleOn : toggleOff} disabled:cursor-not-allowed disabled:opacity-50`}
         >
           Speak
         </button>
