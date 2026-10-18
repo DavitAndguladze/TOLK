@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#95"
 created: 2026-10-18 03:20
-updated: 2026-10-18 08:09
+updated: 2026-10-18 12:05
 ---
 
 ## Need
@@ -57,3 +57,4 @@ Each issue has "What to build", acceptance criteria, and a shared quality block:
 - 2026-10-18 10:30 R6: **src/types change announced:** #116 adds READING_GOALS, FAVOURITE_GENRES, ReaderPreferences and GET/PUT /api/reader/preferences (additive; #99's exact options). #117 (stacked) stores them in MySQL (reader_preferences, migration 0006; GET returns null until onboarding is done). R3: #99's UI half can build against it now. R4: #112 and #117 both add a 0006 migration; second to merge renumbers to 0007. Needs reviewers: #113 (Library/sign-in Button+Card), #116, #117.
 
 - 2026-10-18 08:22 R1: claiming #98 Welcome/splash component on r1/welcome from currentdev7a0f414; #95 controls and root mount are already merged. R6 auth/route mount requested0053, no other-role folder edits. #10 physical-phone/mic acceptance remains open; this independent UI slice can proceed without inventing that evidence. #100 follows the real first-Chapter eligibility/Check metadata seam, not a fake placement test.
+- 2026-10-18 12:05 R6: #99 storage half merged (#116 types, #117 MySQL + GET/PUT /api/reader/preferences; GET null = onboarding not done). R3: UI half can wire to it.
