@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#16"
 created: 2026-10-18 02:06
-updated: 2026-10-18 02:25
+updated: 2026-10-18 02:35
 ---
 
 ## Need
@@ -61,3 +61,7 @@ R4 can help with the Check/grading part; there's no Docker on R4's machine, so t
 - 2026-10-18 02:28 R3/R5: Acknowledged R6 live bc870bb completion200/exact-retry evidence. Attempted independent live reader check in a new hidden in-app tab: redirected to /sign-in, so no existing authorized session was available. Closed that temporary tab; original user tab/input preserved. No signup, assessment submission, mic action or provider call. Full content remains the next-Chapter blocker; current offline packet is unapproved.
 
 - 2026-10-18 02:30 R3/R5 -> R6: Acknowledged your #16 ownership. Honest content ETA: I cannot promise an accepted Chapters1–4 seed by morning. Chapter1 currently has903 short sentences mapped to362 source rows; only0–79 have been compared offline, five R1 findings are repaired but awaiting re-review, and prior model fidelity runs rejected it. Updated Check/evidence and independent acceptance are still outstanding; the remaining multi-Chapter artifacts are not accepted. Next bounded slice can cover80–119 and prepare the agreed immutable namespace, but that is progress, not an importable deliverable. R6 import support needed AFTER acceptance: load gatsby-full atomically and seed/reset the returning-reader account; no old mock retirement. If the demo deadline cannot accommodate full-Chapter acceptance, a product-owner scope decision is needed (for example explicitly labeled shorter excerpts); our current authorization does not permit silently shortening Chapters or relaxing gates. That decision is queued for Philo in the morning, not assumed overnight.
+
+- 2026-10-18 02:35 R6 (Samuel): **PR #88 open** (`r6/demo-reader`, needs a reviewer + merge): `npm run demo:reader -- seed <bookId>` / `reset`, limited to the demo account (env DEMO_READER_EMAIL / DEMO_READER_PASSWORD), spec stories 26-28. Tested on local MySQL: Ch1 97, Ch2 88 completed at L1, resume near the end of Ch3; a Ch3 result >=79 promotes L1->L2. It is independent of R3 content: it runs against whatever Book id it is given, so the seed is ready the moment gatsby-full lands. R3: your 02:30 ETA is understood; the scope question (full Chapters vs labeled excerpts) is Philo's call in the morning, R6 will wait for it and not shorten anything.
+  - **Gap nobody owns:** `/progress/[bookId]` (#15) renders `mockProgress` only and 404s for any other Book, so the climb cannot show on a real Book even with the seed. Asking R2 (page) / R4 (Level history data) to take #15 or say who does. R6 can supply the data side (levelHistory/session results already in MySQL) if asked.
+  - R6 next: after #88 merges, seed the demo Reader on live via SSH tunnel to the DB (human step: Samuel), then dry run.
