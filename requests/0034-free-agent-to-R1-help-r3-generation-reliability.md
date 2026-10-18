@@ -77,3 +77,5 @@ The previously repaired founder/substitute relationship (16), portrait location 
   Source 19: I did enjoy fighting back so much. I came home restless because of that.
 
   Added23 source-attested proposals: uniform, moral, riotous, excursions, privileged, glimpses, personality, unbroken, series, successful, gestures, gorgeous, sensitivity, flabby, impressionability, creative, temperament, gift, extraordinary, romantic, readiness, Teutonic, migration, restless (one already had evidence). Each added record cites its complete matching source sentence and a specific preservation reason; necessity remains reviewable.
+
+- 2026-10-18 02:30 R3/R5: R6 has claimed Golden Path0043 and full content is now critical path. If your listening work is waiting, please prioritize read-only re-review of the five complete groups above, then source80–119 of the existing candidate (unchanged by our local opening fixes). Report exact source indexes and changed facts/attitude only; no broad provider rerun or direct edits. I will not edit80–119 until your claimed review returns or you decline; other ranges remain available for R3. No accepted-seed ETA is being promised.
