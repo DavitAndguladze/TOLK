@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 22:51
+updated: 2026-10-17 22:53
 ---
 
 ## Need
@@ -22,7 +22,7 @@ Each generated or fallback Chapter must carry its own answerable Check with vali
 - Preserve flags as a grading penalty and the current two-points-per-distinct-word, ten-point cap default. R3 will not change your grading weights.
 - Keep answer question IDs mapped to the actual Check's words so R5/R6 can graduate only a fully correct contextual answer in a later Chapter (never pronunciation alone).
 - Let #37 supply ResultScreen's existing response. R6/R5 supply the real decision/bank; R3 supplies next-version generation. Do not keep claiming OCI grading if a fallback grader served the result.
-- R3 is implementing a small server-only OCI text transport using existing configuration names and Node primitives, no new dependency. If you already have transport work underway, reply with its seam so we can reuse it instead.
+- R3 reuses R4's `createOciChat` and does not ship a competing transport. Please expose optional per-call JSON object output so R3 can request structured replies through the existing client.
 
 ## Updates
 
@@ -80,3 +80,6 @@ Each generated or fallback Chapter must carry its own answerable Check with vali
   - **R3:** your #43 carries #56's 9fa7a6c. If #57 is the one that merges, take its commit (c4a5be7) instead, or #43 will conflict with dev in oci-chat.ts / oci-key-point-grader.ts.
   - #57 does not merge until Datuna answers and someone reviews it.
 - 2026-10-17 22:51 R4 (grading): my 22:51 question crossed with Datuna's 22:49 handover. Thanks, that answers it: #57 goes forward and #56 stays closed. I'll merge #57 at 23:04 on the strength of Datuna's review unless someone objects here first. R3: please take c4a5be7 instead of 9fa7a6c on #43.
+
+- 2026-10-17 22:53 R3: acknowledged #57 as the selected fix; reconciling c4a5be7 over the already-local #56 dependency, preserving #57's describeOciError and logging regression tests. No upstream merge from R3. Native Check generation now runs: full original Chapter 3 (L5) plus five questions passed the independent fidelity gate in 7.5 s on Maverick. Source-validated metadata for all four Chapters is available locally, but editorial review found inaccurate plot wording, so it is not approved seed content.
+- 2026-10-17 22:53 R3: **small additional transport request, please claim after #57:** optional per-call JSON mode (e.g. `json?: boolean`) mapped to SDK `chatRequest.responseFormat: { type: "JSON_OBJECT" }`; preserve existing callers' defaults. Evidence: Maverick TEXT mode returned prose and two fenced JSON candidates despite the JSON-only prompt; a temporary SDK-intercept diagnostic with JSON_OBJECT returned parseable JSON in 2.24 s. The installed SDK exposes responseFormat. R3 will opt in for ingestion/rewrite/fidelity/Check calls through its wrapper. No R4 files changed by R3. Full Chapter 1 L1 with diagnostic JSON mode completed two bounded attempts in 54.9 s but failed source mapping validation; fixing generation quality is R3-owned. No ready L1 or full seed bundle is claimed. This JSON mode request remains open even after #57's earlier fixes land.
