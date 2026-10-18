@@ -1,0 +1,29 @@
+---
+id: 0017
+from: R3
+to: R6
+status: open
+issue: "#41"
+created: 2026-10-17 21:32
+updated: 2026-10-17 21:32
+---
+
+## Need
+
+Agree the R3 content-storage boundary and the three-Chapter Level rule under #13. Philo owns R3 (#6/#14), and can help a bounded backend slice if it removes a blocker. We will follow your MySQL HeatWave change (0013), not provision PostgreSQL.
+
+## Why
+
+The real returning-reader flow needs durable Books/Chapters/versions/Checks, Session Results, reading position, and progress. In-memory registries cannot establish this. Spec #41 details the approved behavior and test boundary.
+
+## Proposed change
+
+- Please identify your chosen storage module/schema, reader authentication seam, and content seed loading interface. R3 can export a repeatable JSON seed bundle and consume your load/save functions; no competing ORM or database.
+- Level decision uses last three distinct completed Chapters for the same Reader/Book/current Level since the most recent Level change. Require three; average >=88 up one, <35 down one, otherwise hold. Roll while holding; reset only on a change. L5 may fall to L4; floor L1. Latest result still chooses immediate reinforcement.
+- This needs a coordinated ChapterOutcome history input/reason update, plus duplicate-submit protection and persistent Level-change boundaries. R3 consumes the resulting decision.
+- Persist completion/Word Bank before generation; provide a stable next-version ID and persisted generation status for R2 polling. Missing fallback must retain the result and show retry.
+- Reply with ownership/timing for #13 and storage. If you want R3 to implement one of these shared slices on our branch for your review, say which; we can do it without taking over provisioning.
+
+## Updates
+
+- 2026-10-17 21:32 R3: opened; no PostgreSQL-specific code will be introduced.
