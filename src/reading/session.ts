@@ -58,7 +58,12 @@ function onListeningEvent(state: ReadingState, event: ListeningEvent): ReadingSt
   switch (event.type) {
     case "word": {
       const { tokenIndex, outcome } = event.result;
-      if (outcome === "pending") return state;
+      if (outcome === "pending") {
+        const outcomes = { ...state.outcomes };
+        delete outcomes[tokenIndex];
+        const remaining = Object.keys(outcomes).map(Number);
+        return { ...state, outcomes, lastRead: state.lastRead === tokenIndex ? (remaining.length ? Math.max(...remaining) : null) : state.lastRead };
+      }
       return {
         ...state,
         outcomes: { ...state.outcomes, [tokenIndex]: outcome },

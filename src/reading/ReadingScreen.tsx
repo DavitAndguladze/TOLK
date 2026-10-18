@@ -1,14 +1,12 @@
 "use client";
 
-import { Fragment, useEffect, useReducer, useRef, type ReactNode } from "react";
-import type { ListeningSource, Token, WordOutcome } from "../types";
-import { createMockListeningSource } from "../mocks";
+import { Fragment, useEffect, useReducer, useRef, useState, type ReactNode } from "react";
+import type { Token, WordOutcome } from "../types";
+import { createListeningSource } from "../listening/client";
 import type { Chunk } from "./chunk";
 import { initialReadingState, readingReducer, unreadTokens } from "./session";
-
-// R1's engine factory replaces this (#10). The scripted misses and pause show every word state on stage.
-const createListeningSource = () =>
-  createMockListeningSource({ wordIntervalMs: 380, mispronounce: [8], skip: [27], hesitateOn: 21 });
+import { createReadingAttempt } from "./read-aloud";
+import { ChapterReadAloud } from "./ChapterReadAloud";
 
 const button =
   "min-h-13 cursor-pointer rounded-2xl text-base font-semibold transition outline-light focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:active:scale-100";
@@ -55,22 +53,41 @@ export function ReadingScreen({
   chapterCheck?: ReactNode;
 }) {
   const [state, dispatch] = useReducer(readingReducer, chunks.length, initialReadingState);
-  const source = useRef<ListeningSource>(null);
+  const source = useRef<ReturnType<typeof createReadingAttempt>>(null);
+  const [listeningLabel, setListeningLabel] = useState("Connecting…");
   const chunk = chunks[state.chunkIndex];
   const listening = state.status === "listening";
 
   useEffect(() => {
     if (!listening) return;
-    source.current ??= createListeningSource();
+    setListeningLabel("Connecting…");
+    try {
+      source.current ??= createReadingAttempt({ id: chapterVersionId, tokens: chunks.flatMap(part => part.tokens) }, createListeningSource());
+    } catch {
+      dispatch({ type: "listening", event: { type: "error", message: "Listening could not start." } });
+      return;
+    }
     const active = source.current;
     const unread = unreadTokens(chunk, state);
+    const readingTokens = unread.length ? unread : chunk.tokens;
     let live = true;
+    let freshEvidence = false;
     active
-      .start({ chapterVersionId, tokens: unread.length ? unread : chunk.tokens }, (event) => live && dispatch({ type: "listening", event }))
+      .start({ chapterVersionId, tokens: readingTokens }, (event) => {
+        if (!live) return;
+        if (!freshEvidence && event.type === "word" && event.result.outcome !== "pending") {
+          freshEvidence = true;
+          // A reread replaces old marks only after it has scored evidence; failed starts preserve them.
+          for (const token of readingTokens) dispatch({ type: "listening", event: { type: "word", result: { tokenIndex: token.index, outcome: "pending", hesitationMs: 0 } } });
+        }
+        dispatch({ type: "listening", event });
+      })
+      .then(() => { if (live) setListeningLabel(active.engine === "mock" ? "Demo listening" : "Listening"); })
       .catch((e: unknown) => live && dispatch({ type: "listening", event: { type: "error", message: String(e) } }));
     return () => {
       live = false;
-      void active.stop();
+      // finish() awaits this same Stop; a failure is surfaced by the save panel at Chapter end.
+      void active.stop().catch(() => {});
     };
     // Restart only when listening starts or the Chunk changes, never on each word.
   }, [listening, state.chunkIndex]);
@@ -100,7 +117,7 @@ export function ReadingScreen({
             </ul>
           </>
         )}
-        {chapterCheck ? (
+        <ChapterReadAloud attempt={source.current}>{chapterCheck ? (
           // The Chapter Check brings its own side padding.
           <div className="-mx-6 mt-8">{chapterCheck}</div>
         ) : (
@@ -108,7 +125,7 @@ export function ReadingScreen({
             <p className="font-semibold">Chapter Check</p>
             <p className="mt-1 text-fog">A few questions about what you just read open here next.</p>
           </div>
-        )}
+        )}</ChapterReadAloud>
       </section>
     );
   }
@@ -144,7 +161,7 @@ export function ReadingScreen({
               ) : (
                 <>
                   Part {state.chunkIndex + 1} of {chunks.length}
-                  {listening && <span className="ml-2 text-light">Listening</span>}
+                  {listening && <span className="ml-2 text-light">{listeningLabel}</span>}
                 </>
               )}
             </p>
