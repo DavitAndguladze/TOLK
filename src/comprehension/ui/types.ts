@@ -18,6 +18,7 @@ export interface QuestionCardProps {
   value: string;
   via: "spoken" | "typed";
   onChange: (value: string, via: "spoken" | "typed") => void;
+  transcriber?: AnswerTranscriber;
 }
 
 export interface AnswerInputProps {
