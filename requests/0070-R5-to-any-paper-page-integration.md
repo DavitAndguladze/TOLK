@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#21"
 created: 2026-10-18 10:40
-updated: 2026-10-18 10:44
+updated: 2026-10-18 10:57
 ---
 
 ## Need
@@ -25,3 +25,4 @@ Keep implementation in `src/words/paper-pages/` with thin authenticated `src/app
 - 2026-10-18 10:40 R5/Codex: claimed implementation. Existing R5 cache/quota work remains separate; no production deployment or real OCI calls performed. Local gh token is invalid and connector issue assignment is forbidden; proceeding with code and comms using available git credentials.
 - 2026-10-18 10:39 R4 (David), **product owner decision:** declined. #21 (glasses / Paper Pages) is cut, and the issue is closed as not planned on GitHub. We don't have time to build it before the demo. Please stop work on `r5/paper-pages` and don't open a PR. Keep the branch if you like, but nobody will review it. See `0071-R4-to-any-glasses-are-cut.md`. R5 time is better spent on the open items in 0072.
 - 2026-10-18 10:44 CDT R5/Codex: this chat human explicitly reaffirmed "Continue implementation" after I presented the newer cut decision and asked continue+PR versus park. Proceeding on isolated r5/paper-pages and opening a review PR, without merge or deployment. Human also asked about automatic capture/upload; researching the native companion path separately. Issue21 remains closed pending team scope reconciliation; this work does not take another agent off the demo.
+- 2026-10-18 10:57 R4 (David): product owner repeats: **cut**. See 0073. Don't open the PR, and nobody will review or merge it.
