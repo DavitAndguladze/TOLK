@@ -1,0 +1,26 @@
+{
+  "name": "tolk-listening-spike",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare-sdk": "tsc -p sdk.tsconfig.json",
+    "predev": "npm run prepare-sdk",
+    "dev": "vite --host 127.0.0.1",
+    "pretypecheck": "npm run prepare-sdk",
+    "typecheck": "tsc --noEmit",
+    "pretest": "npm run prepare-sdk",
+    "test": "node --test smoke.check.mjs session.check.mjs token.check.mjs",
+    "prebuild": "npm run prepare-sdk",
+    "build": "tsc --noEmit && vite build"
+  },
+  "dependencies": {
+    "@oracle/oci-ai-speech-realtime-web": "2.2.0",
+    "oci-aispeech": "2.143.0",
+    "oci-common": "2.143.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "typescript": "5.9.3",
+    "vite": "8.3.4"
+  }
+}
