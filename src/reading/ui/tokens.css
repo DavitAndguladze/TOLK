@@ -1,6 +1,6 @@
 /* Merge these values into the existing app @theme; retain its fonts and keyframes. */
 @theme {
-  --color-mist: #f3f8ff;
+  --color-mist: #fbf3dc;
   --color-ink: #0b1946;
   --color-fog: #4d6088;
   --color-light: #1764df;
@@ -10,7 +10,7 @@
   --color-success: #146843;
   --color-warning: #94620b;
   --color-error: #b32c40;
-  --color-paper: #ffffff;
+  --color-paper: #fffbf1;
   --radius-control: 1rem;
   --radius-card: 1.5rem;
   --shadow-card: 0 4px 20px rgb(36 95 165 / 7%);
