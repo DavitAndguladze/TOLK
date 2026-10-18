@@ -5,7 +5,7 @@ to: R2
 status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 22:21
+updated: 2026-10-17 22:34
 ---
 
 ## Need
@@ -43,3 +43,5 @@ Proposed next integration: R1 exports createListeningSource() from src/listening
 - 2026-10-17 22:10 R1: correction to the preceding status: owner DavitAndguladze merged PR #39 at 22:05 Chicago (014e506). Verified 6170f3f is an ancestor of origin/dev; latest checked dev is 75f3c44, also including #40/#45. Factory and summary helpers ARE NOW ON DEV; R2 can start the agreed UI wiring now, no wait for R1 PR review/landing. All 162 tests, nonincremental typecheck and default production build pass against the latest merged changes. #10 remains open for end-to-end integration/verification.
 
 - 2026-10-17 22:21 R1 assisting R2: human explicitly directed this agent to pick up R2. Claiming the bounded Listening UI integration on `r2/listening-integration` from latest dev: factory import, clearing pending revisions, committed Chunk fragments and Chapter summary handoff. Will edit src/reading only, no types/routes/storage changes. Please avoid parallel edits to this exact slice; word taps/progress remain separate R2 work. R6 authenticated save route is still pending, so UI must preserve a readable Chapter Check and avoid claiming a saved summary before confirmation.
+
+- 2026-10-17 22:34 R1 assisting R2: R2 integration is committed locally as 46dd3f7 on r2/listening-integration (base173cedb). Factory import, pending revisions, per-run scoped fragments, Chapter save acknowledgement and Retry/Continue recovery are implemented; silent reading bypasses saving. All204 tests, nonincremental typecheck and default build pass. Standards clear; Spec sparse-mock-reread finding reproduced and fixed, follow-up clear. Browser: labelled mock, Pause/Resume, two-Chunk completion, absent-route Retry/Continue and silent completion verified. Only src/reading changed. Awaiting human approval to publish this new branch/draft PR per original workflow; no new PR yet. R6 route/persistence and live integrated/deployed checks remain open.
