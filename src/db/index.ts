@@ -1,8 +1,8 @@
 // Storage for Books, Chapter Versions, Checks and Reader progress (#7). API agreed in comms 0017.
-import { and, eq, isNull, like, or } from "drizzle-orm";
-import type { Book, BookProgress, Chapter, ChapterCheck, ChapterVersion } from "../types";
+import { and, asc, eq, gt, isNull, like, or } from "drizzle-orm";
+import type { Book, BookProgress, Chapter, ChapterCheck, ChapterVersion, SessionResult } from "../types";
 import { db } from "./client";
-import { bookProgress, books, chapterChecks, chapters, chapterVersions } from "./schema";
+import { bookProgress, books, chapterChecks, chapters, chapterVersions, sessionResults } from "./schema";
 
 export { db } from "./client";
 
@@ -50,9 +50,56 @@ export async function getBookProgress(readerId: string, bookId: string): Promise
   return row ? { bookId, currentChapterNumber: row.currentChapterNumber, currentLevel: row.currentLevel, currentVersionId: row.currentVersionId } : null;
 }
 
+/** Moves the Reader's place in a Book. An actual Level change restarts Level history (#41). */
 export async function setBookProgress(readerId: string, progress: BookProgress): Promise<void> {
-  const values = { currentChapterNumber: progress.currentChapterNumber, currentLevel: progress.currentLevel, currentVersionId: progress.currentVersionId, updatedAt: new Date() };
+  const before = await getBookProgress(readerId, progress.bookId);
+  const levelChanged = before !== null && before.currentLevel !== progress.currentLevel;
+  const values = {
+    currentChapterNumber: progress.currentChapterNumber,
+    currentLevel: progress.currentLevel,
+    currentVersionId: progress.currentVersionId,
+    updatedAt: new Date(),
+    ...(levelChanged && { levelChangedAt: new Date() }),
+  };
   await db().insert(bookProgress).values({ readerId, bookId: progress.bookId, ...values }).onDuplicateKeyUpdate({ set: values });
+}
+
+/** Saves a finished Chapter. A duplicate submit for the same Chapter Version returns the first result unchanged. */
+export async function recordSessionResult(session: SessionResult, bookId: string): Promise<SessionResult> {
+  await db().insert(sessionResults).ignore().values({
+    id: session.id,
+    readerId: session.readerId,
+    bookId,
+    chapterVersionId: session.chapterVersionId,
+    chapterNumber: session.chapterNumber,
+    level: session.level,
+    completedAt: new Date(session.completedAt),
+    data: session,
+  });
+  const [row] = await db()
+    .select({ data: sessionResults.data })
+    .from(sessionResults)
+    .where(and(eq(sessionResults.readerId, session.readerId), eq(sessionResults.chapterVersionId, session.chapterVersionId)));
+  return row.data;
+}
+
+/**
+ * Input for `decideNextLevel` (#60): this Reader's results in this Book since the last actual Level change,
+ * one per Chapter (its latest), oldest first. Includes the just-recorded Chapter.
+ */
+export async function levelHistory(readerId: string, bookId: string): Promise<SessionResult[]> {
+  const [progress] = await db().select({ since: bookProgress.levelChangedAt }).from(bookProgress).where(and(eq(bookProgress.readerId, readerId), eq(bookProgress.bookId, bookId)));
+  const rows = await db()
+    .select({ chapterNumber: sessionResults.chapterNumber, data: sessionResults.data })
+    .from(sessionResults)
+    .where(and(eq(sessionResults.readerId, readerId), eq(sessionResults.bookId, bookId), progress?.since ? gt(sessionResults.completedAt, progress.since) : undefined))
+    .orderBy(asc(sessionResults.completedAt));
+  const latest = new Map<number, SessionResult>();
+  for (const { chapterNumber, data } of rows) {
+    latest.delete(chapterNumber); // re-insert so a re-read Chapter sorts by its latest result
+    latest.set(chapterNumber, data);
+  }
+  return [...latest.values()];
 }
 
 /** The Library: every Book matching `q` by title or author, with this Reader's place in it. */
