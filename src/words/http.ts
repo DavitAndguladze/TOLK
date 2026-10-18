@@ -1,5 +1,6 @@
 import { getChapter, getChapterVersion } from "../db";
 import { getReader } from "../platform/auth";
+import { wrongOrigin } from "../platform/request-origin";
 import { OciQuotaError, ociQuotaResponse } from "../platform/oci-quota";
 import { meaningOf } from "./meaning";
 import { listFlags, removeFlag, saveFlag } from "./mysql-flags";
@@ -18,15 +19,6 @@ async function reading(context: Context) {
     return json({ error: "Chapter Version not found" }, 404);
   }
   return { reader, version, tokenIndex };
-}
-
-function wrongOrigin(req: Request) {
-  const origin = req.headers.get("origin");
-  if (origin === null) return false;
-  try {
-    // Caddy forwards to an internal Next URL; use the same public origin as authentication.
-    return origin !== new URL(process.env.BETTER_AUTH_URL || req.url).origin;
-  } catch { return true; }
 }
 
 export async function wordMeaning(_req: Request, context: Context) {

@@ -1,5 +1,6 @@
 import { getSavedGenerationInput, promotePendingProgress } from "../comprehension/complete-chapter";
 import { getReader } from "../platform/auth";
+import { wrongOrigin } from "../platform/request-origin";
 import { runGeneration } from "./runtime";
 
 const json = (body: unknown, status = 200, headers = {}) => Response.json(body, {
@@ -11,9 +12,7 @@ export async function retryVersion(req: Request, context: { params: Promise<{ ve
   try {
     const reader = await getReader();
     if (!reader) return json({ error: "Sign in to prepare your next Chapter." }, 401);
-    const origin = req.headers.get("origin");
-    if ((origin && origin !== new URL(process.env.BETTER_AUTH_URL || req.url).origin)
-      || req.headers.get("sec-fetch-site") === "cross-site") {
+    if (wrongOrigin(req) || req.headers.get("sec-fetch-site") === "cross-site") {
       return json({ error: "Invalid request origin" }, 403);
     }
     const { versionId } = await context.params;

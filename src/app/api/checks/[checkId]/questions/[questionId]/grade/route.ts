@@ -7,6 +7,7 @@ import { mockKeyPointGrader } from "@/comprehension/key-point-grader";
 import { answerGradeStore, checksById, ensureChapterCheck, findMockVersion, keyPointGrader } from "@/comprehension/registry";
 import { mockChapter } from "@/mocks";
 import { getReader, readerIdFor } from "@/platform/auth";
+import { wrongOrigin } from "@/platform/request-origin";
 import { metered } from "@/platform/oci-quota";
 import type { Api } from "@/types";
 
@@ -19,8 +20,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ checkId
     if (process.env.DATABASE_URL || process.env.LOCAL_DATABASE_URL) {
       const reader = await getReader();
       if (!reader) return NextResponse.json({ error: "Sign in first" }, { status: 401 });
-      const origin = req.headers.get("origin");
-      if (origin && origin !== new URL(process.env.BETTER_AUTH_URL || req.url).origin) {
+      if (wrongOrigin(req)) {
         return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
       }
       const loaded = await loadCheckForReader(reader.id, checkId);

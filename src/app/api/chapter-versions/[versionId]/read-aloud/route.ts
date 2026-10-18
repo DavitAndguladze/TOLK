@@ -3,6 +3,7 @@ import { findMockVersion } from "@/comprehension/registry";
 import { getChapterVersion } from "@/db";
 import { ReadAloudValidationError, validateReadAloudSummary } from "@/listening/summary";
 import { getReader } from "@/platform/auth";
+import { wrongOrigin } from "@/platform/request-origin";
 import { readerIdFrom } from "@/platform/reader-id";
 import { readAloudStore } from "@/platform/registry";
 import type { Api } from "@/types";
@@ -16,8 +17,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ version
   if (!version || version.status !== "ready" || (durable && version.readerId !== null && version.readerId !== reader!.id)) {
     return NextResponse.json({ error: "Chapter Version not found" }, { status: 404 });
   }
-  const origin = req.headers.get("origin");
-  if (origin && origin !== new URL(process.env.BETTER_AUTH_URL || req.url).origin) return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
+  if (wrongOrigin(req)) return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
 
   const body = await req.json().catch(() => null);
   try {
