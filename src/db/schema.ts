@@ -1,7 +1,7 @@
 // MySQL 8 (HeatWave in OCI, Docker locally), ADR-0010. Content rows keep the shared type as JSON
 // (`data`) plus the few columns we look up by; the JSON is the source of truth.
 import { boolean, index, int, json, mysqlTable, primaryKey, text, timestamp, uniqueIndex, varchar } from "drizzle-orm/mysql-core";
-import type { Api, Book, ChapterCheck, ChapterVersion, Chapter, Level, ReadAloudSummary, SessionResult, FlaggedWord, WordBankEntry } from "../types";
+import type { Api, Book, ChapterCheck, ChapterVersion, Chapter, Level, ReadAloudSummary, SessionResult, FlaggedWord, WordBankEntry, ReaderPreferences } from "../types";
 import type { IngestedChapterPolicy } from "../leveling/ingestion";
 import type { GeneratedChapter } from "../leveling/generator";
 
@@ -168,3 +168,10 @@ export const chapterCompletions = mysqlTable("chapter_completions", {
   chapterVersionId: id("chapter_version_id").notNull().references(() => chapterVersions.id),
   data: json("data").$type<Api["POST /api/checks/[checkId]/answers"]["res"]>().notNull(),
 }, (t) => [primaryKey({ columns: [t.readerId, t.chapterVersionId] })]);
+
+/** The Reader's onboarding picks (#99): Reading Goals and Favourite Genres. */
+export const readerPreferences = mysqlTable("reader_preferences", {
+  readerId: id("reader_id").primaryKey().references(() => user.id, { onDelete: "cascade" }),
+  data: json("data").$type<ReaderPreferences>().notNull(),
+  updatedAt: timestamp("updated_at", { fsp: 3 }).notNull().defaultNow(),
+});
