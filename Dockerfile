@@ -16,5 +16,7 @@ ENV NODE_ENV=production PORT=3000 HOSTNAME=0.0.0.0
 COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
 COPY --from=build /app/public ./public
+# Applied on server start by src/instrumentation.ts.
+COPY --from=build /app/drizzle ./drizzle
 EXPOSE 3000
 CMD ["node", "server.js"]

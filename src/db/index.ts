@@ -51,7 +51,7 @@ export async function getBookProgress(readerId: string, bookId: string): Promise
 }
 
 export async function setBookProgress(readerId: string, progress: BookProgress): Promise<void> {
-  const values = { currentChapterNumber: progress.currentChapterNumber, currentLevel: progress.currentLevel, currentVersionId: progress.currentVersionId };
+  const values = { currentChapterNumber: progress.currentChapterNumber, currentLevel: progress.currentLevel, currentVersionId: progress.currentVersionId, updatedAt: new Date() };
   await db().insert(bookProgress).values({ readerId, bookId: progress.bookId, ...values }).onDuplicateKeyUpdate({ set: values });
 }
 

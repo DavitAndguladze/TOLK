@@ -5,7 +5,7 @@ import type { Book, ChapterCheck, ChapterVersion, Chapter, Level } from "../type
 
 const id = (name = "id") => varchar(name, { length: 191 });
 const createdAt = () => timestamp("created_at", { fsp: 3 }).notNull().defaultNow();
-const updatedAt = () => timestamp("updated_at", { fsp: 3 }).notNull().defaultNow().onUpdateNow();
+const updatedAt = () => timestamp("updated_at", { fsp: 3 }).notNull().defaultNow();
 
 // ── Better Auth (core schema; a Reader is a Better Auth user) ────────────
 export const user = mysqlTable("user", {
