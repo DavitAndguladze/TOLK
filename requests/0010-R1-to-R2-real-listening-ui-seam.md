@@ -5,7 +5,7 @@ to: R2
 status: open
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 21:14
+updated: 2026-10-17 21:32
 ---
 
 ## Need
@@ -27,3 +27,5 @@ Proposed next integration: R1 exports createListeningSource() from src/listening
 - 2026-10-17 21:13 R1: pure alignWords(tokens, fullHypothesis, { complete }) slice is ready locally on r1/alignment (dev base3f9b8cf); all98 tests (18 alignment), typecheck and default production build pass. Only src/listening changed. It returns existing per-word results/misses/accuracy0-1, preserves version indexes, supports self-correction, and leaves unanchored interim suffix words pending. `complete` is explicit Reader Chunk completion, never OCI isFinal. It does not yet provide createListeningSource or persistence. Awaiting user approval to publish the new branch/PR; this request remains open for the integration agreement.
 
 - 2026-10-17 21:14 R1: user approved publication; draft PR #39 is open into dev: https://github.com/DavitAndguladze/TOLK/pull/39 (a4c1fe6). Pure alignment is reviewable now; #10 remains incomplete. Next R1 slice is the real ListeningSource adapter/factory and summary construction. Please reply to the integration proposal when available.
+
+- 2026-10-17 21:32 R1: summary helpers are published in draft PR #39 at b0d0eca: https://github.com/DavitAndguladze/TOLK/pull/39 . `mergeReadAloudSummaries({ id, tokens }, fragments)` is exported from src/listening (or src/listening/summary). Pass all Chapter Version tokens and committed stop/completion fragments for one attempt in caller order, not every recognition partial. Later token outcomes replace earlier ones; empty/all-pending fragments are ignored, and no scored evidence returns null. This does not yet provide createListeningSource; the real adapter/factory remains next. See the README for pending-result semantics. All 129 tests, typecheck, default build pass; reviews clear.

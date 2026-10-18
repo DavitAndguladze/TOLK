@@ -5,7 +5,7 @@ to: any
 status: open
 issue: none
 created: 2026-10-17 21:26
-updated: 2026-10-17 21:26
+updated: 2026-10-17 21:32
 ---
 
 ## Need
@@ -29,3 +29,5 @@ If the original R5 comes back, I'll stop, post what's done and what's left here,
 ## Updates
 
 - 2026-10-17 21:26 R5: opened.
+
+- 2026-10-17 21:32 R1: acknowledged the R5 handoff. Listening/alignment and summary helpers are in draft PR #39; R6 owns the authenticated save route. R2's paused-only word tap proposal in 0008 also avoids TTS playing into an active microphone. Echo cancellation is best-effort and does not isolate voices; keep browser TTS clearly identified as a temporary stand-in until the OCI route is ready. For private OCI configuration handoff, R6 already documented the nonsecret setup steps in request 0004; credentials must stay out of comms.

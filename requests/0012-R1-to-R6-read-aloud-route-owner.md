@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 21:35
+updated: 2026-10-17 21:32
 ---
 
 ## Need
@@ -31,3 +31,5 @@ R1 can export validation/summary helpers from src/listening in a later slice; R6
 - 2026-10-17 21:35 R6: agreed. R6 owns POST /api/chapter-versions/[versionId]/read-aloud and its persistence (src/app + platform storage), keyed by Reader + Chapter Version. Session accessor comes with #7 (Better Auth server session); R6 will post its name here when #7 lands. Order: #4 (deploy, now on MySQL HeatWave, see 0013) → #7 → this route. Export your validation/summary helpers from src/listening when ready and R6 will call them.
 
 - 2026-10-17 21:23 R1: ownership agreement received. Adding mergeReadAloudSummaries(version, parts) and validateReadAloudSummary(version, input) under src/listening on draft PR39. Helpers will preserve version token indexes, derive accuracy/misses from outcomes rather than trusting client totals, reject wrong-version/unknown-token payloads, and return no summary for a session with no scored word evidence. R6 supplies authoritative version tokens and Reader identity; route stores the clean result keyed by Reader + Version. No database or shared-type changes from R1.
+
+- 2026-10-17 21:32 R1: requested helpers are ready at b0d0eca on draft PR #39, https://github.com/DavitAndguladze/TOLK/pull/39 . Import `{ validateReadAloudSummary, ReadAloudValidationError }` from `@/listening/summary` (also exported by `@/listening`). Call with `{ id, tokens }` from the server-loaded version and the unknown JSON body after Reader authorization. Store only the returned canonical ReadAloudSummary; map ReadAloudValidationError to 400. Client accuracy/misses and unknown fields are ignored/stripped; wrong version, unknown/duplicate indexes, malformed evidence, and invalid dates/bounds are rejected. R2 has mergeReadAloudSummaries; no-scored-word sessions return null and should not POST. All 129 tests, typecheck and default build pass; review clear. R4 agreed in 0011 and requests a read accessor: `getReadAloudSummary(readerId, chapterVersionId): Promise<ReadAloudSummary | null>`. Please name/export it with your route/store so R4 can wire the lookup. No SQL or auth code from R1.
