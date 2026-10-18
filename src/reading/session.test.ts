@@ -69,4 +69,13 @@ describe("readingReducer", () => {
 
     expect(moved).toMatchObject({ chunkIndex: 1, status: "ready", outcomes: { 0: "correct" } });
   });
+
+  test("a listening error pauses the session so the Reader can resume", () => {
+    const failed = run(initialReadingState(2), { type: "read-aloud" }, word(0, "correct"), {
+      type: "listening",
+      event: { type: "error", message: "network lost" },
+    });
+
+    expect(failed).toMatchObject({ status: "paused", outcomes: { 0: "correct" } });
+  });
 });

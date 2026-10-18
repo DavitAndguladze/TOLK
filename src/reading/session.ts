@@ -58,7 +58,7 @@ function onListeningEvent(state: ReadingState, event: ListeningEvent): ReadingSt
         ? { ...state, status: "chapter-done", stuckOn: null }
         : { ...state, chunkIndex: state.chunkIndex + 1 };
     case "error":
-      return state;
+      return { ...state, status: "paused", stuckOn: null };
   }
 }
 
