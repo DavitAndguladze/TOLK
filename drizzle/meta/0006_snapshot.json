@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "15355fef-be52-4d5c-ac81-0ebf2e5499ad",
+  "id": "3f791274-4d36-43f1-bc38-9e5119b7e737",
   "prevId": "cb78b2c1-1473-4b4a-9fdc-084394c42dc3",
   "tables": {
     "account": {
@@ -732,83 +732,6 @@
       "uniqueConstraints": {},
       "checkConstraint": {}
     },
-    "check_answer_grades": {
-      "name": "check_answer_grades",
-      "columns": {
-        "reader_id": {
-          "name": "reader_id",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "check_id": {
-          "name": "check_id",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "question_id": {
-          "name": "question_id",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "answer_hash": {
-          "name": "answer_hash",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "data": {
-          "name": "data",
-          "type": "json",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(now())"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "check_answer_grades_reader_id_user_id_fk": {
-          "name": "check_answer_grades_reader_id_user_id_fk",
-          "tableFrom": "check_answer_grades",
-          "tableTo": "user",
-          "columnsFrom": [
-            "reader_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "check_answer_grades_pk": {
-          "name": "check_answer_grades_pk",
-          "columns": [
-            "reader_id",
-            "check_id",
-            "question_id",
-            "answer_hash"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "checkConstraint": {}
-    },
     "flagged_words": {
       "name": "flagged_words",
       "columns": {
@@ -924,6 +847,59 @@
           "columns": [
             "reader_id",
             "chapter_version_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "reader_preferences": {
+      "name": "reader_preferences",
+      "columns": {
+        "reader_id": {
+          "name": "reader_id",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "data": {
+          "name": "data",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "reader_preferences_reader_id_user_id_fk": {
+          "name": "reader_preferences_reader_id_user_id_fk",
+          "tableFrom": "reader_preferences",
+          "tableTo": "user",
+          "columnsFrom": [
+            "reader_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "reader_preferences_reader_id": {
+          "name": "reader_preferences_reader_id",
+          "columns": [
+            "reader_id"
           ]
         }
       },

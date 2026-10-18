@@ -1,8 +1,8 @@
 // Storage for Books, Chapter Versions, Checks and Reader progress (#7). API agreed in comms 0017.
 import { and, asc, eq, gt, isNull, like, or, sql } from "drizzle-orm";
-import type { Book, BookProgress, Chapter, ChapterCheck, ChapterVersion, GradingResult, Level, SessionResult } from "../types";
+import type { Book, BookProgress, Chapter, ChapterCheck, ChapterVersion, GradingResult, Level, ReaderPreferences, SessionResult } from "../types";
 import { db } from "./client";
-import { bookProgress, books, chapterChecks, chapters, chapterVersions, sessionResults } from "./schema";
+import { bookProgress, books, chapterChecks, chapters, chapterVersions, readerPreferences, sessionResults } from "./schema";
 
 export { db } from "./client";
 export type DatabaseConnection = Pick<ReturnType<typeof db>, "select" | "insert">;
@@ -154,4 +154,16 @@ async function sharedFirstChapter(bookId: string): Promise<ChapterVersion | null
     .from(chapterVersions)
     .where(and(eq(chapterVersions.bookId, bookId), eq(chapterVersions.chapterNumber, 1), eq(chapterVersions.level, 1), isNull(chapterVersions.readerId)));
   return row?.data ?? null;
+}
+
+/** The Reader's Reading Goals and Favourite Genres (#99), or null before onboarding. */
+export async function getReaderPreferences(readerId: string): Promise<ReaderPreferences | null> {
+  const [row] = await db().select({ data: readerPreferences.data }).from(readerPreferences).where(eq(readerPreferences.readerId, readerId));
+  return row?.data ?? null;
+}
+
+/** Replaces the Reader's picks; Back-then-Continue in onboarding just saves again. */
+export async function setReaderPreferences(readerId: string, preferences: ReaderPreferences): Promise<void> {
+  const values = { data: preferences, updatedAt: new Date() };
+  await db().insert(readerPreferences).values({ readerId, ...values }).onDuplicateKeyUpdate({ set: values });
 }

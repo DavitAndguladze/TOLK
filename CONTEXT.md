@@ -47,6 +47,14 @@ _Avoid_: Scan, photo page
 A person with an account who reads Books.
 _Avoid_: User, student, learner
 
+**Reading Goal**:
+What the Reader says they want to improve, picked after sign-up (one or more): comprehension, vocabulary, confidence reading aloud, complex stories, advanced challenge.
+_Avoid_: Objective, target, learning goal
+
+**Favourite Genre**:
+A kind of Book the Reader picked after sign-up (one or more); drives the Library's "Recommended for you".
+_Avoid_: Interest, category, tag
+
 **Read-aloud**:
 The Reader reading a Chapter Version out loud while the app compares speech word by word against the text.
 _Avoid_: Dictation, voice mode

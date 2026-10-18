@@ -29,7 +29,7 @@ export default async function ResultDemoPage({ searchParams }: { searchParams: P
     nextVersionId: null, // as the answers route returns until next-Chapter generation (#14) lands
   };
   return (
-    <main className="min-h-dvh">
+    <main className="min-h-full">
       <ResultScreen result={result} nextHref={null} />
     </main>
   );

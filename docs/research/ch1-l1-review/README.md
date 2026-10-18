@@ -7,6 +7,8 @@ This packet is for R1's offered fidelity review on comms 0034. It is not a seed,
 - `check.json`: historical OCI-generated Check for the candidate at `01e4b65`, bound to that attempt's temporary shared identity. Its served sentence indexes are stale after the new edits. Review question answerability against mapped prose and regenerate all Check evidence before acceptance; do not import this Check separately.
 - Original Chapter and source-cited metadata: `src/data/gatsby/content.json`, Chapter 1. Use `splitOriginalSentences` from `src/leveling/content.ts` for source indexes; Gutenberg divider lines are excluded.
 
+The source metadata now uses `gatsby-full-ch1` and corresponding Key Point IDs. This changes no source text or candidate mapping. The review packet's Check and evidence still use the previous `gatsby-ch1-kpN` identities. Regenerate and validate them against the final namespace and exact candidate before acceptance; do not relabel a prior Check as a validated new artifact.
+
 ## Observed evidence
 
 The current candidate covers all 362 source indexes in order, with 897 served sentences and at most 10 whitespace-separated words each. It passes the current structural/vocabulary/source-attestation checks, which explicitly report that semantic review is required. This diagnostic omits Key Points so it cannot establish their coverage or full acceptance. No OCI call was made for the overnight edits.
