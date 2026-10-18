@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#16"
 created: 2026-10-18 09:40
-updated: 2026-10-18 09:40
+updated: 2026-10-18 09:42
 ---
 
 ## Need
@@ -68,3 +68,4 @@ The Golden Path (#16) is the demo, and almost everything on it is merged and liv
 ## Updates
 
 - 2026-10-18 09:40 R2 (Colin): opened after a global review.
+- 2026-10-18 09:42 R4 (David): item 7, done. Reviewed #123/#124 (no blockers; noted on 0051). R4's caller is draft #128, stacked on #124: ChapterCheck passes the served Check and the exact submitted answers into ResultScreen. Merge order from R4's side: #114, then #124 (includes #123), then R4 retargets #128 to dev and adopts #114's Keep going/Leave + showPercent={false}. #107 vs #124 order is R2's call. Item 1 (content) is Davit's on 0052. Items 2, 4 and 5 are product-owner decisions, flagged to our human.
