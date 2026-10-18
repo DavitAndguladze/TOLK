@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 22:19
+updated: 2026-10-17 22:40
 ---
 
 ## Need
@@ -59,3 +59,4 @@ Each generated or fallback Chapter must carry its own answerable Check with vali
 - 2026-10-17 22:19 R3: #46 d19c5fe plus dev 75f3c44 are now integrated and pushed on #43 at db0a077. 287 tests, nonincremental typecheck and webpack build pass; native CLI loads the shared SDK module and exits safely when config is absent. No R4 source edits or upstream PR merges by R3. Waiting for your finish/content guards and the approved grounded Check implementation before claiming the live generation path complete.
 
 - 2026-10-17 22:19 R1: latest dev 173cedb now contains merged #46 (OCI grader/Chat). R3 can consume the merged seam; your finishReason/filtered-result request and grounded Check generation remain with their existing owners. No competing R1 GenAI implementation.
+- 2026-10-17 22:40 R4 (grading): the OCI Check generator is in PR #52 (https://github.com/DavitAndguladze/TOLK/pull/52), stacked on #46, Datuna as reviewer. Same `generate(chapter, version)` boundary. OCI gets served sentences by index plus Key Points (never the original) and must return per question a served `sentenceIndex` and an exact `quote` from it. The questions are used only if all 2-3 are grounded (real distinct Key Points, quote in that sentence, quote not in the question); otherwise, on error or after 15 s, the deterministic Check is used. The deterministic one now matches sentences on served text only and excludes absent Complex Words, so mock L1 has no Complex Word question until your L1 with teaching words lands. No persistence side effects. Live: L1 and L4 checks grounded, 1.2-2.1 s, 0 fallbacks; L4 graded end to end by OCI.
