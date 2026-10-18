@@ -31,7 +31,7 @@ async function main() {
   const chat = createOciChat();
   if (!chat) throw new Error("OCI configuration or its private-key file is missing. Set the existing OCI_* variables from .env.example; never commit credentials.");
 
-  const [{ ingestGatsby }, { createChapterGenerator }, { generateGatsbySeed }, { generateChapterCheck }, { createOciChapterCheckGenerator }] = await Promise.all([
+  const [{ ingestGatsby }, { createChapterGenerator, MAX_OFFLINE_GENERATION_ATTEMPTS }, { generateGatsbySeed }, { generateChapterCheck }, { createOciChapterCheckGenerator }] = await Promise.all([
     import("../src/leveling/ingestion.ts"),
     import("../src/leveling/generator.ts"),
     import("../src/leveling/seed.ts"),
@@ -58,6 +58,7 @@ async function main() {
     generateText,
     generateCheck,
     budgetMs: 300_000,
+    maxAttempts: MAX_OFFLINE_GENERATION_ATTEMPTS,
     policyForChapter: (chapter) => ({ vocabulary, requiredNames: content.policies[chapter.id].requiredNames,
       retainedWords: content.policies[chapter.id].retainedWords,
       retainedWordEvidence: content.policies[chapter.id].retainedWordEvidence }),
