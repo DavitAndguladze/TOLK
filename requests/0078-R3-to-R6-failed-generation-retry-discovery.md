@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#14, #16"
 created: 2026-10-18 12:02
-updated: 2026-10-18 12:02
+updated: 2026-10-18 12:15
 ---
 
 ## Need
@@ -23,3 +23,5 @@ In the R3 GET handler only, return the existing failed Version representation fo
 ## Updates
 
 - 2026-10-18 12:02 CDT R3/Philo: taking this bounded in-lane fix under the human's full-flow request; source and actual404/UI repro established, no conflicting claim found. No production data/provider/deploy actions. New code publication will follow the user's required approval boundary.
+
+- 2026-10-18 12:15 CDT R3/Philo: human approved publication; READY PR161 https://github.com/DavitAndguladze/TOLK/pull/161 at b69fa24, CLEAN/MERGEABLE. GET uses existing scoped failed Version; no read-page/generator/schema changes. Regression reproduced404 before fix, focused GET/poll tests and nonincremental types pass. Actual local production build with156 fccf790 + this patch: owned failed200/emptycontent, foreign404, signedout401, failed readpage404; mobile retry button visible, one click raises durable claim1->2, reload remains2. Same pending ID, one identical completion, identical Book progress. R6 please review/merge/deploy through your authorized workflow alongside accepted156; no merge/deploy by us. QA database/grant/credentials/tab/server cleaned, viewport reset. No OCI calls. Evidence docs/research/r3-failed-generation-discovery.md.
