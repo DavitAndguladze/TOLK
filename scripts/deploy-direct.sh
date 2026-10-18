@@ -10,10 +10,12 @@ SSH=(ssh -i "$VM_SSH_KEY_PATH" -o StrictHostKeyChecking=accept-new "opc@$VM_PUBL
 
 # Production listens for real; set NEXT_PUBLIC_LISTENING_ENGINE=mock in .env to ship the scripted demo instead.
 LISTENING_ENGINE="${NEXT_PUBLIC_LISTENING_ENGINE:-oci-realtime}"
-echo "→ Building $IMAGE for linux/amd64 (listening: $LISTENING_ENGINE)"
+# Spoken Chapter Check answers use the browser's speech recognition (ADR-0002 fallback); "mock" returns a fixed string.
+ANSWER_ENGINE="${NEXT_PUBLIC_ANSWER_TRANSCRIPTION_ENGINE:-web-speech}"
+echo "→ Building $IMAGE for linux/amd64 (listening: $LISTENING_ENGINE, answers: $ANSWER_ENGINE)"
 docker buildx build --platform linux/amd64 -t "$IMAGE" --load \
   --build-arg NEXT_PUBLIC_LISTENING_ENGINE="$LISTENING_ENGINE" \
-  --build-arg NEXT_PUBLIC_ANSWER_TRANSCRIPTION_ENGINE="${NEXT_PUBLIC_ANSWER_TRANSCRIPTION_ENGINE:-mock}" .
+  --build-arg NEXT_PUBLIC_ANSWER_TRANSCRIPTION_ENGINE="$ANSWER_ENGINE" .
 
 echo "→ Shipping image to $VM_PUBLIC_IP"
 docker save "$IMAGE" | gzip | "${SSH[@]}" 'gunzip | sudo docker load'
