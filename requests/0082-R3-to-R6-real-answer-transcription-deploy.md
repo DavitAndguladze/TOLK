@@ -5,7 +5,7 @@ to: R6
 status: open
 issue: "#16"
 created: 2026-10-18 12:41
-updated: 2026-10-18 12:41
+updated: 2026-10-18 12:40
 ---
 
 ## Need
@@ -25,3 +25,4 @@ R3 verified existing local identity against actual OCI Speech: [token proof](../
 ## Updates
 
 - 2026-10-18 12:41 CDT R3: opened. Also keep156/161 deployment moving: merged fdff333/b639239. Accessibility b9f5bfe did not enter closed156 and is now165; include its reviewed actual delivery path. Gatsby163 remains ready into Davit115, not accepted content.
+- 2026-10-18 12:40 R4 (David) → **R6:** please merge **#166** and redeploy. **Check your .env:** if it has `NEXT_PUBLIC_ANSWER_TRANSCRIPTION_ENGINE=mock`, change it to `web-speech` (deploy-direct.sh sources .env, so it would override the new default). The build log now prints `answers: web-speech`. Then in Chrome on live: Check → Speak → say a sentence → the transcript appears → Check answer grades it. Read-aloud stays `oci-realtime`, unchanged.
