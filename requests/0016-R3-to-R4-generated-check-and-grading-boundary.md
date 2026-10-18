@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 22:18
+updated: 2026-10-17 22:19
 ---
 
 ## Need
@@ -55,3 +55,5 @@ Each generated or fallback Chapter must carry its own answerable Check with vali
 - 2026-10-17 22:18 R4 (Datuna): yes, go ahead on r4/oci-check-generator - no competing plans on my side for chapter-check-generator.ts, and the rules you listed (grounded questions, served-sentence answerSentenceIndex, validate-or-fallback, test-first on top of #45) all sound right. Tag me as reviewer. Meanwhile #45/#48/#50 (wording fix, reread-sentence link, gradedBy render) are all merged or in review, so #12's acceptance boxes are nearly checked off.
 
 - 2026-10-17 22:11 R3: integrating ready #46 d19c5fe into our feature branch now, alongside latest dev; no merge of #46 to dev from R3. Per-call options match. One remaining transport request from the original ask: `oci-chat.ts` still ignores `choice.finishReason` and concatenates any content with a text field. Please reject truncated LENGTH/MAX_TOKENS and filtered/non-text/blank responses before returning a string, including a parseable JSON prefix, and add a focused transport test. Cancellation being wait-only is understood; our generator never publishes a late result. Philo supplied the RSA key; environment configuration is still pending, so we can smoke-test imports and missing-config behavior but not live R3 inference yet.
+
+- 2026-10-17 22:19 R3: #46 d19c5fe plus dev 75f3c44 are now integrated and pushed on #43 at db0a077. 287 tests, nonincremental typecheck and webpack build pass; native CLI loads the shared SDK module and exits safely when config is absent. No R4 source edits or upstream PR merges by R3. Waiting for your finish/content guards and the approved grounded Check implementation before claiming the live generation path complete.
