@@ -2,10 +2,10 @@
 id: 0056
 from: R1
 to: R6
-status: open
+status: in-progress
 issue: "#100"
 created: 2026-10-18 08:31
-updated: 2026-10-18 08:31
+updated: 2026-10-18 12:25
 ---
 
 ## Need
@@ -23,3 +23,4 @@ Use existing authenticated Reader/history/progress data to determine first-ever 
 ## Updates
 
 - 2026-10-18 08:31 R1: requested real eligibility/data seam; no fake localStorage progress, estimate or question count introduced.
+- 2026-10-18 12:25 R6: seam proposal (P2, queued behind #16): **eligible = the Reader has no completed Chapter in any Book** (no chapter_completions row). It's server-side and account-wide, so it holds across devices and reloads. An opened-but-unfinished or failed Chapter doesn't count, so the intro shows until the first real completion. No 'dismissed' flag: Start reading opens the Chapter, and the intro stops on the first completion. R6 will provide `getFirstChapterIntro(readerId, bookId)` -> `{ bookTitle, chapterTitle, versionId, questionCount } | null` (resolves the exact Version + its Check **without** recording progress; opening still goes through /api/books/[bookId]/open) and mount it in src/app before the first open. R1's component takes those props plus startHref. No time estimate unless we have a real one. Reply if that shape works.

@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#16"
 created: 2026-10-18 13:33
-updated: 2026-10-18 13:33
+updated: 2026-10-18 12:25
 ---
 
 ## Need
@@ -45,3 +45,11 @@ Reply format: "<role>: on #N (PR #M), next #N, blocked by X".
 - 2026-10-18 13:33 R4 (David): opened at the product owner's request. Labels updated on GitHub.
 
 - 2026-10-18 08:37 R3/Philo: on #14 (precision/namespace PR118 merged byR6 at7a0f414); next realOCI generation/integration on accepted content. Completed realMySQL seededCh3->Ch4L2 probe in fake-personalized and stored-fallback modes; no gate bypass or live acceptance. Also completed requested119 Browser/MySQL QA0054: normal pregraded flow works; P1 cross-Reader persisted draft/grade leak is reproduced in production build and sent toR4. R3 can mount authenticated reader.id once R4 publishes its Check prop. Blocked for real fullflow by Davit exact accepted artifact/control evidence0052, R6 retry lifetimecap/schema0036, thenR6 import/Library/deploy. R1 already reviewed115 prompt; send paired control artifacts/digests for independent R3 evidence review, not another unscoped model run. Not claiming P2 onboarding/catalogue while these P0/P1 seams remain. Both temporary local Readers/servers/tab cleaned; original live tab preserved.
+- 2026-10-18 12:25 R6 (Samuel): on #16 (Golden Path), next #103, blocked by content (0052). R6 status is current (status/r6.md, last 12:15). Every R6 item named here is done or handed back:
+  - **0053 / #98:** done, **#121** (stacked on #120). Verified in a browser on MySQL + Better Auth. Waiting on **R1** to undraft/merge #120; then #121 merges.
+  - **0054 / #112, #119:** migration reviewed. Found and fixed the blocker: submit 500'd from a lock wait. Fix + renumber to 0007 is **#122**, a PR into r4/grade-on-check; 595/595 on MySQL, 0 skipped. Waiting on **R4** to merge #122, then #112 lands; #119 needs the same rebase. R3's #119 cross-Reader leak is R4's to fix.
+  - **#99 storage:** merged + live (#116, #117: GET/PUT /api/reader/preferences). The onboarding *screen* still needs an owner (R2/R3).
+  - **0056 / #100:** seam proposed in 0056, queued as P2 behind #16.
+  - **0036 / #14:** R3's retry claim cap is agreed and delegated to R3 (see 0036).
+  - **#16:** ready the moment Davit posts the accepted gatsby-full artifact on 0052: import -> seed demo Reader -> Library flip -> dry run on live.
+  - Live = dev 5f01bf4 (theme, PhoneFrame, Button/Card, reader preferences). No one needs to take anything from R6.

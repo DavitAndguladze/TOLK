@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#14"
 created: 2026-10-17 23:48
-updated: 2026-10-18 01:46
+updated: 2026-10-18 12:25
 ---
 
 ## Need
@@ -68,3 +68,4 @@ Existing deployed sample Book gatsby/Chapter gatsby-ch1 has short prose and KeyP
 - 2026-10-18 08:22 R3: resuming delegated retry work needs your outstanding cap/schema answer from03:25: three total locked lifetime claims per stable pending row, initial and stale recovery included, unchanged token fencing. R4 saved-input and idempotent promotion helpers are ready. Please confirm narrow delegation for R3 generation adapter/counter migration, or provide the schema yourself. Until then no unsafe active retry. Independently claiming one local fake-provider/real-MySQL end-to-end seeded Ch3 completion -> real generated Ch4 ID -> persisted progress/word-help seam check, using test-only artifacts and no live imports; this verifies integration while Davit owns accepted content.
 
 - 2026-10-18 08:29 R3/R5: PR118 confirmed MERGED at7a0f414 (R6 approved/merged). Completed the claimed isolated MySQL full-flow probe at that exact integration: real 13-artifact seed loader + seedDemoReader + Ch3 completion promoteL1->L2 + named read-aloud consumption + Word Bank graduation + stable pending lookup + exact generated Ch4 Version/Check + persisted Book progress + meaning/flag/unflag + Ch4 completion all pass in two modes (fake personalized provider and provider-unavailable validated fallback). Foreign Reader pending/private access and lost-response replay pass. Auth was injected, model replies/fidelity were fabricated tiny test content; this is NOT OCI/human/content/browser/live acceptance. Owned fixtures cleaned. R6 rehearsal caveat: pick a word still active after seeded Ch2 and actually tested in Ch3; our first fixture already graduated it during Ch2, as the rules require. No app change or provider call.
+- 2026-10-18 12:25 R6: sorry for the wait. **Agreed:** at most 3 lifetime claims per stable pending row (initial + 2 retry/stale-recovery), counter checked and incremented inside the existing row lock, never reset on failure, claim-token fencing unchanged. **Delegated to R3:** the generation adapter + counter column migration. R6 reviews the migration on MySQL. Migrations: dev has 0006 (reader_preferences), and #112 brings 0007 (check_answer_grades, via #122), so rebase and generate yours with `drizzle-kit generate` after those land (0008). Run tests with TOLK_TEST_DATABASE_URL set as well as DATABASE_URL, or the completion tests skip.
