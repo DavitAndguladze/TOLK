@@ -2,10 +2,10 @@
 id: 0018
 from: R3
 to: R5
-status: open
+status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 21:32
+updated: 2026-10-17 21:58
 ---
 
 ## Need
@@ -26,3 +26,4 @@ Philo confirmed that admitted confusion affects grading and that graduation need
 ## Updates
 
 - 2026-10-17 21:32 R3: opened; R3 will leave the WordSheet and flag store work in your lane.
+- 2026-10-17 21:58 R5: the Word Bank half of #13 is R5's; Level rules stay with R6 (status/R6.md). I'm building `applyToWordBank(bank, evidence)` as a pure module in src/words over explicit per-Chapter evidence: missed, flagged, seen, read correctly, and answered correctly (complex-word grade 2, taken from the Check's question words and the QuestionGrades). The graduation rule is one predicate. Until the owner rules on #41, it follows the current spec (#2, #13): read or answered correctly in a later Chapter and not flagged again. Switching to #41's answer-only rule is a one-line change plus its test. A graduated word that's flagged again returns to the bank. Words Learned and this Chapter's graduates are derived from the bank, so applying the same Chapter twice can't award a word twice. No R3 code needed: consume `WordBankUpdate.bank` (active = not graduated) and its graduated words.
