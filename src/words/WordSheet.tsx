@@ -20,7 +20,7 @@ const FLAG = "M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7"
 const CLOSE = "M18 6 6 18M6 6l12 12";
 
 /** The word as printed, without the quotes and punctuation around it. */
-export function displayWord(token: Token): string {
+function displayWord(token: Token): string {
   return token.text.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, "");
 }
 
@@ -52,7 +52,8 @@ export function WordSheet({ chapterVersionId, token, onClose }: { chapterVersion
     return () => {
       live = false;
     };
-  }, [chapterVersionId, token]);
+    // Keyed on the index, not the Token object, so a re-render never re-flags a word the Reader just unflagged.
+  }, [chapterVersionId, token.index]);
 
   function toggleFlag() {
     setFailed(false);
