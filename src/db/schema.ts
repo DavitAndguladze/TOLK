@@ -4,6 +4,7 @@ import { boolean, index, int, json, mysqlTable, primaryKey, text, timestamp, uni
 import type { Api, Book, ChapterCheck, ChapterVersion, Chapter, Level, ReadAloudSummary, SessionResult, FlaggedWord, WordBankEntry, ReaderPreferences } from "../types";
 import type { IngestedChapterPolicy } from "../leveling/ingestion";
 import type { GeneratedChapter } from "../leveling/generator";
+import type { StoredAnswerGrade } from "../comprehension/answer-grades";
 
 const id = (name = "id") => varchar(name, { length: 191 });
 const createdAt = () => timestamp("created_at", { fsp: 3 }).notNull().defaultNow();
@@ -168,6 +169,17 @@ export const chapterCompletions = mysqlTable("chapter_completions", {
   chapterVersionId: id("chapter_version_id").notNull().references(() => chapterVersions.id),
   data: json("data").$type<Api["POST /api/checks/[checkId]/answers"]["res"]>().notNull(),
 }, (t) => [primaryKey({ columns: [t.readerId, t.chapterVersionId] })]);
+
+/** A Key Point answer's grade from the Reader pressing Check (#97), so submitting the Check reuses it. */
+export const checkAnswerGrades = mysqlTable("check_answer_grades", {
+  readerId: id("reader_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+  checkId: id("check_id").notNull(),
+  questionId: id("question_id").notNull(),
+  // SHA-256 of the exact answer text: answers can be longer than a key column allows.
+  answerHash: varchar("answer_hash", { length: 64 }).notNull(),
+  data: json("data").$type<StoredAnswerGrade>().notNull(),
+  createdAt: createdAt(),
+}, (t) => [primaryKey({ name: "check_answer_grades_pk", columns: [t.readerId, t.checkId, t.questionId, t.answerHash] })]);
 
 /** The Reader's onboarding picks (#99): Reading Goals and Favourite Genres. */
 export const readerPreferences = mysqlTable("reader_preferences", {
