@@ -43,26 +43,25 @@ function sourceQuote(sentence: string, quote: string): string | null {
   return match ? sentence.slice(match.index, match.index + match[0].length) : null;
 }
 
-const NON_NAME_CAPITALS = new Set(["A", "An", "And", "As", "At", "But", "By", "For", "He", "I", "In", "It", "On", "Once", "One", "The", "They", "This", "To", "We", "When", "While", "You"]);
+const NON_NAME_CAPITALS = new Set(["A", "All", "An", "And", "As", "At", "But", "By", "For", "From", "He", "I", "In", "It", "My", "On", "Once", "One", "Only", "The", "They", "This", "To", "We", "When", "While", "You"]);
 const NON_NAME_SINGLE_WORDS = new Set(["If", "No", "Western", "Eastern", "Northern", "Southern", "Civil", "War", "New"]);
 const NON_NAME_PHRASES = new Set(["Middle Western"]);
 
 /** Exact candidate strings bound to this excerpt; the model selects indexes instead of inventing names. */
 export function getRequiredNameCandidates(sentences: string[]): string[] {
   const candidates = new Set<string>();
-  const pattern = /(?:[A-Z]\.\s+)?[A-Z][\p{L}\p{M}'’-]*(?:\s+(?:(?:[A-Z]\.\s+)?[A-Z][\p{L}\p{M}'’-]*))*/gu;
+  const pattern = /(?:[A-Z]\.|[A-Z][\p{L}\p{M}'’-]*)(?:\s+(?:[A-Z]\.|[A-Z][\p{L}\p{M}'’-]*))*/gu;
   for (const sentence of sentences) {
     for (const match of sentence.matchAll(pattern)) {
-      const phrase = match[0].trim().replace(/[’']s$/u, "");
-      const parts = phrase.split(/\s+/);
-      const variants = [phrase, ...parts];
-      for (const candidate of variants) {
-        const candidateParts = candidate.split(/\s+/);
-        if (candidateParts.some((part) => /^[A-Z]\.?$/u.test(part) || NON_NAME_CAPITALS.has(part))) continue;
-        if (candidateParts.length === 1 && NON_NAME_SINGLE_WORDS.has(candidate)) continue;
-        if (NON_NAME_PHRASES.has(candidate)) continue;
-        if (contains(sentence, candidate)) candidates.add(candidate);
-      }
+      const parts = match[0].trim().replace(/[’']s$/u, "").split(/\s+/);
+      while (parts.length && NON_NAME_CAPITALS.has(parts[0])) parts.shift();
+      const candidate = parts.join(" ");
+      if (!candidate || parts.every((part) => /^[A-Z]\.?$/u.test(part))) continue;
+      if (parts.some((part) => NON_NAME_CAPITALS.has(part))) continue;
+      if (parts.length === 1 && NON_NAME_SINGLE_WORDS.has(candidate)) continue;
+      if (NON_NAME_PHRASES.has(candidate)) continue;
+      // A source name is one candidate; fragments like Great from Great War are not names.
+      if (contains(sentence, candidate)) candidates.add(candidate);
     }
   }
   return [...candidates];
