@@ -348,10 +348,30 @@ export interface ProgressView {
   streak: Streak;
 }
 
+/** What the Reader wants to improve, picked after sign-up (#99). */
+export const READING_GOALS = ["comprehension", "vocabulary", "reading-aloud-confidence", "complex-stories", "advanced-challenge"] as const;
+export type ReadingGoal = (typeof READING_GOALS)[number];
+
+/** Kinds of Book the Reader likes, picked after sign-up (#99); drives "Recommended for you". */
+export const FAVOURITE_GENRES = [
+  "fantasy", "mystery-thriller", "adventure", "science-fiction", "romance",
+  "historical-fiction", "horror", "biography", "personal-development", "science-technology",
+] as const;
+export type FavouriteGenre = (typeof FAVOURITE_GENRES)[number];
+
+/** The Reader's onboarding picks; each list has at least one entry once saved. */
+export interface ReaderPreferences {
+  readingGoals: ReadingGoal[];
+  favouriteGenres: FavouriteGenre[];
+}
+
 // ── HTTP contract (Next.js route handlers) ───────────────────────────────
 
 export interface Api {
   "GET /api/library?q": { req: void; res: (Book & { progress: BookProgress | null })[] };
+  /** null until the Reader finishes onboarding (#99). */
+  "GET /api/reader/preferences": { req: void; res: ReaderPreferences | null };
+  "PUT /api/reader/preferences": { req: ReaderPreferences; res: ReaderPreferences };
   "POST /api/books/[bookId]/open": { req: void; res: { chapter: Pick<Chapter, "id" | "number" | "title">; version: ChapterVersion } };
   "GET /api/chapter-versions/[versionId]": { req: void; res: ChapterVersion };
   "POST /api/chapter-versions/[versionId]/read-aloud": { req: ReadAloudSummary; res: { ok: true } };
