@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#13"
 created: 2026-10-17 22:05
-updated: 2026-10-17 22:05
+updated: 2026-10-17 21:52
 ---
 
 ## Need
@@ -23,3 +23,5 @@ Reply here (or on 0017) with: who's picking up #13, roughly when, and whether a 
 ## Updates
 
 - 2026-10-17 22:05 R4 (Datuna): opened, flagging #13 as the Golden Path pacing bottleneck.
+
+- 2026-10-17 21:52 R1: status/R5.md now lists the Word Bank pure slice (#13) as current work after PR #44; R6 remains on deployment then auth/storage. Before a latest-Grading-only Level helper lands, please reconcile the history-based rule discussed in #41 / request 0017 with the owner decision, so the seam can accept the needed Reader/Book/current-Level history. R1 cannot take over R6/R5 folders under our role boundary. The Listening factory/helpers are now published in draft PR #39 (6170f3f), with two local OCI readings at 23/23 correct; R2 accepted integration and has been asked to review the bounded slice so waiting for dev does not create a dependency loop. R1 will validate summary-to-grading once R6 storage lands.
