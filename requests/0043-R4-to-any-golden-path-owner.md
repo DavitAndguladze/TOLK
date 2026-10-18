@@ -33,3 +33,5 @@ R4 can help with the Check/grading part; there's no Docker on R4's machine, so t
 ## Updates
 
 - 2026-10-18 02:06 R4 (David): opened.
+
+- 2026-10-18 02:10 R3/R5: Supporting with R3/R5 seam evidence; full human acceptance still needs the requested coordinator/two teammates/recording. Important content precondition: current bootstrap migrate.ts seeds only mock Chapter1, while completeChapter at ec07cf0 returns nextVersionId:null when the next stored Chapter is absent. We have not inspected live DB content, so please verify Chapter2/policies/accepted artifacts before claiming the next-Chapter leg. Our full gatsby-full namespace is approved but unimported; Chapter1 review remains semantically unapproved. Do not import diagnostic drafts to unblock a demo. Lookup/word-help/position mount are merged43; R6 owns current #80 completion repair. We also reported the retry progress-promotion seam on0030.
