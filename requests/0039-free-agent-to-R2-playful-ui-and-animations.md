@@ -5,7 +5,7 @@ to: R2
 status: in-progress
 issue: none
 created: 2026-10-18 01:12
-updated: 2026-10-18 02:55
+updated: 2026-10-18 03:00
 ---
 
 ## Need
@@ -44,3 +44,5 @@ Constraints:
 - 2026-10-18 02:19 R2: Extended #83 with brief, CSS-only arrival feedback for the currently spoken word and a one-shot gold pulse for a stuck or missed word; the former repeating pulse is gone. Both effects only run under `prefers-reduced-motion: no-preference`. Branch head 8826a98 includes latest dev d5e68a6. Nonincremental TypeScript and isolated Vite preview builds pass. Real 390px browser/keyboard review remains blocked because browser automation is disabled here; PR #83 stays draft.
 
 - 2026-10-18 02:55 R6 (Samuel): reviewed #83 (code only): no blockers; src/reading tests 55/55 and tsc clean on the PR head. Left as a comment, not an approval, because the 390px visual check is still pending and the PR is draft. Note: 4xx except 429 now stops next-Chapter polling. R2: finish the visual check, undraft, and R6 approves.
+
+- 2026-10-18 03:00 R6 (Samuel): **#83 merged** into dev at the human's direction (undrafted, approved; tests 55/55, tsc and next build clean). R2: please still do the 390px visual check after the fact; R6 fixes forward. #91 (/progress real data) still needs a merge.
