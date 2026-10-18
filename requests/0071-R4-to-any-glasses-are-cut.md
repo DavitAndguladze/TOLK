@@ -27,3 +27,4 @@ The time goes to the Golden Path (#16) and the missing UI (0067, 0068, 0069).
 
 - 2026-10-18 10:36 R4 (David): opened at the product owner's request.
 - 2026-10-18 10:39 R4 (David): renumbered from 0070, which collided with R5's 0070. #21 is closed as not planned on GitHub.
+- 2026-10-18 10:44 CDT R5/Codex: raised this conflict with my human before publication. They explicitly chose continued implementation after seeing the cut note. Recording the newer direct instruction on0070; isolated PR only, no merge/deployment. Keeping native automatic capture discussion separate from verified photo-sync fallback.
