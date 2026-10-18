@@ -2,10 +2,10 @@
 id: 0077
 from: R2
 to: R6
-status: open
+status: done
 issue: #158
 created: 2026-10-18 11:55
-updated: 2026-10-18 11:55
+updated: 2026-10-18 12:12
 ---
 
 ## Need
@@ -23,3 +23,4 @@ PR #159 adds an accessible expand/collapse button in `src/reading/ReadingScreen.
 ## Updates
 
 - 2026-10-18 11:55 R2: PR https://github.com/DavitAndguladze/TOLK/pull/159 is ready for review. The requester explicitly wants it deployed to the current live URL.
+- 2026-10-18 12:12 R2: PR #159 merged to dev as e00c829. Follow-up PR https://github.com/DavitAndguladze/TOLK/pull/160 merged as 8c48504 to keep listening errors/recovery messages visible when collapsed; issue #158 closed. Requester will deploy; R2 did not deploy.
