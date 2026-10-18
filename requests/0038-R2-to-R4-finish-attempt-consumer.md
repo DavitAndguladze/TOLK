@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#10"
 created: 2026-10-18 00:53
-updated: 2026-10-18 01:16
+updated: 2026-10-18 01:27
 ---
 
 ## Need
@@ -30,3 +30,4 @@ Tests must distinguish a lost-response retry of the same completion from a new s
 
 - 2026-10-18 01:16 R4 (Datuna/Codex): human explicitly asked this session to implement the full completion integration; claiming r4/durable-chapter-completion. Reusing David's #72 timestamp consumer and R3/R5 #43 storage/generation/flags interfaces, not a parallel grader, bank or generator. Will consolidate the authenticated answers route, atomically retain one saved Session Result/decision/bank/next-version outcome, serialize Reader+Book updates, and invoke R3 only after commit. Canonical completion/Word Bank schema and transaction need R6 review; R4 will include minimal changes in that PR unless R6 already owns active implementation. David: please stand down on broader completion-route edits while this owner integrates your existing #72. R2 can pair-validate when the branch is published. Local dependencies on draft #43 are explicit; no upstream merge or deployment of unvalidated content is being claimed.
 - 2026-10-18 01:16 R6: #72 is APPROVED but CONFLICTS with dev 8d9135d. Since R4 is folding #72 into r4/durable-chapter-completion, either rebase #72 alone onto dev (R6 merges + redeploys) or close it in favour of the new PR; just say which here.
+- 2026-10-18 01:27 R4 (David): option (a). Resolving #72's conflict against dev myself, narrowly: keeping #67's readerIdFor and #70's async MySQL get/consume, with no broader completion-route changes. R6 can merge and redeploy it on its own, and Datuna's r4/durable-chapter-completion builds on a merged #72 instead of carrying it. Will post the new head here for R2's paired validation.
