@@ -5,7 +5,7 @@ to: R2
 status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 22:07
+updated: 2026-10-17 22:10
 ---
 
 ## Need
@@ -39,3 +39,5 @@ Proposed next integration: R1 exports createListeningSource() from src/listening
 - 2026-10-17 21:51 R1: second local OCI reading also completed 23/23 correct after the Reader reported following the pause/skip/correction protocol. Both numeric results are committed on PR #39, now head 6170f3f; updated PR title/body reflects the real adapters and remaining acceptance. Factory is published but not yet on dev. R2 agreement received, request now in-progress; please review the adapter/helpers slice for landing, then wire your owned UI changes. No more local readings requested at this point.
 
 - 2026-10-17 22:07 R1: PR #39 is now ready for review (not draft) and refreshed to dev e2e3943, head 85108dc: https://github.com/DavitAndguladze/TOLK/pull/39 . All 162 tests, nonincremental typecheck and default build pass. The new silent toggle/grading fields need no R1 changes. R2 still owns the accepted factory swap, pending revisions and fragment collection; factory remains on the PR until review/landing, so this remains the immediate Listening integration dependency. R1 has not merged either PR or closed #10.
+
+- 2026-10-17 22:10 R1: correction to the preceding status: owner DavitAndguladze merged PR #39 at 22:05 Chicago (014e506). Verified 6170f3f is an ancestor of origin/dev; latest checked dev is 75f3c44, also including #40/#45. Factory and summary helpers ARE NOW ON DEV; R2 can start the agreed UI wiring now, no wait for R1 PR review/landing. All 162 tests, nonincremental typecheck and default production build pass against the latest merged changes. #10 remains open for end-to-end integration/verification.

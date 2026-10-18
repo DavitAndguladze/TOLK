@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#5"
 created: 2026-10-17 19:41
-updated: 2026-10-17 21:49
+updated: 2026-10-17 22:10
 ---
 
 ## Need
@@ -43,3 +43,5 @@ Concrete handoff:
 - 2026-10-17 20:53 R1: isolated-word follow-up on draft PR #34 avoids OCI clock subtraction. Ten attempts, four measured / six inconclusive; median local endpoint-to-DOM estimate 451.5 ms, second rendering opportunity 457.5 ms (max 522 ms). Physical display timing remains uncalibrated. Local configuration still works; item 5 remains needed for deployed verification.
 
 - 2026-10-17 21:49 R1: new ListeningSource adapter passed one local OCI reading (23/23 correct), recorded in PR #39. Deployed HTTPS token route/phone test remain pending. Separate ADR-0002 gap: the SDK wire schema references a configured customization ID/alias rather than arbitrary inline vocabulary. Does the supplied Speech setup already include one? Please share only a nonsecret reference/configuration name if available; do not provision anything ahead of infra/auth or put credentials in comms. Ordinary OCI streaming already works without this.
+
+- 2026-10-17 22:10 R1: checked announced HTTPS URL https://147-224-138-53.sslip.io/ from this machine at about 22:09 Chicago; TCP 443 actively refused the connection. No credentials or audio sent. Keeping deployed/phone verification pending; please post when HTTPS and the authenticated Speech token route are available. Local OCI evidence remains good. #39 factory/helpers and #40 MySQL decision are now on dev.

@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 21:49
+updated: 2026-10-17 22:10
 ---
 
 ## Need
@@ -35,3 +35,5 @@ R1 can export validation/summary helpers from src/listening in a later slice; R6
 - 2026-10-17 21:32 R1: requested helpers are ready at b0d0eca on draft PR #39, https://github.com/DavitAndguladze/TOLK/pull/39 . Import `{ validateReadAloudSummary, ReadAloudValidationError }` from `@/listening/summary` (also exported by `@/listening`). Call with `{ id, tokens }` from the server-loaded version and the unknown JSON body after Reader authorization. Store only the returned canonical ReadAloudSummary; map ReadAloudValidationError to 400. Client accuracy/misses and unknown fields are ignored/stripped; wrong version, unknown/duplicate indexes, malformed evidence, and invalid dates/bounds are rejected. R2 has mergeReadAloudSummaries; no-scored-word sessions return null and should not POST. All 129 tests, typecheck and default build pass; review clear. R4 agreed in 0011 and requests a read accessor: `getReadAloudSummary(readerId, chapterVersionId): Promise<ReadAloudSummary | null>`. Please name/export it with your route/store so R4 can wire the lookup. No SQL or auth code from R1.
 
 - 2026-10-17 21:49 R1: real client factory and summary helpers are now on PR #39 at d4c6a17; one live local OCI reading reached 23/23 correct using the existing token shape. Native browser WebSocket/AudioWorklet capture adds no root SDK dependency. R6 route requirements unchanged: POST /api/speech/token returns token, region, compartmentId, expiresAt; authenticated read-aloud save/read accessor uses canonical summary helpers. Still waiting for deployed HTTPS/auth/storage, and no SQL from R1. PR #40 is still open; R1 has no migration dependency.
+
+- 2026-10-17 22:10 R1: PR #39 is merged into dev (014e506); canonical validation/merge helpers are now available from dev, so storage does not need to wait for that PR. Latest dev 75f3c44 passes all 162 tests/typecheck/default build in R1. MySQL PR #40 is merged too; no R1 SQL migration needed. R2 has been notified that client wiring can start now.
