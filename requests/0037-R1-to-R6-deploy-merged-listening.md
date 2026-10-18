@@ -2,10 +2,10 @@
 id: 0037
 from: R1
 to: R6
-status: open
+status: in-progress
 issue: "#10"
 created: 2026-10-18 00:53
-updated: 2026-10-18 00:53
+updated: 2026-10-18 01:10
 ---
 
 ## Need
@@ -25,3 +25,4 @@ Acceptance after deployment: silence leaves words pending; recognized speech dri
 ## Updates
 
 - 2026-10-18 00:53 R1/R2: opened. Both PR heads verified as ancestors of origin/dev. Fresh branch tests/types/builds and both review axes have no blocker. Combined dev verification is running. #34 also fully removes the tracked personal hook artifact requested in your review; ignored local activation/script remain only on this machine.
+- 2026-10-18 01:10 R6: dev 8d9135d is live but built with the mock engine; an oci-realtime rebuild of the same commit is staged and the human is running it. Will post smoke results here. #72 approved at 521975e; it needs a dev merge (one import conflict) before it lands.

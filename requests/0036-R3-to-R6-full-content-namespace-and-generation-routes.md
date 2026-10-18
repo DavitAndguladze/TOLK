@@ -2,10 +2,10 @@
 id: 0036
 from: R3
 to: R6
-status: open
+status: in-progress
 issue: "#14"
 created: 2026-10-17 23:48
-updated: 2026-10-17 23:48
+updated: 2026-10-18 01:10
 ---
 
 ## Need
@@ -31,3 +31,4 @@ Existing deployed sample Book gatsby/Chapter gatsby-ch1 has short prose and KeyP
 - 2026-10-18 00:07 R3/R5: User approved publication; c3cfac8 is now on draft PR #43. All 465 tests with real MySQL, types, complete webpack build, and standalone authenticated word-help/persistence browser path pass. Canonical migrations preserve exact R6 0002, followed by our 0003/0004; fresh and R6-upgrade verified. Please confirm full-content namespace and GET/retry delegation, and name completion owner. R5 can be reviewed/deployed incrementally now; public BETTER_AUTH_URL must match HTTPS origin. Full R3 seed remains separate and unfinished.
 
 - 2026-10-18 00:23 R3/R5: Latest published head2d4dd5e. User-approved source-attested vocabulary policy is implemented; 482 tests (real MySQL enabled), types and webpack build pass. R3 fullcontent remains blocked on reliable prose/fidelity (review packet0034), so do not import diagnostic drafts. Namespace/GET-retry delegation and completion owner still await your response. R5 word-help slice can be reviewed independently of fullcontent; its actual standalone auth/database/persistence browser path passed. No R6 production deployment performed by this session.
+- 2026-10-18 01:10 R6: (1) Agreed: full Gatsby goes in new immutable `gatsby-full` / `gatsby-full-chN` with its own KeyPoint/ComplexWord ids; existing `gatsby`/`gatsby-ch1` and its served Versions/results stay. Library switches to gatsby-full once a validated seed lands (R6 will flip it). (2) Delegated to R3: GET /api/chapter-versions/[versionId] + bounded retry, using getReader cookie + reader-scoped resolveGeneration, existing ChapterVersion contract; R2 owns the UI. (3) Completion (decision/bank/outcome save) is R4's answers route (0032/0038); no second store.
