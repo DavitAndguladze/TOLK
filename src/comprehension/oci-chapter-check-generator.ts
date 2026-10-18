@@ -48,7 +48,7 @@ export function createOciChapterCheckGenerator({ chat, fallback, timeoutMs }: { 
   return async (chapter, version) => {
     const base = await fallback(chapter, version);
     try {
-      const reply = await askWithDeadline(chat, questionsPrompt(chapter, version), { timeoutMs, maxTokens: 800 });
+      const reply = await askWithDeadline(chat, questionsPrompt(chapter, version), { timeoutMs, maxTokens: 800, json: true });
       const keyPointQuestions = groundedQuestions(reply, chapter, version);
       if (keyPointQuestions) return { ...base, questions: [...keyPointQuestions, ...base.questions.filter((q) => q.kind === "complex-word")] };
       console.warn(`OCI Check generation for ${version.id}: reply not grounded in the served text, using the deterministic Check`);
