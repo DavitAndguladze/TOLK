@@ -6,3 +6,5 @@ node_modules
 .scratch
 next-env.d.ts
 *.tsbuildinfo
+.claude/settings.local.json
+.claude/hooks/block-dangerous-git.sh

@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     env_file: .env
     volumes:
-      - ./oci_api_key.pem:/app/oci_api_key.pem:ro
+      - ./oci_api_key.pem:/app/oci_api_key.pem:ro,z
     expose:
       - "3000"
   caddy:
@@ -17,7 +17,7 @@ services:
     environment:
       APP_DOMAIN: ${APP_DOMAIN}
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro,z
       - caddy_data:/data
     depends_on:
       - app

@@ -1,17 +1,35 @@
 import type { Metadata, Viewport } from "next";
+import { Atkinson_Hyperlegible_Next } from "next/font/google";
+import { PhoneFrame } from "@/reading/ui/PhoneFrame";
+import "./globals.css";
+
+const atkinson = Atkinson_Hyperlegible_Next({
+  subsets: ["latin"],
+  variable: "--font-atkinson",
+  fallback: ["system-ui", "sans-serif"],
+  adjustFontFallback: false,
+});
 
 export const metadata: Metadata = {
   title: "TOLK",
   description: "Read aloud, one Level closer to the original.",
   manifest: "/manifest.webmanifest",
+  appleWebApp: { capable: true, title: "TOLK", statusBarStyle: "default" },
 };
 
-export const viewport: Viewport = { width: "device-width", initialScale: 1 };
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#fbf3dc",
+  viewportFit: "cover",
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" className={atkinson.variable}>
+      <body className="bg-mist font-ui text-ink antialiased">
+        <PhoneFrame>{children}</PhoneFrame>
+      </body>
     </html>
   );
 }

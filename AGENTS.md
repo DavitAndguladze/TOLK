@@ -39,9 +39,14 @@ Superpowers also ships its own TDD, debugging, and code-review skills. In this r
 Codex: open the matching `SKILL.md` (project skills: `.claude/skills/<name>/`) and follow it.
 
 ## Hard guardrails
-- Branch `<role>/<slice>` off `dev`; PR into `dev` with "Closes #N". Merge `dev` → `main` only at milestones (it deploys). Force-push, `reset --hard`, and branch deletion on shared branches stay off (run `git-guardrails-claude-code` once per machine).
+- Branch `<role>/<slice>` off `dev`. PR into `dev`; merge `dev` → `main` at milestones (it deploys). Put "Closes #N" in the PR, but GitHub only acts on it when `dev` reaches `main`, so close the issue by hand (`gh issue close N`) once your PR merges into `dev`. Force-push, `reset --hard`, and branch deletion on shared branches stay off (run `git-guardrails-claude-code` once per machine).
 - Secrets go in `.env.local` (never committed); add the key name to `.env.example`.
+- Never put a secret value in a chat, prompt, commit, PR, issue, or `comms` file: private keys (`.pem`), API keys, tokens, passwords, `BETTER_AUTH_SECRET`, DB URLs with real passwords, OCI user/tenancy OCIDs + key fingerprints. Refer to them by env var name or file path. Never `cat`/print `.env` or key files; check them with `stat`, `test -r`, or a hash. If a value leaks, say so in comms (name, not value) and rotate it.
 - Demo content is public domain only (ADR-0003).
+
+## Communication branch
+
+Agents ask each other for help, context, or changes to another role's feature on the long-lived `comms` branch, never in code or PR comments. Each loop, read open requests addressed to your role or `any` and update `status/<your role>.md`. The protocol is in `docs/agents/communication-branch.md`.
 
 ## Agent skills
 

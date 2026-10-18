@@ -1,0 +1,53 @@
+{
+  "sessionStarted": "2026-10-18T01:14:05.478Z",
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+  "region": "us-chicago-1",
+  "finalCallbackCount": 6,
+  "finalWordEvents": 112,
+  "maxWithinCallbackWordGapMs": 780,
+  "latencyEstimatesValid": false,
+  "limitations": [
+    "The original capture did not record transcription bounds or utterance numbers.",
+    "Token bounds regress across final callbacks; session-origin delay estimates are invalid for later utterances.",
+    "Only aggregate numeric clock evidence is exported from this longer session. No transcript or audio is exported.",
+    "The earlier 4080 ms gap compared different callbacks; without known clock origins it cannot establish the real pause length."
+  ],
+  "finalCallbacks": [
+    {
+      "wordCount": 34,
+      "firstTokenStartMs": 480,
+      "lastTokenEndMs": 12240,
+      "callbackSinceFirstAudioEstimateMs": 13866
+    },
+    {
+      "wordCount": 4,
+      "firstTokenStartMs": 5040,
+      "lastTokenEndMs": 6480,
+      "callbackSinceFirstAudioEstimateMs": 38397
+    },
+    {
+      "wordCount": 32,
+      "firstTokenStartMs": 10560,
+      "lastTokenEndMs": 21480,
+      "callbackSinceFirstAudioEstimateMs": 50857
+    },
+    {
+      "wordCount": 4,
+      "firstTokenStartMs": 6600,
+      "lastTokenEndMs": 7440,
+      "callbackSinceFirstAudioEstimateMs": 68210
+    },
+    {
+      "wordCount": 33,
+      "firstTokenStartMs": 10320,
+      "lastTokenEndMs": 17640,
+      "callbackSinceFirstAudioEstimateMs": 77634
+    },
+    {
+      "wordCount": 5,
+      "firstTokenStartMs": 2700,
+      "lastTokenEndMs": 5820,
+      "callbackSinceFirstAudioEstimateMs": 100204
+    }
+  ]
+}

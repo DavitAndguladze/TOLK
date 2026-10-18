@@ -79,6 +79,7 @@ export const mockChapter: Chapter = {
     { word: "vulnerable", meaning: "easily hurt or affected" },
     { word: "criticizing", meaning: "pointing out what's wrong with someone" },
     { word: "advantages", meaning: "things that give you a better chance" },
+    { word: "judge", meaning: "to decide someone is bad" },
   ],
 };
 
@@ -116,9 +117,15 @@ export const mockChapterCheck: ChapterCheck = {
 };
 
 export const mockQuestionGrades: QuestionGrade[] = [
-  { questionId: "q1", grade: 2, feedback: "Right: don't be quick to judge people.", rereadSentenceIndex: null },
-  { questionId: "q2", grade: 1, feedback: "Close. It's because not everyone had the good things Nick had.", rereadSentenceIndex: 3 },
-  { questionId: "q3", grade: 2, feedback: "Yes.", rereadSentenceIndex: null },
+  { questionId: "q1", grade: 2, feedback: "Right: don't be quick to judge people.", rereadSentenceIndex: null, rereadSentence: null },
+  {
+    questionId: "q2",
+    grade: 1,
+    feedback: "Close. It's because not everyone had the good things Nick had.",
+    rereadSentenceIndex: 3,
+    rereadSentence: "Not everyone has had the good things you have had.”",
+  },
+  { questionId: "q3", grade: 2, feedback: "Yes.", rereadSentenceIndex: null, rereadSentence: null },
 ];
 
 export const mockGrading: Grading = {
@@ -127,7 +134,7 @@ export const mockGrading: Grading = {
   barelyPassed: true,
   questionGrades: mockQuestionGrades,
   missedWords: [{ word: "advice", source: "read-aloud" }, { word: "quick", source: "flagged" }],
-  basis: { readAloudAccuracy: 0.94, checkScore: 5, checkMax: 6, flaggedCount: 1 },
+  basis: { readAloudAccuracy: 0.94, checkScore: 5, checkMax: 6, flaggedCount: 1, gradedBy: "oci-generative-ai" },
 };
 
 export const mockSession: SessionResult = {

@@ -190,6 +190,12 @@ export interface ChapterCheck {
 
 export interface ChapterCheckAnswers {
   answers: { questionId: string; answer: string; via: "spoken" | "typed" }[];
+  /**
+   * The `startedAt` of the read-aloud summary saved for this completion of the Chapter, or null
+   * (or absent) when the Reader read silently or the save failed. Grading uses a saved summary only
+   * when it matches, so an older reading is never credited (comms 0024).
+   */
+  readAloudStartedAt?: string | null;
 }
 
 export interface QuestionGrade {
@@ -198,9 +204,18 @@ export interface QuestionGrade {
   /** One line, from OCI Generative AI. */
   feedback: string;
   rereadSentenceIndex: number | null;
+  /** This Chapter Version's text for rereadSentenceIndex, so feedback can quote it without a second lookup. */
+  rereadSentence: string | null;
 }
 
 export type GradingResult = "fully-understood" | "partly-understood" | "struggled";
+
+/**
+ * Who graded the Key Point answers: OCI Generative AI, or the word-match stand-in that runs when
+ * OCI isn't configured or fails. "oci-generative-ai" only if OCI graded every one. Complex Word
+ * answers are multiple choice, always graded exactly.
+ */
+export type KeyPointGradedBy = "oci-generative-ai" | "stand-in";
 
 /** Output of the deterministic grading combiner (pure). */
 export interface Grading {
@@ -210,8 +225,8 @@ export interface Grading {
   barelyPassed: boolean;
   questionGrades: QuestionGrade[];
   missedWords: { word: string; source: "read-aloud" | "chapter-check" | "flagged" }[];
-  /** Shown to Reader and judges: what the grade was based on. */
-  basis: { readAloudAccuracy: number | null; checkScore: number; checkMax: number; flaggedCount: number };
+  /** Shown to Reader and judges: what the grade was based on, and who graded the answers. */
+  basis: { readAloudAccuracy: number | null; checkScore: number; checkMax: number; flaggedCount: number; gradedBy: KeyPointGradedBy };
 }
 
 /** Pure grading combiner input: AI question grades + signals. */
@@ -220,6 +235,7 @@ export interface GradingInput {
   readAloud: ReadAloudSummary | null;
   flaggedWords: string[];
   complexWordMisses: string[];
+  gradedBy: KeyPointGradedBy;
 }
 
 export interface SessionResult {
@@ -241,7 +257,12 @@ export type LevelReason =
   | "partly-understood" // same
   | "struggled-hold" // same, score ≥ 35
   | "struggled-down" // down one, score < 35
-  | "at-original"; // already L5
+  | "at-original" // already L5
+  | "insufficient-history" // fewer than three qualifying Chapters
+  | "sustained-understanding" // three-Chapter average >= 88, up one
+  | "sustained-struggle" // three-Chapter average < 35, down one
+  | "sustained-hold" // three-Chapter average in [35, 88)
+  | "at-simplest"; // already L1
 
 export interface LevelDecision {
   from: Level;
@@ -270,7 +291,12 @@ export interface WordBankUpdate {
 /** The core pure seam: grading → level → word bank. Most tests live here. */
 export interface ChapterOutcome {
   grade(input: GradingInput): Grading;
-  decideNextLevel(current: Level, grading: Grading): LevelDecision;
+  /**
+   * #41: history includes the just-completed Chapter, oldest first. The storage adapter must
+   * scope it to one Reader + Book, since the last actual Level change (even on return to an
+   * earlier Level). No history means hold; reinforcement still follows the latest grading.
+   */
+  decideNextLevel(current: Level, grading: Grading, history?: readonly SessionResult[]): LevelDecision;
   applyToWordBank(
     bank: WordBankEntry[],
     session: SessionResult,
@@ -322,16 +348,38 @@ export interface ProgressView {
   streak: Streak;
 }
 
+/** What the Reader wants to improve, picked after sign-up (#99). */
+export const READING_GOALS = ["comprehension", "vocabulary", "reading-aloud-confidence", "complex-stories", "advanced-challenge"] as const;
+export type ReadingGoal = (typeof READING_GOALS)[number];
+
+/** Kinds of Book the Reader likes, picked after sign-up (#99); drives "Recommended for you". */
+export const FAVOURITE_GENRES = [
+  "fantasy", "mystery-thriller", "adventure", "science-fiction", "romance",
+  "historical-fiction", "horror", "biography", "personal-development", "science-technology",
+] as const;
+export type FavouriteGenre = (typeof FAVOURITE_GENRES)[number];
+
+/** The Reader's onboarding picks; each list has at least one entry once saved. */
+export interface ReaderPreferences {
+  readingGoals: ReadingGoal[];
+  favouriteGenres: FavouriteGenre[];
+}
+
 // ── HTTP contract (Next.js route handlers) ───────────────────────────────
 
 export interface Api {
   "GET /api/library?q": { req: void; res: (Book & { progress: BookProgress | null })[] };
+  /** null until the Reader finishes onboarding (#99). */
+  "GET /api/reader/preferences": { req: void; res: ReaderPreferences | null };
+  "PUT /api/reader/preferences": { req: ReaderPreferences; res: ReaderPreferences };
   "POST /api/books/[bookId]/open": { req: void; res: { chapter: Pick<Chapter, "id" | "number" | "title">; version: ChapterVersion } };
   "GET /api/chapter-versions/[versionId]": { req: void; res: ChapterVersion };
   "POST /api/chapter-versions/[versionId]/read-aloud": { req: ReadAloudSummary; res: { ok: true } };
   "POST /api/chapter-versions/[versionId]/flags": { req: { word: string; tokenIndex: number }; res: { flagged: FlaggedWord; meaning: string } };
   "DELETE /api/chapter-versions/[versionId]/flags/[tokenIndex]": { req: void; res: { ok: true } };
   "GET /api/chapter-versions/[versionId]/check": { req: void; res: ChapterCheck };
+  /** Grades one answer when the Reader presses Check (#97); submitting the Check reuses this grade for the same answer. */
+  "POST /api/checks/[checkId]/questions/[questionId]/grade": { req: ChapterCheckAnswers["answers"][number]; res: QuestionGrade };
   "POST /api/checks/[checkId]/answers": { req: ChapterCheckAnswers; res: { session: SessionResult; decision: LevelDecision; wordBank: WordBankUpdate; nextVersionId: string | null } };
   "GET /api/progress?bookId": { req: void; res: ProgressView };
   "POST /api/speech/token": { req: void; res: { token: string; region: string; compartmentId: string; expiresAt: string } };

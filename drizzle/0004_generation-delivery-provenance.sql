@@ -1,0 +1,1 @@
+ALTER TABLE `chapter_generations` ADD `provenance` json;

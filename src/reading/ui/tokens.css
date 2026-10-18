@@ -1,0 +1,27 @@
+/* Merge these values into the existing app @theme; retain its fonts and keyframes. */
+@theme {
+  --color-mist: #fbf3dc;
+  --color-ink: #0b1946;
+  --color-fog: #4d6088;
+  --color-light: #1764df;
+  --color-glow: #bedcff;
+  --color-gold: #94620b;
+  --color-hairline: #cddff3;
+  --color-success: #146843;
+  --color-warning: #94620b;
+  --color-error: #b32c40;
+  --color-paper: #fffbf1;
+  --radius-control: 1rem;
+  --radius-card: 1.5rem;
+  --shadow-card: 0 4px 20px rgb(36 95 165 / 7%);
+  --text-reading: 1.75rem;
+  --text-reading--line-height: 1.8;
+  --text-title: 2rem;
+  --text-title--line-height: 1.15;
+  --spacing-touch: 2.75rem;
+  --spacing-page: 1.5rem;
+  --spacing-control-gap: 0.75rem;
+  --ease-reader: cubic-bezier(0.2, 0.75, 0.25, 1);
+  --duration-reader-fast: 120ms;
+  --duration-reader-progress: 250ms;
+}

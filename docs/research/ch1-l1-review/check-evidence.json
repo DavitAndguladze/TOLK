@@ -1,0 +1,37 @@
+{
+  "status": "generated_and_validated_not_fidelity_approved",
+  "evidence": {
+    "source": "generated from the final candidate's served sentences (docs/research/ch1-l1-review/candidate.json)",
+    "questions": [
+      {
+        "questionId": "gatsby-ch1-L1-kp-0",
+        "sentenceIndex": 4,
+        "quote": "Not everyone has had the good things you have had.\""
+      },
+      {
+        "questionId": "gatsby-ch1-L1-kp-1",
+        "sentenceIndex": 170,
+        "quote": "It was, well, the less fashionable of the two."
+      },
+      {
+        "questionId": "gatsby-ch1-L1-kp-2",
+        "sentenceIndex": 196,
+        "quote": "I drove to East Egg for dinner with the Buchanans."
+      },
+      {
+        "questionId": "gatsby-ch1-L1-cw-0",
+        "sentenceIndex": 11,
+        "quote": "An abnormal mind can quickly see this in someone normal."
+      },
+      {
+        "questionId": "gatsby-ch1-L1-cw-1",
+        "sentenceIndex": 247,
+        "quote": "He was supercilious, as if better than other people."
+      }
+    ]
+  },
+  "notes": [
+    "sentenceIndex is the served sentence's array position in candidate.json's draft.sentences (0-based), matching each question's answerSentenceIndex in check.json - not the originalSentenceIndex.",
+    "kp-0's quote ends with a closing quotation mark because that served sentence is the second half of dialogue split across two sentences (the opening quote mark is in the previous sentence); this is intentional, consistent with how quoted dialogue is split elsewhere in the candidate, not a stray character."
+  ]
+}

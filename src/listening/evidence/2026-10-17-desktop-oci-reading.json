@@ -1,0 +1,20 @@
+{
+  "implementationCommit": "cfc389f",
+  "engine": "oci-realtime",
+  "environment": "Windows desktop, in-app browser, localhost:5178",
+  "fixture": "mockChapterVersion(1), first whole-sentence Chunk from chunkChapterVersion, 23 tokens",
+  "startedAt": "2026-10-18T02:47:44.219Z",
+  "endedAt": "2026-10-18T02:47:57.450Z",
+  "accuracy": 1,
+  "correct": 23,
+  "scored": 23,
+  "total": 23,
+  "status": "Chunk complete; microphone stopped",
+  "evidenceSource": "User reported reading finished; agent inspected the visible numeric result and highlighted public-domain text.",
+  "limits": [
+    "One local desktop reading, not a phone/deployed test or an accuracy benchmark.",
+    "Session bounds include startup; they are not recognition/display latency.",
+    "Hesitation is uncalibrated and reported as zero; speaker isolation is not established.",
+    "No raw audio, transcript, token credentials, or device identifiers are stored in this evidence file."
+  ]
+}

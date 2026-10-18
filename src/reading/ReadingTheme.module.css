@@ -1,0 +1,79 @@
+.surface {
+  color: var(--color-ink);
+  /* One warm page colour for the whole read route, header included (src/app/read uses bg-paper too). */
+  background: var(--color-paper);
+  font-family: var(--font-atkinson), system-ui, sans-serif;
+  min-height: 100%;
+}
+
+.text {
+  /* A paragraph per screen reads like a book page: Times New Roman (--font-book), sized for running text. */
+  font-family: var(--font-book);
+  font-size: clamp(1.3rem, 4.4vw, 1.55rem);
+  line-height: 1.7;
+  letter-spacing: 0.005em;
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+
+.controls {
+  border-top: 1px solid var(--color-hairline);
+  border-radius: 1.75rem 1.75rem 0 0;
+  background: var(--color-paper);
+  box-shadow: 0 -6px 28px rgb(36 95 165 / 8%);
+}
+
+.legend {
+  margin-inline: auto;
+  margin-bottom: 1.5rem;
+  max-width: 36rem;
+  border: 1px solid var(--color-hairline);
+  border-radius: 1rem;
+  background: #fff;
+  padding: 0.75rem 1rem;
+  color: var(--color-fog);
+  font-size: 0.875rem;
+}
+
+.legend summary {
+  min-height: 2.75rem;
+  display: list-item;
+  align-content: center;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.legend summary:focus-visible {
+  outline: 2px solid var(--color-light);
+  outline-offset: 4px;
+  border-radius: 0.25rem;
+}
+
+.legend p { margin-top: 0.5rem; }
+
+/* End of Chapter: a centered message that fades away, then the Chapter Check opens.
+   Fixed inside PhoneFrame (its transform makes it the containing block), so it centers on the phone screen. */
+.endIntro {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+  background: var(--color-paper);
+}
+
+/* Readable by default; the fade runs only when motion is welcome (a reduced-motion Reader sees it still, then the Check). */
+@media (prefers-reduced-motion: no-preference) {
+  .endIntro { animation: end-intro 2200ms ease-in-out forwards; }
+}
+
+@keyframes end-intro {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; }
+}

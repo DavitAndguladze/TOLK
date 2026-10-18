@@ -1,0 +1,92 @@
+/* Establish Tailwind's layer order even when a preview loads this module first. */
+@layer theme, base, components, utilities;
+@layer components {
+.button {
+  display: inline-flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid transparent;
+  border-bottom-width: 4px;
+  border-radius: var(--radius-control, 1rem);
+  font: inherit;
+  font-weight: 700;
+  line-height: 1.25;
+  cursor: pointer;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.primary { color: white; background: var(--color-light); border-bottom-color: #104aad; }
+.secondary { color: var(--color-ink); background: var(--color-paper); border-color: var(--color-hairline); }
+.button:hover:not(:disabled) { filter: brightness(0.96); }
+.button:active:not(:disabled) { transform: translateY(2px); }
+.button:disabled { cursor: not-allowed; color: #566580; background: #e3ecf7; border-color: #c8d5e7; }
+.button:focus-visible, .close:focus-visible { outline: 3px solid var(--color-light); outline-offset: 4px; }
+.fullWidth { width: 100%; }
+.spinner { width: 1rem; height: 1rem; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; }
+
+.card {
+  padding: 1.25rem;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-card, 1.5rem);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-card, 0 4px 20px rgb(36 95 165 / 7%));
+  overflow-wrap: anywhere;
+}
+
+.selectCard {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  min-height: 4rem;
+  padding: 1rem;
+  border: 2px solid var(--color-hairline);
+  border-radius: var(--radius-control, 1rem);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+.selectCard:has(input:checked) { border-color: var(--color-light); background: #eaf3ff; }
+.selectCard:has(input:focus-visible) { outline: 3px solid var(--color-light); outline-offset: 4px; }
+.selectCard:has(input:disabled) { cursor: not-allowed; opacity: 0.65; }
+.selectCard input { flex: 0 0 auto; width: 1.25rem; height: 1.25rem; accent-color: var(--color-light); }
+.selectText { min-width: 0; overflow-wrap: anywhere; }
+.selectTitle { display: block; font-weight: 700; }
+.description { display: block; margin-top: 0.25rem; color: var(--color-fog); font-size: 0.875rem; }
+.selectCard[data-feedback="correct"] { border-color: var(--color-success, #146843); }
+.selectCard[data-feedback="incorrect"] { border-color: var(--color-error, #b32c40); }
+.feedback { display: block; margin-top: 0.5rem; font-weight: 700; font-size: 0.875rem; }
+.selectCard[data-feedback="correct"] .feedback { color: var(--color-success, #146843); }
+.selectCard[data-feedback="incorrect"] .feedback { color: var(--color-error, #b32c40); }
+
+.progressLabel { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: 0.5rem; color: var(--color-fog); font-size: 0.875rem; }
+.progress { height: 0.75rem; overflow: hidden; border-radius: 999px; background: var(--color-hairline); }
+.progressFill { height: 100%; width: 100%; transform-origin: left; border-radius: inherit; background: var(--color-light); }
+
+.dialog { width: min(22rem, calc(100vw - 2rem)); max-height: calc(100dvh - 3rem); margin: auto; padding: 1.5rem; border: 1px solid var(--color-hairline); border-radius: 1.5rem; color: var(--color-ink); background: var(--color-paper); overflow-y: auto; }
+.dialog::backdrop { background: rgb(11 25 70 / 45%); }
+.dialogTitle { font-size: 1.5rem; font-weight: 800; line-height: 1.2; margin: 0 0 1rem; }
+.dialogActions { margin-top: 1.5rem; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.75rem; }
+
+.stage { min-height: 100dvh; background: #e6f1ff; }
+.frame { position: relative; isolation: isolate; width: 100%; height: 100dvh; overflow: hidden; background: var(--color-mist); transform: translateZ(0); }
+.viewport { height: 100%; overflow-y: auto; overscroll-behavior-y: contain; scrollbar-width: thin; }
+
+@media (min-width: 640px) {
+  .stage { display: grid; place-items: center; padding: 1.5rem; }
+  .frame { width: 390px; height: min(844px, calc(100dvh - 3rem)); border: 1px solid var(--color-hairline); border-radius: 2.5rem; box-shadow: 0 16px 60px rgb(36 95 165 / 14%); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .button { transition: transform var(--duration-reader-fast, 120ms) var(--ease-reader, ease), filter var(--duration-reader-fast, 120ms) ease; }
+  .selectCard { transition: border-color 150ms ease, background-color 150ms ease; }
+  .progressFill { transition: transform var(--duration-reader-progress, 250ms) ease-out; }
+  .spinner { animation: spin 900ms linear infinite; }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+}

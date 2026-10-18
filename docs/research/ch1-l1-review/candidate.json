@@ -1,0 +1,3799 @@
+{
+  "status": "editorial_repair_not_approved",
+  "provenance": {
+    "source": "agent-editorial-repair-of-OCI-based-draft",
+    "input": "../tolk-r3-generation/.scratch/ch1-L1-editorial-candidate.json",
+    "repairedOriginalIndexes": [
+      4,
+      12,
+      20,
+      22,
+      23,
+      24,
+      26,
+      34,
+      36,
+      38,
+      43,
+      47,
+      50,
+      52,
+      54,
+      55,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      67,
+      69,
+      75,
+      76,
+      79,
+      80,
+      81,
+      82,
+      83,
+      87,
+      88,
+      95,
+      101,
+      105,
+      117,
+      119,
+      141,
+      142,
+      151,
+      152,
+      155,
+      164,
+      167,
+      177,
+      205,
+      214,
+      218,
+      246,
+      248,
+      249,
+      250,
+      254,
+      255,
+      275,
+      287,
+      290,
+      293,
+      294,
+      298,
+      309,
+      319,
+      353,
+      354,
+      355,
+      356,
+      359,
+      360
+    ],
+    "humanReviewed": false,
+    "ociCheckPerformed": false,
+    "independentFidelityPerformed": false,
+    "policyImplementationChanged": false,
+    "overnightRepairs": [
+      {
+        "date": "2026-10-18",
+        "originalSentenceIndexes": [
+          5,
+          14,
+          15,
+          16,
+          17
+        ],
+        "reviewedSourceRange": [
+          0,
+          19
+        ],
+        "independentAcceptance": false
+      },
+      {
+        "date": "2026-10-18",
+        "originalSentenceIndexes": [
+          6,
+          8,
+          9,
+          20,
+          22,
+          24,
+          25,
+          26,
+          28,
+          29,
+          32,
+          34,
+          35,
+          37,
+          38,
+          39
+        ],
+        "reviewedSourceRange": [
+          20,
+          39
+        ],
+        "revisitedSourceIndexes": [
+          6,
+          8,
+          9
+        ],
+        "independentAcceptance": false
+      },
+      {
+        "date": "2026-10-18",
+        "originalSentenceIndexes": [
+          40,
+          41,
+          42,
+          44,
+          45,
+          46,
+          49,
+          51,
+          54,
+          55,
+          56,
+          58,
+          59,
+          61,
+          62,
+          63,
+          66,
+          67,
+          68,
+          70,
+          71,
+          72,
+          73,
+          74,
+          75,
+          77
+        ],
+        "reviewedSourceRange": [
+          40,
+          79
+        ],
+        "independentAcceptance": false
+      }
+    ]
+  },
+  "draft": {
+    "level": 1,
+    "levelScore": 20,
+    "sentences": [
+      {
+        "text": "When I was young, it was easy to hurt me.",
+        "originalSentenceIndex": 0
+      },
+      {
+        "text": "My father told me what he thought I should do.",
+        "originalSentenceIndex": 0
+      },
+      {
+        "text": "I have thought about his words ever since.",
+        "originalSentenceIndex": 0
+      },
+      {
+        "text": "He said, \"Think before saying bad things about people.",
+        "originalSentenceIndex": 1
+      },
+      {
+        "text": "Not everyone has had the good things you have had.\"",
+        "originalSentenceIndex": 1
+      },
+      {
+        "text": "He said no more.",
+        "originalSentenceIndex": 2
+      },
+      {
+        "text": "We could tell each other much with few words.",
+        "originalSentenceIndex": 2
+      },
+      {
+        "text": "I knew he meant much more than that.",
+        "originalSentenceIndex": 2
+      },
+      {
+        "text": "So I often wait before I judge anyone.",
+        "originalSentenceIndex": 3
+      },
+      {
+        "text": "This can help me learn about many strange people.",
+        "originalSentenceIndex": 3
+      },
+      {
+        "text": "Some talk a long time without saying anything interesting.",
+        "originalSentenceIndex": 3
+      },
+      {
+        "text": "An abnormal mind can quickly see this in someone normal.",
+        "originalSentenceIndex": 4
+      },
+      {
+        "text": "Such people want to share things with that person.",
+        "originalSentenceIndex": 4
+      },
+      {
+        "text": "People at college called me a politician.",
+        "originalSentenceIndex": 4
+      },
+      {
+        "text": "That was not fair.",
+        "originalSentenceIndex": 4
+      },
+      {
+        "text": "I knew the secret pain of wild, unknown men.",
+        "originalSentenceIndex": 4
+      },
+      {
+        "text": "I did not ask for most of their secret talk.",
+        "originalSentenceIndex": 5
+      },
+      {
+        "text": "I would act as if I had gone to sleep.",
+        "originalSentenceIndex": 5
+      },
+      {
+        "text": "Sometimes I would act busy, or make fun of them.",
+        "originalSentenceIndex": 5
+      },
+      {
+        "text": "I did this when I knew secret talk was coming.",
+        "originalSentenceIndex": 5
+      },
+      {
+        "text": "Young men often use words they have taken from others.",
+        "originalSentenceIndex": 5
+      },
+      {
+        "text": "You can also see that they leave things out.",
+        "originalSentenceIndex": 5
+      },
+      {
+        "text": "To wait before we judge takes hope without an end.",
+        "originalSentenceIndex": 6
+      },
+      {
+        "text": "I am still afraid I might miss something.",
+        "originalSentenceIndex": 7
+      },
+      {
+        "text": "I must remember what my father said.",
+        "originalSentenceIndex": 7
+      },
+      {
+        "text": "Some people are born with more good in them.",
+        "originalSentenceIndex": 7
+      },
+      {
+        "text": "He said this as if we were better than others.",
+        "originalSentenceIndex": 7
+      },
+      {
+        "text": "I say it in that way too.",
+        "originalSentenceIndex": 7
+      },
+      {
+        "text": "I have been boasting about my tolerance.",
+        "originalSentenceIndex": 8
+      },
+      {
+        "text": "But there are things I cannot put up with.",
+        "originalSentenceIndex": 8
+      },
+      {
+        "text": "The way people act may rest on hard rock.",
+        "originalSentenceIndex": 9
+      },
+      {
+        "text": "Or it may rest on wet marshes.",
+        "originalSentenceIndex": 9
+      },
+      {
+        "text": "After a point, I do not care which it is.",
+        "originalSentenceIndex": 9
+      },
+      {
+        "text": "Last fall, I came back from the East.",
+        "originalSentenceIndex": 10
+      },
+      {
+        "text": "I wanted the world in uniform.",
+        "originalSentenceIndex": 10
+      },
+      {
+        "text": "It should stand at moral attention forever.",
+        "originalSentenceIndex": 10
+      },
+      {
+        "text": "I wanted no more riotous excursions.",
+        "originalSentenceIndex": 10
+      },
+      {
+        "text": "They gave me privileged glimpses into the human heart.",
+        "originalSentenceIndex": 10
+      },
+      {
+        "text": "Only Gatsby did not make me feel that way.",
+        "originalSentenceIndex": 11
+      },
+      {
+        "text": "This book has his name.",
+        "originalSentenceIndex": 11
+      },
+      {
+        "text": "Gatsby was everything I really looked down on.",
+        "originalSentenceIndex": 11
+      },
+      {
+        "text": "What if personality is an unbroken series of successful gestures?",
+        "originalSentenceIndex": 12
+      },
+      {
+        "text": "Then there was something gorgeous about him.",
+        "originalSentenceIndex": 12
+      },
+      {
+        "text": "He had great sensitivity to the promises of life.",
+        "originalSentenceIndex": 12
+      },
+      {
+        "text": "He was like machines that register earthquakes 10,000 miles away.",
+        "originalSentenceIndex": 12
+      },
+      {
+        "text": "This was not that flabby impressionability.",
+        "originalSentenceIndex": 13
+      },
+      {
+        "text": "I mean that things change you too much.",
+        "originalSentenceIndex": 13
+      },
+      {
+        "text": "People make that sound important: “creative temperament.”",
+        "originalSentenceIndex": 13
+      },
+      {
+        "text": "His was an extraordinary gift for hope.",
+        "originalSentenceIndex": 13
+      },
+      {
+        "text": "He had a romantic readiness for what life might bring.",
+        "originalSentenceIndex": 13
+      },
+      {
+        "text": "I have never found this in anyone else.",
+        "originalSentenceIndex": 13
+      },
+      {
+        "text": "I probably never will.",
+        "originalSentenceIndex": 13
+      },
+      {
+        "text": "No, Gatsby turned out all right in the end.",
+        "originalSentenceIndex": 14
+      },
+      {
+        "text": "But something preyed on Gatsby.",
+        "originalSentenceIndex": 14
+      },
+      {
+        "text": "Foul dust floated in the wake of his dreams.",
+        "originalSentenceIndex": 14
+      },
+      {
+        "text": "That made me lose interest in the sorrows of men.",
+        "originalSentenceIndex": 14
+      },
+      {
+        "text": "Their sorrows came to nothing.",
+        "originalSentenceIndex": 14
+      },
+      {
+        "text": "Their happy times did not last.",
+        "originalSentenceIndex": 14
+      },
+      {
+        "text": "I lost interest in those happy times too.",
+        "originalSentenceIndex": 14
+      },
+      {
+        "text": "This was only for a while.",
+        "originalSentenceIndex": 14
+      },
+      {
+        "text": "My family has been well-to-do and important here.",
+        "originalSentenceIndex": 15
+      },
+      {
+        "text": "This is a city in the Middle West.",
+        "originalSentenceIndex": 15
+      },
+      {
+        "text": "This has been true for three generations.",
+        "originalSentenceIndex": 15
+      },
+      {
+        "text": "The Carraways are a close family.",
+        "originalSentenceIndex": 16
+      },
+      {
+        "text": "We say our family comes from the Dukes of Buccleuch.",
+        "originalSentenceIndex": 16
+      },
+      {
+        "text": "But my grandfather’s brother really started our family line.",
+        "originalSentenceIndex": 16
+      },
+      {
+        "text": "He came here in '51.",
+        "originalSentenceIndex": 16
+      },
+      {
+        "text": "He sent another man to the Civil War.",
+        "originalSentenceIndex": 16
+      },
+      {
+        "text": "That man went in his place.",
+        "originalSentenceIndex": 16
+      },
+      {
+        "text": "He started a business.",
+        "originalSentenceIndex": 16
+      },
+      {
+        "text": "He would sell things used to make and fix things.",
+        "originalSentenceIndex": 16
+      },
+      {
+        "text": "He would sell them to other business people.",
+        "originalSentenceIndex": 16
+      },
+      {
+        "text": "My father is still in charge of that business.",
+        "originalSentenceIndex": 16
+      },
+      {
+        "text": "I never saw this great-uncle.",
+        "originalSentenceIndex": 17
+      },
+      {
+        "text": "People say I look like him.",
+        "originalSentenceIndex": 17
+      },
+      {
+        "text": "The painting hangs in the office of my father.",
+        "originalSentenceIndex": 17
+      },
+      {
+        "text": "He looks like a hard man in that painting.",
+        "originalSentenceIndex": 17
+      },
+      {
+        "text": "I finished school at New Haven in 1915.",
+        "originalSentenceIndex": 18
+      },
+      {
+        "text": "My father finished there 25 years before me.",
+        "originalSentenceIndex": 18
+      },
+      {
+        "text": "A little later, I took part in the Great War.",
+        "originalSentenceIndex": 18
+      },
+      {
+        "text": "I call it a late “Teutonic migration.”",
+        "originalSentenceIndex": 18
+      },
+      {
+        "text": "I mean a war, as if people were just moving.",
+        "originalSentenceIndex": 18
+      },
+      {
+        "text": "I did enjoy fighting back so much.",
+        "originalSentenceIndex": 19
+      },
+      {
+        "text": "I came home restless because of that.",
+        "originalSentenceIndex": 19
+      },
+      {
+        "text": "I once felt the Middle West was a warm centre.",
+        "originalSentenceIndex": 20
+      },
+      {
+        "text": "It felt like the centre of the world.",
+        "originalSentenceIndex": 20
+      },
+      {
+        "text": "Now it felt like the ragged edge of the universe.",
+        "originalSentenceIndex": 20
+      },
+      {
+        "text": "So I decided to go East.",
+        "originalSentenceIndex": 20
+      },
+      {
+        "text": "I would learn the bond business.",
+        "originalSentenceIndex": 20
+      },
+      {
+        "text": "Everyone I knew worked in that business.",
+        "originalSentenceIndex": 21
+      },
+      {
+        "text": "I thought it could pay one more single man.",
+        "originalSentenceIndex": 21
+      },
+      {
+        "text": "All my aunts and uncles talked about my plan.",
+        "originalSentenceIndex": 22
+      },
+      {
+        "text": "They talked as if choosing a prep school for me.",
+        "originalSentenceIndex": 22
+      },
+      {
+        "text": "At last, they said, \"Well, yes.\"",
+        "originalSentenceIndex": 22
+      },
+      {
+        "text": "They looked very serious and not quite sure.",
+        "originalSentenceIndex": 22
+      },
+      {
+        "text": "My father agreed to give me money for a year.",
+        "originalSentenceIndex": 23
+      },
+      {
+        "text": "After some delays, I came East in spring, 1922.",
+        "originalSentenceIndex": 23
+      },
+      {
+        "text": "I thought I would stay there for good.",
+        "originalSentenceIndex": 23
+      },
+      {
+        "text": "To find rooms in the city made the most sense.",
+        "originalSentenceIndex": 24
+      },
+      {
+        "text": "But the days were warm.",
+        "originalSentenceIndex": 24
+      },
+      {
+        "text": "I had just left wide lawns and friendly trees.",
+        "originalSentenceIndex": 24
+      },
+      {
+        "text": "A young man at work had an idea.",
+        "originalSentenceIndex": 24
+      },
+      {
+        "text": "We could share a house in a town.",
+        "originalSentenceIndex": 24
+      },
+      {
+        "text": "We would go into the city for work each day.",
+        "originalSentenceIndex": 24
+      },
+      {
+        "text": "That sounded like a great idea.",
+        "originalSentenceIndex": 24
+      },
+      {
+        "text": "He found a weather-beaten bungalow.",
+        "originalSentenceIndex": 25
+      },
+      {
+        "text": "It was like a house made of cardboard.",
+        "originalSentenceIndex": 25
+      },
+      {
+        "text": "It was 80 a month.",
+        "originalSentenceIndex": 25
+      },
+      {
+        "text": "At the last moment, work sent him to Washington.",
+        "originalSentenceIndex": 25
+      },
+      {
+        "text": "So I went to the house in the country alone.",
+        "originalSentenceIndex": 25
+      },
+      {
+        "text": "I had a dog for a few days.",
+        "originalSentenceIndex": 26
+      },
+      {
+        "text": "Then he ran away.",
+        "originalSentenceIndex": 26
+      },
+      {
+        "text": "I also had an old Dodge and a Finnish woman.",
+        "originalSentenceIndex": 26
+      },
+      {
+        "text": "She made my bed and cooked breakfast.",
+        "originalSentenceIndex": 26
+      },
+      {
+        "text": "She muttered Finnish wisdom to herself.",
+        "originalSentenceIndex": 26
+      },
+      {
+        "text": "She did this over the electric stove.",
+        "originalSentenceIndex": 26
+      },
+      {
+        "text": "For a day or so, I felt alone.",
+        "originalSentenceIndex": 27
+      },
+      {
+        "text": "Then one morning a man stopped me on the road.",
+        "originalSentenceIndex": 27
+      },
+      {
+        "text": "He had come here after I did.",
+        "originalSentenceIndex": 27
+      },
+      {
+        "text": "\"How do I get to West Egg village?\"",
+        "originalSentenceIndex": 28
+      },
+      {
+        "text": "He asked helplessly.",
+        "originalSentenceIndex": 29
+      },
+      {
+        "text": "I told him the way.",
+        "originalSentenceIndex": 30
+      },
+      {
+        "text": "As I kept walking, I no longer felt alone.",
+        "originalSentenceIndex": 31
+      },
+      {
+        "text": "I could show people the way.",
+        "originalSentenceIndex": 32
+      },
+      {
+        "text": "I felt like a pathfinder and an original settler.",
+        "originalSentenceIndex": 32
+      },
+      {
+        "text": "Without trying, he made me feel at home here.",
+        "originalSentenceIndex": 33
+      },
+      {
+        "text": "The sun was out.",
+        "originalSentenceIndex": 34
+      },
+      {
+        "text": "New leaves were growing on the trees in great bursts.",
+        "originalSentenceIndex": 34
+      },
+      {
+        "text": "They were growing like things in a fast film.",
+        "originalSentenceIndex": 34
+      },
+      {
+        "text": "I felt sure life was starting again with summer.",
+        "originalSentenceIndex": 34
+      },
+      {
+        "text": "I had felt that way before.",
+        "originalSentenceIndex": 34
+      },
+      {
+        "text": "For one thing, there was so much to read.",
+        "originalSentenceIndex": 35
+      },
+      {
+        "text": "The young, breath-giving air could give me so much health.",
+        "originalSentenceIndex": 35
+      },
+      {
+        "text": "I bought 12 volumes about banking, credit, and investment securities.",
+        "originalSentenceIndex": 36
+      },
+      {
+        "text": "They stood on my shelf in red and gold.",
+        "originalSentenceIndex": 36
+      },
+      {
+        "text": "They looked like new money from the mint.",
+        "originalSentenceIndex": 36
+      },
+      {
+        "text": "They were promising to show the shining secrets of money.",
+        "originalSentenceIndex": 36
+      },
+      {
+        "text": "Only Midas, Morgan, and Maecenas knew those secrets.",
+        "originalSentenceIndex": 36
+      },
+      {
+        "text": "I had a great plan: read many other books too.",
+        "originalSentenceIndex": 37
+      },
+      {
+        "text": "I was interested in what people read and write.",
+        "originalSentenceIndex": 38
+      },
+      {
+        "text": "This was when I was in college.",
+        "originalSentenceIndex": 38
+      },
+      {
+        "text": "One year, I wrote editorials for the Yale News.",
+        "originalSentenceIndex": 38
+      },
+      {
+        "text": "They were very serious and said things everyone already knew.",
+        "originalSentenceIndex": 38
+      },
+      {
+        "text": "Now I would bring all that back into my life.",
+        "originalSentenceIndex": 38
+      },
+      {
+        "text": "Again, I would become a “well-rounded man.”",
+        "originalSentenceIndex": 38
+      },
+      {
+        "text": "Such a man is the most limited of all specialists.",
+        "originalSentenceIndex": 38
+      },
+      {
+        "text": "That is more than just a smart saying.",
+        "originalSentenceIndex": 39
+      },
+      {
+        "text": "After all, life is better seen through a single window.",
+        "originalSentenceIndex": 39
+      },
+      {
+        "text": "By chance, I rented a house in a strange place.",
+        "originalSentenceIndex": 40
+      },
+      {
+        "text": "Few communities in North America were as strange.",
+        "originalSentenceIndex": 40
+      },
+      {
+        "text": "It was on a slender, riotous island.",
+        "originalSentenceIndex": 41
+      },
+      {
+        "text": "The island goes straight east from New York.",
+        "originalSentenceIndex": 41
+      },
+      {
+        "text": "It had two strange formations of land.",
+        "originalSentenceIndex": 41
+      },
+      {
+        "text": "These were only two of its strange natural things.",
+        "originalSentenceIndex": 41
+      },
+      {
+        "text": "They are 20 miles from the city.",
+        "originalSentenceIndex": 42
+      },
+      {
+        "text": "They look like two very big eggs.",
+        "originalSentenceIndex": 42
+      },
+      {
+        "text": "Their contour is the same.",
+        "originalSentenceIndex": 42
+      },
+      {
+        "text": "Only a bay is between them.",
+        "originalSentenceIndex": 42
+      },
+      {
+        "text": "They go out into Long Island Sound.",
+        "originalSentenceIndex": 42
+      },
+      {
+        "text": "That is salt water in the Western hemisphere.",
+        "originalSentenceIndex": 42
+      },
+      {
+        "text": "It was a domesticated body of water.",
+        "originalSentenceIndex": 42
+      },
+      {
+        "text": "People called it a wet barnyard.",
+        "originalSentenceIndex": 42
+      },
+      {
+        "text": "They are not perfect ovals.",
+        "originalSentenceIndex": 43
+      },
+      {
+        "text": "Their contact end is crushed flat.",
+        "originalSentenceIndex": 43
+      },
+      {
+        "text": "They are like the egg in the Columbus story.",
+        "originalSentenceIndex": 43
+      },
+      {
+        "text": "Gulls that fly overhead must always wonder at their resemblance.",
+        "originalSentenceIndex": 43
+      },
+      {
+        "text": "People on the ground find something else more interesting.",
+        "originalSentenceIndex": 44
+      },
+      {
+        "text": "Their shape and size are the same.",
+        "originalSentenceIndex": 44
+      },
+      {
+        "text": "They are different in every other way.",
+        "originalSentenceIndex": 44
+      },
+      {
+        "text": "I made my home at West Egg.",
+        "originalSentenceIndex": 45
+      },
+      {
+        "text": "It was, well, the less fashionable of the two.",
+        "originalSentenceIndex": 45
+      },
+      {
+        "text": "But that simple name does not tell the whole truth.",
+        "originalSentenceIndex": 45
+      },
+      {
+        "text": "They were different in a strange, rather sinister way.",
+        "originalSentenceIndex": 45
+      },
+      {
+        "text": "My house was at the very end of the egg.",
+        "originalSentenceIndex": 46
+      },
+      {
+        "text": "It was only 150 feet from the Sound.",
+        "originalSentenceIndex": 46
+      },
+      {
+        "text": "It was squeezed between one very big house and another.",
+        "originalSentenceIndex": 46
+      },
+      {
+        "text": "Each rented for 12,000 or 15,000 a season.",
+        "originalSentenceIndex": 46
+      },
+      {
+        "text": "The house on my right was very big.",
+        "originalSentenceIndex": 47
+      },
+      {
+        "text": "It was an imitation of a Hôtel de Ville.",
+        "originalSentenceIndex": 47
+      },
+      {
+        "text": "That government building was in Normandy.",
+        "originalSentenceIndex": 47
+      },
+      {
+        "text": "There was a tower on one side.",
+        "originalSentenceIndex": 47
+      },
+      {
+        "text": "It was very new under a thin beard of ivy.",
+        "originalSentenceIndex": 47
+      },
+      {
+        "text": "There was a marble swimming pool.",
+        "originalSentenceIndex": 47
+      },
+      {
+        "text": "It had over 40 acres of lawn and garden.",
+        "originalSentenceIndex": 47
+      },
+      {
+        "text": "That was the great house of Gatsby.",
+        "originalSentenceIndex": 48
+      },
+      {
+        "text": "Or rather, I did not actually know Mr. Gatsby.",
+        "originalSentenceIndex": 49
+      },
+      {
+        "text": "A gentleman of that name made his home there.",
+        "originalSentenceIndex": 49
+      },
+      {
+        "text": "My own house was an eyesore, but a small one.",
+        "originalSentenceIndex": 50
+      },
+      {
+        "text": "People had overlooked it.",
+        "originalSentenceIndex": 50
+      },
+      {
+        "text": "I could see the water.",
+        "originalSentenceIndex": 50
+      },
+      {
+        "text": "I could see part of my neighbour’s lawn too.",
+        "originalSentenceIndex": 50
+      },
+      {
+        "text": "Being near millionaires made me feel better.",
+        "originalSentenceIndex": 50
+      },
+      {
+        "text": "All this was 80 dollars a month.",
+        "originalSentenceIndex": 50
+      },
+      {
+        "text": "Across the bay was fashionable East Egg.",
+        "originalSentenceIndex": 51
+      },
+      {
+        "text": "Its white palaces glittered along the water.",
+        "originalSentenceIndex": 51
+      },
+      {
+        "text": "My story of that summer really started one evening.",
+        "originalSentenceIndex": 51
+      },
+      {
+        "text": "I drove to East Egg for dinner with the Buchanans.",
+        "originalSentenceIndex": 51
+      },
+      {
+        "text": "Daisy was my second cousin once removed.",
+        "originalSentenceIndex": 52
+      },
+      {
+        "text": "I had known Tom at college.",
+        "originalSentenceIndex": 52
+      },
+      {
+        "text": "Just after the war, I spent two days with them.",
+        "originalSentenceIndex": 53
+      },
+      {
+        "text": "That was in Chicago.",
+        "originalSentenceIndex": 53
+      },
+      {
+        "text": "Her husband had been great at many physical things.",
+        "originalSentenceIndex": 54
+      },
+      {
+        "text": "He played football at New Haven.",
+        "originalSentenceIndex": 54
+      },
+      {
+        "text": "He was one of their most powerful ends ever.",
+        "originalSentenceIndex": 54
+      },
+      {
+        "text": "People across the country knew of him.",
+        "originalSentenceIndex": 54
+      },
+      {
+        "text": "At 21, he was already great at that one thing.",
+        "originalSentenceIndex": 54
+      },
+      {
+        "text": "Everything afterward felt less wonderful.",
+        "originalSentenceIndex": 54
+      },
+      {
+        "text": "His family was very rich.",
+        "originalSentenceIndex": 55
+      },
+      {
+        "text": "Even at college, people thought he spent too much.",
+        "originalSentenceIndex": 55
+      },
+      {
+        "text": "Now he had left Chicago and come East.",
+        "originalSentenceIndex": 55
+      },
+      {
+        "text": "The way he came East took your breath away.",
+        "originalSentenceIndex": 55
+      },
+      {
+        "text": "He even brought polo ponies from Lake Forest.",
+        "originalSentenceIndex": 55
+      },
+      {
+        "text": "Someone from my own generation had that much money.",
+        "originalSentenceIndex": 56
+      },
+      {
+        "text": "It was hard to believe.",
+        "originalSentenceIndex": 56
+      },
+      {
+        "text": "I do not know why they came East.",
+        "originalSentenceIndex": 57
+      },
+      {
+        "text": "They spent a year in France for no special reason.",
+        "originalSentenceIndex": 58
+      },
+      {
+        "text": "Then they kept moving, never at rest in one place.",
+        "originalSentenceIndex": 58
+      },
+      {
+        "text": "They went where rich people played polo together.",
+        "originalSentenceIndex": 58
+      },
+      {
+        "text": "Daisy said on the phone they would stay for good.",
+        "originalSentenceIndex": 59
+      },
+      {
+        "text": "I did not believe her.",
+        "originalSentenceIndex": 59
+      },
+      {
+        "text": "I could not know what she really felt.",
+        "originalSentenceIndex": 59
+      },
+      {
+        "text": "But I thought Tom would always keep moving.",
+        "originalSentenceIndex": 59
+      },
+      {
+        "text": "He would keep looking a little wistfully.",
+        "originalSentenceIndex": 59
+      },
+      {
+        "text": "He would want the dramatic turbulence of some football game.",
+        "originalSentenceIndex": 59
+      },
+      {
+        "text": "He could never get that game back.",
+        "originalSentenceIndex": 59
+      },
+      {
+        "text": "I drove over to East Egg one warm, windy evening.",
+        "originalSentenceIndex": 60
+      },
+      {
+        "text": "I went to see two old friends.",
+        "originalSentenceIndex": 60
+      },
+      {
+        "text": "Really, I knew almost nothing about them.",
+        "originalSentenceIndex": 60
+      },
+      {
+        "text": "Their house was even more elaborate than I expected.",
+        "originalSentenceIndex": 61
+      },
+      {
+        "text": "It was a cheerful red-and-white Georgian Colonial mansion.",
+        "originalSentenceIndex": 61
+      },
+      {
+        "text": "It looked out over the bay.",
+        "originalSentenceIndex": 61
+      },
+      {
+        "text": "The lawn ran from the beach towards the front door.",
+        "originalSentenceIndex": 62
+      },
+      {
+        "text": "It ran for 0.25 miles.",
+        "originalSentenceIndex": 62
+      },
+      {
+        "text": "It was like something jumping over sundials and brick walks.",
+        "originalSentenceIndex": 62
+      },
+      {
+        "text": "It was like jumping over burning gardens.",
+        "originalSentenceIndex": 62
+      },
+      {
+        "text": "At the house, it was drifting up the side.",
+        "originalSentenceIndex": 62
+      },
+      {
+        "text": "It went up in bright vines.",
+        "originalSentenceIndex": 62
+      },
+      {
+        "text": "It was as if its run kept it going.",
+        "originalSentenceIndex": 62
+      },
+      {
+        "text": "There was a line of French windows at the front.",
+        "originalSentenceIndex": 63
+      },
+      {
+        "text": "They were glowing with reflected gold.",
+        "originalSentenceIndex": 63
+      },
+      {
+        "text": "They were wide open to the warm, windy afternoon.",
+        "originalSentenceIndex": 63
+      },
+      {
+        "text": "Tom Buchanan was standing on the front porch.",
+        "originalSentenceIndex": 63
+      },
+      {
+        "text": "He was in riding clothes, with his legs apart.",
+        "originalSentenceIndex": 63
+      },
+      {
+        "text": "He had changed since his years at New Haven.",
+        "originalSentenceIndex": 64
+      },
+      {
+        "text": "Now he was a strong man of 30.",
+        "originalSentenceIndex": 65
+      },
+      {
+        "text": "His hair was light and close to gold.",
+        "originalSentenceIndex": 65
+      },
+      {
+        "text": "His mouth looked rather hard.",
+        "originalSentenceIndex": 65
+      },
+      {
+        "text": "He was supercilious, as if better than other people.",
+        "originalSentenceIndex": 65
+      },
+      {
+        "text": "His eyes were full of light.",
+        "originalSentenceIndex": 66
+      },
+      {
+        "text": "They made him look too proud of himself.",
+        "originalSentenceIndex": 66
+      },
+      {
+        "text": "They took over his face.",
+        "originalSentenceIndex": 66
+      },
+      {
+        "text": "They made him look as if always leaning aggressively forward.",
+        "originalSentenceIndex": 66
+      },
+      {
+        "text": "His riding clothes had an effeminate look, meant for show.",
+        "originalSentenceIndex": 67
+      },
+      {
+        "text": "Even these clothes could not hide his enormous power.",
+        "originalSentenceIndex": 67
+      },
+      {
+        "text": "He seemed too big for his glistening boots.",
+        "originalSentenceIndex": 67
+      },
+      {
+        "text": "He strained their top lacing.",
+        "originalSentenceIndex": 67
+      },
+      {
+        "text": "A lot of muscle moved when his shoulder moved.",
+        "originalSentenceIndex": 67
+      },
+      {
+        "text": "You could see it under his thin coat.",
+        "originalSentenceIndex": 67
+      },
+      {
+        "text": "His body could move things with great force.",
+        "originalSentenceIndex": 68
+      },
+      {
+        "text": "It was a cruel body.",
+        "originalSentenceIndex": 68
+      },
+      {
+        "text": "His voice was a gruff, husky tenor.",
+        "originalSentenceIndex": 69
+      },
+      {
+        "text": "It made him seem even more ready for a fight.",
+        "originalSentenceIndex": 69
+      },
+      {
+        "text": "He talked like a father who knows better than you.",
+        "originalSentenceIndex": 70
+      },
+      {
+        "text": "There was a little contempt in his voice.",
+        "originalSentenceIndex": 70
+      },
+      {
+        "text": "He talked this way even to people he liked.",
+        "originalSentenceIndex": 70
+      },
+      {
+        "text": "Some men at New Haven had great hate for him.",
+        "originalSentenceIndex": 70
+      },
+      {
+        "text": "This was what he seemed to say:",
+        "originalSentenceIndex": 71
+      },
+      {
+        "text": "\"I am stronger and more of a man than you.",
+        "originalSentenceIndex": 71
+      },
+      {
+        "text": "That does not make my opinion about these things final.\"",
+        "originalSentenceIndex": 71
+      },
+      {
+        "text": "We were in the same club at school.",
+        "originalSentenceIndex": 72
+      },
+      {
+        "text": "That was in our last year.",
+        "originalSentenceIndex": 72
+      },
+      {
+        "text": "We were never very close.",
+        "originalSentenceIndex": 72
+      },
+      {
+        "text": "I had always felt he did think well of me.",
+        "originalSentenceIndex": 72
+      },
+      {
+        "text": "I thought he wanted me to like him.",
+        "originalSentenceIndex": 72
+      },
+      {
+        "text": "That wish was hard and defiant, with some wistfulness.",
+        "originalSentenceIndex": 72
+      },
+      {
+        "text": "We talked on the porch for a few minutes.",
+        "originalSentenceIndex": 73
+      },
+      {
+        "text": "We were in the sun.",
+        "originalSentenceIndex": 73
+      },
+      {
+        "text": "\"I have a nice place here,\" he said.",
+        "originalSentenceIndex": 74
+      },
+      {
+        "text": "His eyes kept moving quickly all around, without rest.",
+        "originalSentenceIndex": 74
+      },
+      {
+        "text": "He turned me around by one arm.",
+        "originalSentenceIndex": 75
+      },
+      {
+        "text": "His broad, flat hand moved across what we could see.",
+        "originalSentenceIndex": 75
+      },
+      {
+        "text": "There was a sunken Italian garden.",
+        "originalSentenceIndex": 75
+      },
+      {
+        "text": "There was half an acre of deep, pungent roses.",
+        "originalSentenceIndex": 75
+      },
+      {
+        "text": "A snub-nosed motorboat bumped the tide offshore.",
+        "originalSentenceIndex": 75
+      },
+      {
+        "text": "\"It belonged to Demaine, the oil man.\"",
+        "originalSentenceIndex": 76
+      },
+      {
+        "text": "He turned me around again, politely and abruptly.",
+        "originalSentenceIndex": 77
+      },
+      {
+        "text": "\"We will go inside.\"",
+        "originalSentenceIndex": 78
+      },
+      {
+        "text": "We walked through a high hallway into a bright room.",
+        "originalSentenceIndex": 79
+      },
+      {
+        "text": "The room was rosy-coloured.",
+        "originalSentenceIndex": 79
+      },
+      {
+        "text": "There were French windows at either end.",
+        "originalSentenceIndex": 79
+      },
+      {
+        "text": "They made it seem only just part of the house.",
+        "originalSentenceIndex": 79
+      },
+      {
+        "text": "The windows were open a little.",
+        "originalSentenceIndex": 80
+      },
+      {
+        "text": "They were gleaming white against the fresh grass outside.",
+        "originalSentenceIndex": 80
+      },
+      {
+        "text": "The grass seemed to grow a little way inside.",
+        "originalSentenceIndex": 80
+      },
+      {
+        "text": "A breeze went through the room.",
+        "originalSentenceIndex": 81
+      },
+      {
+        "text": "It blew curtains in one end and out the other.",
+        "originalSentenceIndex": 81
+      },
+      {
+        "text": "They moved like pale flags, twisting up toward the ceiling.",
+        "originalSentenceIndex": 81
+      },
+      {
+        "text": "The ceiling looked like a frosted wedding-cake.",
+        "originalSentenceIndex": 81
+      },
+      {
+        "text": "Then the breeze moved over the wine-coloured rug.",
+        "originalSentenceIndex": 81
+      },
+      {
+        "text": "Its shadow moved like wind on the sea.",
+        "originalSentenceIndex": 81
+      },
+      {
+        "text": "Only the enormous couch was completely still.",
+        "originalSentenceIndex": 82
+      },
+      {
+        "text": "Two young women were buoyed up on it.",
+        "originalSentenceIndex": 82
+      },
+      {
+        "text": "It was like an anchored balloon.",
+        "originalSentenceIndex": 82
+      },
+      {
+        "text": "Both women were in white dresses.",
+        "originalSentenceIndex": 83
+      },
+      {
+        "text": "The dresses kept moving in the air.",
+        "originalSentenceIndex": 83
+      },
+      {
+        "text": "It was as if they had made a short flight.",
+        "originalSentenceIndex": 83
+      },
+      {
+        "text": "The flight had taken them around the house.",
+        "originalSentenceIndex": 83
+      },
+      {
+        "text": "Now the air had blown them back inside.",
+        "originalSentenceIndex": 83
+      },
+      {
+        "text": "I must have been standing there for a little while.",
+        "originalSentenceIndex": 84
+      },
+      {
+        "text": "I could hear the hard, quick sound of each cover.",
+        "originalSentenceIndex": 84
+      },
+      {
+        "text": "A picture on the wall also made a deep sound.",
+        "originalSentenceIndex": 84
+      },
+      {
+        "text": "There was a big, deep sound.",
+        "originalSentenceIndex": 85
+      },
+      {
+        "text": "Tom Buchanan had shut the window at the back.",
+        "originalSentenceIndex": 85
+      },
+      {
+        "text": "The air stopped moving through the room.",
+        "originalSentenceIndex": 85
+      },
+      {
+        "text": "Each window cover came down, little by little.",
+        "originalSentenceIndex": 85
+      },
+      {
+        "text": "So did each cover on the floor.",
+        "originalSentenceIndex": 85
+      },
+      {
+        "text": "The women no longer looked as if in the air.",
+        "originalSentenceIndex": 85
+      },
+      {
+        "text": "One woman was born later than the other.",
+        "originalSentenceIndex": 86
+      },
+      {
+        "text": "I did not know her.",
+        "originalSentenceIndex": 86
+      },
+      {
+        "text": "She was at her end of the divan.",
+        "originalSentenceIndex": 87
+      },
+      {
+        "text": "Her body was at full length.",
+        "originalSentenceIndex": 87
+      },
+      {
+        "text": "She did not move at all.",
+        "originalSentenceIndex": 87
+      },
+      {
+        "text": "Her chin was up a little.",
+        "originalSentenceIndex": 87
+      },
+      {
+        "text": "She looked as if balancing something likely to fall.",
+        "originalSentenceIndex": 87
+      },
+      {
+        "text": "She may have seen me from the side.",
+        "originalSentenceIndex": 88
+      },
+      {
+        "text": "But she gave no sign of it.",
+        "originalSentenceIndex": 88
+      },
+      {
+        "text": "I almost said sorry in a quiet voice.",
+        "originalSentenceIndex": 88
+      },
+      {
+        "text": "I felt like I should not have come in.",
+        "originalSentenceIndex": 88
+      },
+      {
+        "text": "The other girl was Daisy.",
+        "originalSentenceIndex": 89
+      },
+      {
+        "text": "She tried to get up and moved forward a little.",
+        "originalSentenceIndex": 89
+      },
+      {
+        "text": "Her face said she wanted to do the right thing.",
+        "originalSentenceIndex": 89
+      },
+      {
+        "text": "Then she gave a strange but lovely little laugh.",
+        "originalSentenceIndex": 89
+      },
+      {
+        "text": "I started laughing too and went forward into the room.",
+        "originalSentenceIndex": 89
+      },
+      {
+        "text": "\"I am so happy that I cannot move.\"",
+        "originalSentenceIndex": 90
+      },
+      {
+        "text": "She gave another laugh.",
+        "originalSentenceIndex": 91
+      },
+      {
+        "text": "It was as if she had said something very smart.",
+        "originalSentenceIndex": 91
+      },
+      {
+        "text": "She took my hand for a moment.",
+        "originalSentenceIndex": 91
+      },
+      {
+        "text": "She looked up at my face.",
+        "originalSentenceIndex": 91
+      },
+      {
+        "text": "Her look made a promise.",
+        "originalSentenceIndex": 91
+      },
+      {
+        "text": "There was no one she wanted to see more.",
+        "originalSentenceIndex": 91
+      },
+      {
+        "text": "She often made people feel this way.",
+        "originalSentenceIndex": 92
+      },
+      {
+        "text": "In a quiet voice, she told me the last name.",
+        "originalSentenceIndex": 93
+      },
+      {
+        "text": "The girl with her head back was called Baker.",
+        "originalSentenceIndex": 93
+      },
+      {
+        "text": "Some people say she wants them to move close.",
+        "originalSentenceIndex": 94
+      },
+      {
+        "text": "They say she does it by using a quiet voice.",
+        "originalSentenceIndex": 94
+      },
+      {
+        "text": "I had heard them say this about Daisy.",
+        "originalSentenceIndex": 94
+      },
+      {
+        "text": "It did not matter.",
+        "originalSentenceIndex": 94
+      },
+      {
+        "text": "Her voice was still lovely.",
+        "originalSentenceIndex": 94
+      },
+      {
+        "text": "Miss Baker's lips moved a little.",
+        "originalSentenceIndex": 95
+      },
+      {
+        "text": "She nodded at me so little I almost missed it.",
+        "originalSentenceIndex": 95
+      },
+      {
+        "text": "Then she quickly tipped her head back again.",
+        "originalSentenceIndex": 95
+      },
+      {
+        "text": "It was as if her object had tottered a little.",
+        "originalSentenceIndex": 95
+      },
+      {
+        "text": "That had given her a little fright.",
+        "originalSentenceIndex": 95
+      },
+      {
+        "text": "Again, I almost said sorry.",
+        "originalSentenceIndex": 96
+      },
+      {
+        "text": "People who need no help almost always make me wonder.",
+        "originalSentenceIndex": 97
+      },
+      {
+        "text": "I feel surprise and respect.",
+        "originalSentenceIndex": 97
+      },
+      {
+        "text": "I looked back at Daisy.",
+        "originalSentenceIndex": 98
+      },
+      {
+        "text": "She started to ask me questions.",
+        "originalSentenceIndex": 98
+      },
+      {
+        "text": "Her voice was quiet and full of feeling.",
+        "originalSentenceIndex": 98
+      },
+      {
+        "text": "I wanted to hear her voice go up and down.",
+        "originalSentenceIndex": 99
+      },
+      {
+        "text": "Each time she talked, it was like new music.",
+        "originalSentenceIndex": 99
+      },
+      {
+        "text": "You would never hear this music again.",
+        "originalSentenceIndex": 99
+      },
+      {
+        "text": "Her face was lovely and sad.",
+        "originalSentenceIndex": 100
+      },
+      {
+        "text": "Her eyes were full of light.",
+        "originalSentenceIndex": 100
+      },
+      {
+        "text": "Her mouth was full of life and feeling.",
+        "originalSentenceIndex": 100
+      },
+      {
+        "text": "But the way her voice made people feel was special.",
+        "originalSentenceIndex": 100
+      },
+      {
+        "text": "Men who had loved her found it difficult to forget.",
+        "originalSentenceIndex": 100
+      },
+      {
+        "text": "Her voice made them want to listen.",
+        "originalSentenceIndex": 100
+      },
+      {
+        "text": "It was like music, with a quiet call to listen.",
+        "originalSentenceIndex": 100
+      },
+      {
+        "text": "She made you think she had just done wonderful things.",
+        "originalSentenceIndex": 100
+      },
+      {
+        "text": "It was a promise of more wonderful things next hour.",
+        "originalSentenceIndex": 100
+      },
+      {
+        "text": "I told her about my day in Chicago.",
+        "originalSentenceIndex": 101
+      },
+      {
+        "text": "I had stopped there on my way East.",
+        "originalSentenceIndex": 101
+      },
+      {
+        "text": "12 people sent their love through me.",
+        "originalSentenceIndex": 101
+      },
+      {
+        "text": "\"Do they miss me?\"",
+        "originalSentenceIndex": 102
+      },
+      {
+        "text": "She called out in a very happy voice.",
+        "originalSentenceIndex": 103
+      },
+      {
+        "text": "\"The whole town is very sad.\"",
+        "originalSentenceIndex": 104
+      },
+      {
+        "text": "\"Every car has its left rear wheel painted black.",
+        "originalSentenceIndex": 105
+      },
+      {
+        "text": "It is like a mourning wreath.",
+        "originalSentenceIndex": 105
+      },
+      {
+        "text": "A crying sound goes all night along the north shore.\"",
+        "originalSentenceIndex": 105
+      },
+      {
+        "text": "\"How lovely this is!\"",
+        "originalSentenceIndex": 106
+      },
+      {
+        "text": "\"Let us go back, Tom.\"",
+        "originalSentenceIndex": 107
+      },
+      {
+        "text": "\"Let us go tomorrow.\"",
+        "originalSentenceIndex": 108
+      },
+      {
+        "text": "Then she changed what we were talking about.",
+        "originalSentenceIndex": 109
+      },
+      {
+        "text": "\"You should see the baby.\"",
+        "originalSentenceIndex": 109
+      },
+      {
+        "text": "\"I would like to see her.\"",
+        "originalSentenceIndex": 110
+      },
+      {
+        "text": "\"She has gone to sleep.\"",
+        "originalSentenceIndex": 111
+      },
+      {
+        "text": "\"She is three years old.\"",
+        "originalSentenceIndex": 112
+      },
+      {
+        "text": "\"Have you never seen her?\"",
+        "originalSentenceIndex": 113
+      },
+      {
+        "text": "\"I have never seen her.\"",
+        "originalSentenceIndex": 114
+      },
+      {
+        "text": "\"You should see her.\"",
+        "originalSentenceIndex": 115
+      },
+      {
+        "text": "She started to say more about the little girl.",
+        "originalSentenceIndex": 116
+      },
+      {
+        "text": "Tom Buchanan had been moving around the room without rest.",
+        "originalSentenceIndex": 117
+      },
+      {
+        "text": "He stopped and put his hand on my shoulder.",
+        "originalSentenceIndex": 117
+      },
+      {
+        "text": "\"What are you doing, Nick?\"",
+        "originalSentenceIndex": 118
+      },
+      {
+        "text": "\"I am a bond man.\"",
+        "originalSentenceIndex": 119
+      },
+      {
+        "text": "\"Who do you work with?\"",
+        "originalSentenceIndex": 120
+      },
+      {
+        "text": "I told him the name.",
+        "originalSentenceIndex": 121
+      },
+      {
+        "text": "\"I have never heard of them,\" he said.",
+        "originalSentenceIndex": 122
+      },
+      {
+        "text": "He was quite sure.",
+        "originalSentenceIndex": 122
+      },
+      {
+        "text": "This made me a little angry.",
+        "originalSentenceIndex": 123
+      },
+      {
+        "text": "\"You will hear of them,\" I said.",
+        "originalSentenceIndex": 124
+      },
+      {
+        "text": "My answer was short and not very nice.",
+        "originalSentenceIndex": 124
+      },
+      {
+        "text": "\"You will if you stay in the East.\"",
+        "originalSentenceIndex": 125
+      },
+      {
+        "text": "\"Do not worry,\" he said.",
+        "originalSentenceIndex": 126
+      },
+      {
+        "text": "\"I will stay in the East.\"",
+        "originalSentenceIndex": 126
+      },
+      {
+        "text": "He looked at Daisy, then back at me.",
+        "originalSentenceIndex": 126
+      },
+      {
+        "text": "He did seem ready to hear something more.",
+        "originalSentenceIndex": 126
+      },
+      {
+        "text": "\"I would be a damn fool to live anywhere else.\"",
+        "originalSentenceIndex": 127
+      },
+      {
+        "text": "Miss Baker said, \"I absolutely agree!\"",
+        "originalSentenceIndex": 128
+      },
+      {
+        "text": "She talked so quickly that I moved in surprise.",
+        "originalSentenceIndex": 129
+      },
+      {
+        "text": "She had said nothing since I came into the room.",
+        "originalSentenceIndex": 129
+      },
+      {
+        "text": "She did seem to feel the same surprise.",
+        "originalSentenceIndex": 130
+      },
+      {
+        "text": "Her mouth came open as if she wanted sleep.",
+        "originalSentenceIndex": 130
+      },
+      {
+        "text": "Then she quickly got to her feet.",
+        "originalSentenceIndex": 130
+      },
+      {
+        "text": "Each move was quick and easy.",
+        "originalSentenceIndex": 130
+      },
+      {
+        "text": "\"My body is hard to move,\" she said.",
+        "originalSentenceIndex": 131
+      },
+      {
+        "text": "\"I have been lying on this seat for so long.",
+        "originalSentenceIndex": 131
+      },
+      {
+        "text": "I cannot remember when I first came here.\"",
+        "originalSentenceIndex": 131
+      },
+      {
+        "text": "\"Do not look at me,\" Daisy said.",
+        "originalSentenceIndex": 132
+      },
+      {
+        "text": "\"I tried all afternoon to take you to New York.\"",
+        "originalSentenceIndex": 132
+      },
+      {
+        "text": "Someone brought a drink for each of the four people.",
+        "originalSentenceIndex": 133
+      },
+      {
+        "text": "They came from the room where the food was kept.",
+        "originalSentenceIndex": 133
+      },
+      {
+        "text": "Miss Baker said, \"No, thank you.\"",
+        "originalSentenceIndex": 133
+      },
+      {
+        "text": "\"I am working hard to get ready to play.",
+        "originalSentenceIndex": 134
+      },
+      {
+        "text": "I am absolutely serious about it.\"",
+        "originalSentenceIndex": 134
+      },
+      {
+        "text": "Tom looked at her.",
+        "originalSentenceIndex": 135
+      },
+      {
+        "text": "He did seem not to believe her.",
+        "originalSentenceIndex": 135
+      },
+      {
+        "text": "\"You really are?\"",
+        "originalSentenceIndex": 136
+      },
+      {
+        "text": "He finished his drink in a moment.",
+        "originalSentenceIndex": 137
+      },
+      {
+        "text": "He made the full drink seem very small.",
+        "originalSentenceIndex": 137
+      },
+      {
+        "text": "\"How do you ever get anything done?",
+        "originalSentenceIndex": 138
+      },
+      {
+        "text": "I cannot understand it.\"",
+        "originalSentenceIndex": 138
+      },
+      {
+        "text": "I looked at Miss Baker.",
+        "originalSentenceIndex": 139
+      },
+      {
+        "text": "I tried to think what work she did.",
+        "originalSentenceIndex": 139
+      },
+      {
+        "text": "It was a pleasure to look at her.",
+        "originalSentenceIndex": 140
+      },
+      {
+        "text": "She was a slender, small-breasted girl.",
+        "originalSentenceIndex": 141
+      },
+      {
+        "text": "Her body was straight.",
+        "originalSentenceIndex": 141
+      },
+      {
+        "text": "She kept her shoulders back like a young cadet.",
+        "originalSentenceIndex": 141
+      },
+      {
+        "text": "Her grey eyes looked tired from the sun.",
+        "originalSentenceIndex": 142
+      },
+      {
+        "text": "She looked back with polite curiosity.",
+        "originalSentenceIndex": 142
+      },
+      {
+        "text": "I was interested in her, and she in me.",
+        "originalSentenceIndex": 142
+      },
+      {
+        "text": "Her face was wan, lovely, and not quite happy.",
+        "originalSentenceIndex": 142
+      },
+      {
+        "text": "I now thought I had seen her somewhere before.",
+        "originalSentenceIndex": 143
+      },
+      {
+        "text": "Perhaps I had seen a picture of her.",
+        "originalSentenceIndex": 143
+      },
+      {
+        "text": "\"You live in West Egg,\" she said.",
+        "originalSentenceIndex": 144
+      },
+      {
+        "text": "She made it sound like a bad place.",
+        "originalSentenceIndex": 144
+      },
+      {
+        "text": "\"I know somebody there.\"",
+        "originalSentenceIndex": 145
+      },
+      {
+        "text": "I started to say that I knew nobody there.",
+        "originalSentenceIndex": 146
+      },
+      {
+        "text": "I did not finish.",
+        "originalSentenceIndex": 146
+      },
+      {
+        "text": "\"You must know Gatsby.\"",
+        "originalSentenceIndex": 147
+      },
+      {
+        "text": "\"Do you mean Gatsby?\"",
+        "originalSentenceIndex": 148
+      },
+      {
+        "text": "Daisy asked this and wanted an answer.",
+        "originalSentenceIndex": 149
+      },
+      {
+        "text": "\"Which Gatsby do you mean?\"",
+        "originalSentenceIndex": 150
+      },
+      {
+        "text": "I was about to say that Gatsby was my neighbour.",
+        "originalSentenceIndex": 151
+      },
+      {
+        "text": "But someone said dinner was ready before I could answer.",
+        "originalSentenceIndex": 151
+      },
+      {
+        "text": "Tom Buchanan put his tense arm hard under mine.",
+        "originalSentenceIndex": 151
+      },
+      {
+        "text": "He made me leave the room.",
+        "originalSentenceIndex": 151
+      },
+      {
+        "text": "It was like moving a checker to another square.",
+        "originalSentenceIndex": 151
+      },
+      {
+        "text": "The two young women went out ahead of us.",
+        "originalSentenceIndex": 152
+      },
+      {
+        "text": "Their hands were set lightly on their hips.",
+        "originalSentenceIndex": 152
+      },
+      {
+        "text": "They moved slenderly and without hurry.",
+        "originalSentenceIndex": 152
+      },
+      {
+        "text": "They went to a rosy-coloured porch, open toward the sunset.",
+        "originalSentenceIndex": 152
+      },
+      {
+        "text": "Four candles flickered on the table.",
+        "originalSentenceIndex": 152
+      },
+      {
+        "text": "The wind was less strong now.",
+        "originalSentenceIndex": 152
+      },
+      {
+        "text": "\"Why do we need this light from fire?\"",
+        "originalSentenceIndex": 153
+      },
+      {
+        "text": "Daisy asked this with an angry look.",
+        "originalSentenceIndex": 154
+      },
+      {
+        "text": "She snapped them out with her fingers.",
+        "originalSentenceIndex": 155
+      },
+      {
+        "text": "\"In two weeks, the day will have the most light.",
+        "originalSentenceIndex": 156
+      },
+      {
+        "text": "No other day in the year will have more.\"",
+        "originalSentenceIndex": 156
+      },
+      {
+        "text": "She looked at all of us with a happy face.",
+        "originalSentenceIndex": 157
+      },
+      {
+        "text": "\"Do you watch for the day with the most light?",
+        "originalSentenceIndex": 158
+      },
+      {
+        "text": "I mean the most light in the year.",
+        "originalSentenceIndex": 158
+      },
+      {
+        "text": "Do you always watch for it and then miss it?\"",
+        "originalSentenceIndex": 158
+      },
+      {
+        "text": "\"I always watch for that day.",
+        "originalSentenceIndex": 159
+      },
+      {
+        "text": "Then I miss it.\"",
+        "originalSentenceIndex": 159
+      },
+      {
+        "text": "\"We should plan something,\" said Miss Baker.",
+        "originalSentenceIndex": 160
+      },
+      {
+        "text": "Her mouth came open as if she wanted sleep.",
+        "originalSentenceIndex": 160
+      },
+      {
+        "text": "She took her seat at the table.",
+        "originalSentenceIndex": 160
+      },
+      {
+        "text": "It was as if she were going to bed.",
+        "originalSentenceIndex": 160
+      },
+      {
+        "text": "\"All right,\" said Daisy.",
+        "originalSentenceIndex": 161
+      },
+      {
+        "text": "\"What shall we plan?\"",
+        "originalSentenceIndex": 162
+      },
+      {
+        "text": "She turned to me as if she needed help.",
+        "originalSentenceIndex": 163
+      },
+      {
+        "text": "\"What do people plan?\"",
+        "originalSentenceIndex": 163
+      },
+      {
+        "text": "Before I could answer, she looked at her little finger.",
+        "originalSentenceIndex": 164
+      },
+      {
+        "text": "Her expression was full of wonder.",
+        "originalSentenceIndex": 164
+      },
+      {
+        "text": "\"Look at this!\"",
+        "originalSentenceIndex": 165
+      },
+      {
+        "text": "\"I hurt it,\" she said in an angry voice.",
+        "originalSentenceIndex": 166
+      },
+      {
+        "text": "We all looked.",
+        "originalSentenceIndex": 167
+      },
+      {
+        "text": "Her knuckle was black and blue.",
+        "originalSentenceIndex": 167
+      },
+      {
+        "text": "\"You did it, Tom,\" she said.",
+        "originalSentenceIndex": 168
+      },
+      {
+        "text": "She made it clear that it was his fault.",
+        "originalSentenceIndex": 168
+      },
+      {
+        "text": "\"I know you did not mean to hurt me.",
+        "originalSentenceIndex": 169
+      },
+      {
+        "text": "But you did hurt me.\"",
+        "originalSentenceIndex": 169
+      },
+      {
+        "text": "\"I married a man who can hurt people.",
+        "originalSentenceIndex": 170
+      },
+      {
+        "text": "That is why this has happened to me.",
+        "originalSentenceIndex": 170
+      },
+      {
+        "text": "He is such a great, big, strong man.\"",
+        "originalSentenceIndex": 170
+      },
+      {
+        "text": "She did not finish what she was saying.",
+        "originalSentenceIndex": 170
+      },
+      {
+        "text": "\"I hate being called big like that,\" said Tom.",
+        "originalSentenceIndex": 171
+      },
+      {
+        "text": "He was angry.",
+        "originalSentenceIndex": 171
+      },
+      {
+        "text": "\"I hate it even when you are kidding.\"",
+        "originalSentenceIndex": 171
+      },
+      {
+        "text": "Daisy called him big in the same way again.",
+        "originalSentenceIndex": 172
+      },
+      {
+        "text": "Sometimes she and Miss Baker talked at once.",
+        "originalSentenceIndex": 173
+      },
+      {
+        "text": "They did not try to make anyone listen.",
+        "originalSentenceIndex": 173
+      },
+      {
+        "text": "They were playing with words that meant little.",
+        "originalSentenceIndex": 173
+      },
+      {
+        "text": "They did not talk too much.",
+        "originalSentenceIndex": 173
+      },
+      {
+        "text": "Their talk was calm, like their white clothes.",
+        "originalSentenceIndex": 173
+      },
+      {
+        "text": "Their eyes had no wish for anything.",
+        "originalSentenceIndex": 173
+      },
+      {
+        "text": "They did not look at anyone in a personal way.",
+        "originalSentenceIndex": 173
+      },
+      {
+        "text": "The women were here with Tom and me.",
+        "originalSentenceIndex": 174
+      },
+      {
+        "text": "They did seem to think we were fine company.",
+        "originalSentenceIndex": 174
+      },
+      {
+        "text": "They tried a little to be nice.",
+        "originalSentenceIndex": 174
+      },
+      {
+        "text": "They tried a little to give or enjoy some pleasure.",
+        "originalSentenceIndex": 174
+      },
+      {
+        "text": "They knew dinner would soon be over.",
+        "originalSentenceIndex": 175
+      },
+      {
+        "text": "A little later, the evening would be over too.",
+        "originalSentenceIndex": 175
+      },
+      {
+        "text": "They would put it behind them without much thought.",
+        "originalSentenceIndex": 175
+      },
+      {
+        "text": "This was very different from life in the West.",
+        "originalSentenceIndex": 176
+      },
+      {
+        "text": "There, people had to hurry through each evening.",
+        "originalSentenceIndex": 176
+      },
+      {
+        "text": "They went quickly from one part to the next.",
+        "originalSentenceIndex": 176
+      },
+      {
+        "text": "They always had hope for something that did not happen.",
+        "originalSentenceIndex": 176
+      },
+      {
+        "text": "Or they were afraid of the very moment.",
+        "originalSentenceIndex": 176
+      },
+      {
+        "text": "\"You make me feel uncivilized, Daisy,\" I said.",
+        "originalSentenceIndex": 177
+      },
+      {
+        "text": "I was on my second glass of claret.",
+        "originalSentenceIndex": 177
+      },
+      {
+        "text": "It was corky, but still quite impressive.",
+        "originalSentenceIndex": 177
+      },
+      {
+        "text": "\"Can you talk about food that comes from the ground?",
+        "originalSentenceIndex": 178
+      },
+      {
+        "text": "Or something like that?\"",
+        "originalSentenceIndex": 178
+      },
+      {
+        "text": "I did not mean anything special by this.",
+        "originalSentenceIndex": 179
+      },
+      {
+        "text": "But someone said something I did not expect.",
+        "originalSentenceIndex": 179
+      },
+      {
+        "text": "\"The world we know is coming to an end.\"",
+        "originalSentenceIndex": 180
+      },
+      {
+        "text": "Tom said this with great force.",
+        "originalSentenceIndex": 180
+      },
+      {
+        "text": "\"I have come to expect terrible things.\"",
+        "originalSentenceIndex": 181
+      },
+      {
+        "text": "\"Have you read The Rise of the Coloured Empires?",
+        "originalSentenceIndex": 182
+      },
+      {
+        "text": "It is by a man called Goddard.\"",
+        "originalSentenceIndex": 182
+      },
+      {
+        "text": "\"No, I have not,\" I said.",
+        "originalSentenceIndex": 183
+      },
+      {
+        "text": "His way of speaking was quite a surprise.",
+        "originalSentenceIndex": 183
+      },
+      {
+        "text": "\"It is a fine book.",
+        "originalSentenceIndex": 184
+      },
+      {
+        "text": "Everybody should read it.\"",
+        "originalSentenceIndex": 184
+      },
+      {
+        "text": "\"We white people must be careful.",
+        "originalSentenceIndex": 185
+      },
+      {
+        "text": "If not, other people will completely take over.\"",
+        "originalSentenceIndex": 185
+      },
+      {
+        "text": "\"It is all work to learn how the world works.",
+        "originalSentenceIndex": 186
+      },
+      {
+        "text": "That work makes it clear this is true.\"",
+        "originalSentenceIndex": 186
+      },
+      {
+        "text": "\"Tom is getting very deep,\" Daisy said.",
+        "originalSentenceIndex": 187
+      },
+      {
+        "text": "Her sad look did not seem to come from thought.",
+        "originalSentenceIndex": 187
+      },
+      {
+        "text": "\"He does read a book with very deep thought.",
+        "originalSentenceIndex": 188
+      },
+      {
+        "text": "Such a book has long words in it.\"",
+        "originalSentenceIndex": 188
+      },
+      {
+        "text": "\"What was that word?\"",
+        "originalSentenceIndex": 189
+      },
+      {
+        "text": "She started to say more but did not finish.",
+        "originalSentenceIndex": 189
+      },
+      {
+        "text": "\"This is all about how the world works,\" said Tom.",
+        "originalSentenceIndex": 190
+      },
+      {
+        "text": "He looked at her as if tired of waiting.",
+        "originalSentenceIndex": 190
+      },
+      {
+        "text": "\"This man has worked out the whole thing.\"",
+        "originalSentenceIndex": 191
+      },
+      {
+        "text": "\"We white people are the ones in control.",
+        "originalSentenceIndex": 192
+      },
+      {
+        "text": "We must watch out for other people.",
+        "originalSentenceIndex": 192
+      },
+      {
+        "text": "If we do not, they will take control.\"",
+        "originalSentenceIndex": 192
+      },
+      {
+        "text": "\"We must beat them down,\" said Daisy.",
+        "originalSentenceIndex": 193
+      },
+      {
+        "text": "Her voice was very quiet.",
+        "originalSentenceIndex": 193
+      },
+      {
+        "text": "She quickly shut one eye while looking at the sun.",
+        "originalSentenceIndex": 193
+      },
+      {
+        "text": "She did it with great force.",
+        "originalSentenceIndex": 193
+      },
+      {
+        "text": "The sun was still hot.",
+        "originalSentenceIndex": 193
+      },
+      {
+        "text": "\"You should live in California,\" Miss Baker started to say.",
+        "originalSentenceIndex": 194
+      },
+      {
+        "text": "But Tom stopped her by moving hard in his seat.",
+        "originalSentenceIndex": 194
+      },
+      {
+        "text": "\"The idea is that we are Nordics.\"",
+        "originalSentenceIndex": 195
+      },
+      {
+        "text": "\"I am, and you are, and you are.\"",
+        "originalSentenceIndex": 196
+      },
+      {
+        "text": "He stopped for just a moment.",
+        "originalSentenceIndex": 196
+      },
+      {
+        "text": "Then he moved his head to say Daisy was, too.",
+        "originalSentenceIndex": 196
+      },
+      {
+        "text": "She quickly shut one eye at me again.",
+        "originalSentenceIndex": 196
+      },
+      {
+        "text": "\"We made all the things that make life work.",
+        "originalSentenceIndex": 197
+      },
+      {
+        "text": "We worked out how the world works and made art.",
+        "originalSentenceIndex": 197
+      },
+      {
+        "text": "We did all of that.\"",
+        "originalSentenceIndex": 197
+      },
+      {
+        "text": "\"Do you see what I mean?\"",
+        "originalSentenceIndex": 198
+      },
+      {
+        "text": "He thought very hard about what he was saying.",
+        "originalSentenceIndex": 199
+      },
+      {
+        "text": "It almost made me feel sorry for him.",
+        "originalSentenceIndex": 199
+      },
+      {
+        "text": "He was even more happy with himself than before.",
+        "originalSentenceIndex": 199
+      },
+      {
+        "text": "But being happy with himself did not seem enough anymore.",
+        "originalSentenceIndex": 199
+      },
+      {
+        "text": "Almost at once, the phone started to ring inside.",
+        "originalSentenceIndex": 200
+      },
+      {
+        "text": "The man who brought our food left the outside table.",
+        "originalSentenceIndex": 200
+      },
+      {
+        "text": "Daisy took this chance to move close to me.",
+        "originalSentenceIndex": 200
+      },
+      {
+        "text": "\"I will tell you a family secret,\" she said.",
+        "originalSentenceIndex": 201
+      },
+      {
+        "text": "Her voice was quiet but very happy.",
+        "originalSentenceIndex": 201
+      },
+      {
+        "text": "\"It is about the man who works here.",
+        "originalSentenceIndex": 202
+      },
+      {
+        "text": "I mean the part of his face over his mouth.",
+        "originalSentenceIndex": 202
+      },
+      {
+        "text": "It is between his eyes.\"",
+        "originalSentenceIndex": 202
+      },
+      {
+        "text": "\"Do you want to hear about that part?\"",
+        "originalSentenceIndex": 203
+      },
+      {
+        "text": "\"That is why I came over tonight.\"",
+        "originalSentenceIndex": 204
+      },
+      {
+        "text": "\"He was not always a butler.",
+        "originalSentenceIndex": 205
+      },
+      {
+        "text": "He once worked for some people in New York.",
+        "originalSentenceIndex": 205
+      },
+      {
+        "text": "He was their silver polisher.",
+        "originalSentenceIndex": 205
+      },
+      {
+        "text": "They had a silver service for 200 people.",
+        "originalSentenceIndex": 205
+      },
+      {
+        "text": "\"He had to do this from morning till night.",
+        "originalSentenceIndex": 206
+      },
+      {
+        "text": "At last, it hurt that part of his face.\"",
+        "originalSentenceIndex": 206
+      },
+      {
+        "text": "Miss Baker said, \"Things went from bad to worse.\"",
+        "originalSentenceIndex": 207
+      },
+      {
+        "text": "\"Yes, that is right.\"",
+        "originalSentenceIndex": 208
+      },
+      {
+        "text": "\"Things went from bad to worse.",
+        "originalSentenceIndex": 209
+      },
+      {
+        "text": "At last, he had to leave his job.\"",
+        "originalSentenceIndex": 209
+      },
+      {
+        "text": "For a moment, the sun gave her face light.",
+        "originalSentenceIndex": 210
+      },
+      {
+        "text": "It made her look beautiful and full of life.",
+        "originalSentenceIndex": 210
+      },
+      {
+        "text": "As I heard her voice, I had to move forward.",
+        "originalSentenceIndex": 210
+      },
+      {
+        "text": "I felt I could not take in enough air.",
+        "originalSentenceIndex": 210
+      },
+      {
+        "text": "Then the light left her face, little by little.",
+        "originalSentenceIndex": 210
+      },
+      {
+        "text": "I almost felt sorry to see the light go.",
+        "originalSentenceIndex": 210
+      },
+      {
+        "text": "It was like children leaving a nice street at night.",
+        "originalSentenceIndex": 210
+      },
+      {
+        "text": "The man who brought our food came back.",
+        "originalSentenceIndex": 211
+      },
+      {
+        "text": "He talked close to the side of Tom Buchanan's head.",
+        "originalSentenceIndex": 211
+      },
+      {
+        "text": "He talked with a very quiet voice.",
+        "originalSentenceIndex": 211
+      },
+      {
+        "text": "Tom looked angry and moved his seat back.",
+        "originalSentenceIndex": 211
+      },
+      {
+        "text": "He went inside without saying a word.",
+        "originalSentenceIndex": 211
+      },
+      {
+        "text": "Daisy moved close to me again.",
+        "originalSentenceIndex": 212
+      },
+      {
+        "text": "She did seem more alive now that Tom was gone.",
+        "originalSentenceIndex": 212
+      },
+      {
+        "text": "Her voice was happy and full of music.",
+        "originalSentenceIndex": 212
+      },
+      {
+        "text": "\"I love to see you at my table, Nick.\"",
+        "originalSentenceIndex": 213
+      },
+      {
+        "text": "\"You remind me of a rose, an absolute rose.",
+        "originalSentenceIndex": 214
+      },
+      {
+        "text": "\"Does he not make you think of that?\"",
+        "originalSentenceIndex": 215
+      },
+      {
+        "text": "She turned to Miss Baker and wanted her to agree.",
+        "originalSentenceIndex": 216
+      },
+      {
+        "text": "\"Is he not exactly like that lovely thing?\"",
+        "originalSentenceIndex": 216
+      },
+      {
+        "text": "This was not true.",
+        "originalSentenceIndex": 217
+      },
+      {
+        "text": "I am not even a little like a rose.",
+        "originalSentenceIndex": 218
+      },
+      {
+        "text": "She was making up her words as she talked.",
+        "originalSentenceIndex": 219
+      },
+      {
+        "text": "But I felt her strong wish to be close.",
+        "originalSentenceIndex": 219
+      },
+      {
+        "text": "Her quick, wonderful words had strong feeling in them.",
+        "originalSentenceIndex": 219
+      },
+      {
+        "text": "They made you feel that you were important to her.",
+        "originalSentenceIndex": 219
+      },
+      {
+        "text": "She had something to keep her mouth clean during dinner.",
+        "originalSentenceIndex": 220
+      },
+      {
+        "text": "Now she gave it a quick throw to the table.",
+        "originalSentenceIndex": 220
+      },
+      {
+        "text": "She said she had to leave and went inside.",
+        "originalSentenceIndex": 220
+      },
+      {
+        "text": "Miss Baker and I looked quickly at each other.",
+        "originalSentenceIndex": 221
+      },
+      {
+        "text": "We were careful not to show what we thought.",
+        "originalSentenceIndex": 221
+      },
+      {
+        "text": "I was about to speak.",
+        "originalSentenceIndex": 222
+      },
+      {
+        "text": "She quickly moved up in her seat.",
+        "originalSentenceIndex": 222
+      },
+      {
+        "text": "She said, \"Be quiet.\"",
+        "originalSentenceIndex": 222
+      },
+      {
+        "text": "Her voice told me that I must be careful.",
+        "originalSentenceIndex": 223
+      },
+      {
+        "text": "People talked with great feeling in the next room.",
+        "originalSentenceIndex": 224
+      },
+      {
+        "text": "Their talking was quiet.",
+        "originalSentenceIndex": 224
+      },
+      {
+        "text": "Miss Baker moved close to hear.",
+        "originalSentenceIndex": 224
+      },
+      {
+        "text": "She did not hide that she wanted to hear.",
+        "originalSentenceIndex": 224
+      },
+      {
+        "text": "For a moment, I could almost understand the words.",
+        "originalSentenceIndex": 225
+      },
+      {
+        "text": "Then the talking got quiet again.",
+        "originalSentenceIndex": 225
+      },
+      {
+        "text": "Then it was full of strong feeling again.",
+        "originalSentenceIndex": 225
+      },
+      {
+        "text": "We could hear more of its sound.",
+        "originalSentenceIndex": 225
+      },
+      {
+        "text": "Then it completely stopped.",
+        "originalSentenceIndex": 225
+      },
+      {
+        "text": "\"That Mr. Gatsby you talked of lives next to me.\"",
+        "originalSentenceIndex": 226
+      },
+      {
+        "text": "I started to tell her more.",
+        "originalSentenceIndex": 226
+      },
+      {
+        "text": "\"Do not talk.\"",
+        "originalSentenceIndex": 227
+      },
+      {
+        "text": "\"I want to hear what happens.\"",
+        "originalSentenceIndex": 228
+      },
+      {
+        "text": "\"Is something happening?\"",
+        "originalSentenceIndex": 229
+      },
+      {
+        "text": "I asked because I did not know anything was wrong.",
+        "originalSentenceIndex": 230
+      },
+      {
+        "text": "\"Do you mean you do not know?\"",
+        "originalSentenceIndex": 231
+      },
+      {
+        "text": "Miss Baker asked this in real surprise.",
+        "originalSentenceIndex": 232
+      },
+      {
+        "text": "\"I thought everybody knew.\"",
+        "originalSentenceIndex": 233
+      },
+      {
+        "text": "\"I do not know.\"",
+        "originalSentenceIndex": 234
+      },
+      {
+        "text": "She started to answer, then stopped for a moment.",
+        "originalSentenceIndex": 235
+      },
+      {
+        "text": "\"Tom has another woman in New York.\"",
+        "originalSentenceIndex": 236
+      },
+      {
+        "text": "\"He has another woman?\"",
+        "originalSentenceIndex": 237
+      },
+      {
+        "text": "I said those words again.",
+        "originalSentenceIndex": 238
+      },
+      {
+        "text": "I had no idea what she meant.",
+        "originalSentenceIndex": 238
+      },
+      {
+        "text": "Miss Baker moved her head to say yes.",
+        "originalSentenceIndex": 239
+      },
+      {
+        "text": "\"She should know better than to call him during dinner.",
+        "originalSentenceIndex": 240
+      },
+      {
+        "text": "Do not you think?\"",
+        "originalSentenceIndex": 241
+      },
+      {
+        "text": "Before I could really understand, I heard clothes moving.",
+        "originalSentenceIndex": 242
+      },
+      {
+        "text": "I also heard the sound of big feet.",
+        "originalSentenceIndex": 242
+      },
+      {
+        "text": "Tom and Daisy were back at the table.",
+        "originalSentenceIndex": 242
+      },
+      {
+        "text": "\"Nothing could be done about it!\"",
+        "originalSentenceIndex": 243
+      },
+      {
+        "text": "Daisy said this, trying hard to sound happy.",
+        "originalSentenceIndex": 244
+      },
+      {
+        "text": "Her voice was strong, but she did not feel calm.",
+        "originalSentenceIndex": 244
+      },
+      {
+        "text": "She took a seat and looked hard at Miss Baker.",
+        "originalSentenceIndex": 245
+      },
+      {
+        "text": "Then she looked at me and kept talking.",
+        "originalSentenceIndex": 245
+      },
+      {
+        "text": "\"I looked outside for a minute.",
+        "originalSentenceIndex": 245
+      },
+      {
+        "text": "It is a lovely night to be in love.",
+        "originalSentenceIndex": 245
+      },
+      {
+        "text": "\"There is a bird on the lawn.",
+        "originalSentenceIndex": 246
+      },
+      {
+        "text": "I think it must be a nightingale.",
+        "originalSentenceIndex": 246
+      },
+      {
+        "text": "Perhaps it came over on Cunard or White Star Line.",
+        "originalSentenceIndex": 246
+      },
+      {
+        "text": "It will not stop making a song.\"",
+        "originalSentenceIndex": 247
+      },
+      {
+        "text": "Her voice was like a song.",
+        "originalSentenceIndex": 247
+      },
+      {
+        "text": "\"It makes you feel in love, Tom, does it not?\"",
+        "originalSentenceIndex": 247
+      },
+      {
+        "text": "\"Very romantic,\" he said.",
+        "originalSentenceIndex": 248
+      },
+      {
+        "text": "Then he talked to me in a sad voice.",
+        "originalSentenceIndex": 248
+      },
+      {
+        "text": "\"I want to take you down to the stables.",
+        "originalSentenceIndex": 248
+      },
+      {
+        "text": "We can go after dinner, if it is light enough.\"",
+        "originalSentenceIndex": 248
+      },
+      {
+        "text": "The phone inside made a sound that did surprise us.",
+        "originalSentenceIndex": 249
+      },
+      {
+        "text": "Daisy moved her head at Tom to say no.",
+        "originalSentenceIndex": 249
+      },
+      {
+        "text": "That stopped the talk about his team, and everything else.",
+        "originalSentenceIndex": 249
+      },
+      {
+        "text": "The last five minutes at the table felt broken.",
+        "originalSentenceIndex": 250
+      },
+      {
+        "text": "I remember the candles being lit again, for no reason.",
+        "originalSentenceIndex": 250
+      },
+      {
+        "text": "I wanted to look straight at everyone.",
+        "originalSentenceIndex": 250
+      },
+      {
+        "text": "Yet I also wanted to avoid all their eyes.",
+        "originalSentenceIndex": 250
+      },
+      {
+        "text": "I could not guess what Daisy and Tom were thinking.",
+        "originalSentenceIndex": 251
+      },
+      {
+        "text": "Miss Baker looked strong and hard to fool.",
+        "originalSentenceIndex": 251
+      },
+      {
+        "text": "But even she must have kept thinking about the phone.",
+        "originalSentenceIndex": 251
+      },
+      {
+        "text": "The phone was like one more person, making 5.",
+        "originalSentenceIndex": 251
+      },
+      {
+        "text": "It kept calling for attention with a strong voice.",
+        "originalSentenceIndex": 251
+      },
+      {
+        "text": "Some people might have found this situation interesting.",
+        "originalSentenceIndex": 252
+      },
+      {
+        "text": "I just wanted to call the police right away.",
+        "originalSentenceIndex": 252
+      },
+      {
+        "text": "Of course, nobody talked about the horse team again.",
+        "originalSentenceIndex": 253
+      },
+      {
+        "text": "Tom and Miss Baker went back into the library.",
+        "originalSentenceIndex": 254
+      },
+      {
+        "text": "Several feet of twilight were between them.",
+        "originalSentenceIndex": 254
+      },
+      {
+        "text": "They went as if to watch beside a real body.",
+        "originalSentenceIndex": 254
+      },
+      {
+        "text": "I tried to look pleasantly interested and a little deaf.",
+        "originalSentenceIndex": 254
+      },
+      {
+        "text": "I followed Daisy around the connecting verandas.",
+        "originalSentenceIndex": 254
+      },
+      {
+        "text": "We went to the porch in front.",
+        "originalSentenceIndex": 254
+      },
+      {
+        "text": "We sat side by side on a wicker settee.",
+        "originalSentenceIndex": 255
+      },
+      {
+        "text": "It was very dark there.",
+        "originalSentenceIndex": 255
+      },
+      {
+        "text": "Daisy had her face in her hands.",
+        "originalSentenceIndex": 256
+      },
+      {
+        "text": "It was as though she felt how lovely it was.",
+        "originalSentenceIndex": 256
+      },
+      {
+        "text": "After a while, her eyes moved out into the dark.",
+        "originalSentenceIndex": 256
+      },
+      {
+        "text": "I saw that her feeling was strong and not calm.",
+        "originalSentenceIndex": 257
+      },
+      {
+        "text": "I asked questions about her little girl.",
+        "originalSentenceIndex": 257
+      },
+      {
+        "text": "I thought they might help her feel calm.",
+        "originalSentenceIndex": 257
+      },
+      {
+        "text": "\"We do not know each other very well, Nick.\"",
+        "originalSentenceIndex": 258
+      },
+      {
+        "text": "She said this all at once.",
+        "originalSentenceIndex": 258
+      },
+      {
+        "text": "\"Even if we are family.",
+        "originalSentenceIndex": 259
+      },
+      {
+        "text": "You did not come to my wedding.\"",
+        "originalSentenceIndex": 260
+      },
+      {
+        "text": "\"I was not back from the war.\"",
+        "originalSentenceIndex": 261
+      },
+      {
+        "text": "\"That is true.\"",
+        "originalSentenceIndex": 262
+      },
+      {
+        "text": "She kept waiting for a moment.",
+        "originalSentenceIndex": 263
+      },
+      {
+        "text": "\"Well, I have had a very bad time, Nick.",
+        "originalSentenceIndex": 264
+      },
+      {
+        "text": "Now I do not see much good in anything.\"",
+        "originalSentenceIndex": 264
+      },
+      {
+        "text": "It was clear she had a reason for feeling so.",
+        "originalSentenceIndex": 265
+      },
+      {
+        "text": "I kept waiting, but she said nothing more.",
+        "originalSentenceIndex": 266
+      },
+      {
+        "text": "After a moment, I talked about her daughter again.",
+        "originalSentenceIndex": 266
+      },
+      {
+        "text": "I did not sound very sure of myself.",
+        "originalSentenceIndex": 266
+      },
+      {
+        "text": "\"I suppose she can talk, and eat, and everything.\"",
+        "originalSentenceIndex": 267
+      },
+      {
+        "text": "\"Oh, yes.\"",
+        "originalSentenceIndex": 268
+      },
+      {
+        "text": "She looked at me without really thinking about me.",
+        "originalSentenceIndex": 269
+      },
+      {
+        "text": "\"Listen, Nick, I will tell you what I said.",
+        "originalSentenceIndex": 270
+      },
+      {
+        "text": "I said it when she was born.",
+        "originalSentenceIndex": 270
+      },
+      {
+        "text": "Would you like to hear?\"",
+        "originalSentenceIndex": 271
+      },
+      {
+        "text": "\"Very much.\"",
+        "originalSentenceIndex": 272
+      },
+      {
+        "text": "\"It will show you how I have come to feel.",
+        "originalSentenceIndex": 273
+      },
+      {
+        "text": "It can show how I feel about things.",
+        "originalSentenceIndex": 273
+      },
+      {
+        "text": "Well, she was less than an hour old.",
+        "originalSentenceIndex": 274
+      },
+      {
+        "text": "Only God knows where Tom was.",
+        "originalSentenceIndex": 274
+      },
+      {
+        "text": "\"I woke up from the ether feeling completely abandoned.",
+        "originalSentenceIndex": 275
+      },
+      {
+        "text": "I asked the nurse right away about the baby.",
+        "originalSentenceIndex": 275
+      },
+      {
+        "text": "Was it a boy or a girl?",
+        "originalSentenceIndex": 275
+      },
+      {
+        "text": "She told me it was a girl.",
+        "originalSentenceIndex": 276
+      },
+      {
+        "text": "So I turned my head away and started crying.",
+        "originalSentenceIndex": 276
+      },
+      {
+        "text": "“All right,” I said.",
+        "originalSentenceIndex": 277
+      },
+      {
+        "text": "“I am glad it is a girl.",
+        "originalSentenceIndex": 277
+      },
+      {
+        "text": "And I hope she will be a fool.",
+        "originalSentenceIndex": 278
+      },
+      {
+        "text": "That is the best thing a girl can be here.",
+        "originalSentenceIndex": 278
+      },
+      {
+        "text": "She can be a beautiful little fool.”",
+        "originalSentenceIndex": 278
+      },
+      {
+        "text": "\"You see, I think everything is terrible,\" she went on.",
+        "originalSentenceIndex": 279
+      },
+      {
+        "text": "Her voice was very sure.",
+        "originalSentenceIndex": 279
+      },
+      {
+        "text": "\"Everybody thinks so, all the people who know the most.",
+        "originalSentenceIndex": 280
+      },
+      {
+        "text": "And I know.",
+        "originalSentenceIndex": 281
+      },
+      {
+        "text": "I have been all over the place.",
+        "originalSentenceIndex": 282
+      },
+      {
+        "text": "I have seen everything and done everything.\"",
+        "originalSentenceIndex": 282
+      },
+      {
+        "text": "Her eyes quickly moved around.",
+        "originalSentenceIndex": 283
+      },
+      {
+        "text": "She looked ready to fight anyone who thought different things.",
+        "originalSentenceIndex": 283
+      },
+      {
+        "text": "She looked rather like Tom.",
+        "originalSentenceIndex": 283
+      },
+      {
+        "text": "She gave a strong laugh, looking down on others.",
+        "originalSentenceIndex": 283
+      },
+      {
+        "text": "\"I know the world, God, I know it so well!\"",
+        "originalSentenceIndex": 284
+      },
+      {
+        "text": "Her voice stopped, and stopped making me listen and believe.",
+        "originalSentenceIndex": 285
+      },
+      {
+        "text": "At once, I felt her words were not really honest.",
+        "originalSentenceIndex": 285
+      },
+      {
+        "text": "That made me feel bad.",
+        "originalSentenceIndex": 286
+      },
+      {
+        "text": "The whole evening felt like a game to fool me.",
+        "originalSentenceIndex": 286
+      },
+      {
+        "text": "Perhaps she wanted to make me share some feeling.",
+        "originalSentenceIndex": 286
+      },
+      {
+        "text": "I kept waiting.",
+        "originalSentenceIndex": 287
+      },
+      {
+        "text": "Soon she looked at me with a smirk.",
+        "originalSentenceIndex": 287
+      },
+      {
+        "text": "I knew that look would come.",
+        "originalSentenceIndex": 287
+      },
+      {
+        "text": "Her lovely look said she was in a secret society.",
+        "originalSentenceIndex": 287
+      },
+      {
+        "text": "It was a distinguished society to which Tom belonged too.",
+        "originalSentenceIndex": 287
+      },
+      {
+        "text": "Inside, the deep red room was full of light.",
+        "originalSentenceIndex": 288
+      },
+      {
+        "text": "Tom and Miss Baker were sitting on one long seat.",
+        "originalSentenceIndex": 289
+      },
+      {
+        "text": "He was at one end, and she at the other.",
+        "originalSentenceIndex": 289
+      },
+      {
+        "text": "She read to him from the Saturday Evening Post.",
+        "originalSentenceIndex": 289
+      },
+      {
+        "text": "She talked in a quiet voice with no change.",
+        "originalSentenceIndex": 289
+      },
+      {
+        "text": "Her words ran together like a song making people calm.",
+        "originalSentenceIndex": 289
+      },
+      {
+        "text": "The lamplight was bright on his boots.",
+        "originalSentenceIndex": 290
+      },
+      {
+        "text": "It was dull on her autumn-leaf yellow hair.",
+        "originalSentenceIndex": 290
+      },
+      {
+        "text": "As she turned a page, light ran along the paper.",
+        "originalSentenceIndex": 290
+      },
+      {
+        "text": "Slender muscles moved a little in her arms.",
+        "originalSentenceIndex": 290
+      },
+      {
+        "text": "When we came in, she put up one hand.",
+        "originalSentenceIndex": 291
+      },
+      {
+        "text": "She kept us quiet for a moment.",
+        "originalSentenceIndex": 291
+      },
+      {
+        "text": "\"There will be more,\" she said.",
+        "originalSentenceIndex": 292
+      },
+      {
+        "text": "She let the paper fall on the table.",
+        "originalSentenceIndex": 292
+      },
+      {
+        "text": "\"You can read it in our next paper.\"",
+        "originalSentenceIndex": 292
+      },
+      {
+        "text": "Her knee moved as if she could not rest.",
+        "originalSentenceIndex": 293
+      },
+      {
+        "text": "Then she stood up.",
+        "originalSentenceIndex": 293
+      },
+      {
+        "text": "\"Ten o’clock,\" she said.",
+        "originalSentenceIndex": 294
+      },
+      {
+        "text": "She looked as if finding the time on the ceiling.",
+        "originalSentenceIndex": 294
+      },
+      {
+        "text": "\"Time for this good girl to go to bed.\"",
+        "originalSentenceIndex": 295
+      },
+      {
+        "text": "\"Jordan is going to play tomorrow,\" Daisy said.",
+        "originalSentenceIndex": 296
+      },
+      {
+        "text": "\"The big game is over at Westchester.\"",
+        "originalSentenceIndex": 296
+      },
+      {
+        "text": "\"Oh, you are Jordan Baker.\"",
+        "originalSentenceIndex": 297
+      },
+      {
+        "text": "Now I knew why I had seen her face before.",
+        "originalSentenceIndex": 298
+      },
+      {
+        "text": "I had seen it in many rotogravure pictures.",
+        "originalSentenceIndex": 298
+      },
+      {
+        "text": "They were of the sporting life at Asheville.",
+        "originalSentenceIndex": 298
+      },
+      {
+        "text": "Others were from Hot Springs and Palm Beach.",
+        "originalSentenceIndex": 298
+      },
+      {
+        "text": "Her face looked pleasing, though she looked down on others.",
+        "originalSentenceIndex": 298
+      },
+      {
+        "text": "I had heard a story about her too.",
+        "originalSentenceIndex": 299
+      },
+      {
+        "text": "It was a bad story that said something against her.",
+        "originalSentenceIndex": 299
+      },
+      {
+        "text": "But I could no longer remember it.",
+        "originalSentenceIndex": 299
+      },
+      {
+        "text": "\"Good night,\" she said in a quiet voice.",
+        "originalSentenceIndex": 300
+      },
+      {
+        "text": "\"Wake me at eight, will not you?\"",
+        "originalSentenceIndex": 301
+      },
+      {
+        "text": "\"If you will get up.\"",
+        "originalSentenceIndex": 302
+      },
+      {
+        "text": "\"I will.",
+        "originalSentenceIndex": 303
+      },
+      {
+        "text": "Good night, Mr. Carraway.",
+        "originalSentenceIndex": 304
+      },
+      {
+        "text": "I will see you soon.\"",
+        "originalSentenceIndex": 305
+      },
+      {
+        "text": "\"Of course you will,\" Daisy said.",
+        "originalSentenceIndex": 306
+      },
+      {
+        "text": "\"In fact, I think I will plan a marriage.",
+        "originalSentenceIndex": 307
+      },
+      {
+        "text": "Come over often, Nick.",
+        "originalSentenceIndex": 308
+      },
+      {
+        "text": "Then I will find a way to throw you together.",
+        "originalSentenceIndex": 308
+      },
+      {
+        "text": "\"I could lock you both in linen closets by accident.",
+        "originalSentenceIndex": 309
+      },
+      {
+        "text": "Or push you out to sea in a boat.",
+        "originalSentenceIndex": 309
+      },
+      {
+        "text": "You know, all that sort of thing.\"",
+        "originalSentenceIndex": 309
+      },
+      {
+        "text": "\"Good night,\" Miss Baker called as she went up.",
+        "originalSentenceIndex": 310
+      },
+      {
+        "text": "\"I have not heard a word.\"",
+        "originalSentenceIndex": 311
+      },
+      {
+        "text": "\"She is a nice girl,\" Tom said after a moment.",
+        "originalSentenceIndex": 312
+      },
+      {
+        "text": "\"They should not let her run around the country so.\"",
+        "originalSentenceIndex": 313
+      },
+      {
+        "text": "\"Who should not?\"",
+        "originalSentenceIndex": 314
+      },
+      {
+        "text": "Daisy asked this in a cold voice.",
+        "originalSentenceIndex": 315
+      },
+      {
+        "text": "\"Her family.\"",
+        "originalSentenceIndex": 316
+      },
+      {
+        "text": "\"Her family is one woman about 1,000 years old.",
+        "originalSentenceIndex": 317
+      },
+      {
+        "text": "That woman is a sister of one of her parents.",
+        "originalSentenceIndex": 317
+      },
+      {
+        "text": "Also, Nick is going to look after her.",
+        "originalSentenceIndex": 318
+      },
+      {
+        "text": "Are not you, Nick?",
+        "originalSentenceIndex": 318
+      },
+      {
+        "text": "\"She will spend lots of weekends here this summer.",
+        "originalSentenceIndex": 319
+      },
+      {
+        "text": "I think being with a family will be very good.\"",
+        "originalSentenceIndex": 320
+      },
+      {
+        "text": "Daisy and Tom looked at each other for a moment.",
+        "originalSentenceIndex": 321
+      },
+      {
+        "text": "They said nothing.",
+        "originalSentenceIndex": 321
+      },
+      {
+        "text": "\"Is she from New York?\"",
+        "originalSentenceIndex": 322
+      },
+      {
+        "text": "I asked this quickly.",
+        "originalSentenceIndex": 323
+      },
+      {
+        "text": "\"She is from Louisville.",
+        "originalSentenceIndex": 324
+      },
+      {
+        "text": "We were white girls together there.",
+        "originalSentenceIndex": 325
+      },
+      {
+        "text": "Our beautiful white lives—\"",
+        "originalSentenceIndex": 326
+      },
+      {
+        "text": "\"Did you have a private talk with Nick outside?\"",
+        "originalSentenceIndex": 327
+      },
+      {
+        "text": "Tom asked this all at once, in a strong voice.",
+        "originalSentenceIndex": 328
+      },
+      {
+        "text": "\"Did I?\"",
+        "originalSentenceIndex": 329
+      },
+      {
+        "text": "She looked at me.",
+        "originalSentenceIndex": 330
+      },
+      {
+        "text": "\"I cannot seem to remember.",
+        "originalSentenceIndex": 331
+      },
+      {
+        "text": "But I think we talked about the Nordic people.",
+        "originalSentenceIndex": 331
+      },
+      {
+        "text": "Yes, I am sure we did.",
+        "originalSentenceIndex": 332
+      },
+      {
+        "text": "We started talking about it, and then, you know—\"",
+        "originalSentenceIndex": 333
+      },
+      {
+        "text": "\"Do not believe everything you hear, Nick,\" he told me.",
+        "originalSentenceIndex": 334
+      },
+      {
+        "text": "I said in an easy way that I heard nothing.",
+        "originalSentenceIndex": 335
+      },
+      {
+        "text": "A few minutes later, I got up to go home.",
+        "originalSentenceIndex": 335
+      },
+      {
+        "text": "They came to the door with me.",
+        "originalSentenceIndex": 336
+      },
+      {
+        "text": "They were side by side in a happy light.",
+        "originalSentenceIndex": 336
+      },
+      {
+        "text": "As I started my car, Daisy called out.",
+        "originalSentenceIndex": 337
+      },
+      {
+        "text": "Her voice made it clear I must listen.",
+        "originalSentenceIndex": 337
+      },
+      {
+        "text": "\"Wait!",
+        "originalSentenceIndex": 337
+      },
+      {
+        "text": "I forgot to ask you something important.",
+        "originalSentenceIndex": 338
+      },
+      {
+        "text": "We heard you plan to marry a girl out West.\"",
+        "originalSentenceIndex": 339
+      },
+      {
+        "text": "\"That is right,\" Tom said in a kind way.",
+        "originalSentenceIndex": 340
+      },
+      {
+        "text": "\"We heard you have made a promise to marry her.\"",
+        "originalSentenceIndex": 341
+      },
+      {
+        "text": "\"That is a lie about me.",
+        "originalSentenceIndex": 342
+      },
+      {
+        "text": "I am too poor.\"",
+        "originalSentenceIndex": 343
+      },
+      {
+        "text": "\"But we heard it,\" Daisy said again.",
+        "originalSentenceIndex": 344
+      },
+      {
+        "text": "She was open and lovely again.",
+        "originalSentenceIndex": 344
+      },
+      {
+        "text": "This was a surprise to me.",
+        "originalSentenceIndex": 344
+      },
+      {
+        "text": "\"We heard it from three people.",
+        "originalSentenceIndex": 345
+      },
+      {
+        "text": "So it must be true.\"",
+        "originalSentenceIndex": 345
+      },
+      {
+        "text": "Of course, I knew what they were talking about.",
+        "originalSentenceIndex": 346
+      },
+      {
+        "text": "But I had made no promise to marry anyone.",
+        "originalSentenceIndex": 346
+      },
+      {
+        "text": "People had already talked as if I would marry her.",
+        "originalSentenceIndex": 347
+      },
+      {
+        "text": "That was one reason I had come East.",
+        "originalSentenceIndex": 347
+      },
+      {
+        "text": "You cannot stop seeing an old friend because people talk.",
+        "originalSentenceIndex": 348
+      },
+      {
+        "text": "But I would not let their talk make me marry.",
+        "originalSentenceIndex": 348
+      },
+      {
+        "text": "It felt good that they were interested in me.",
+        "originalSentenceIndex": 349
+      },
+      {
+        "text": "Being rich no longer made them seem far away.",
+        "originalSentenceIndex": 349
+      },
+      {
+        "text": "But I felt rather sick and did not understand.",
+        "originalSentenceIndex": 349
+      },
+      {
+        "text": "I felt that way as I went away.",
+        "originalSentenceIndex": 349
+      },
+      {
+        "text": "I thought Daisy should run out with her child.",
+        "originalSentenceIndex": 350
+      },
+      {
+        "text": "But she did not seem to plan anything like that.",
+        "originalSentenceIndex": 350
+      },
+      {
+        "text": "Tom had a woman in New York.",
+        "originalSentenceIndex": 351
+      },
+      {
+        "text": "That was less of a surprise than the book.",
+        "originalSentenceIndex": 351
+      },
+      {
+        "text": "How had a book made him feel so bad?",
+        "originalSentenceIndex": 351
+      },
+      {
+        "text": "Something made him try an old way of thinking.",
+        "originalSentenceIndex": 352
+      },
+      {
+        "text": "He was no longer happy just being strong and proud.",
+        "originalSentenceIndex": 352
+      },
+      {
+        "text": "His heart must have needed something else.",
+        "originalSentenceIndex": 352
+      },
+      {
+        "text": "It was deep summer on the roadhouse roofs.",
+        "originalSentenceIndex": 353
+      },
+      {
+        "text": "It was deep summer in front of wayside garages too.",
+        "originalSentenceIndex": 353
+      },
+      {
+        "text": "New red petrol-pumps sat in pools of light.",
+        "originalSentenceIndex": 353
+      },
+      {
+        "text": "I reached my place at West Egg.",
+        "originalSentenceIndex": 353
+      },
+      {
+        "text": "I put my car under its shed.",
+        "originalSentenceIndex": 353
+      },
+      {
+        "text": "Then I sat on an abandoned grass roller outside.",
+        "originalSentenceIndex": 353
+      },
+      {
+        "text": "I sat there in the yard for a while.",
+        "originalSentenceIndex": 353
+      },
+      {
+        "text": "The wind had gone, leaving a loud, bright night.",
+        "originalSentenceIndex": 354
+      },
+      {
+        "text": "Wings were beating in the trees.",
+        "originalSentenceIndex": 354
+      },
+      {
+        "text": "The frogs made a persistent organ sound.",
+        "originalSentenceIndex": 354
+      },
+      {
+        "text": "It was as if the earth had full bellows.",
+        "originalSentenceIndex": 354
+      },
+      {
+        "text": "They blew the frogs full of life.",
+        "originalSentenceIndex": 354
+      },
+      {
+        "text": "A moving cat made a dark silhouette in the moonlight.",
+        "originalSentenceIndex": 355
+      },
+      {
+        "text": "Its silhouette wavered as it moved.",
+        "originalSentenceIndex": 355
+      },
+      {
+        "text": "I turned my head to watch it.",
+        "originalSentenceIndex": 355
+      },
+      {
+        "text": "Then I saw I was not alone.",
+        "originalSentenceIndex": 355
+      },
+      {
+        "text": "A man was 50 feet away.",
+        "originalSentenceIndex": 355
+      },
+      {
+        "text": "He had come from the shadow of my neighbour’s mansion.",
+        "originalSentenceIndex": 355
+      },
+      {
+        "text": "His hands were in his pockets.",
+        "originalSentenceIndex": 355
+      },
+      {
+        "text": "He looked at the silver pepper of the stars.",
+        "originalSentenceIndex": 355
+      },
+      {
+        "text": "He moved without hurry.",
+        "originalSentenceIndex": 356
+      },
+      {
+        "text": "His feet were in a secure position on the lawn.",
+        "originalSentenceIndex": 356
+      },
+      {
+        "text": "I thought it must be Mr. Gatsby himself.",
+        "originalSentenceIndex": 356
+      },
+      {
+        "text": "He looked ready to determine his share of our heavens.",
+        "originalSentenceIndex": 356
+      },
+      {
+        "text": "I decided to call to him.",
+        "originalSentenceIndex": 357
+      },
+      {
+        "text": "Miss Baker had talked about him at dinner.",
+        "originalSentenceIndex": 358
+      },
+      {
+        "text": "That was enough reason to start talking to him.",
+        "originalSentenceIndex": 358
+      },
+      {
+        "text": "But I did not call to him.",
+        "originalSentenceIndex": 359
+      },
+      {
+        "text": "Something sudden told me he was happy being alone.",
+        "originalSentenceIndex": 359
+      },
+      {
+        "text": "He stretched out his arms toward the dark water.",
+        "originalSentenceIndex": 359
+      },
+      {
+        "text": "He did it in a curious way.",
+        "originalSentenceIndex": 359
+      },
+      {
+        "text": "Even far away, I could have sworn he was trembling.",
+        "originalSentenceIndex": 359
+      },
+      {
+        "text": "Without thinking, I looked out to the sea.",
+        "originalSentenceIndex": 360
+      },
+      {
+        "text": "I saw only one little green light far away.",
+        "originalSentenceIndex": 360
+      },
+      {
+        "text": "It might have been the end of a dock.",
+        "originalSentenceIndex": 360
+      },
+      {
+        "text": "When I looked for Gatsby again, he was gone.",
+        "originalSentenceIndex": 361
+      },
+      {
+        "text": "I was alone again in the dark, without quiet.",
+        "originalSentenceIndex": 361
+      }
+    ],
+    "reinforcedWords": []
+  },
+  "remainingKnownLimits": [
+    "Only the 66 documented-loss rows were repaired; other source mappings retain the prior agent draft and have not received an exhaustive fresh fidelity review.",
+    "Short sentences retain some necessary rare source terms and literary comparisons without added definitions. Reader difficulty remains unmeasured.",
+    "Dialogue punctuation and cross-row continuity inherit upstream editorial choices and require independent review.",
+    "Passes local length, coverage, and source-attestation checks only; no human approval, OCI Chapter Check, or independent model fidelity pass is claimed."
+  ]
+}

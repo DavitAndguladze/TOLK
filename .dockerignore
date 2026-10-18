@@ -1,0 +1,9 @@
+node_modules
+.next
+.git
+.env*
+!.env.example
+*.pem
+.scratch
+src/listening/spike
+.claude/settings.local.json
