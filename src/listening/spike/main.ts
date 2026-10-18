@@ -17,6 +17,7 @@ let client: AIServiceSpeechRealtimeApi | undefined;
 let tokenRequest: AbortController | undefined;
 let firstAudioAt: number | undefined;
 let finished = "";
+let utterance = 0;
 let entries: object[] = [];
 const firstSeen = new Map<string, number>();
 
@@ -52,6 +53,7 @@ start.onclick = async () => {
   firstSeen.clear();
   firstAudioAt = undefined;
   finished = "";
+  utterance = 0;
   words.replaceChildren();
   document.querySelector("#transcript")!.textContent = "No recognized words yet.";
   document.querySelector("#stream-check")!.textContent = "Browser streaming: pending.";
@@ -93,18 +95,22 @@ start.onclick = async () => {
         const arrivedAt = performance.now();
         const transcription = result.transcriptions[0];
         if (!transcription) return;
+        record("transcription", { utterance, isFinal: transcription.isFinal,
+          startTimeInMs: transcription.startTimeInMs, endTimeInMs: transcription.endTimeInMs,
+          arrivedAtMs: arrivedAt });
         document.querySelector("#stream-check")!.textContent = "Browser streaming: YES — OCI returned recognized text.";
         document.querySelector("#transcript")!.textContent = `${finished} ${transcription.transcription}`;
         words.replaceChildren();
         for (const word of transcription.tokens ?? []) {
           if (word.type !== "WORD") continue;
-          const key = `${word.startTimeInMs}:${word.token}`;
+          const key = `${utterance}:${word.startTimeInMs}:${word.token}`;
           if (!firstSeen.has(key)) firstSeen.set(key, arrivedAt);
           const valid = Number.isFinite(word.startTimeInMs) && Number.isFinite(word.endTimeInMs)
             && word.endTimeInMs >= word.startTimeInMs && Number.isFinite(word.confidence);
-          const delay = firstAudioAt === undefined || !valid ? null
+          // Live token clocks can restart; later utterance origins are unverified.
+          const delay = firstAudioAt === undefined || !valid || utterance > 0 ? null
             : Math.round(firstSeen.get(key)! - firstAudioAt - word.endTimeInMs);
-          const arrivalDelay = firstAudioAt === undefined || !valid ? null
+          const arrivalDelay = firstAudioAt === undefined || !valid || utterance > 0 ? null
             : Math.round(arrivedAt - firstAudioAt - word.endTimeInMs);
           const row = words.insertRow();
           for (const value of [word.token, word.startTimeInMs, word.endTimeInMs, word.confidence,
@@ -112,12 +118,14 @@ start.onclick = async () => {
             row.insertCell().textContent = String(value);
           }
           if (valid) document.querySelector("#fields-check")!.textContent = "Word timing and confidence: observed — inspect partial and final rows in evidence.";
-          record("word", { ...word, isFinal: transcription.isFinal, arrivedAtMs: arrivedAt,
+          record("word", { ...word, utterance, isFinal: transcription.isFinal, arrivedAtMs: arrivedAt,
             audioOriginEstimateMs: firstAudioAt ?? null, delayEstimateMs: arrivalDelay,
             firstArrivalDelayEstimateMs: delay });
         }
-        if (transcription.isFinal) finished += ` ${transcription.transcription}`;
-        document.querySelector("#delay-check")!.textContent = "Delay under one second: review first-arrival estimates in evidence, then confirm externally.";
+        if (transcription.isFinal) { finished += ` ${transcription.transcription}`; utterance++; }
+        document.querySelector("#delay-check")!.textContent = utterance > 0
+          ? "Delay: later utterance clocks need calibration; use raw bounds in evidence."
+          : "Delay under one second: review first-arrival estimates in evidence, then confirm externally.";
       },
     }, token.token, token.compartmentId,
     `wss://realtime.aiservice.${token.region}.oci.oraclecloud.com/ws/transcribe/stream`, {

@@ -33,6 +33,8 @@ Request a final result and wait for final rows before Stop if the last words mat
 
 Copy evidence holds only text/timing events, browser identity, and OCI region. It excludes JWTs, private keys, audio, and authentication messages. Treat it as a manual export; nothing is sent to a file or service automatically. A new Start clears the previous in-memory results.
 
+Live testing found that token timestamps can restart after final results. The spike records transcription bounds and an utterance number, keeps first-seen words separate between utterances, and suppresses derived delays after the first final result until their clock origin is calibrated. Raw timestamps remain available; do not interpret a timestamp reset as a network delay or compare raw word bounds across utterances to infer a hesitation.
+
 ## Checks
 
 ```powershell

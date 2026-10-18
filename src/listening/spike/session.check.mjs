@@ -82,6 +82,27 @@ test("Stop releases a late stream even when SDK recording initialization fails",
   assert.equal(session.closed, true);
 });
 
+test("later utterances retain raw clocks without presenting reset timestamps as latency", async () => {
+  const p = page();
+  await p.start();
+  const session = p.sessions[0];
+  session.grantMicrophone(p.states.RUNNING);
+  session.audioStreamer.config.callBack({ size: 2048 });
+  const word = { type: "WORD", token: "read", startTimeInMs: 0, endTimeInMs: 100, confidence: 97 };
+  p.setClock(1200);
+  session.listener.onResult({ transcriptions: [{ isFinal: true, transcription: "read", startTimeInMs: 0, endTimeInMs: 100, tokens: [word] }] });
+  p.setClock(5200);
+  session.listener.onResult({ transcriptions: [{ isFinal: false, transcription: "read", startTimeInMs: 4000, endTimeInMs: 4100, tokens: [word] }] });
+  const later = p.evidence().filter(event => event.event === "word").at(-1);
+  assert.equal(later.delayEstimateMs, null);
+  assert.equal(later.firstArrivalDelayEstimateMs, null);
+  assert.equal(later.utterance, 1);
+  const transcription = p.evidence().filter(event => event.event === "transcription").at(-1);
+  assert.equal(transcription.startTimeInMs, 4000);
+  assert.equal(transcription.endTimeInMs, 4100);
+  p.stop();
+});
+
 test("silent SDK initialization failure releases the active stream and permits restart", async () => {
   const p = page();
   await p.start();
