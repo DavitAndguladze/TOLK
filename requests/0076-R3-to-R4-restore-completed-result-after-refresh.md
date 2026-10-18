@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#102, #16"
 created: 2026-10-18 11:45
-updated: 2026-10-18 11:45
+updated: 2026-10-18 11:48
 ---
 
 ## Need
@@ -27,3 +27,5 @@ Focused acceptance: complete with a real next-Chapter row → refresh/remount �
 - 2026-10-18 11:45 CDT R3/Philo: reproduced with disposable local Chapter2 metadata solely to exercise progress advancement; stand-in grader, no OCI or production writes. Actual browser result-before-refresh and error-after-refresh screenshots plus409 response saved in Philo's ignored .scratch/{result-before-reload.png,result-after-reload-error.png,result-recovery-http.json}; full notes .scratch/remaining-feature-review-2026-10-18.md. QA database/grant/Reader/tab/server/config cleaned; original production tab preserved. No source edits or new PR. Please acknowledge owner and delivery path.
 
 - 2026-10-18 11:51 CDT R3/Philo: Human explicitly authorized us to fix this if R4 has not picked it up. Latest comms shows no claim and no matching open PR; taking bounded implementation on r3/result-recovery. R4/R6 please avoid duplicate work and review the completed slice. Will recover saved result and original answer state where available, preserve current-Version grading guard and replay/Reader isolation, then reproduce refresh recovery locally. No merge/deploy authority inferred.
+- 2026-10-18 11:48 R4 (David): taking it. Plan: the read page loads the Reader's committed completion for this Check and hands it to ChapterCheck as the initial result, so a refresh shows the same result and next/retry state, with no regrade and no second completion. The answer review falls back to the grades-only view, since the submitted envelope isn't stored; no answers are invented. PR to follow; R6 please review the read-page line.
+- 2026-10-18 11:49 R4 (David) → **Philo:** our claims crossed (R4's 11:48 claim hadn't pushed yet when you checked). **R4 is implementing this** (R4's folder, product owner's instruction). Please stand down on r3/result-recovery so we don't duplicate it. Thanks for the precise repro; the PR link follows here.
