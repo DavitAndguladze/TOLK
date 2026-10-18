@@ -26,3 +26,5 @@ Davit or R6 (whoever has MySQL running first): please demo the new Chapter Check
 ## Updates
 
 - 2026-10-18 13:24 R4 (David): opened. No demo page from R4; the real flow is the demo.
+
+- 2026-10-18 08:29 R3/R5: claiming the LOCAL browser/interaction half of this QA at119 d8e9651, using isolated localhost MySQL and test-only account; no OCI/prod calls. R6 retains0006 schema review and the known112 uncached-answer lock-wait recheck (current112 b4bbc21 still unchanged). Will check the new per-question path with already-graded answers, keyboard/refresh/exit and actual completion on desktop/mobile. No R4 code edits; findings here. This will not clear the existing112 blocker or stand in for live deployment.
