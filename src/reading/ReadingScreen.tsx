@@ -84,6 +84,7 @@ function ChapterReadingScreen({
   const [endIntroDone, setEndIntroDone] = useState(completed);
   const [controlsExpanded, setControlsExpanded] = useState(true);
   const passage = useRef<HTMLParagraphElement>(null);
+  const checkScreen = useRef<HTMLElement>(null);
   const positionKey = readerId ? `tolk-reading-position:${encodeURIComponent(readerId)}:${encodeURIComponent(chapterVersionId)}` : null;
   const chunk = chunks[state.chunkIndex];
   const listening = state.status === "listening";
@@ -164,6 +165,22 @@ function ChapterReadingScreen({
     return () => clearTimeout(timer);
   }, [chapterDone]);
 
+  // The full-screen Check/result covers the read page like a modal: everything behind it is inert (out of
+  // focus order and the accessibility tree) and focus moves into it; leaving restores the page.
+  const showingCheck = chapterDone && endIntroDone;
+  useEffect(() => {
+    const screen = checkScreen.current;
+    if (!showingCheck || !screen) return;
+    const covered: Element[] = [];
+    for (let node: Element = screen; node.parentElement && node !== document.body; node = node.parentElement) {
+      for (const sibling of node.parentElement.children) {
+        if (sibling !== node && !sibling.hasAttribute("inert")) { sibling.setAttribute("inert", ""); covered.push(sibling); }
+      }
+    }
+    screen.focus();
+    return () => covered.forEach((element) => element.removeAttribute("inert"));
+  }, [showingCheck]);
+
   if (!chunk) return <p role="status" className="px-6 py-8 text-fog">This Chapter has no text ready to read yet.</p>;
 
   if (state.status === "chapter-done") {
@@ -182,7 +199,7 @@ function ChapterReadingScreen({
       </section>
     );
     return (
-      <section aria-label="End of Chapter" className={theme.checkScreen}>
+      <section ref={checkScreen} tabIndex={-1} aria-label="End of Chapter" className={`${theme.checkScreen} outline-none`}>
         <div className="mx-auto max-w-xl animate-page-in px-6 pt-[max(1.5rem,env(safe-area-inset-top))] pb-12">
         {demoListening && source.current && <p className="text-fog">Demo results are simulated. The microphone was not used.</p>}
         {practice.length > 0 && (
