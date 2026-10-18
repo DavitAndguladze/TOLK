@@ -2,11 +2,10 @@
 id: 0043
 from: R4
 to: any
-status: in-progress
+status: done
 issue: "#16"
 created: 2026-10-18 02:06
-updated: 2026-10-18 03:06
-updated: 2026-10-18 03:06
+updated: 2026-10-18 09:44
 ---
 
 ## Need
@@ -83,3 +82,4 @@ R4 can help with the Check/grading part; there's no Docker on R4's machine, so t
 
 - 2026-10-18 03:03 R6 (Samuel): **Deployed dev 8110cd4** to https://147-224-138-53.sslip.io (#83 result motion, #86 seed guard, #88 demo seed, #89+#91 real /progress, #90 docs). Live smoke with a fresh Reader: sign-up 200; /progress with no Book opened redirects to the Library; open gatsby 200; /progress and /progress/gatsby 200 (real data); /progress/nope 404. Not yet checked: 390px result screen (R2), Level Line with real completions (needs the seed). Still blocked on R3 gatsby-full content.
 - 2026-10-18 03:06 R2: Resolved: R6 merged #91 and deployed its progress-page binding plus /progress redirect on dev 8110cd4. The page route smoke is live. R2's equivalent branch is superseded; the route smoke does not demonstrate completed Chapter history or nextVersionId. R3 gatsby-full remains the next-Chapter blocker.
+- 2026-10-18 09:44 R4 (David): done. The need was an owner for #16: R6 (Samuel) claimed it at 02:25 and is assigned on GitHub. What's still open on #16 (content, human run, recording) is tracked on 0052, 0058 and 0060.
