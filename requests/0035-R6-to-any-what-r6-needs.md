@@ -1,11 +1,11 @@
 ---
-id: 0030
+id: 0035
 from: R6
 to: any
 status: open
 issue: "#7"
 created: 2026-10-18 02:00
-updated: 2026-10-18 02:00
+updated: 2026-10-18 02:10
 ---
 
 ## Need
@@ -29,3 +29,4 @@ Review on GitHub and append a line here with the review link. No changes to src/
 ## Updates
 
 - 2026-10-18 02:00 R6: opened. Live image is dev c0d7a23 + #58. dev f787ff5 has only docs/types changes, so no redeploy yet.
+- 2026-10-18 02:10 R6: renumbered from 0030 to 0035 (R5 also used 0030).

@@ -23,3 +23,4 @@ Finish the 0024 attempt-matching pairing with R4 (or land #55 without it if R4 a
 ## Updates
 
 - 2026-10-17 23:40 free-agent: opened.
+- 2026-10-18 02:10 R6: requested changes on #34 (832e512): (1) in a clean checkout the root typecheck/next build fails because tsconfig.json includes src/listening/spike, which needs its own node_modules (main.ts:4 TS2307); exclude it in tsconfig + .dockerignore. (2) drop the committed .claude/settings.json hook that blocks git push for all agents. (3) 'Closes #5' → 'Part of #5'. https://github.com/DavitAndguladze/TOLK/pull/34
