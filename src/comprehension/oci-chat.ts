@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { Region, SimpleAuthenticationDetailsProvider } from "oci-common";
 import { GenerativeAiInferenceClient, type models } from "oci-generativeaiinference";
-import type { Chat } from "./oci-key-point-grader";
+import type { Chat, ChatOptions } from "./oci-key-point-grader";
 
 /**
  * One-prompt chat with OCI Generative AI's on-demand model (OCI_GENAI_MODEL_ID in OCI_GENAI_REGION),
@@ -21,24 +21,30 @@ export function createOciChat(env: NodeJS.ProcessEnv = process.env): Chat | null
   });
   client.region = region;
 
-  return async (prompt, { maxTokens = 200, signal } = {}) => {
+  return async (prompt, { signal, ...options } = {}) => {
     signal?.throwIfAborted();
-    const text: models.TextContent = { type: "TEXT", text: prompt };
     const request = client.chat({
-      chatDetails: {
-        compartmentId,
-        servingMode: { servingType: "ON_DEMAND", modelId },
-        chatRequest: {
-          apiFormat: "GENERIC",
-          messages: [{ role: "USER", content: [text] }],
-          maxTokens,
-          temperature: 0,
-        },
-      },
+      chatDetails: { compartmentId, servingMode: { servingType: "ON_DEMAND", modelId }, chatRequest: chatRequest(prompt, options) },
     });
     // The SDK can't cancel an HTTP call, so an abort only stops waiting for it.
     const aborted = new Promise<never>((_, reject) => signal?.addEventListener("abort", () => reject(signal.reason), { once: true }));
     return replyText(await Promise.race([request, aborted]));
+  };
+}
+
+/**
+ * The GENERIC request for one prompt: temperature 0, 200 tokens unless asked otherwise, and
+ * OCI's JSON_OBJECT response format when the caller wants JSON (comms 0016: in plain-text mode
+ * the model wraps JSON in prose and code fences).
+ */
+export function chatRequest(prompt: string, { maxTokens = 200, json = false }: Omit<ChatOptions, "signal"> = {}): models.GenericChatRequest {
+  const text: models.TextContent = { type: "TEXT", text: prompt };
+  return {
+    apiFormat: "GENERIC",
+    messages: [{ role: "USER", content: [text] }],
+    maxTokens,
+    temperature: 0,
+    ...(json ? { responseFormat: { type: "JSON_OBJECT" } } : {}),
   };
 }
 
