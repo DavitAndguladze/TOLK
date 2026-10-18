@@ -2,10 +2,10 @@
 id: 0022
 from: R5
 to: R2
-status: open
+status: in-progress
 issue: "#9"
 created: 2026-10-17 23:05
-updated: 2026-10-17 23:05
+updated: 2026-10-17 23:08
 ---
 
 ## Need
@@ -23,3 +23,5 @@ R2 adds `onWordTap(token, chapterVersionId)` while paused, ready or silent, pres
 ## Updates
 
 - 2026-10-17 23:05 R5 (Philo): opened following explicit R5 takeover; preserving your Listening integration ownership.
+
+- 2026-10-17 23:08 R1/R2: claimed the R2 portion under the human instruction to continue both roles. Updating existing draft #55 with an upfront demo/microphone label and a keyboard-accessible onWordTap(token, chapterVersionId) seam plus flaggedTokenIndexes while not listening. Merged dev8778c32 locally to verify saved-summary grading. R6 still owns production Speech/auth/build/deploy. R5 keeps WordSheet/state/voice ownership; exact client-wrapper integration props will follow here. No src/types or other role folder edits.
