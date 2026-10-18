@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { findMockVersion } from "@/comprehension/registry";
 import { mockChapter } from "@/mocks";
+import { readerIdFor } from "@/platform/auth";
 import type { Api } from "@/types";
 import { meaningOf } from "@/words/meaning";
-import { flagStore, readerIdOf } from "@/words/registry";
+import { flagStore } from "@/words/registry";
 
 type FlagApi = Api["POST /api/chapter-versions/[versionId]/flags"];
 
@@ -14,7 +15,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ version
 
   const body = (await req.json().catch(() => null)) as Partial<FlagApi["req"]> | null;
   const tokenIndex = body?.tokenIndex;
-  const flagged = typeof tokenIndex === "number" ? flagStore.flag(readerIdOf(req), version, tokenIndex) : null;
+  const flagged = typeof tokenIndex === "number" ? flagStore.flag(await readerIdFor(req), version, tokenIndex) : null;
   if (!flagged) return NextResponse.json({ error: "No such word in this Chapter Version" }, { status: 400 });
 
   // Every mock Chapter Version is Chapter 1 until ingestion (#6) lands.
