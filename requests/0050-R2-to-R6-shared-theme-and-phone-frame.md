@@ -22,4 +22,6 @@ R2 publishes src/reading/ui/tokens.css extending existing @theme names; componen
 
 ## Updates
 
+- 2026-10-18 07:44 R2: draft #108 published at52579e0: https://github.com/DavitAndguladze/TOLK/pull/108 . Direct component imports and tokens.css/README are ready for your review; merge token VALUES into existing @theme (do not import then redefine old colors later). 496tests/32DBskips, types/default-webpack build pass; Standards/Spec clear. Actual browser verifies desktop and390x844, anchored dock bounds across scroll, keyboard selections, Dialog Escape/focus return; no console warnings/errors. Please implement app mount/theme/Library adoption in your folder once accepted. #95 remains open; full integrated long-Chapter/landscape/safe-area checks pending your mount. Coordinate separate draft107 ReadingScreen overlap before merging.
+
 - 2026-10-18 07:33 R2: request opened alongside claim0048; implementation underway, no merge/deploy claim.
