@@ -1,18 +1,17 @@
 "use client";
 
-import { Fragment, useEffect, useReducer, useRef, type ReactNode } from "react";
-import type { ListeningSource, Token, WordOutcome } from "../types";
-import { createMockListeningSource } from "../mocks";
+import { Fragment, useEffect, useReducer, useRef, useState, type ReactNode } from "react";
+import type { Token, WordOutcome } from "../types";
+import { createListeningSource } from "../listening/client";
 import type { Chunk } from "./chunk";
 import { initialReadingState, readingReducer, unreadTokens } from "./session";
-
-// R1's engine factory replaces this (#10). The scripted misses and pause show every word state on stage.
-const createListeningSource = () =>
-  createMockListeningSource({ wordIntervalMs: 380, mispronounce: [8], skip: [27], hesitateOn: 21 });
+import { createReadingAttempt } from "./read-aloud";
+import { ChapterReadAloud } from "./ChapterReadAloud";
 
 const button =
   "min-h-13 cursor-pointer rounded-2xl text-base font-semibold transition outline-light focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:active:scale-100";
 const stepButton = `${button} grid w-13 place-items-center border border-hairline bg-white/60 text-ink hover:bg-white disabled:bg-transparent disabled:text-fog/50`;
+const demoListening = (process.env.NEXT_PUBLIC_LISTENING_ENGINE ?? "mock") === "mock";
 
 const outcomeClass: Record<WordOutcome, string> = {
   pending: "",
@@ -21,17 +20,18 @@ const outcomeClass: Record<WordOutcome, string> = {
   skipped: "text-fog underline decoration-fog/70 decoration-dotted decoration-2 underline-offset-[7px]",
 };
 
-function Word({ token, outcome, latest, stuck }: { token: Token; outcome: WordOutcome; latest: boolean; stuck: boolean }) {
-  return (
-    <span
-      className={`-mx-0.5 rounded-md px-0.5 transition-colors duration-200 ${outcomeClass[outcome]} ${
-        latest ? "bg-glow/45" : ""
-      } ${stuck ? "animate-pulse bg-gold/15 ring-2 ring-gold/60" : ""}`}
-    >
+function Word({ token, outcome, latest, stuck, flagged, onTap }: { token: Token; outcome: WordOutcome; latest: boolean; stuck: boolean; flagged: boolean; onTap?: () => void }) {
+  const className = `-mx-0.5 rounded-md px-0.5 transition-colors duration-200 ${outcomeClass[outcome]} ${latest ? "bg-glow/45" : ""} ${stuck ? "animate-pulse bg-gold/15 ring-2 ring-gold/60" : ""} ${flagged ? "bg-gold/15 ring-1 ring-gold/60" : ""}`;
+  const content = (
+    <>
       {token.text}
       {(outcome === "mispronounced" || outcome === "skipped") && <span className="sr-only"> ({outcome})</span>}
-    </span>
+      {flagged && <span className="sr-only"> (flagged)</span>}
+    </>
   );
+  return onTap ? (
+    <button type="button" onClick={onTap} className={`${className} cursor-pointer outline-light hover:bg-white/70 focus-visible:outline-2 focus-visible:outline-offset-2`}>{content}</button>
+  ) : <span className={className}>{content}</span>;
 }
 
 function Icon({ d }: { d: string }) {
@@ -44,33 +44,56 @@ function Icon({ d }: { d: string }) {
 const MIC = "M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3ZM19 11a7 7 0 0 1-14 0M12 18v3";
 const PAUSE = "M9 5v14M15 5v14";
 
-/** `chapterCheck` replaces the placeholder card when the Chapter ends (R4's Chapter Check, #11). */
+/** `chapterCheck` replaces the end card; a client parent supplies R5's word-tap callback and flags. */
 export function ReadingScreen({
   chapterVersionId,
   chunks,
   chapterCheck,
+  onWordTap,
+  flaggedTokenIndexes,
 }: {
   chapterVersionId: string;
   chunks: Chunk[];
   chapterCheck?: ReactNode;
+  onWordTap?: (token: Token, chapterVersionId: string) => void;
+  flaggedTokenIndexes?: ReadonlySet<number>;
 }) {
   const [state, dispatch] = useReducer(readingReducer, chunks.length, initialReadingState);
-  const source = useRef<ListeningSource>(null);
+  const source = useRef<ReturnType<typeof createReadingAttempt>>(null);
+  const [listeningLabel, setListeningLabel] = useState("Connecting…");
   const chunk = chunks[state.chunkIndex];
   const listening = state.status === "listening";
 
   useEffect(() => {
     if (!listening) return;
-    source.current ??= createListeningSource();
+    setListeningLabel("Connecting…");
+    try {
+      source.current ??= createReadingAttempt({ id: chapterVersionId, tokens: chunks.flatMap(part => part.tokens) }, createListeningSource());
+    } catch {
+      dispatch({ type: "listening", event: { type: "error", message: "Listening could not start." } });
+      return;
+    }
     const active = source.current;
     const unread = unreadTokens(chunk, state);
+    const readingTokens = unread.length ? unread : chunk.tokens;
     let live = true;
+    let freshEvidence = false;
     active
-      .start({ chapterVersionId, tokens: unread.length ? unread : chunk.tokens }, (event) => live && dispatch({ type: "listening", event }))
+      .start({ chapterVersionId, tokens: readingTokens }, (event) => {
+        if (!live) return;
+        if (!freshEvidence && event.type === "word" && event.result.outcome !== "pending") {
+          freshEvidence = true;
+          // A reread replaces old marks only after it has scored evidence; failed starts preserve them.
+          for (const token of readingTokens) dispatch({ type: "listening", event: { type: "word", result: { tokenIndex: token.index, outcome: "pending", hesitationMs: 0 } } });
+        }
+        dispatch({ type: "listening", event });
+      })
+      .then(() => { if (live) setListeningLabel(active.engine === "mock" ? "Demo listening" : "Listening"); })
       .catch((e: unknown) => live && dispatch({ type: "listening", event: { type: "error", message: String(e) } }));
     return () => {
       live = false;
-      void active.stop();
+      // finish() awaits this same Stop; a failure is surfaced by the save panel at Chapter end.
+      void active.stop().catch(() => {});
     };
     // Restart only when listening starts or the Chunk changes, never on each word.
   }, [listening, state.chunkIndex]);
@@ -83,6 +106,7 @@ export function ReadingScreen({
     return (
       <section aria-live="polite" className="mx-auto max-w-xl animate-page-in px-6 pt-10 pb-12">
         <h2 className="font-book text-[1.75rem] leading-tight">You reached the end of the Chapter.</h2>
+        {demoListening && source.current && <p className="mt-3 text-fog">Demo results are simulated. The microphone was not used.</p>}
         <p className="mt-3 text-lg text-fog">
           {tokens.some((t) => state.outcomes[t.index])
             ? `${clear} of ${tokens.length} words came through clearly.`
@@ -100,7 +124,7 @@ export function ReadingScreen({
             </ul>
           </>
         )}
-        {chapterCheck ? (
+        <ChapterReadAloud attempt={source.current}>{chapterCheck ? (
           // The Chapter Check brings its own side padding.
           <div className="-mx-6 mt-8">{chapterCheck}</div>
         ) : (
@@ -108,7 +132,7 @@ export function ReadingScreen({
             <p className="font-semibold">Chapter Check</p>
             <p className="mt-1 text-fog">A few questions about what you just read open here next.</p>
           </div>
-        )}
+        )}</ChapterReadAloud>
       </section>
     );
   }
@@ -117,7 +141,7 @@ export function ReadingScreen({
 
   return (
     <>
-      <section aria-label="Chapter text" className="px-6 pt-8 pb-52">
+      <section aria-label="Chapter text" className="px-6 pt-8 pb-72">
         <p key={chunk.index} className="mx-auto max-w-xl animate-page-in font-book text-[1.5625rem] leading-[1.7] text-pretty">
           {chunk.tokens.map((token, i) => (
             <Fragment key={token.index}>
@@ -127,6 +151,8 @@ export function ReadingScreen({
                 outcome={state.outcomes[token.index] ?? "pending"}
                 latest={listening && token.index === state.lastRead}
                 stuck={token.index === state.stuckOn}
+                flagged={flaggedTokenIndexes?.has(token.index) ?? false}
+                onTap={!listening && onWordTap ? () => onWordTap(token, chapterVersionId) : undefined}
               />
             </Fragment>
           ))}
@@ -135,6 +161,8 @@ export function ReadingScreen({
 
       <footer className="fixed inset-x-0 bottom-0 border-t border-hairline bg-mist/95 px-6 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur">
         <div className="mx-auto max-w-xl">
+          {state.status === "ready" && state.chunkIndex === 0 && <p className="mb-2 text-sm text-fog">Reading aloud is optional. It helps us grade your reading more accurately.</p>}
+          {demoListening && !state.silent && <p className="mb-2 text-sm text-ink">Demo playback. Words advance automatically; the microphone is not used.</p>}
           <div className="flex items-center justify-between text-sm text-fog">
             <p aria-live="polite">
               {stuckWord ? (
@@ -144,7 +172,7 @@ export function ReadingScreen({
               ) : (
                 <>
                   Part {state.chunkIndex + 1} of {chunks.length}
-                  {listening && <span className="ml-2 text-light">Listening</span>}
+                  {listening && <span className="ml-2 text-light">{listeningLabel}</span>}
                 </>
               )}
             </p>
@@ -185,7 +213,7 @@ export function ReadingScreen({
                 className={`${button} flex flex-1 items-center justify-center gap-2 bg-light text-white hover:bg-[#125f3f]`}
               >
                 <Icon d={listening ? PAUSE : MIC} />
-                {listening ? "Pause" : state.status === "paused" ? "Resume" : "Read aloud"}
+                {listening ? "Pause" : demoListening ? state.status === "paused" ? "Resume demo" : "Play demo" : state.status === "paused" ? "Resume" : "Read aloud"}
               </button>
             )}
             {state.chunkIndex === chunks.length - 1 ? (
