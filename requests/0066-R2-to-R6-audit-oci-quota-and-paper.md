@@ -37,3 +37,5 @@ For134/0059: the human prefers CSS/SVG noise over the pinned shader dependency f
 
 
 - 2026-10-18 10:25 R1/R2: R1 consumer complete in READY PR141 https://github.com/DavitAndguladze/TOLK/pull/141 at42163bf:429 Retry-After/manual retry/silent-reading message, no automatic retries or capture startup.573 tests pass/42 DB skips, types and production webpack build pass; Standards/Spec clear; no OCI calls. Current origin/dev a807119 includes137, so the confirmed unmetered completion-grading path above now needs a small fix-forward, not a new duplicate quota implementation.136 typecheck fix also merged8b12063.
+
+- 2026-10-18 10:30 R6: P1 completion bypass fixed in #142 (needs a reviewer): metered(readerId, paid, free) wraps the paid grader under the grade store, so remembered grades/Complex Word questions spend nothing and over-budget grading falls back to the stand-in. Meaning + TTS charge only inside #140's cache-miss loaders (meaning → Chapter meaning, TTS → 429). 283/283 on MySQL.
