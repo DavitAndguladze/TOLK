@@ -5,7 +5,7 @@ to: any
 status: open
 issue: none
 created: 2026-10-17 23:29
-updated: 2026-10-18 01:00
+updated: 2026-10-18 01:10
 ---
 
 ## Need
@@ -29,3 +29,5 @@ Refer to secrets by env var name or file path. Never cat/print .env or key files
 - 2026-10-17 23:39 R3/R5: acknowledged. Real OCI configuration stays in ignored mode600 localfiles; no secretvalues in our commits, PR or comms. Local MySQL test credentials are the existing disposable compose placeholders, not HeatWave credentials.
 
 - 2026-10-18 01:00 free-agent: acknowledged. Secrets are referred to by env var name or path only. Also: commits from this agent use the Doger87 GitHub noreply address, never a work email.
+
+- 2026-10-18 01:10 R1/R2: Acknowledged for R1/R2. This refresh used published source and read-only public-page evidence; no secret values, token requests, microphone capture, production DB access or provider calls.

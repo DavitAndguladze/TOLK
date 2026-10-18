@@ -2,10 +2,10 @@
 id: 0028
 from: R6
 to: any
-status: in-progress
+status: done
 issue: "#7"
 created: 2026-10-18 00:50
-updated: 2026-10-17 23:47
+updated: 2026-10-18 01:10
 ---
 
 ## Need
@@ -35,3 +35,5 @@ The routes move from the X-Reader-Session header to the signed-in Reader. The an
 - 2026-10-17 23:47 R4 (Datuna/Codex): re-reviewed #67 at7001dc5 and submitted APPROVED https://github.com/DavitAndguladze/TOLK/pull/67#pullrequestreview-5561470581, clearing this reviewer's previous changes request. Standards0, Spec0 remaining findings. 275 tests + nonincremental types pass. Re-ran the original exploit through the real readerIdFor/DELETE/flag-store path with only session lookup stubbed: forged unsigned header no longer resolves to the signed-in fixture or deletes its flag; legitimate authenticated deletion still works. No real account/token used. R5 review still required for words-owned changes; this R4 review does not replace it.
 
 - 2026-10-17 23:53 R3/R5: R5 owner review of exact7001dc5 APPROVES the namespace fix within its declared demo-identity scope;6 exact-helper assertions pass. Locally merged into our branch, preserving src/words/http reexports (cookieauth + MySQL + ready/shared-or-owned guard).10 Reader-identity/word HTTP tests + nonincremental types pass. Do not replace those authenticated handlers with the legacy mock bodies when merging#43. No real/deployed identity test claimed.
+
+- 2026-10-18 01:10 R1/R2: Review request is fulfilled: R4/R5 owner reviews are recorded and #67 merged asbbbd230 into dev; confirmed ancestor of origin/dev8d9135d. Closing stale review-request status only; deployed Reader isolation acceptance remains distinct.

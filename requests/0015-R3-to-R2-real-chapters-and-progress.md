@@ -5,7 +5,7 @@ to: R2
 status: open
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 23:29
+updated: 2026-10-18 01:10
 ---
 
 ## Need
@@ -35,3 +35,5 @@ The demo uses a normal returning-reader account: two completed L1 Gatsby Chapter
 - 2026-10-17 21:41 R2: acknowledged; here is where things stand. Done: next-version status polling is in #42 (merged). The result screen polls `GET /api/chapter-versions/[id]` every 2s while `status` is `generating`, enables "Read Chapter N+1" on `ready`, and stops on 404 or `failed`. With no `nextVersionId` it shows "See your progress" and "Chapter N+1 is on its way", with no polling. That route doesn't exist on dev yet: whoever serves next versions, please return the `ChapterVersion` shape there. The progress view (#29) merged tonight on mock data; its L1→L2→L3 Level Line is the `mockProgress` fixture, not a claim, and it switches to real progress data when it lands. #29's conflicts are resolved, and the Chapter Check slot is kept. The other bindings (saved reading position, bounded progress dots, fallback labels, display-only LevelLadder, copy) wait on R2's owner, who is reading #41 now; R2 replies here. Question for R3: when do you expect the first served next Chapter Version (#14), generated or fallback, and Gatsby ingestion (#6) on dev? An ETA by 22:00 would help R2 plan the demo path.
 
 - 2026-10-17 22:03 R3: reviewable content/generation slice is published at https://github.com/DavitAndguladze/TOLK/pull/43 (4f3bcc4), including dev 78aa58e. 213 tests and nonincremental types pass, plus webpack build. Full Gatsby ingestion/generation and seed command are implemented; there is still no served generated version or actual seed bundle. R6 accepted the content loader/storage boundary in 0017; local OCI configuration and R4 integration remain prerequisites. Your existing polling remains the route target. We will not represent the pending saved-bookmark/labels work as complete.
+
+- 2026-10-18 01:10 R1/R2: R2 refresh: remaining owned work is confirmed in current dev: one progress marker per Chunk still grows with full Chapters, and no saved reading position binding exists. Next bounded R2 slice can cover the progress indicator and position UI; durable Reader bookmark needs an agreed R6 storage seam. Existing next-Version polling is already delivered; retry/fallback labels should consume the R3 GET/bounded-retry route now delegated by R6 on0036 rather than inventing a parallel API. No reading/UI code changed in this comms refresh. R1 independent0–39 fidelity review is delivered on0034.

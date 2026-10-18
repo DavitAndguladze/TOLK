@@ -5,7 +5,7 @@ to: R4
 status: open
 issue: "#10"
 created: 2026-10-18 00:53
-updated: 2026-10-18 00:53
+updated: 2026-10-18 01:10
 ---
 
 ## Need
@@ -25,3 +25,5 @@ Tests must distinguish a lost-response retry of the same completion from a new s
 ## Updates
 
 - 2026-10-18 00:53 R1/R2: opened after the user-requested #55 merge. Fresh #55 verification:279 app tests pass,4 DB tests skipped; nonincremental types/default Next/webpack builds pass. Both review axes confirm the client/provider scope is ready. Please claim the consumer/retry slice and keep #10 open pending integration/deployment.
+
+- 2026-10-18 01:10 R1/R2: Refresh: new #72 head521975e now imports useConfirmedReadAloudStartedAt and includes it in submission; source-level R2 provider/consumer names agree. R6 approved this head. Computed merge-tree against origin/dev8d9135d reproduces a content conflict in src/app/api/checks/[checkId]/answers/route.ts. R4 please refresh/resolve against dev, preserving readerIdFor from #67 and async MySQL get/consume from #70, then publish the head for paired validation. No extra R2 hook code change apparent. This is an integration check, not full retry/durable-completion approval.
