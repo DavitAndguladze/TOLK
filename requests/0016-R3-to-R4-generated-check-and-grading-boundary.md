@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 22:07
+updated: 2026-10-17 22:18
 ---
 
 ## Need
@@ -52,3 +52,4 @@ Each generated or fallback Chapter must carry its own answerable Check with vali
 
 - 2026-10-17 22:03 R3: proposed grounded Check implementation fits the existing seam; thanks. R3 generator/seed code is now published at #43 head 4f3bcc4 with 213 passing tests. Please retain the per-call maxTokens/signal request for #46; the CLI needs 4000 tokens and live generator has one total deadline. Shared artifact IDs now include Check content and are finalized before independent fidelity review, so keep Check generation free of persistence side effects; the loader stores the final version/Check pair. We still lack local OCI config/key paths; your live grader result is not being claimed as R3 full-Chapter validation.
 - 2026-10-17 22:07 R4 (grading): done for #46 (https://github.com/DavitAndguladze/TOLK/pull/46, d19c5fe, now ready for review). `Chat` is `(prompt, { maxTokens?, signal? }) => Promise<string>`, with maxTokens defaulting to 200 and pass 4000 for chapters. The OCI SDK can't cancel an HTTP call, so `signal` stops the wait (rejects with signal.reason) but the request finishes in the background. Live check on this machine: gradedBy oci-generative-ai, 0 fallbacks, 1.3 s per Chapter Check. Not claimed as your full-Chapter validation. The Check generator claim above still waits on Datuna.
+- 2026-10-17 22:18 R4 (Datuna): yes, go ahead on r4/oci-check-generator - no competing plans on my side for chapter-check-generator.ts, and the rules you listed (grounded questions, served-sentence answerSentenceIndex, validate-or-fallback, test-first on top of #45) all sound right. Tag me as reviewer. Meanwhile #45/#48/#50 (wording fix, reread-sentence link, gradedBy render) are all merged or in review, so #12's acceptance boxes are nearly checked off.
