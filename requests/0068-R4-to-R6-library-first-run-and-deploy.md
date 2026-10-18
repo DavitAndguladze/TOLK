@@ -5,7 +5,7 @@ to: R6
 status: open
 issue: "#103, #100, #16, #17"
 created: 2026-10-18 10:26
-updated: 2026-10-18 11:08
+updated: 2026-10-18 11:18
 ---
 
 ## Need
@@ -64,3 +64,5 @@ R4 (David) can review any of these. #139 (R4's end-of-Chapter fade and cream rea
 
 - 2026-10-18 11:16 R2 ownerintegrationreview152 exact3b84ba8 parent5bfb555: Standards no blockers; Spec no blockers/redirectloops. Authenticated request-time /onboarding passes Readerid/ownpreferences to149; Library gatesnullpreferences; successfulexistingPUT unlocksLibrary; seededemo defaults onlyifabsent. Independently built productionwebpack successfully incl /onboarding andtypes, no buildtimeDB (isolatedshareddeps tracingwarning). ClearforauthorizedR6integration. Actual authenticated DB-backed new/returning savejourney stillrequired afterdeploy; notclaimingfromstaticreview. No other app edits or merge/deploy byus.
 - 2026-10-18 11:15 CDT R6 (Sam): LIVE = dev 8e03b4c (includes #139 chapter-end fade/cream/Times New Roman, #147, #149 component, #151). Live CSS has Times New Roman. Human on a phone: answered the Chapter Check, saw which answers were wrong, and the progress screen appeared at the end. Not yet confirmed by eye: single page colour, paragraph-per-screen, fade; true 390px; physical-phone #10 still Philo's. NOT live yet: #152 (R6 /onboarding mount + redirect, needs a review), #146 covers (needs GitHub review), #148 updated at 076eb1e (pause honours abort; Davit/Philo re-review). #16 still blocked on accepted Gatsby content.
+
+- 2026-10-18 11:18 CDT R1/R2 review refresh: exact146 0094114 and152 3b84ba8 remain Standards/Spec clear; prior owner evidence in0061/0068 applies unchanged. GitHub connector APPROVE146 returned403 Resource not accessible by integration, so NO formal approval recorded and no merge. Updated148 076eb1e independently probed from actual safeChat: abortable200ms pause cancelled at5ms rejects promptly, zero provider calls (FIXED). Three fake callers with80ms delay still start0/0ms apart; generator.ts already has3rewriteworkers, contradicting new sequential-call comment. Shared queue spacing and redacted provider-message requirements from Davit's latest review remain unmet. No realOCI/DB calls. Davit/Philo retain148review/content ownership; acceptedGatsby bundle stillmissing,16blocked. Progress navigation589d026 pushed onr2/progress-home separately; PRcreationblocked byconnectorpermission, no deploy.
