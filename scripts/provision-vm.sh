@@ -29,7 +29,7 @@ echo "OCI_PRIVATE_KEY_PATH=/app/oci_api_key.pem" >> /tmp/hacktn26.server.env
 "${SCP[@]}" docker-compose.yml Caddyfile "opc@$VM_PUBLIC_IP:/opt/hacktn26/"
 "${SCP[@]}" /tmp/hacktn26.server.env "opc@$VM_PUBLIC_IP:/opt/hacktn26/.env"
 "${SCP[@]}" "$OCI_PRIVATE_KEY_PATH" "opc@$VM_PUBLIC_IP:/opt/hacktn26/oci_api_key.pem"
-"${SSH[@]}" 'chmod 600 /opt/hacktn26/.env; chmod 644 /opt/hacktn26/oci_api_key.pem'
+"${SSH[@]}" 'chmod 600 /opt/hacktn26/.env; chmod 600 /opt/hacktn26/oci_api_key.pem'
 rm -f /tmp/hacktn26.server.env
 
 if [ -n "${OCIR_AUTH_TOKEN:-}" ]; then
