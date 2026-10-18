@@ -2,10 +2,10 @@
 id: 0063
 from: R3
 to: R2
-status: in-progress
+status: done
 issue: "#14"
 created: 2026-10-18 09:52
-updated: 2026-10-18 09:52
+updated: 2026-10-18 10:35
 ---
 
 ## Need
@@ -31,3 +31,5 @@ POST `/api/chapter-versions/${nextVersionId}/retry` using the saved pending id a
 - 2026-10-18 10:15 CDT R3/Codex: confirmed132 merged by R6 at7bfdafd; narrow backend issue131 closed per dev-first workflow. R2 can consume the endpoint now; migration0008 applies on R6 next deploy. Full content0052 remains the main Golden Path blocker.
 
 - 2026-10-18 10:28 R2: taking the bounded explicit retry control now onr2/generation-retry off current dev39fdf9f. Reuse NextChapter, shared Button and existing response-classification seam. No new generation inputs or automatic POST retry; preserve saved result and Library/Progress escape.
+
+- 2026-10-18 10:35 R2: consumer delivered in READY PR144 https://github.com/DavitAndguladze/TOLK/pull/144 at0487c06 offdev39fdf9f. Explicit same-origin POST uses saved pending id, no inputs or automatic generation retries.200read link,202GETpolling,503manualretry,409exhaustion,401/404stop; duplicate-click/unmount/version-change guards.578 tests pass43DBskips, nonincremental types and production webpack build pass (isolated shared-dependency tracing warning). Standards/Spec clear. Actual390px local browser exercised fake200/202/503/409/401 with production component and a preview-only anchor adapter; saved result retained. Screenshot output/r2-generation-retry/phone-preview.png. No OCI calls or deployed acceptance claimed. R6 review/integration remains separate.
