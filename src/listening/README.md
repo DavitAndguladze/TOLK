@@ -1,6 +1,26 @@
 # Listening — R1
 
-Issue #10 starts with pure alignment and Read-aloud Summary helpers. They use the existing `Token`, `WordResult`, `ReadAloudMiss`, and `ReadAloudSummary` contract from `src/types`. They do not yet replace the mock ListeningSource or save summaries.
+Issue #10 provides alignment, Read-aloud Summary helpers, and browser listening adapters behind the existing `ListeningSource` contract. Reading UI wiring, authenticated persistence, and deployed accuracy verification remain separate handoffs below.
+
+## Browser listening interface
+
+```ts
+import { createListeningSource } from "@/listening/client";
+
+const source = createListeningSource();
+await source.start({ chapterVersionId: version.id, tokens: chunk.tokens }, onEvent);
+const fragment = await source.stop(); // Pause: unread words stay pending.
+```
+
+`NEXT_PUBLIC_LISTENING_ENGINE` selects `mock` (default), `oci-realtime`, or `web-speech`. Next.js embeds this flag at build time; rebuild when changing it. An explicit `{ engine }` option supports local verification. Invalid flags fail visibly. OCI never silently falls back to browser speech. Browser speech is the ADR-0002 emergency fallback and can send audio to the browser vendor's service; select it explicitly. The factory is a client import; server validation continues to use `@/listening/summary` or the pure barrel.
+
+The OCI adapter requests the existing same-origin `POST /api/speech/token` contract, authenticates over a regional Oracle WebSocket, and streams mono 16 kHz signed 16-bit little-endian PCM in 64 ms frames. Browser AudioWorklet capture avoids the spike SDK package's missing compiled distribution and needs no new root dependency. Microphone audio is never played, persisted, or logged. Noise suppression and echo cancellation are requested, and automatic gain is requested off; constraints are best-effort and do not isolate speakers. HTTPS (or localhost), AudioWorklet support, microphone permission, and a valid token route are required. The adapter refuses an unexpected sample rate instead of sending incorrectly encoded audio. Its Blob worklet requires `blob:` to be allowed if a Content Security Policy is introduced.
+
+Reference protocol: [Oracle realtime browser SDK](https://github.com/oracle/oci-ai-speech-realtime-web-sdk/blob/main/ai-speech-realtime-sdk-web/src/ai-speech-realtime-web-client.ts). Capture uses the [Web Audio platform](https://www.w3.org/TR/webaudio/#AudioWorklet); browser fallback follows [SpeechRecognition](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition). These are wire/platform references, not evidence that this adapter has passed a live test.
+
+Each recognition snapshot replaces the current partial; finalized utterances accumulate. Word events preserve Chapter Version indexes, including `pending` revisions which consumers must use to clear earlier marks. An OCI/browser final utterance alone does not complete a Chunk. Automatic completion requires a finalized hypothesis aligned through the last expected word, then stops capture and emits one `chunk-complete` summary. Pause/Stop returns the latest partial summary with pending suffix words. Repeated Stop returns the same session bounds. New Start cancels the previous session and ignores its late results. Late microphone grants are released after cancellation. Failed starts reject; runtime failures stop capture and emit a safe error. Token, permission, and recognition startup have bounded timeouts; OCI network backpressure and long hypotheses stop the session rather than retain unbounded audio/text.
+
+Limitations: no calibrated hesitation events yet, because OCI word clocks reset and receipt time is not speech timing. Raw word bounds/confidence remain evidence only. No unverified inline custom-vocabulary payload is sent; ADR-0002 vocabulary configuration still needs an available OCI customization. A final skipped/substituted word cannot trigger automatic completion without an explicit Reader finish signal; the existing interface has only Start/Stop, so R2's Finish action needs an agreed explicit completion policy (request 0010). Stopping during a pause never manufactures skipped words. Background speech matching the expected text can still advance alignment.
 
 ## Alignment interface
 
