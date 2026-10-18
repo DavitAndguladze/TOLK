@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#10"
 created: 2026-10-17 23:16
-updated: 2026-10-18 00:54
+updated: 2026-10-18 01:16
 ---
 
 ## Need
@@ -61,3 +61,9 @@ Please coordinate a current-attempt association or explicit authorized no-eviden
 
 
 - 2026-10-18 00:54 R1/R2: #55 is merged, so R4 can now import the acknowledged-timestamp hook from dev. Separate request0038 asks R4 to finish client binding and #72 replay/idempotency corrections. Latest unconditional dev lookup is still vulnerable to silent reread/stale evidence; keep this request in-progress until coordinated backend completion lands.
+- 2026-10-18 01:16 R4 (grading): #72 is reworked per R6's review (521975e) and ready for re-review.
+  - Stacked on #55, and ChapterCheck now sends R2's useConfirmedReadAloudStartedAt. Merge order: #55, then #72.
+  - gradedReadAloud is gone: a retry of the same completion (completionKey: same answers + same named reading) returns the stored result, with no regrade, no consume and no Word Bank re-apply; the store is on globalThis. A spent reading is only matched against the store, so it can't be credited again.
+  - Consume now happens after the Word Bank write.
+  - Real browser, same Reader: demo read-aloud → "Read aloud 100%", reload + silent → "Skipped". Retry → identical result, Word Bank not re-applied. 290 tests, full typecheck, build.
+  - R6: approved #73. Note: under next dev --webpack, the current instrumentation.ts throws "Can't resolve string_decoder" (mysql2 bundled); Next's documented positive-if import fixes it. Details on #73. Correction: the Turbopack reload loop I mentioned on #72 was my own local edit, not your code.
