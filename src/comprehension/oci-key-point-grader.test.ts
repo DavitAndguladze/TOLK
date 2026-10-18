@@ -8,22 +8,23 @@ const sentence = mockChapterVersion(1).sentences[2]; // "He said, “Do not be q
 const question = { id: "q1", kind: "key-point" as const, prompt: "What did Nick's father tell him?", keyPointId: keyPoint.id, answerSentenceIndex: 2 };
 const answer = "Not to judge people";
 
-const fallback: KeyPointGrader = async () => ({ grade: 1, feedback: "fallback" });
+const fallback: KeyPointGrader = async () => ({ grade: 1, feedback: "fallback", gradedBy: "stand-in" });
+const fellBack = { grade: 1, feedback: "fallback", gradedBy: "stand-in" };
 
 const gradeWith = (chat: (prompt: string) => Promise<string>, timeoutMs = 1000) =>
   createOciKeyPointGrader({ chat, fallback, timeoutMs })({ question, keyPoint, answer, sentence });
 
 describe("createOciKeyPointGrader", () => {
-  test("uses the grade and feedback OCI Generative AI returns", async () => {
+  test("uses the grade and feedback OCI Generative AI returns, and says OCI graded it", async () => {
     const result = await gradeWith(async () => '{"grade": 2, "feedback": "Yes: his father told him not to judge people."}');
 
-    expect(result).toEqual({ grade: 2, feedback: "Yes: his father told him not to judge people." });
+    expect(result).toEqual({ grade: 2, feedback: "Yes: his father told him not to judge people.", gradedBy: "oci-generative-ai" });
   });
 
   test("finds the JSON when the model wraps it in a code fence or a sentence", async () => {
     const result = await gradeWith(async () => 'Here is the grade:\n```json\n{"grade": 1, "feedback": "Partly: he said not to judge."}\n```');
 
-    expect(result).toEqual({ grade: 1, feedback: "Partly: he said not to judge." });
+    expect(result).toEqual({ grade: 1, feedback: "Partly: he said not to judge.", gradedBy: "oci-generative-ai" });
   });
 
   describe("falls back to the stand-in grader", () => {
@@ -35,7 +36,7 @@ describe("createOciKeyPointGrader", () => {
       ["no feedback", '{"grade": 2}'],
       ["empty feedback", '{"grade": 2, "feedback": "  "}'],
     ])("when the reply has %s", async (_, reply) => {
-      expect(await gradeWith(async () => reply)).toEqual({ grade: 1, feedback: "fallback" });
+      expect(await gradeWith(async () => reply)).toEqual(fellBack);
     });
 
     test("when OCI Generative AI fails", async () => {
@@ -43,13 +44,13 @@ describe("createOciKeyPointGrader", () => {
         throw new Error("401 NotAuthenticated");
       });
 
-      expect(result).toEqual({ grade: 1, feedback: "fallback" });
+      expect(result).toEqual(fellBack);
     });
 
     test("when OCI Generative AI doesn't answer in time", async () => {
       const never = () => new Promise<string>(() => {});
 
-      expect(await gradeWith(never, 20)).toEqual({ grade: 1, feedback: "fallback" });
+      expect(await gradeWith(never, 20)).toEqual(fellBack);
     });
   });
 

@@ -26,7 +26,7 @@ function parseReply(text: string): Awaited<ReturnType<KeyPointGrader>> | null {
   }
   const { grade, feedback } = reply;
   if ((grade !== 0 && grade !== 1 && grade !== 2) || typeof feedback !== "string" || !feedback.trim()) return null;
-  return { grade, feedback: feedback.trim() };
+  return { grade, feedback: feedback.trim(), gradedBy: "oci-generative-ai" };
 }
 
 /**
