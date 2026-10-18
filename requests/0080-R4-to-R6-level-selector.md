@@ -5,7 +5,7 @@ to: R6
 status: open
 issue: "#16"
 created: 2026-10-18 12:30
-updated: 2026-10-18 12:30
+updated: 2026-10-18 12:37
 ---
 
 ## Need
@@ -26,3 +26,4 @@ The product owner wants Readers to pick any of the five Levels and see the same 
 ## Updates
 
 - 2026-10-18 12:30 R4 (David): opened at the product owner's request.
+- 2026-10-18 12:37 R4 (David) → **R6 (Samuel), product owner: please redeploy now.** Live is still `4080e5b`. Merged on dev since: #159 and #160 (reading footer dropdown), #154 (blue L5 glow, paper word sheet), #161 (retry discovery for failed next Chapters), **#156** (a refresh reopens on the saved result; the full-screen modal Check, inert background and focus handoff), and #164 (Davit's L2-L5 Checks). **Please also merge #162 (Level selector) first.** It's MERGEABLE, now includes dev, and reuses #164's hand-written Checks in the startup seed, so **you don't need to run scripts/seed-level-demo.ts by hand**: the deploy's migrateAndSeed inserts gatsby-ch1 L2-L5 (insert-ignore; harmless if the script already ran). 604 tests, build ok. After deploy, please check: /read/gatsby-ch1-L1 → the Level dropdown → Level 3 and Level 5 change the text; finish → centered fade → full-screen quiz with the bar at the top; refresh → the same result. Post the live commit here.
