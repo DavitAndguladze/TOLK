@@ -13,13 +13,14 @@ const gradeAnswer = (answer: string) => mockKeyPointGrader({ question, keyPoint,
 describe("mockKeyPointGrader", () => {
   test("gives 2 when the answer covers at least half of the Key Point's words", async () => {
     // father, told, criticizing ~ criticize, people: 4 of 5.
-    expect(await gradeAnswer("His father told him to stop criticizing people")).toEqual({ grade: 2, feedback: "Yes, that's it." });
+    expect(await gradeAnswer("His father told him to stop criticizing people")).toEqual({ grade: 2, feedback: "Yes, that's it.", gradedBy: "stand-in" });
   });
 
   test("gives 1 when the answer touches the Key Point", async () => {
     // told, people: 2 of 5.
     expect(await gradeAnswer("He told him to be nice to people")).toEqual({
       grade: 1,
+      gradedBy: "stand-in",
       feedback: "Partly. The chapter says: Nick's father told him not to criticize other people.",
     });
   });
@@ -27,6 +28,7 @@ describe("mockKeyPointGrader", () => {
   test("gives 0 when the answer misses the Key Point", async () => {
     expect(await gradeAnswer("I don't know")).toEqual({
       grade: 0,
+      gradedBy: "stand-in",
       feedback: "Not quite. The chapter says: Nick's father told him not to criticize other people.",
     });
   });

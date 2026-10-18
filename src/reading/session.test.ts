@@ -93,4 +93,22 @@ describe("readingReducer", () => {
 
     expect(finished.status).toBe("chapter-done");
   });
+
+  test("toggling silent reading flips the flag and leaves other state untouched", () => {
+    const toggled = run(initialReadingState(2), { type: "toggle-silent" });
+    expect(toggled.silent).toBe(true);
+
+    expect(run(toggled, { type: "toggle-silent" }).silent).toBe(false);
+  });
+
+  test("a Reader who toggles silent reading can finish the Chapter with no words read aloud (#18)", () => {
+    const finished = run(
+      initialReadingState(2),
+      { type: "toggle-silent" },
+      { type: "go-to-chunk", index: 1 },
+      { type: "finish-chapter" },
+    );
+
+    expect(finished).toMatchObject({ status: "chapter-done", outcomes: {}, silent: true });
+  });
 });
