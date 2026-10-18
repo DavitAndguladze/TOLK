@@ -35,13 +35,19 @@ export async function getChapterCheckForVersion(
  * Validates and stores a Chapter Check submission. Deliberately returns only confirmation of
  * storage, not a full result - grading (#10), the Level decision (#11), and the next Chapter
  * Version (#12) are separate tickets that consume these stored answers.
+ *
+ * `storageKey` defaults to the bare check id, but a shared Chapter Version's check (Chapter 1's
+ * L1, ADR-0008) is answered by every Reader - callers with a Reader/session identity should pass
+ * a composite key (e.g. `${check.id}:${readerId}`) so one Reader's submission can't overwrite
+ * another's.
  */
 export async function submitCheckAnswers(
   check: ChapterCheck,
   submission: ChapterCheckAnswers,
   store: AnswersStore,
+  storageKey: string = check.id,
 ): Promise<{ stored: true }> {
   const answers = recordAnswers(check, submission);
-  await store.save(check.id, answers);
+  await store.save(storageKey, answers);
   return { stored: true };
 }

@@ -17,9 +17,13 @@ function bestMatchingSentence(sentences: Sentence[], needle: string): number {
   return best.index;
 }
 
+/** Dedupes (two Complex Words could share a meaning) and rotates by a word-derived offset, not
+ *  Math.random(), so the correct meaning isn't always the first choice but tests stay reproducible. */
 function complexWordChoices(target: ComplexWord, all: ComplexWord[]): string[] {
   const distractors = all.filter((w) => w.word !== target.word).map((w) => w.meaning);
-  return [target.meaning, ...distractors, ...FILLER_CHOICES].slice(0, 3);
+  const choices = [...new Set([target.meaning, ...distractors, ...FILLER_CHOICES])].slice(0, 3);
+  const offset = target.word.split("").reduce((sum, c) => sum + c.charCodeAt(0), 0) % choices.length;
+  return [...choices.slice(offset), ...choices.slice(0, offset)];
 }
 
 /**

@@ -47,12 +47,14 @@ describe("getChapterCheckForVersion", () => {
   });
 });
 
+const fullSubmission = () => ({
+  answers: mockChapterCheck.questions.map((q) => ({ questionId: q.id, answer: q.choices?.[0] ?? "an answer", via: "typed" as const })),
+});
+
 describe("submitCheckAnswers", () => {
   test("stores a valid submission and confirms it", async () => {
     const store = createInMemoryAnswersStore();
-    const submission = {
-      answers: mockChapterCheck.questions.map((q) => ({ questionId: q.id, answer: "an answer", via: "typed" as const })),
-    };
+    const submission = fullSubmission();
 
     const result = await submitCheckAnswers(mockChapterCheck, submission, store);
 
@@ -66,5 +68,17 @@ describe("submitCheckAnswers", () => {
 
     await expect(submitCheckAnswers(mockChapterCheck, submission, store)).rejects.toThrow();
     expect(await store.get(mockChapterCheck.id)).toBeNull();
+  });
+
+  test("stores under a caller-supplied key instead of the bare check id", async () => {
+    // Chapter 1's L1 version (and its check) is shared across every Reader (ADR-0008) - without a
+    // per-Reader key, Reader B's submission would overwrite Reader A's.
+    const store = createInMemoryAnswersStore();
+    const submission = fullSubmission();
+
+    await submitCheckAnswers(mockChapterCheck, submission, store, `${mockChapterCheck.id}:reader-a`);
+
+    expect(await store.get(mockChapterCheck.id)).toBeNull();
+    expect(await store.get(`${mockChapterCheck.id}:reader-a`)).toEqual(submission);
   });
 });

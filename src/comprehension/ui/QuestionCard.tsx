@@ -29,7 +29,7 @@ export function QuestionCard({ question, value, via, onChange, transcriber }: Qu
         <div className="mt-3">
           <AnswerInput
             via={via}
-            onToggleVia={(nextVia) => onChange(value, nextVia)}
+            onToggleVia={(nextVia) => onChange("", nextVia)} // switching mode starts a fresh answer, doesn't relabel the old one
             value={value}
             onChange={(nextValue) => onChange(nextValue, via)}
             transcriber={transcriber}

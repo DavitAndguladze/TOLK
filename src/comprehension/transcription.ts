@@ -16,6 +16,7 @@ interface MinimalSpeechRecognition {
   interimResults: boolean;
   onresult: ((event: { results: { [i: number]: { [j: number]: { transcript: string } } } }) => void) | null;
   onerror: ((event: { error?: string }) => void) | null;
+  onend: (() => void) | null;
   start(): void;
 }
 
@@ -43,8 +44,20 @@ export function createWebSpeechTranscriber(): AnswerTranscriber {
         const recognition = new Ctor();
         recognition.continuous = false;
         recognition.interimResults = false;
-        recognition.onresult = (event) => resolve(event.results[0][0].transcript);
-        recognition.onerror = (event) => reject(new Error(event.error ?? "speech recognition error"));
+        let settled = false;
+        recognition.onresult = (event) => {
+          settled = true;
+          resolve(event.results[0][0].transcript);
+        };
+        recognition.onerror = (event) => {
+          settled = true;
+          reject(new Error(event.error ?? "speech recognition error"));
+        };
+        // Silence (no speech, a timeout) ends recognition with neither onresult nor onerror -
+        // without this, the caller's "Listening..." state would hang forever.
+        recognition.onend = () => {
+          if (!settled) reject(new Error("No speech detected"));
+        };
         recognition.start();
       });
     },

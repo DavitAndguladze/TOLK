@@ -1,26 +1,23 @@
 import { notFound } from "next/navigation";
-import { generateChapterCheck } from "@/comprehension/chapter-check-generator";
-import { chapterCheckCache, checksById } from "@/comprehension/registry";
-import { getChapterCheckForVersion } from "@/comprehension/service";
+import { ensureChapterCheck, mockVersions } from "@/comprehension/registry";
 import { ChapterCheck } from "@/comprehension/ui/ChapterCheck";
-import { LEVELS, type Level } from "@/types";
-import { mockBook, mockChapter, mockChapterVersion } from "@/mocks";
+import type { Level } from "@/types";
+import { mockBook, mockChapter } from "@/mocks";
 import { chunkChapterVersion } from "@/reading/chunk";
 import { LevelLadder } from "@/reading/LevelLadder";
 import { ReadingScreen } from "@/reading/ReadingScreen";
 
-const versions = LEVELS.map((level) => mockChapterVersion(level));
-const hrefs = Object.fromEntries(versions.map((v) => [v.level, `/read/${v.id}`])) as Record<Level, string>;
+const hrefs = Object.fromEntries(mockVersions.map((v) => [v.level, `/read/${v.id}`])) as Record<Level, string>;
 
 export default async function ReadPage({ params }: { params: Promise<{ versionId: string }> }) {
   const { versionId } = await params;
-  const version = versions.find((v) => v.id === versionId);
+  const version = mockVersions.find((v) => v.id === versionId);
   if (!version) notFound();
 
   // Generated alongside the Chapter Version, not when the Reader finishes reading, so the
   // Chapter Check has no spinner later (spec: "generated when the Chapter Version is generated").
-  const check = await getChapterCheckForVersion(mockChapter, version, { generate: generateChapterCheck, cache: chapterCheckCache });
-  checksById.set(check.id, check);
+  const check = await ensureChapterCheck(version.id);
+  if (!check) notFound();
 
   return (
     <main className="min-h-dvh">

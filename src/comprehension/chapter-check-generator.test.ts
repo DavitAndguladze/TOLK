@@ -41,6 +41,26 @@ describe("generateChapterCheck", () => {
     }
   });
 
+  test("the correct meaning isn't always the first choice", async () => {
+    // Regression: tapping the top option always scored before choices were rotated.
+    const version = mockChapterVersion(1);
+    const check = await generateChapterCheck(mockChapter, version);
+    const byWord = new Map(mockChapter.complexWords.map((cw) => [cw.word, cw]));
+    const complexWordQuestions = check.questions.filter((q) => q.kind === "complex-word");
+
+    const someMeaningIsFirst = complexWordQuestions.some((q) => q.choices?.[0] === (q.word ? byWord.get(q.word)?.meaning : undefined));
+    expect(someMeaningIsFirst).toBe(false);
+  });
+
+  test("complex-word choices have no duplicates", async () => {
+    const version = mockChapterVersion(1);
+    const check = await generateChapterCheck(mockChapter, version);
+
+    for (const q of check.questions.filter((q) => q.kind === "complex-word")) {
+      expect(new Set(q.choices).size).toBe(q.choices?.length);
+    }
+  });
+
   test("every answerSentenceIndex points at a real sentence in the Chapter Version", async () => {
     const version = mockChapterVersion(1);
     const check = await generateChapterCheck(mockChapter, version);

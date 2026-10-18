@@ -8,17 +8,25 @@ export function recordAnswers(check: ChapterCheck, submission: ChapterCheckAnswe
     throw new AnswerValidationError("Submission must include an `answers` array");
   }
 
-  const validIds = new Set(check.questions.map((q) => q.id));
+  const byId = new Map(check.questions.map((q) => [q.id, q]));
   const byQuestion = new Map<string, ChapterCheckAnswers["answers"][number]>();
 
   for (const answer of submission.answers) {
-    if (!validIds.has(answer.questionId)) {
+    const question = byId.get(answer.questionId);
+    if (!question) {
       throw new AnswerValidationError(`"${answer.questionId}" is not a question on check "${check.id}"`);
     }
-    if (!answer.answer.trim()) {
+    if (typeof answer.answer !== "string" || !answer.answer.trim()) {
       throw new AnswerValidationError(`Empty answer for question "${answer.questionId}"`);
     }
+    if (question.choices && !question.choices.includes(answer.answer)) {
+      throw new AnswerValidationError(`"${answer.answer}" is not one of the choices for question "${answer.questionId}"`);
+    }
     byQuestion.set(answer.questionId, answer); // re-answering a question keeps the latest try
+  }
+
+  if (byQuestion.size !== check.questions.length) {
+    throw new AnswerValidationError(`Every question must be answered (got ${byQuestion.size} of ${check.questions.length})`);
   }
 
   return { answers: [...byQuestion.values()] };
