@@ -1,5 +1,13 @@
 # Reading UI integration
 
+## Full-Chapter navigation and device resume (0015/0039)
+
+`ReadingScreen` now renders one fixed-width Chapter-position bar instead of one marker per Chunk. Its part count and native progressbar value remain meaningful for long Chapters; the percentage describes position, not earned reading accuracy. Controls have pressed feedback, and progress animation is restricted to `motion-safe`.
+
+The authenticated page may supply `readerId`. With it, the browser saves only the first token index of the visible Chunk under Reader + immutable Chapter Version identity. Reload resumes that Chunk ready to read, with no word outcomes, summary, or microphone state restored. A changed Reader or Version remounts the session and runs listening cleanup. The resumed card can return to the beginning. Missing/corrupt/disabled storage does not prevent reading; without readerId, no bookmark is saved. This is device-local position only; R6/R5 own supplying reader.id (comms0040), and cross-device persistence is outside this slice.
+
+Navigation rejects noninteger/out-of-bounds positions and cannot move while listening. Empty Chapter input renders a status rather than crashing. Safe listening error text is now visible and clears on retry/navigation, while silent completion remains available.
+
 Demo playback is disclosed before Start: "Play demo" / "Resume demo", with a note that words advance automatically and the microphone is not used. Completed demo results remain explicitly simulated. Real-engine mode keeps the Read aloud / Resume labels and connection/error handling.
 
 Reading aloud stays optional. The opening choice explains that it helps grading accuracy; the Chapter Check slot remains reachable through silent completion or explicit continuation after a failed save (request 0027).

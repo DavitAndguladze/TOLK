@@ -11,6 +11,24 @@ const word = (tokenIndex: number, outcome: WordOutcome): ReadingAction => ({
 const run = (state: ReadingState, ...actions: ReadingAction[]) => actions.reduce(readingReducer, state);
 
 describe("readingReducer", () => {
+  test("restoring a saved part resumes ready with no microphone or reading credit", () => {
+    const restored = run(initialReadingState(300), { type: "restore-position", index: 237 });
+    expect(restored).toMatchObject({ chunkIndex: 237, status: "ready", outcomes: {}, lastRead: null, stuckOn: null });
+    const listening = run(initialReadingState(300), { type: "read-aloud" }, word(0, "correct"));
+    expect(run(listening, { type: "restore-position", index: 237 })).toEqual(listening);
+  });
+
+  test.each([-1, 300, 1.5, NaN, Infinity])("invalid saved or requested part %s cannot leave the Chapter", (index) => {
+    const state = initialReadingState(300);
+    expect(run(state, { type: "restore-position", index })).toEqual(state);
+    expect(run(state, { type: "go-to-chunk", index })).toEqual(state);
+  });
+
+  test("navigation cannot leave a live microphone running on another part", () => {
+    const state = run(initialReadingState(2), { type: "read-aloud" });
+    expect(run(state, { type: "go-to-chunk", index: 1 })).toEqual(state);
+  });
+
   test("marks each word's outcome as the listening source reports it, leaving the rest pending", () => {
     const state = run(initialReadingState(2), { type: "read-aloud" }, word(0, "correct"), word(1, "mispronounced"), word(2, "skipped"));
 
@@ -76,8 +94,10 @@ describe("readingReducer", () => {
       event: { type: "error", message: "network lost" },
     });
 
-    expect(failed).toMatchObject({ status: "paused", interrupted: true, outcomes: { 0: "correct" } });
+    expect(failed).toMatchObject({ status: "paused", interrupted: true, listeningError: "network lost", outcomes: { 0: "correct" } });
     expect(run(failed, { type: "read-aloud" }).interrupted).toBe(false);
+    expect(run(failed, { type: "read-aloud" }).listeningError).toBeNull();
+    expect(run(failed, { type: "go-to-chunk", index: 1 }).listeningError).toBeNull();
   });
 
   test("tracks the latest word read, even when re-reading words that already have an outcome", () => {

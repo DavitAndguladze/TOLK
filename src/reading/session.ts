@@ -14,6 +14,7 @@ export interface ReadingState {
   lastRead: number | null;
   /** Listening stopped on an error rather than a Pause tap. */
   interrupted: boolean;
+  listeningError: string | null;
   /** Reader opted to skip reading aloud for this Chapter (ticket #18). */
   silent: boolean;
 }
@@ -22,6 +23,7 @@ export type ReadingAction =
   | { type: "read-aloud" }
   | { type: "pause" }
   | { type: "go-to-chunk"; index: number }
+  | { type: "restore-position"; index: number }
   | { type: "finish-chapter" }
   | { type: "toggle-silent" }
   | { type: "listening"; event: ListeningEvent };
@@ -34,17 +36,24 @@ export const initialReadingState = (chunkCount: number): ReadingState => ({
   stuckOn: null,
   lastRead: null,
   interrupted: false,
+  listeningError: null,
   silent: false,
 });
 
 export function readingReducer(state: ReadingState, action: ReadingAction): ReadingState {
   switch (action.type) {
     case "read-aloud":
-      return { ...state, status: "listening", interrupted: false };
+      return { ...state, status: "listening", interrupted: false, listeningError: null };
     case "pause":
       return { ...state, status: "paused", stuckOn: null };
     case "go-to-chunk":
-      return { ...state, chunkIndex: action.index, status: "ready", stuckOn: null };
+      if (state.status === "listening" || state.status === "chapter-done") return state;
+      if (!Number.isInteger(action.index) || action.index < 0 || action.index >= state.chunkCount) return state;
+      return { ...state, chunkIndex: action.index, status: "ready", stuckOn: null, interrupted: false, listeningError: null };
+    case "restore-position":
+      if (state.status !== "ready" || Object.keys(state.outcomes).length) return state;
+      if (!Number.isInteger(action.index) || action.index < 0 || action.index >= state.chunkCount) return state;
+      return { ...state, chunkIndex: action.index };
     case "finish-chapter":
       return { ...state, status: "chapter-done", stuckOn: null };
     case "toggle-silent":
@@ -78,7 +87,7 @@ function onListeningEvent(state: ReadingState, event: ListeningEvent): ReadingSt
         ? { ...state, status: "chapter-done", stuckOn: null }
         : { ...state, chunkIndex: state.chunkIndex + 1 };
     case "error":
-      return { ...state, status: "paused", stuckOn: null, interrupted: true };
+      return { ...state, status: "paused", stuckOn: null, interrupted: true, listeningError: event.message };
   }
 }
 

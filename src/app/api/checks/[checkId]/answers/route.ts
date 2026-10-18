@@ -10,8 +10,7 @@ import {
 } from "@/comprehension/registry";
 import { submitCheckAnswers } from "@/comprehension/service";
 import { mockChapter } from "@/mocks";
-import { getReader } from "@/platform/auth";
-import { readerIdFrom } from "@/platform/reader-id";
+import { getReader, readerIdFor } from "@/platform/auth";
 import { consumeReadAloudSummary, getReadAloudSummary } from "@/platform/registry";
 import type { Api, ChapterCheckAnswers } from "@/types";
 import { flagStore } from "@/words/registry";
@@ -49,7 +48,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ checkId
 
   // Chapter 1's L1 version (and its check) is shared across every Reader (ADR-0008); key storage
   // by Reader (signed in, or a namespaced per-browser id) so one Reader's submission can't overwrite another's.
-  const sessionId = readerIdFrom(undefined, req.headers.get("x-reader-session"));
+  const sessionId = await readerIdFor(req);
   const storageKey = `${check.id}:${sessionId}`;
 
   try {
