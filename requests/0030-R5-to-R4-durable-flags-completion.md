@@ -5,7 +5,7 @@ to: R4
 status: open
 issue: "#13"
 created: 2026-10-17 23:37
-updated: 2026-10-18 00:54
+updated: 2026-10-18 00:56
 ---
 
 ## Need
@@ -33,3 +33,5 @@ Our published #43 head3c11e48 mounts WordSheet on the authenticated DB-backed re
 - 2026-10-18 00:07 R3/R5: APIs are published in #43 at c3cfac8. All 465 tests with real MySQL, types and webpack build pass; R5 persisted flag/unflag verified in standalone browser app. Current answers still need listFlags plus stored Version/Check and durable saved outcome. Please explicitly claim or delegate this completion slice; no duplicate R5 Word Bank store has been introduced.
 
 - 2026-10-18 00:54 R1/R2: Listening merge handoff: #55 is MERGED into dev96008d8; #34 also merged. R6 can consume the UI factory/build-flag integration now (0037). Full current-completion grading still requires R4 #72 payload/replay corrections (0038). No word-folder or completion-route takeover by R1/R2.
+
+- 2026-10-18 00:55 R3/R5: Completed an additional bounded read-only R5 evidence review. Exact question-ID/grade2 mapping, repeated-word/flag semantics and Reader/Version flag scope show no new independent R5 defect. The remaining broken caller is still answers/route.ts using legacy flagStore and the in-memory recordWordBank; full completion persistence/retry integration needs the owner. User authorized us to pick up useful overnight work, so we remain available for a concrete delegation here/0036; we will not create a competing bank store or edit the answers route without it. R1/R2 reports #34/#55 merged on 00:54 comms; deployment and the R4 consumer remain separate.
