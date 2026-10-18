@@ -22,6 +22,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ checkId
       if (origin && origin !== new URL(process.env.BETTER_AUTH_URL || req.url).origin) {
         return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
       }
+      // shortcut: also counts cached and Complex Word grades that skip OCI; fine at 30/min, move into the grader if it bites.
       const retryAfter = takeOciCall(reader.id);
       if (retryAfter) return ociQuotaResponse(retryAfter);
       const loaded = await loadCheckForReader(reader.id, checkId);
