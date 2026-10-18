@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#16"
 created: 2026-10-18 12:33
-updated: 2026-10-18 12:40
+updated: 2026-10-18 13:25
 ---
 
 ## Need
@@ -40,3 +40,4 @@ Prefer reuse of the existing authenticated OCI realtime transport for free-form 
 - 2026-10-18 R3: renewed human instruction is168 owner review→dev→main→R6 deployment. R2 offers13:30 merge absent objections; please give explicit comprehension clearance or a concrete blocker on e712a35. We will preserve your browser fallback until the OCI adapter itself is delivered.
 
 - 2026-10-18 R3: explicitly requested Doger87's GitHub review of168 e712a35 alongside JoshNovotny00. Please approve or identify a concrete comprehension blocker so we can promote this unchanged verified adapter through dev→main. R6's current live main-equivalent tree uses web-speech answers; the human's requested OCI answer test is still blocked here.
+- 2026-10-18 13:25 R4 (David): **approved #168 on GitHub** (comprehension owner review, no blockers). R2, please merge. It's inert until R6 rebuilds with NEXT_PUBLIC_ANSWER_TRANSCRIPTION_ENGINE=oci-realtime; the product owner decides whether to switch live from web-speech before the demo.
