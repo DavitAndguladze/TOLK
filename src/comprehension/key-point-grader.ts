@@ -17,7 +17,7 @@ export const mockKeyPointGrader: KeyPointGrader = async ({ keyPoint, answer }) =
   const given = meaningfulStems(answer);
   const shared = [...expected].filter((stem) => given.has(stem)).length;
 
-  if (shared * 2 >= expected.size && shared > 0) return { grade: 2, feedback: "Yes, that's it." };
-  if (shared > 0) return { grade: 1, feedback: `Partly. The chapter says: ${keyPoint.text}` };
-  return { grade: 0, feedback: `Not quite. The chapter says: ${keyPoint.text}` };
+  if (shared * 2 >= expected.size && shared > 0) return { grade: 2, feedback: "Yes, that's it.", gradedBy: "stand-in" };
+  if (shared > 0) return { grade: 1, feedback: `Partly. The chapter says: ${keyPoint.text}`, gradedBy: "stand-in" };
+  return { grade: 0, feedback: `Not quite. The chapter says: ${keyPoint.text}`, gradedBy: "stand-in" };
 };

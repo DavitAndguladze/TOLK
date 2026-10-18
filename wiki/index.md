@@ -11,7 +11,7 @@
 - [[first-hour-spike]] — OCI Speech listening spike, 3 checks, 5pm decision table
 - [[open-questions]] — current interview frontier, what's blocked, logged tensions
 - ../CONTEXT.md — glossary (Book, Library, Chapter, Chapter Version, Level, Level Score, Key Point, Complex Word, Read-aloud Miss, Flagged Word, Chapter Check, Grading Result, Word Bank, Graduated Word, Words Learned, Level Line, Streak)
-- ../docs/adr/ — 0001 pre-generate levels, 0002 align speech to expected text, 0003 public domain only, 0004 Next.js monolith on OCI, 0005 comprehension-first, 0006 managed OCI PostgreSQL, 0007 three Pillars (superseded), 0008 per-Reader chapter generation, 0009 one Grading Result + Word Bank
+- ../docs/adr/ — 0001 pre-generate levels, 0002 align speech to expected text, 0003 public domain only, 0004 Next.js monolith on OCI, 0005 comprehension-first, 0006 managed OCI PostgreSQL (superseded), 0007 three Pillars (superseded), 0008 per-Reader chapter generation, 0009 one Grading Result + Word Bank, 0010 Starter Kit MySQL HeatWave + VM
 
 ## Raw sources
 - raw/challenge-3-ai-that-strengthens-learning.md — Oracle challenge brief
