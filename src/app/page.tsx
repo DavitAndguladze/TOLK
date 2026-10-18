@@ -50,9 +50,9 @@ export default async function Library({ searchParams }: { searchParams: Promise<
             {books.map((book) => (
               <li key={book.id}>
                 <Card className="p-0">
-                  {/* A plain <a>, not <Link>: opening a Book records progress, so it must never be prefetched. */}
+                  {/* A plain <a>, not <Link>: this leads into the open flow, which records progress, so it must never be prefetched. */}
                   <a
-                    href={`/api/books/${book.id}/open`}
+                    href={`/books/${book.id}/start`}
                     className="flex min-h-11 flex-col rounded-[inherit] p-5 outline-light outline-offset-2 hover:bg-glow/20 focus-visible:outline-3 motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:translate-y-0.5"
                   >
                     <span className="font-book text-[1.25rem] leading-snug font-medium">{book.title}</span>
