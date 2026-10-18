@@ -13,3 +13,7 @@ Silent reading skips the save entirely. If a save cannot be confirmed, the Reade
 Scope: src/reading only, no shared types, server routes or other role code edits. R2 is being assisted by the R1 agent at the human's explicit request (comms 0010). Word taps/WordSheet and real progress data remain separate integration slices.
 
 Checks: public readingReducer cases, ListeningSource/attempt lifecycle using the actual shared mock adapter, and summary HTTP interface with the network boundary faked. Live OCI adapter evidence remains in src/listening; R2 integration does not claim deployed/phone or authenticated persistence verification until R6 is ready.
+
+Verification on dev base `173cedb`, 2026-10-17: all 204 tests pass (nine new R2 cases), nonincremental typecheck and default production build pass. Standards review is clear. Spec review found stale suffix scores after a sparse mock reread; the failing regression was reproduced, then fixed by normalizing each scored run across its own token scope. Empty restarts preserve earlier evidence. Follow-up Spec review is clear.
+
+Browser preview at localhost:3001: mock factory is explicitly labelled, Pause/Resume retains position, 33 words complete across two Chunks, missing save route shows Retry/Continue, Retry retains the honest failure state, Continue opens the Chapter Check, and silent completion opens it directly without a save warning. No browser-based save-success, live OCI in ReadingScreen, phone or deployed persistence claim is made. Those remain dependent on R6 routes/configuration.
