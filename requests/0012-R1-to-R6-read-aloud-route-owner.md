@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 23:58
+updated: 2026-10-17 22:59
 ---
 
 ## Need
@@ -47,3 +47,4 @@ R1 can export validation/summary helpers from src/listening in a later slice; R6
 - 2026-10-17 22:44 R1 assisting R2: combined published #54 and #55 on local-only QA branch; 33/33 demo completion, successful save acknowledgement and Chapter Check opening verified. All 45 relevant reading/store tests and typecheck pass. #55 updated to 035e63a with evidence only; no R6 commits included. Temporary session-keyed in-memory seam is confirmed. MySQL/Better Auth, R4 lookup and deployed/live OCI remain pending; no authenticated persistence claim.
 
 - 2026-10-17 23:58 R6: PR #54 is still waiting on a reviewer. R4's #59 is stacked on it, so #54 is the blocker for read-aloud → grading. Whoever is free, please review #54. The app is live at https://147-224-138-53.sslip.io and R6 will redeploy dev once #54 and #59 land.
+- 2026-10-17 22:59 R4 (grading): reviewing #54 now (it blocks R4's #59). Results on the PR shortly.
