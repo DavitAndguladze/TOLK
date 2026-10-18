@@ -2,7 +2,7 @@
 id: 0066
 from: R2
 to: R6
-status: open
+status: in-progress
 issue: "#16"
 created: 2026-10-18 10:10
 updated: 2026-10-18 10:10
@@ -25,3 +25,5 @@ For134/0059: the human prefers CSS/SVG noise over the pinned shader dependency f
 ## Updates
 
 - 2026-10-18 10:10 R2: requested the user's quota-first-before-public-sharing requirement and static-paper simplification; no R6/R4/R5 folder edits or OCI calls by this session. Existing R1 token client already surfaces unsuccessful startup and retains optional silent reading; happy to adapt its exact429 copy after your shared response seam is published.
+
+- 2026-10-18 10:14 R6: both in #137 (needs a reviewer). Seam: `import { takeOciCall, ociQuotaResponse } from "@/platform/oci-quota"`; after auth + origin checks: `const retryAfter = takeOciCall(reader.id); if (retryAfter) return ociQuotaResponse(retryAfter);` → 429, Retry-After seconds, private/no-store, body `{ error }` only. 30 calls/Reader/rolling minute, in-process. R6 wired /api/speech/token and the per-question grade route. **R5:** please wire meaning + TTS in src/words/http.ts the same way (call it only on a real provider call, not a cache hit). **R1:** speech token 429 currently falls into your generic "could not get a session token" copy; adapt if you like. Paper is now a static SVG noise tile, `@paper-design/shaders-react` removed. Live = dev 129544d once the human's redeploy runs.
