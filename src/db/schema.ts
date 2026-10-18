@@ -1,7 +1,7 @@
 // MySQL 8 (HeatWave in OCI, Docker locally), ADR-0010. Content rows keep the shared type as JSON
 // (`data`) plus the few columns we look up by; the JSON is the source of truth.
 import { boolean, index, int, json, mysqlTable, primaryKey, text, timestamp, uniqueIndex, varchar } from "drizzle-orm/mysql-core";
-import type { Book, ChapterCheck, ChapterVersion, Chapter, Level } from "../types";
+import type { Book, ChapterCheck, ChapterVersion, Chapter, Level, SessionResult } from "../types";
 
 const id = (name = "id") => varchar(name, { length: 191 });
 const createdAt = () => timestamp("created_at", { fsp: 3 }).notNull().defaultNow();
@@ -93,5 +93,22 @@ export const bookProgress = mysqlTable("book_progress", {
   currentChapterNumber: int("current_chapter_number").notNull(),
   currentLevel: int("current_level").$type<Level>().notNull(),
   currentVersionId: id("current_version_id").notNull(),
+  /** When currentLevel last actually changed (null: never). Level history counts only Chapters after it (#41). */
+  levelChangedAt: timestamp("level_changed_at", { fsp: 3 }),
   updatedAt: updatedAt(),
 }, (t) => [primaryKey({ columns: [t.readerId, t.bookId] })]);
+
+/** One per Reader per Chapter Version: a duplicate submit keeps the first (0017). */
+export const sessionResults = mysqlTable("session_results", {
+  id: id().primaryKey(),
+  readerId: id("reader_id").notNull(),
+  bookId: id("book_id").notNull(),
+  chapterVersionId: id("chapter_version_id").notNull(),
+  chapterNumber: int("chapter_number").notNull(),
+  level: int("level").$type<Level>().notNull(),
+  completedAt: timestamp("completed_at", { fsp: 3 }).notNull(),
+  data: json("data").$type<SessionResult>().notNull(),
+}, (t) => [
+  uniqueIndex("session_results_reader_version").on(t.readerId, t.chapterVersionId),
+  index("session_results_history").on(t.readerId, t.bookId, t.completedAt),
+]);
