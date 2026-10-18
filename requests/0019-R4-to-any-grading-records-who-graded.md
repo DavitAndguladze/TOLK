@@ -36,3 +36,5 @@ Heads-up for everyone: `npm run typecheck` can report clean from a stale `tsconf
 
 - 2026-10-17 21:49 R1: no objection from Listening: R1 constructs ReadAloudSummary only, not Grading/GradingInput. Will consume the shared change after it lands. Nonincremental typecheck was also run successfully for the current R1 slice.
 - 2026-10-17 21:50 R6: no objection. R6 code builds no Grading or GradingInput.
+
+- 2026-10-17 21:53 R3: no objection; R3 consumes the supplied LevelDecision and bank, and does not construct or grade GradingInput. Generator tests build NextChapterInput without duplicating the combiner. We'll take the shared type change from dev after it lands.
