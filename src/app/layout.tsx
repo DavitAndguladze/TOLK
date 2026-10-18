@@ -1,9 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Atkinson_Hyperlegible_Next, Newsreader } from "next/font/google";
+import { Atkinson_Hyperlegible_Next } from "next/font/google";
 import { PhoneFrame } from "@/reading/ui/PhoneFrame";
 import "./globals.css";
 
-const newsreader = Newsreader({ subsets: ["latin"], axes: ["opsz"], variable: "--font-newsreader" });
 const atkinson = Atkinson_Hyperlegible_Next({
   subsets: ["latin"],
   variable: "--font-atkinson",
@@ -27,7 +26,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${newsreader.variable} ${atkinson.variable}`}>
+    <html lang="en" className={atkinson.variable}>
       <body className="bg-mist font-ui text-ink antialiased">
         <PhoneFrame>{children}</PhoneFrame>
       </body>

@@ -14,8 +14,8 @@ export function rereadChunk(chunks: readonly Chunk[], sentence: string | null): 
   return chunks.findIndex(chunk => chunk.sentences.some(item => item.index === Number(sentence)));
 }
 
-/** Greedy: add whole sentences until the next one would pass `maxWords`. A longer sentence gets a chunk to itself. */
-export function chunkChapterVersion(version: Pick<ChapterVersion, "sentences" | "tokens">, maxWords = 30): Chunk[] {
+/** Greedy: add whole sentences until the next one would pass `maxWords` (about a paragraph). A longer sentence gets a chunk to itself. */
+export function chunkChapterVersion(version: Pick<ChapterVersion, "sentences" | "tokens">, maxWords = 100): Chunk[] {
   const chunks: Chunk[] = [];
   const tokensBySentence = Map.groupBy(version.tokens, (t) => t.sentenceIndex);
   for (const sentence of version.sentences) {

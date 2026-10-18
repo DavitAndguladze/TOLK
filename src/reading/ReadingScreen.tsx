@@ -76,6 +76,7 @@ function ChapterReadingScreen({
   const [positionReady, setPositionReady] = useState(false);
   const [resumedPart, setResumedPart] = useState<number | null>(null);
   const [reviewSentence, setReviewSentence] = useState<number | null>(null);
+  const [endIntroDone, setEndIntroDone] = useState(false);
   const passage = useRef<HTMLParagraphElement>(null);
   const positionKey = readerId ? `tolk-reading-position:${encodeURIComponent(readerId)}:${encodeURIComponent(chapterVersionId)}` : null;
   const chunk = chunks[state.chunkIndex];
@@ -149,6 +150,14 @@ function ChapterReadingScreen({
     // Restart only when listening starts or the Chunk changes, never on each word.
   }, [listening, state.chunkIndex]);
 
+  // Matches the end-intro animation's 2200ms; the timer, not animationend, opens the Check so it still opens if animations are off.
+  const chapterDone = state.status === "chapter-done";
+  useEffect(() => {
+    if (!chapterDone) return;
+    const timer = setTimeout(() => setEndIntroDone(true), 2200);
+    return () => clearTimeout(timer);
+  }, [chapterDone]);
+
   if (!chunk) return <p role="status" className="px-6 py-8 text-fog">This Chapter has no text ready to read yet.</p>;
 
   if (state.status === "chapter-done") {
@@ -156,15 +165,19 @@ function ChapterReadingScreen({
     const clear = tokens.filter((t) => state.outcomes[t.index] === "correct").length;
     const missed = tokens.filter((t) => state.outcomes[t.index] === "mispronounced" || state.outcomes[t.index] === "skipped");
     const practice = [...new Set(missed.map((t) => t.normalized).filter(Boolean))];
-    return (
-      <section aria-live="polite" className={`${theme.surface} mx-auto max-w-xl animate-page-in px-6 pt-10 pb-12`}>
+    if (!endIntroDone) return (
+      <section aria-live="polite" className={theme.endIntro}>
         <h2 className="font-book text-[1.75rem] leading-tight">You reached the end of the Chapter.</h2>
-        {demoListening && source.current && <p className="mt-3 text-fog">Demo results are simulated. The microphone was not used.</p>}
-        <p className="mt-3 text-lg text-fog">
+        <p className="text-lg text-fog">
           {tokens.some((t) => state.outcomes[t.index])
             ? `${clear} of ${tokens.length} words came through clearly.`
             : "You read this Chapter without reading it aloud."}
         </p>
+      </section>
+    );
+    return (
+      <section aria-label="End of Chapter" className={`${theme.surface} mx-auto max-w-xl animate-page-in px-6 pt-10 pb-12`}>
+        {demoListening && source.current && <p className="text-fog">Demo results are simulated. The microphone was not used.</p>}
         {practice.length > 0 && (
           <>
             <p className="mt-6 font-semibold">Words to practice</p>
