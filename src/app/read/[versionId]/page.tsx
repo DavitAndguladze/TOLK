@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { LEVELS, type Level } from "@/types";
 import { mockBook, mockChapter, mockChapterVersion } from "@/mocks";
@@ -17,7 +18,15 @@ export default async function ReadPage({ params }: { params: Promise<{ versionId
     <main className="min-h-dvh">
       <header className="px-6 pt-[max(1.5rem,env(safe-area-inset-top))]">
         <div className="mx-auto max-w-xl">
-          <p className="font-book text-[1.0625rem] text-fog italic">{mockBook.title}</p>
+          <div className="flex items-baseline justify-between gap-4">
+            <p className="font-book text-[1.0625rem] text-fog italic">{mockBook.title}</p>
+            <Link
+              href={`/progress/${version.bookId}`}
+              className="-my-3 inline-flex min-h-11 items-center rounded-lg px-2 text-sm font-semibold text-light underline-offset-4 outline-light hover:underline focus-visible:outline-2"
+            >
+              Progress
+            </Link>
+          </div>
           <h1 className="font-book text-[1.75rem] leading-tight font-medium">{mockChapter.title}</h1>
           <LevelLadder current={version.level} hrefs={hrefs} />
         </div>
