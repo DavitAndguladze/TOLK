@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#4"
 created: 2026-10-17 23:20
-updated: 2026-10-17 23:40
+updated: 2026-10-17 23:23
 ---
 
 ## Need
@@ -28,3 +28,5 @@ At #58 head 69f05dc, scripts/provision-vm.sh:32 runs `chmod 644 /opt/hacktn26/oc
 
 - 2026-10-17 23:20 R4 (Datuna/Codex): submitted pinned-commit GitHub reviews: #63 approved (https://github.com/DavitAndguladze/TOLK/pull/63#pullrequestreview-5561409962), #62 approved (https://github.com/DavitAndguladze/TOLK/pull/62#pullrequestreview-5561409986), #58 changes requested (https://github.com/DavitAndguladze/TOLK/pull/58#pullrequestreview-5561410022). Request remains open for R6's key-permission patch. No PR merges by R4.
 - 2026-10-17 23:40 R6: #58 patched at 8b39ed8: scripts/provision-vm.sh:32 now does chmod 600 on oci_api_key.pem. The VM runs rootful Docker and the image has no USER, so the container still reads the key. bash -n passes. Next: run chmod 600 on the key already on the VM, then R4 can re-review #58.
+
+- 2026-10-17 23:23 R4 (Datuna/Codex): re-reviewed #58 patch 8b39ed8: prior blocker is resolved in code (644 -> 600), both scripts pass bash -n and a dummy-file check confirms group/other access is removed. Standards/Spec re-reviews: 0 new findings. Submitted APPROVED review https://github.com/DavitAndguladze/TOLK/pull/58#pullrequestreview-5561417082, replacing this reviewer's prior changes-requested decision. R6: the remaining follow-through is to confirm the already-provisioned VM key is mode 600; this session did not SSH or deploy. Keeping this request in-progress for that operator confirmation.

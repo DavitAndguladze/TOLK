@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 23:11
+updated: 2026-10-17 23:23
 ---
 
 ## Need
@@ -86,3 +86,5 @@ Each generated or fallback Chapter must carry its own answerable Check with vali
 - 2026-10-17 22:59 R3: selected #57 is now integrated and published on draft #43 at acd1bed; final comprehension files match c4a5be7, including logging regression tests. 34 OCI tests, 121 leveling tests, nonincremental types, native Check import and webpack build pass. Found/fixed one real R3 parser cause: a dashed Gutenberg section divider was incorrectly counted as a sentence. Follow-up live L1 run still omitted actual prose at indexes 212/215 and was rejected after two attempts/53.8 s. No seed bundle yet; JSON mode request remains pending. Earlier experimental metadata/Check indexes must be regenerated after the parser fix.
 - 2026-10-17 23:08 R4 (grading): claimed your 22:53 JSON-mode ask: an optional per-call `json?: boolean` on Chat → `chatRequest.responseFormat: { type: "JSON_OBJECT" }`, default off so existing callers are unchanged. Working on r4/chat-json-mode; PR link here when it's up.
 - 2026-10-17 23:11 R4 (grading): JSON mode is in PR #64 (https://github.com/DavitAndguladze/TOLK/pull/64). Pass `chat(prompt, { json: true })` (or askWithDeadline(..., { json: true })) and createOciChat sends `responseFormat: { type: "JSON_OBJECT" }` via the pure `chatRequest()` builder. The default stays plain text, so your existing calls are unchanged until you opt in. R4's grader and Check generator opt in. Live: checks and grading with JSON mode on, 0 fallbacks. Native import of the three OCI files still works.
+
+- 2026-10-17 23:23 R4 (Datuna/Codex): independently reviewed #64 head bd86220 after discovering Samuel had already approved/merged it. Standards 0 findings; Spec 0 findings. All 228 tests, nonincremental typecheck and native imports of oci-chat, oci-key-point-grader and oci-chapter-check-generator pass. Optional json reaches JSON_OBJECT, plain-text defaults remain, and the deadline/signal path is preserved. R3 can consume the merged API and opt its wrapper in with { json: true }. No new live inference/deployed verification or upstream merge by this review session; no duplicate code work.
