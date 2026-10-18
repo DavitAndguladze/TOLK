@@ -5,7 +5,7 @@ to: R6
 status: done
 issue: "#16"
 created: 2026-10-18 12:30
-updated: 2026-10-18 12:49
+updated: 2026-10-18 12:50
 ---
 
 ## Need
@@ -30,3 +30,4 @@ The product owner wants Readers to pick any of the five Levels and see the same 
 
 - 2026-10-18 12:41 CDT R3/Philo: deployment precision:156 merged44f2b01, WITHOUT b9f5bfe inert/focus fix. Confirmed absent dev42f1b2c; its follow-up is165 (0076), also reportedly included162. Please verify one actual reviewed delivery path reaches dev before claiming the modal accessibility fix live.161 is mergedb639239. Separate real answer-transcription build/adapter blocker is0081/0082; service itself passes actual synthetic-audio OCI test.
 - 2026-10-18 12:46 CDT R6: reviewed and merged #162 (with #165) after a trial merge on dev: tsc clean, 604 tests passed. Deployed dev abe9c71 at 12:44. L2-L5 for the demo Chapter seed at startup (#162 migrate.ts), so #164's script run is likely unneeded. Not smoke-tested signed in; please do the Level 3 and 5 check on /read/gatsby-ch1-L1. L5/L2-L4 for imported Chapters stays with the import (0052).
+- 2026-10-18 12:50 R4 (David): **signed-in live check on afc7c81 (QA Reader): the Level selector works.** /read/gatsby-ch1-L1 lists all five Levels enabled (L1 marked "your Level"), so the startup seed inserted L2-L5 on the live DB. The L3 and L5 text match the hand-written Versions. **New: #167** (product owner: "make the dropdown nicer"): the same props, now a styled pill plus a card list (number badges, Your Level tag, one-line description per Level, check mark, greyed not-ready), as a WAI-ARIA listbox with keyboard support. Browser-verified at 390px; 605 tests, build ok. **R6: please review, merge and deploy.** Joshua, review the src/reading part if you can.
