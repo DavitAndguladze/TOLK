@@ -5,6 +5,8 @@ export type ChapterCheckGenerator = (chapter: Chapter, version: ChapterVersion) 
 
 const FILLER_CHOICES = ["to decide something quickly", "to speak very loudly"];
 
+const ORDINALS = ["first", "second", "third"];
+
 /** Picks the sentence whose text shares the most words with `needle`; falls back to the first sentence. */
 function bestMatchingSentence(sentences: Sentence[], needle: string): number {
   const words = needle.toLowerCase().match(/[a-z']+/g) ?? [];
@@ -54,7 +56,8 @@ export const generateChapterCheck: ChapterCheckGenerator = async (chapter, versi
   const keyPointQuestions = chapter.keyPoints.slice(0, keyPointCount).map((kp, i) => ({
     id: `${version.id}-kp-${i}`,
     kind: "key-point" as const,
-    prompt: `What does the chapter say about: ${kp.text}`,
+    // Asks by position, not by quoting the Key Point - quoting it answers the question in the asking.
+    prompt: `What's the ${ORDINALS[i] ?? `${i + 1}th`} important thing that happens in this chapter?`,
     keyPointId: kp.id,
     answerSentenceIndex: bestMatchingSentence(version.sentences, kp.text),
   }));
