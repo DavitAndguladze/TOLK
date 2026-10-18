@@ -84,7 +84,7 @@ function freeze<T>(value: T): T {
   return value;
 }
 
-function verify(artifact: ChapterArtifact, context: ChapterVersionContext, policy: ChapterPolicy): void {
+export function verifyChapterArtifact(artifact: ChapterArtifact, context: ChapterVersionContext, policy: ChapterPolicy): void {
   const { version, check, fidelity } = artifact;
   if (!fidelity || fidelity.versionId !== version.id || fidelity.digest !== digestFor(context.original, version, check)
     || fidelity.plotPreserved !== true || fidelity.tonePreserved !== true || fidelity.checkAnswerable !== true
@@ -215,7 +215,7 @@ export function createChapterGenerator(options: ChapterGeneratorOptions): Gatsby
       digest: digestFor(context.original, version, check), wordBank: context.wordBank, graduatedWords: context.graduatedWords,
       reinforcement: context.reinforcement }), { signal: bounded }), bounded)) as FidelityReview;
     const artifact = { version, check, fidelity };
-    verify(artifact, context, policy);
+    verifyChapterArtifact(artifact, context, policy);
     version.status = "ready";
     return freeze({ ...artifact, provenance: { source: context.level === 5 ? "original" : context.readerId === null ? "pre-generated" : "live",
       personalized: context.readerId !== null && context.level !== 5, attempts } });
@@ -246,7 +246,7 @@ export function createChapterGenerator(options: ChapterGeneratorOptions): Gatsby
         const artifact = structuredClone(await withSignal(() => options.fallback!(structuredClone(context.original), context.level, { signal: bounded }), bounded));
         if (!artifact || artifact.version?.status !== "ready" || artifact.version.readerId !== null || artifact.version.baselineVersionId !== null
           || artifact.version.reinforcedWords.length !== 0) throw new Error("Fallback must be a ready shared artifact without personalized reinforcement");
-        verify(artifact, { ...context, readerId: null, baseline: undefined, wordBank: [] }, options.policyForChapter(context.original));
+        verifyChapterArtifact(artifact, { ...context, readerId: null, baseline: undefined, wordBank: [] }, options.policyForChapter(context.original));
         bounded.throwIfAborted();
         return freeze({ ...artifact, provenance: { source: "pre-generated", personalized: false, attempts,
           fallbackReason: live.aborted ? "timeout" : "generation-failed" } });
