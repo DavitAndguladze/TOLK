@@ -1,4 +1,4 @@
-import { beforeEach, expect, test, vi } from "vitest";
+import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { mockChapter, mockChapterVersion } from "../mocks";
 
 const deps = vi.hoisted(() => ({ reader: vi.fn(), version: vi.fn(), chapter: vi.fn(), define: vi.fn(), speak: vi.fn(), list: vi.fn(), flag: vi.fn(), unflag: vi.fn() }));
@@ -13,12 +13,14 @@ const request = (body: unknown) => new Request("https://tolk.test/api/tts", { me
 
 beforeEach(() => {
   vi.resetAllMocks();
+  vi.stubEnv("BETTER_AUTH_URL", "https://tolk.test");
   deps.reader.mockResolvedValue({ id: "reader-a" });
   deps.version.mockResolvedValue(mockChapterVersion(1));
   deps.chapter.mockResolvedValue(mockChapter);
   deps.define.mockResolvedValue({ meaning: "A father is a male parent.", source: "oci-generative-ai" });
   deps.list.mockResolvedValue([]);
 });
+afterEach(() => vi.unstubAllEnvs());
 
 test("signed-out and foreign Reader requests never reach word services", async () => {
   deps.reader.mockResolvedValue(null);
@@ -76,4 +78,21 @@ test("cross-origin writes cannot flag or spend speech requests", async () => {
   expect((await speakWord(req)).status).toBe(403);
   expect(deps.flag).not.toHaveBeenCalled();
   expect(deps.speak).not.toHaveBeenCalled();
+});
+
+test("public-origin writes work behind the internal proxy URL without trusting forwarded hosts", async () => {
+  const req = new Request("http://0.0.0.0:3000/api/tts", {
+    method: "POST", headers: { origin: "https://tolk.test", "Content-Type": "application/json" },
+    body: JSON.stringify({ text: "father", tokenIndex: 5 }),
+  });
+  deps.flag.mockResolvedValue({ word: "father", chapterVersionId: "gatsby-ch1-L1", tokenIndex: 5 });
+  deps.speak.mockResolvedValue(new Uint8Array([0x49, 0x44, 0x33]).buffer);
+  expect((await postFlag(req.clone(), context())).status).toBe(200);
+  expect((await speakWord(req.clone())).status).toBe(200);
+  expect((await deleteFlag(new Request(req.url, { method: "DELETE", headers: req.headers }), context())).status).toBe(200);
+  req.headers.set("origin", "https://elsewhere.test");
+  req.headers.set("x-forwarded-host", "elsewhere.test");
+  expect((await speakWord(req.clone())).status).toBe(403);
+  vi.stubEnv("BETTER_AUTH_URL", "invalid");
+  expect((await postFlag(req.clone(), context())).status).toBe(403);
 });

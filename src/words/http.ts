@@ -21,7 +21,11 @@ async function reading(context: Context) {
 
 function wrongOrigin(req: Request) {
   const origin = req.headers.get("origin");
-  return origin !== null && origin !== new URL(req.url).origin;
+  if (origin === null) return false;
+  try {
+    // Caddy forwards to an internal Next URL; use the same public origin as authentication.
+    return origin !== new URL(process.env.BETTER_AUTH_URL || req.url).origin;
+  } catch { return true; }
 }
 
 export async function wordMeaning(_req: Request, context: Context) {
