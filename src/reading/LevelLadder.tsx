@@ -12,25 +12,33 @@ function dotClass(level: Level, current: Level) {
   return level < current ? "size-2.5 bg-light/70" : "size-2.5 border border-fog/60 bg-mist";
 }
 
-/** Where this Chapter Version sits between L1 and the author's original. The links are the temporary Level switch (#3). */
-export function LevelLadder({ current, hrefs }: { current: Level; hrefs: Record<Level, string> }) {
+/** Where a Chapter Version sits between L1 and the author's original. With `hrefs`, the dots are the temporary Level switch (#3). */
+export function LevelLadder({ current, hrefs }: { current: Level; hrefs?: Record<Level, string> }) {
   const climbed = ((current - 1) / (LEVELS.length - 1)) * 100;
+  const label = `Level ${current}, ${LEVEL_SPECS[current].label}`;
+  const Wrapper = hrefs ? "nav" : "div";
   return (
-    <nav aria-label="Level" className="mt-5">
+    <Wrapper aria-label={hrefs ? "Level" : label} role={hrefs ? undefined : "img"} className="mt-5">
       <ol className="relative flex justify-between">
         <li aria-hidden className="absolute inset-x-[22px] top-1/2 h-px -translate-y-1/2 bg-hairline">
-          <span className="block h-full bg-light/70" style={{ width: `${climbed}%` }} />
+          <span className="block h-full bg-light/70 transition-[width] duration-700 ease-out" style={{ width: `${climbed}%` }} />
         </li>
         {LEVELS.map((level) => (
           <li key={level} className="relative">
-            <Link
-              href={hrefs[level]}
-              aria-label={`Level ${level}, ${LEVEL_SPECS[level].label}`}
-              aria-current={level === current ? "page" : undefined}
-              className="grid size-11 place-items-center rounded-full outline-light focus-visible:outline-2"
-            >
-              <span className={`block rounded-full transition-all duration-200 ${dotClass(level, current)}`} />
-            </Link>
+            {hrefs ? (
+              <Link
+                href={hrefs[level]}
+                aria-label={`Level ${level}, ${LEVEL_SPECS[level].label}`}
+                aria-current={level === current ? "page" : undefined}
+                className="grid size-11 place-items-center rounded-full outline-light focus-visible:outline-2"
+              >
+                <span className={`block rounded-full transition-all duration-500 ${dotClass(level, current)}`} />
+              </Link>
+            ) : (
+              <span className="grid size-11 place-items-center">
+                <span className={`block rounded-full transition-all duration-500 ${dotClass(level, current)}`} />
+              </span>
+            )}
           </li>
         ))}
       </ol>
@@ -38,6 +46,6 @@ export function LevelLadder({ current, hrefs }: { current: Level; hrefs: Record<
         <span className="font-semibold">Level {current}</span>
         <span className="text-fog">{LEVEL_SPECS[current].label}</span>
       </p>
-    </nav>
+    </Wrapper>
   );
 }
