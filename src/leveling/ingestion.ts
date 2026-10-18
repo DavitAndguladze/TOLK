@@ -113,10 +113,11 @@ DATA:\n${JSON.stringify({ ...original, originalText: undefined,
           throw new Error(`Missing or invalid required-name policy for ${original.id}`);
         }
         if (!Array.isArray(retained) || !retained.every(text)) throw new Error(`Invalid retained-word policy for ${original.id}`);
-        const unretained = complexWords.filter((entry) => !retained.includes(entry.word));
-        if (unretained.length) {
-          throw new Error(`Complex Word(s) extracted for ${original.id} but missing from retainedWords: ${unretained.map((entry) => entry.word).join(", ")}`);
-        }
+        // The prompt asks the model to echo every extracted Complex Word into retainedWords too,
+        // but it inconsistently drops some; validateRetainedWordPolicy already treats a Complex
+        // Word as retained with or without this echo, so repair the list from the data the code
+        // already has instead of failing a correct extraction over the model's own duplicate echo.
+        const repairedRetained = [...retained, ...complexWords.map((entry) => entry.word).filter((word) => !retained.includes(word))];
         const chapter = { ...original, keyPoints, complexWords };
         if (value.retainedWordEvidence !== undefined && !Array.isArray(value.retainedWordEvidence)) {
           throw new Error(`Invalid retained-word evidence for ${original.id}`);
@@ -126,11 +127,11 @@ DATA:\n${JSON.stringify({ ...original, originalText: undefined,
           if (!record(row) || !text(row.word) || !text(row.reason)) throw new Error(`Invalid retained-word evidence for ${original.id}`);
           return { word: row.word, reason: row.reason.trim(), ...evidence };
         });
-        const retainedIssues = validateRetainedWordPolicy(chapter, { retainedWords: retained, retainedWordEvidence });
+        const retainedIssues = validateRetainedWordPolicy(chapter, { retainedWords: repairedRetained, retainedWordEvidence });
         if (retainedIssues.length) throw new Error(retainedIssues.map((issue) => issue.message).join("; "));
         chapters.push(chapter);
         policies[original.id] = {
-          requiredNames: [...new Set(names as string[])], retainedWords: [...new Set(retained as string[])],
+          requiredNames: [...new Set(names as string[])], retainedWords: [...new Set(repairedRetained)],
           ...(retainedWordEvidence === undefined ? {} : { retainedWordEvidence }),
           originalEvidence: {
             keyPoints: value.keyPoints.map((row, index) => ({ keyPointId: keyPoints[index].id, ...citation(row) })),

@@ -114,6 +114,18 @@ describe("Gatsby ingestion", () => {
     expect(content.policies["gatsby-ch1"].requiredNames).toEqual(["Gatsby", "Nick", "Carraway"]);
   });
 
+  it("repairs retainedWords when the model drops Complex Words it already extracted", async () => {
+    // Real observed model behavior: it extracts 3 Complex Words but echoes only some of them
+    // back into retainedWords, even though the prompt asks it to retain every one.
+    const content = await ingestGatsby(source, { generateText: async (prompt) => {
+      const data = JSON.parse(prompt.split("DATA:\n")[1]);
+      const value = metadata(data.number);
+      return JSON.stringify(data.number === 1 ? { ...value, retainedWords: value.retainedWords.slice(0, 1) } : value);
+    } });
+    expect(content.policies["gatsby-ch1"].retainedWords).toEqual(expect.arrayContaining(["younger", "vulnerable", "turning"]));
+    expect(content.chapters[0].complexWords.map((entry) => entry.word)).toEqual(["younger", "vulnerable", "turning"]);
+  });
+
   it("still rejects a name with no word present anywhere in the Chapter", async () => {
     await expect(ingestGatsby(source, { generateText: async (prompt) => {
       const data = JSON.parse(prompt.split("DATA:\n")[1]);
