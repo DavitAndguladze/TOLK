@@ -94,7 +94,16 @@ DATA:\n${JSON.stringify({ ...original, originalText: undefined,
           || new Set(complexWords.map((word) => word.word.toLowerCase())).size !== complexWords.length) {
           throw new Error(`Duplicate metadata for ${original.id}`);
         }
-        const names = value.requiredNames;
+        // The model sometimes reaches for a famous character's full name from its training data
+        // instead of what this exact Chapter uses (e.g. "Nick Carraway" when the text only ever
+        // says "Nick" or "Carraway" alone) - the prompt already asks for "a surname alone if that
+        // is all the source uses", so repair a multi-word miss to whichever of its words actually
+        // appear verbatim, rather than failing a correct extraction over a cosmetic join.
+        const names = Array.isArray(value.requiredNames) ? value.requiredNames.flatMap((name) => {
+          if (!text(name) || contains(original.originalText, name)) return [name];
+          const present = name.trim().split(/\s+/).filter((word) => contains(original.originalText, word));
+          return present.length ? present : [name];
+        }) : value.requiredNames;
         const retained = value.retainedWords;
         if (Array.isArray(names)) {
           const absent = names.filter((name) => text(name) && !contains(original.originalText, name));

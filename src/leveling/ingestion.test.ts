@@ -102,6 +102,26 @@ describe("Gatsby ingestion", () => {
     });
   });
 
+  it("repairs a model-hallucinated full name to whichever word(s) the Chapter actually uses verbatim", async () => {
+    // Nick's surname is never followed by his first name anywhere in the real Gutenberg text -
+    // the model keeps reaching for the famous book's canonical "Nick Carraway" from its training
+    // data instead of what Chapter 1 actually says.
+    const content = await ingestGatsby(source, { generateText: async (prompt) => {
+      const data = JSON.parse(prompt.split("DATA:\n")[1]);
+      const value = metadata(data.number);
+      return JSON.stringify(data.number === 1 ? { ...value, requiredNames: [...value.requiredNames, "Nick Carraway"] } : value);
+    } });
+    expect(content.policies["gatsby-ch1"].requiredNames).toEqual(["Gatsby", "Nick", "Carraway"]);
+  });
+
+  it("still rejects a name with no word present anywhere in the Chapter", async () => {
+    await expect(ingestGatsby(source, { generateText: async (prompt) => {
+      const data = JSON.parse(prompt.split("DATA:\n")[1]);
+      const value = metadata(data.number);
+      return JSON.stringify(data.number === 1 ? { ...value, requiredNames: [...value.requiredNames, "Zzyzx Qorvane"] } : value);
+    } })).rejects.toThrow("Names not present verbatim");
+  });
+
   it("rejects an empty required-name policy instead of silently exempting no names", async () => {
     await expect(ingestGatsby(source, { generateText: async (prompt) => {
       const data = JSON.parse(prompt.split("DATA:\n")[1]);
