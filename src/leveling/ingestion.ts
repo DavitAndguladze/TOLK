@@ -109,10 +109,13 @@ DATA:\n${JSON.stringify({ ...original, originalText: undefined,
           const absent = names.filter((name) => text(name) && !contains(original.originalText, name));
           if (absent.length) throw new Error(`Names not present verbatim in ${original.id}: ${absent.join(", ")}`);
         }
-        if (!Array.isArray(names) || names.length === 0 || !names.every((name) => text(name) && contains(original.originalText, name))
-          || !Array.isArray(retained) || !retained.every(text)
-          || !complexWords.every((entry) => retained.includes(entry.word))) {
-          throw new Error(`Invalid explicit name or retained-vocabulary policy for ${original.id}`);
+        if (!Array.isArray(names) || names.length === 0 || !names.every((name) => text(name) && contains(original.originalText, name))) {
+          throw new Error(`Missing or invalid required-name policy for ${original.id}`);
+        }
+        if (!Array.isArray(retained) || !retained.every(text)) throw new Error(`Invalid retained-word policy for ${original.id}`);
+        const unretained = complexWords.filter((entry) => !retained.includes(entry.word));
+        if (unretained.length) {
+          throw new Error(`Complex Word(s) extracted for ${original.id} but missing from retainedWords: ${unretained.map((entry) => entry.word).join(", ")}`);
         }
         const chapter = { ...original, keyPoints, complexWords };
         if (value.retainedWordEvidence !== undefined && !Array.isArray(value.retainedWordEvidence)) {
