@@ -33,7 +33,7 @@ describe("Gatsby ingestion", () => {
       });
       return JSON.stringify(metadata(data.number));
     } });
-    expect(content.policies["gatsby-ch1"].originalEvidence.keyPoints[0].originalSentenceIndex).toBe(0);
+    expect(content.policies["gatsby-full-ch1"].originalEvidence.keyPoints[0].originalSentenceIndex).toBe(0);
   });
 
   it("extracts full original Chapters 1-4 with stable identities and source-backed metadata", async () => {
@@ -44,13 +44,13 @@ describe("Gatsby ingestion", () => {
     const first = await ingestGatsby(source, { generateText });
     const second = await ingestGatsby(source, { generateText });
     expect(first).toEqual(second);
-    expect(first.book.id).toBe("gatsby");
-    expect(first.chapters.map((chapter) => chapter.id)).toEqual(["gatsby-ch1", "gatsby-ch2", "gatsby-ch3", "gatsby-ch4"]);
+    expect(first.book.id).toBe("gatsby-full");
+    expect(first.chapters.map((chapter) => chapter.id)).toEqual(["gatsby-full-ch1", "gatsby-full-ch2", "gatsby-full-ch3", "gatsby-full-ch4"]);
     expect(first.chapters[0].originalText).toBe(originals[0].originalText);
     expect(first.chapters[0].keyPoints).toHaveLength(3);
-    expect(first.chapters[0].keyPoints[0].id).toBe("gatsby-ch1-kp1");
-    expect(first.policies["gatsby-ch1"].requiredNames).toEqual(["Gatsby"]);
-    expect(first.policies["gatsby-ch1"].retainedWords).toEqual(["younger", "vulnerable", "turning"]);
+    expect(first.chapters[0].keyPoints[0].id).toBe("gatsby-full-ch1-kp1");
+    expect(first.policies["gatsby-full-ch1"].requiredNames).toEqual(["Gatsby"]);
+    expect(first.policies["gatsby-full-ch1"].retainedWords).toEqual(["younger", "vulnerable", "turning"]);
   });
 
   it("retains individually documented source words beyond Check vocabulary without losing their rationale", async () => {
@@ -62,8 +62,8 @@ describe("Gatsby ingestion", () => {
           reason: "Preserves that the father's words were guidance for Nick." }],
       } : value);
     } });
-    expect(content.policies["gatsby-ch1"].retainedWords).toEqual(["younger", "vulnerable", "turning", "advice"]);
-    expect(content.policies["gatsby-ch1"].retainedWordEvidence).toEqual([{
+    expect(content.policies["gatsby-full-ch1"].retainedWords).toEqual(["younger", "vulnerable", "turning", "advice"]);
+    expect(content.policies["gatsby-full-ch1"].retainedWordEvidence).toEqual([{
       word: "advice", originalSentenceIndex: 0, quote: "my father gave me some advice",
       reason: "Preserves that the father's words were guidance for Nick.",
     }]);
@@ -97,8 +97,8 @@ describe("Gatsby ingestion", () => {
       if (data.number === 1) value.keyPoints[1].quote = "The advantages that you've had.";
       return JSON.stringify(value);
     } });
-    expect(content.policies["gatsby-ch1"].originalEvidence.keyPoints[1]).toEqual({
-      keyPointId: "gatsby-ch1-kp2", originalSentenceIndex: 1, quote: "the advantages that you’ve had",
+    expect(content.policies["gatsby-full-ch1"].originalEvidence.keyPoints[1]).toEqual({
+      keyPointId: "gatsby-full-ch1-kp2", originalSentenceIndex: 1, quote: "the advantages that you’ve had",
     });
   });
 

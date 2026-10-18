@@ -3,6 +3,8 @@ import { and, eq, inArray } from "drizzle-orm";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { generateChapterCheck } from "../comprehension/chapter-check-generator";
 import vocabulary from "../data/vocabulary/english-2018.json" with { type: "json" };
+import gatsbySource from "../data/gatsby/content.json" with { type: "json" };
+import { mockBook, mockChapter, mockChapterCheck, mockChapterVersion } from "../mocks";
 import { chapterArtifactDigest, createChapterGenerator, type FidelityInput, type FidelityReview } from "../leveling/generator";
 import { generateGatsbySeed } from "../leveling/seed";
 import type { Chapter, NextChapterInput } from "../types";
@@ -71,6 +73,26 @@ describe.skipIf(!testDatabase)("persisted Chapter generation", () => {
     const id = await store.startGeneration(data.readerId, data.bookId, 2, 1, data.input.baseline.id);
     return { ...data, id };
   }
+
+  it("loads full source metadata beside the served sample without publishing ready content", async () => {
+    await content.loadContent({ books: [mockBook], chapters: [mockChapter], versions: [{ version: mockChapterVersion(1), check: mockChapterCheck }] });
+    const sample = async () => Promise.all([
+      content.getBook(mockBook.id), content.getChapter(mockBook.id, 1),
+      content.getChapterVersion(mockChapterVersion(1).id), content.getChapterCheck(mockChapterVersion(1).id),
+    ]);
+    const before = await sample();
+    const existingFull = await content.getBook("gatsby-full");
+    if (!existingFull) owned.push({ readerId: randomUUID(), bookId: "gatsby-full" });
+    await store.loadGatsbySource();
+    await store.loadGatsbySource();
+    expect(await sample()).toEqual(before);
+    expect(await content.getBook("gatsby-full")).toEqual(gatsbySource.book);
+    for (const chapter of gatsbySource.chapters) {
+      expect(await content.getChapter("gatsby-full", chapter.number)).toEqual(chapter);
+      expect(await store.getChapterPolicy(chapter.id)).toEqual(gatsbySource.policies[chapter.id as keyof typeof gatsbySource.policies]);
+    }
+    expect(await content.db().select().from(schema.chapterVersions).where(eq(schema.chapterVersions.bookId, "gatsby-full"))).toEqual([]);
+  });
 
   it("persists a generated fractional Level Score without breaking immutable identity", async () => {
     const { readerId, id, input } = await setup();

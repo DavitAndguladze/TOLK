@@ -12,10 +12,12 @@ describe("Gatsby ingestion source", () => {
     const content: IngestedGatsby = JSON.parse(readFileSync(new URL("../data/gatsby/content.json", import.meta.url), "utf8"));
     const originals = parseGatsby(source).slice(0, 4);
     expect(content.book).toEqual(GATSBY_BOOK);
+    expect(content.book.id).toBe("gatsby-full");
     expect(content.chapters.map(({ keyPoints: _keyPoints, complexWords: _words, ...original }) => original)).toEqual(originals);
     expect(content.chapters.map((chapter) => splitOriginalSentences(chapter.originalText).length)).toEqual([362, 308, 388, 373]);
     for (const chapter of content.chapters) {
       const policy = content.policies[chapter.id];
+      expect(chapter.keyPoints.every((point) => point.chapterId === chapter.id && point.id.startsWith(`${chapter.id}-kp`))).toBe(true);
       expect(validateRetainedWordPolicy(chapter, policy)).toEqual([]);
       const sentences = splitOriginalSentences(chapter.originalText);
       expect(policy.originalEvidence.keyPoints.map((point) => point.keyPointId)).toEqual(chapter.keyPoints.map((point) => point.id));
@@ -31,7 +33,7 @@ describe("Gatsby ingestion source", () => {
     const chapters = parseGatsby(source);
     expect(chapters).toHaveLength(GATSBY_BOOK.chapterCount);
     expect(chapters.slice(0, 4).map((chapter) => chapter.number)).toEqual([1, 2, 3, 4]);
-    expect(chapters.slice(0, 4).map((chapter) => chapter.id)).toEqual(["gatsby-ch1", "gatsby-ch2", "gatsby-ch3", "gatsby-ch4"]);
+    expect(chapters.slice(0, 4).map((chapter) => chapter.id)).toEqual(["gatsby-full-ch1", "gatsby-full-ch2", "gatsby-full-ch3", "gatsby-full-ch4"]);
     expect(chapters[0].originalText).toMatch(/^In my younger and more vulnerable years/);
     expect(chapters.at(-1)?.originalText.slice(-100)).toMatch(/borne back ceaselessly into\s+the past\.$/);
     for (const chapter of chapters) {
