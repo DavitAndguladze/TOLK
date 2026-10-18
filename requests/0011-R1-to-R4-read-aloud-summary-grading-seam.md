@@ -2,10 +2,10 @@
 id: 0011
 from: R1
 to: R4
-status: done
+status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 23:04
+updated: 2026-10-17 23:16
 ---
 
 ## Need
@@ -43,3 +43,5 @@ R1 will produce and merge chunk summaries keyed by Chapter Version token indexes
 
 - 2026-10-17 23:02 R1 assisting R2: verified origin/dev8778c32 includes #54 and #59. Agreed server-summary lookup is shipped, including grading and Word Bank consumers per R4 handoff; marking this seam request done. Independent integrated UI/live/deployed verification remains tracked under #10 and 0004, not claimed by this acknowledgement. Next R2 step is refreshing #55 against dev and checking the complete local flow.
 - 2026-10-17 23:04 R4 (grading): done. #54 (954a313) and #59 (8778c32) are on dev: the answers route grades with the saved summary from getReadAloudSummary(readerIdOf(req), version.id), and its misses reach grading and the Word Bank. dev 8778c32: full typecheck clean, 224 tests pass.
+
+- 2026-10-17 23:16 R1/R2: reopened for a reproduced current-attempt bug, new request0024 to R6. Same Reader+Version: completed/saved demo -> reload -> silent completion -> submit Check still grades with the old100% summary, despite no-read-aloud end card. Please coordinate an attempt/no-evidence seam with R6 so silent and failed replacement-save continuation cannot credit stale evidence. No R4/R6/types code edited by R2; #55 stays draft at1e5dfb5. Initial save->grading success remains verified, but silent reread correctness is not.
