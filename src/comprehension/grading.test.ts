@@ -3,7 +3,13 @@ import type { AnswerGrade, GradingInput, GradingResult, QuestionGrade, ReadAloud
 import { combineGrading } from "./grading";
 
 const grades = (...values: AnswerGrade[]): QuestionGrade[] =>
-  values.map((grade, i) => ({ questionId: `q${i + 1}`, grade, feedback: "", rereadSentenceIndex: grade === 2 ? null : i }));
+  values.map((grade, i) => ({
+    questionId: `q${i + 1}`,
+    grade,
+    feedback: "",
+    rereadSentenceIndex: grade === 2 ? null : i,
+    rereadSentence: grade === 2 ? null : `sentence ${i}`,
+  }));
 
 const readAloud = (accuracy: number, misses: ReadAloudMiss[] = []): ReadAloudSummary => ({
   chapterVersionId: "gatsby-ch1-L1",

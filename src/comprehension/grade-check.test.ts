@@ -89,6 +89,7 @@ describe("gradeChapterCheck", () => {
         grade: 1,
         feedback: "Close.",
         rereadSentenceIndex: first.answerSentenceIndex,
+        rereadSentence: version.sentences[first.answerSentenceIndex].text,
       });
       // 3 of 6 Key Point points + 4 of 4 Complex Word points → 7 of 10 → 63, no flags → 10.
       expect(session.grading.score).toBe(73);
@@ -98,6 +99,7 @@ describe("gradeChapterCheck", () => {
       const session = await grade(answer());
 
       expect(session.grading.questionGrades.map((g) => g.rereadSentenceIndex)).toEqual([null, null, null, null, null]);
+      expect(session.grading.questionGrades.map((g) => g.rereadSentence)).toEqual([null, null, null, null, null]);
     });
   });
 
@@ -113,6 +115,7 @@ describe("gradeChapterCheck", () => {
         grade: 0,
         feedback: "'vulnerable' means easily hurt or affected.",
         rereadSentenceIndex: vulnerable.answerSentenceIndex,
+        rereadSentence: version.sentences[vulnerable.answerSentenceIndex].text,
       });
       expect(session.grading.missedWords).toEqual([
         { word: "vulnerable", source: "chapter-check" },
