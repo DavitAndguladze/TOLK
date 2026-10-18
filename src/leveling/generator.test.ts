@@ -262,6 +262,15 @@ describe("ChapterGenerator", () => {
     const fallback = await createChapterGenerator(dependencies()).generatePreGenerated(chapter, 1);
     const result = await createChapterGenerator({ ...dependencies(), generateText: async () => "{}", fallback: async () => fallback }).generate(input());
     expect(result.provenance).toMatchObject({ source: "pre-generated", attempts: 2, fallbackReason: "generation-failed" });
+  });
+
+  it("honors a raised maxAttempts before giving up, still bounded by the live default elsewhere", async () => {
+    const fallback = await createChapterGenerator(dependencies()).generatePreGenerated(chapter, 1);
+    let calls = 0;
+    const result = await createChapterGenerator({ ...dependencies(), maxAttempts: 5,
+      generateText: async () => { calls++; return "{}"; }, fallback: async () => fallback }).generate(input());
+    expect(calls).toBe(5);
+    expect(result.provenance).toMatchObject({ source: "pre-generated", attempts: 5, fallbackReason: "generation-failed" });
     expect(result.check.chapterVersionId).toBe(fallback.version.id);
   });
 

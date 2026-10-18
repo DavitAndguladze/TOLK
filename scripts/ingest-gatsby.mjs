@@ -61,6 +61,9 @@ async function main() {
     generateText,
     generateCheck,
     budgetMs: 300_000,
+    // Bootstrapping has no fallback of its own and a generous 5-minute budget per artifact; spend
+    // more of it on self-correction instead of giving up after the live default's 2 attempts.
+    maxAttempts: 5,
     policyForChapter: (chapter) => ({ vocabulary, requiredNames: content.policies[chapter.id].requiredNames,
       retainedWords: content.policies[chapter.id].retainedWords,
       retainedWordEvidence: content.policies[chapter.id].retainedWordEvidence }),

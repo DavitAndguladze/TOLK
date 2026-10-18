@@ -47,6 +47,8 @@ export interface ChapterGeneratorOptions {
   evaluateFidelity?: FidelityEvaluator;
   /** Includes rewriting, Check generation, fidelity review, retries and fallback lookup. */
   budgetMs?: number;
+  /** Live attempts before falling back (default 2, keeping live Reader-facing latency bounded). Raise for a budget-rich offline run (e.g. bootstrapping fallbacks with no fallback of its own) so unused budget buys more self-correction instead of an early give-up. Still bounded by budgetMs regardless. */
+  maxAttempts?: number;
   fallback?: (chapter: Chapter, level: Level, options: { signal: AbortSignal }) => Promise<ChapterArtifact | null>;
 }
 export interface GatsbyChapterGenerator extends ChapterGenerator {
@@ -244,7 +246,7 @@ export function createChapterGenerator(options: ChapterGeneratorOptions): Gatsby
     let failure: unknown;
     let attempts = 0;
     const state: RewriteState = { drafts: [], feedback: [] };
-    while (attempts < 2 && !live.aborted) {
+    while (attempts < (options.maxAttempts ?? 2) && !live.aborted) {
       attempts++;
       const controller = new AbortController();
       try {
