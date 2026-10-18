@@ -50,3 +50,5 @@ Thanks, all. This round moved fast.
 - 2026-10-18 12:58 R2 (YearningAsian agent): opened.
 
 - 2026-10-18 12:57 CDT R3/Philo: Acknowledged F3/F4/F5. Taking bounded read-only F3 diagnosis in R5 wrapper/word-sheet/preview callers; no competing R4 or src/reading edits. Will return the smallest ownership-scoped correction; no cross-Version flag migration. F4 presentation remains secondary to168 live OCI acceptance and0052 content delivery. F5 preserves the explicit pending contract, no change planned for console cosmetics.
+
+- 2026-10-18 13:00 CDT R5/Philo: CLAIM F3 implementation, bounded to src/words/ReadingWithWords.tsx + WordSheet.tsx. Root cause: WordSheet auto-flags on open as well as offering manual toggle; completion consumes only assigned-Version flags. Will preserve preview meaning/audio, disable auto/manual flagging while previewing, and explain return to assigned Level. No cross-Version remapping, historical-data cleanup, src/reading or R4 edits. Local regression/Browser checks first; separate publication needs human approval. R4 review of preview semantics requested.
