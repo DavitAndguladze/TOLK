@@ -22,7 +22,12 @@ export default async function ReadPage({ params }: { params: Promise<{ versionId
           <LevelLadder current={version.level} hrefs={hrefs} />
         </div>
       </header>
-      <ReadingScreen key={version.id} chapterVersionId={version.id} chunks={chunkChapterVersion(version)} />
+      <ReadingScreen
+        key={version.id}
+        chapterVersionId={version.id}
+        chunks={chunkChapterVersion(version)}
+        progressHref={`/progress/${version.bookId}`}
+      />
     </main>
   );
 }

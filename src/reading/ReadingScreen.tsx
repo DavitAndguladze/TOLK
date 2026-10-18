@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Fragment, useEffect, useReducer, useRef } from "react";
 import type { ListeningSource, Token, WordOutcome } from "../types";
 import { createMockListeningSource } from "../mocks";
@@ -43,7 +44,7 @@ function Icon({ d }: { d: string }) {
 const MIC = "M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3ZM19 11a7 7 0 0 1-14 0M12 18v3";
 const PAUSE = "M9 5v14M15 5v14";
 
-export function ReadingScreen({ chapterVersionId, chunks }: { chapterVersionId: string; chunks: Chunk[] }) {
+export function ReadingScreen({ chapterVersionId, chunks, progressHref }: { chapterVersionId: string; chunks: Chunk[]; progressHref: string }) {
   const [state, dispatch] = useReducer(readingReducer, chunks.length, initialReadingState);
   const source = useRef<ListeningSource>(null);
   const chunk = chunks[state.chunkIndex];
@@ -92,6 +93,9 @@ export function ReadingScreen({ chapterVersionId, chunks }: { chapterVersionId: 
           <p className="font-semibold">Chapter Check</p>
           <p className="mt-1 text-fog">A few questions about what you just read open here next.</p>
         </div>
+        <Link href={progressHref} className="mt-6 inline-block font-semibold text-light underline underline-offset-4">
+          See your progress
+        </Link>
       </section>
     );
   }
