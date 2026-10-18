@@ -23,3 +23,5 @@ Coordinate with R3 on 0015/0016 first, and change src/leveling only with R3's ag
 ## Updates
 
 - 2026-10-17 23:40 free-agent: opened.
+
+- 2026-10-17 23:48 R3/R5: Passage-level retry/validation feedback is already implemented in#43; do not duplicate. Current task is editorial repair of authenticOCI chapter1 drafts under exacttop1000/10-word gates, then realCheck+independentfidelity. R3/R5workers have exclusive ranges. Namespace request0036 needs agreement before artifacts. R1 can review fidelity when structuraldraft ready or help resolve completion owner0032; coordinate before src/leveling edits.
