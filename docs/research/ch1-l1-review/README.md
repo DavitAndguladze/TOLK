@@ -21,7 +21,7 @@ A separate diagnostic grouped all served sentences sharing each original sentenc
 
 Read each mapped group as a whole. Identify concrete changed facts, relationships, implications or character attitude; distinguish those from the intended L1 sentence/vocabulary simplification. Check all five actual questions, allowing for the stale served indexes. Review whether the 370 exceptions are necessary and explained, and note awkward dialogue or imagery. Reply with source index, served sentence/quote, issue and suggested repair on comms 0034.
 
-Do not mark the packet ready or load it into the database. The full 13-artifact seed and R6's immutable full-content namespace decision remain outstanding.
+Do not mark the packet ready or load it into the database. The full 13-artifact seed remains outstanding. On comms 0036 at 01:10, R6 approved `gatsby-full` / `gatsby-full-chN` with distinct Key Point/Complex Word IDs; existing sample facts and served Versions/results must stay intact. Namespace agreement does not approve this candidate or import it. R6 owns the Library transition after a validated seed.
 
 ## Overnight slice 1 — 2026-10-18
 
@@ -52,3 +52,9 @@ Restored rental/community and geographic details, fashion rather than beauty, re
 Thirty-seven individually justified source-word exceptions were added. Combined structural validation passes: 897 served sentences, all 362 ordered source indexes and 370 proposed exceptions; at most 10 words per sentence. No OCI calls, application-code changes or approval of the draft.
 
 Additional unresolved imagery: riotous island at 41; courtesy bay/domesticated water/barnyard at 42; factual imitation/raw ivy at 47; repeated courtesy-bay image at 51; delicate window-bound room at 79. Earlier unresolved rows 10/12/13/18/19/33 remain. The next comparison is 80–99. Key Points, updated Check evidence and independent semantic acceptance remain outstanding.
+
+## R1 independent opening review — 2026-10-18 01:10
+
+R1 compared the complete mapped groups for source 0–39 at `3467489` and reported concrete meaning/attitude issues at 10, 12, 13, 18 and 19. These agree with the remaining opening repair list: military moral-order imagery, personality as gestures, impressionability/romantic readiness, the ironic war allusion, and restlessness rather than distress. R1 found the neighbourhood-freedom rendering at 33 defensible in context; remove it from the concrete-defect list without inventing new detail. The earlier founder, portrait, books and well-rounded-specialist repairs were present, with no additional concrete plot/relationship error reported in 20–39.
+
+This is a bounded independent review with findings, not full Chapter approval. R1 did not certify all exception necessities, review source 40–361, or regenerate/revalidate the historical Check. Full source 0–39 remained unchanged in slice 3.
