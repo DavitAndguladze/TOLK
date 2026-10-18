@@ -206,9 +206,9 @@ function ChapterReadingScreen({
         {onWordTap && <p className="mx-auto mt-6 max-w-xl text-center text-sm text-fog">{listening ? "Pause to tap a word for help." : "Tap a word for its meaning and pronunciation."}</p>}
         <details className={`${theme.legend} mt-6`}>
           <summary>What do the word marks mean?</summary>
-          <p><span className="font-semibold text-light">Blue words</span> came through clearly. A blue background follows your current word.</p>
+          <p><span className="font-semibold text-light">Blue words</span> {demoListening ? "show simulated clear reading" : "came through clearly"}. A blue background follows your current word.</p>
           <p><span className={outcomeClass.mispronounced}>A wavy underline</span> means a word may need another try. <span className={outcomeClass.skipped}>A dotted underline</span> means it may have been skipped.</p>
-          <p>Unmarked words are still waiting. These marks follow your voice; the Chapter Check also helps decide your Grading Result.</p>
+          <p>Unmarked words are still waiting. {demoListening ? "Demo marks advance automatically without using the microphone." : "These marks follow your voice."} The Chapter Check also helps decide your Grading Result.</p>
         </details>
       </section>
 

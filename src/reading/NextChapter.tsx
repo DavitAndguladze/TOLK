@@ -7,7 +7,7 @@ import { nextChapterPollResponse } from "./result";
 const POLL_MS = 2000;
 
 const primary =
-  "flex min-h-13 items-center justify-center rounded-2xl bg-light px-4 font-semibold text-white outline-light transition hover:bg-[#125f3f] focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98]";
+  "flex min-h-13 items-center justify-center rounded-2xl bg-light px-4 font-semibold text-white outline-light transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98]";
 
 /** The result screen's way on: Chapter N+1 once its Chapter Version is ready, the progress view until then. */
 export function NextChapter({ versionId, href, chapterNumber }: { versionId: string | null; href: string | null; chapterNumber: number }) {
