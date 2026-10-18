@@ -6,6 +6,7 @@
   .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; padding: 0; margin: 0; list-style: none; align-items: start; }
   .card { overflow: hidden; padding: 0; border-radius: 1.1rem; }
   .cover { display: block; width: 100%; height: auto; aspect-ratio: 8 / 9; }
+  .photo { object-fit: contain; }
   .info { padding: .8rem; }
   .genre { color: var(--color-fog); font-size: .75rem; line-height: 1.4; }
   .title { margin-top: .35rem; font-size: 1rem; line-height: 1.22; font-weight: 750; overflow-wrap: anywhere; }

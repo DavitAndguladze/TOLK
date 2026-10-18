@@ -3,8 +3,11 @@ import styles from "./BookCatalogue.module.css";
 
 type Cover = (typeof CLASSIC_BOOKS)[number]["cover"];
 
-/** Original geometric illustrations authored for TOLK; no publisher covers or external assets. */
-export function BookCover({ cover, color }: { cover: Cover; color: string }) {
+type CoverArt = { label: string; year: number; width: number; height: number };
+
+/** Real public-domain cover from public/covers (audit: cover-audit.json); falls back to an original TOLK drawing. */
+export function BookCover({ cover, color, title, art }: { cover: Cover; color: string; title: string; art?: CoverArt }) {
+  if (art) return <img className={`${styles.cover} ${styles.photo}`} src={`/covers/${cover}.jpg`} width={art.width} height={art.height} alt={`${art.label} of ${title} (${art.year})`} loading="lazy" decoding="async" style={{ backgroundColor: color }} />;
   const artwork = {
     alice: <><path d="M40 132h80v20H40zM50 115h60v17H50z" fill="currentColor" opacity=".22"/><circle cx="80" cy="71" r="30"/><path d="M75 33h10v8H75zM80 51v21l13 9M72 17l-3 10m22-10 3 10"/><circle cx="80" cy="72" r="3" fill="currentColor"/></>,
     sherlock: <><path d="M27 145V98h20v47m7 0V82h17m24 63V91h15v54m7 0v-34h17" opacity=".4"/><circle cx="78" cy="65" r="29"/><path d="m99 86 27 34" strokeWidth="9"/><path d="M61 66c0-10 7-18 17-18" opacity=".6"/></>,

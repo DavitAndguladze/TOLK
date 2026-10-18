@@ -14,7 +14,7 @@ export function BookCatalogue() {
         {CLASSIC_BOOKS.map(book => (
           <li key={book.gutenbergId}>
             <Card className={styles.card}>
-              <BookCover cover={book.cover} color={book.color} />
+              <BookCover cover={book.cover} color={book.color} title={book.title} art={"coverArt" in book ? book.coverArt : undefined} />
               <div className={styles.info}>
                 <p className={styles.genre}>{book.genre}</p>
                 <h3 className={styles.title}>{book.title}</h3>
@@ -24,7 +24,7 @@ export function BookCatalogue() {
                   <summary>About this Book<span className={styles.srOnly}>: {book.title}</span></summary>
                   <p>{book.description}</p>
                   <p className={styles.estimate}>{book.readingTime} for the original text at 200 words per minute. Your pace will vary.</p>
-                  <p className={styles.credit}>Text: public domain in the USA, as listed by Project Gutenberg. Cover: original TOLK vector artwork.</p>
+                  <p className={styles.credit}>Text: public domain in the USA, as listed by Project Gutenberg. {"coverArt" in book ? `Cover: ${book.coverArt.label.toLowerCase()}, ${book.coverArt.year}, public domain in the USA (Wikimedia Commons).` : "Cover: original TOLK vector artwork."}</p>
                   <a href={`https://www.gutenberg.org/ebooks/${book.gutenbergId}`} className={`${controls.button} ${controls.secondary} ${controls.fullWidth} ${styles.source}`}>Original on Gutenberg<span className={styles.srOnly}>: {book.title} (external source)</span></a>
                 </details>
               </div>
