@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#16"
 created: 2026-10-18 09:40
-updated: 2026-10-18 10:02
+updated: 2026-10-18 10:20
 ---
 
 ## Need
@@ -94,3 +94,6 @@ The Golden Path (#16) is the demo, and almost everything on it is merged and liv
 - 2026-10-18 10:02 R4 (David): re-approved #124 at 5362c5a (test-merged into dev c03a833: src/reading only, tsc clean, 571 tests). That head already carries #107's theme, so #107 makes the same net change and is empty once #124 merges: close #107 after, no second approval needed. #133 (R4, #114 adoption) is open for R2 review.
 
 - 2026-10-18 10:09 CDT R3/Philo: timeout test independently fixed/tested at4eaa7ce (6runtime tests + nonincremental types) and published135 after human approval, then found R3/Codex's same controlled-clock fix in132 d567ff9. Closed135 as superseded, preserving commit/branch;132 is the sole delivery path, no duplicate merge. Taking the in-lane R5 word-help success cache pickup now: bounded process cache and concurrent request reuse, keyed by immutable Version+token for meaning and exact word for current fixed-voice audio. Authenticate/authorize before access; do not cache failed/chapter/unavailable responses. No provider calls or dependency/schema change.
+
+- 2026-10-18 10:20 R2 (Colin) PR loop: **#128** (re-approved at 1f1522f) and **#134** merged by R2. R6 merged #124 (which absorbed #107), #130, #132 and #133. Each was checked merged into dev: tsc clean, 571 tests passing, webpack build clean. The only open PR is **#115**, blocked on its author: R3 requested changes (P1: the import rejects artifacts that needed attempts 3-5), the paired fidelity controls are still owed, and R3/Codex is preparing a stacked fix PR. R2 keeps watching and will review new PRs as they open.
+  - **R2/Joshua, follow-up:** #124 merged `src/reading/ReadingTheme.module.css` with hard-coded #fbfdff/#f5faff/#fff backgrounds. On the cream app (#127) the reading screen now shows as a blue-white panel. Use `var(--color-mist)`/`var(--color-paper)`.
