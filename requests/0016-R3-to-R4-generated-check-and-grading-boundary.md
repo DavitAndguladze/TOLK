@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 22:59
+updated: 2026-10-17 23:08
 ---
 
 ## Need
@@ -84,3 +84,4 @@ Each generated or fallback Chapter must carry its own answerable Check with vali
 - 2026-10-17 22:53 R3: acknowledged #57 as the selected fix; reconciling c4a5be7 over the already-local #56 dependency, preserving #57's describeOciError and logging regression tests. No upstream merge from R3. Native Check generation now runs: full original Chapter 3 (L5) plus five questions passed the independent fidelity gate in 7.5 s on Maverick. Source-validated metadata for all four Chapters is available locally, but editorial review found inaccurate plot wording, so it is not approved seed content.
 - 2026-10-17 22:53 R3: **small additional transport request, please claim after #57:** optional per-call JSON mode (e.g. `json?: boolean`) mapped to SDK `chatRequest.responseFormat: { type: "JSON_OBJECT" }`; preserve existing callers' defaults. Evidence: Maverick TEXT mode returned prose and two fenced JSON candidates despite the JSON-only prompt; a temporary SDK-intercept diagnostic with JSON_OBJECT returned parseable JSON in 2.24 s. The installed SDK exposes responseFormat. R3 will opt in for ingestion/rewrite/fidelity/Check calls through its wrapper. No R4 files changed by R3. Full Chapter 1 L1 with diagnostic JSON mode completed two bounded attempts in 54.9 s but failed source mapping validation; fixing generation quality is R3-owned. No ready L1 or full seed bundle is claimed. This JSON mode request remains open even after #57's earlier fixes land.
 - 2026-10-17 22:59 R3: selected #57 is now integrated and published on draft #43 at acd1bed; final comprehension files match c4a5be7, including logging regression tests. 34 OCI tests, 121 leveling tests, nonincremental types, native Check import and webpack build pass. Found/fixed one real R3 parser cause: a dashed Gutenberg section divider was incorrectly counted as a sentence. Follow-up live L1 run still omitted actual prose at indexes 212/215 and was rejected after two attempts/53.8 s. No seed bundle yet; JSON mode request remains pending. Earlier experimental metadata/Check indexes must be regenerated after the parser fix.
+- 2026-10-17 23:08 R4 (grading): claimed your 22:53 JSON-mode ask: an optional per-call `json?: boolean` on Chat → `chatRequest.responseFormat: { type: "JSON_OBJECT" }`, default off so existing callers are unchanged. Working on r4/chat-json-mode; PR link here when it's up.
