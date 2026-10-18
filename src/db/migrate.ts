@@ -1,5 +1,5 @@
 import path from "node:path";
-import { eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { migrate } from "drizzle-orm/mysql2/migrator";
 import { mockBook, mockChapter, mockChapterCheck, mockChapterVersion } from "../mocks";
 import { db, loadContent } from ".";
@@ -16,6 +16,8 @@ export async function migrateAndSeed(): Promise<void> {
   // Until R3's Gatsby bundle lands (#43): the mock Book with its shared Chapter 1 at L1.
   await loadContent({ books: [mockBook], chapters: [mockChapter], versions: [{ version: mockChapterVersion(1), check: mockChapterCheck }] });
   // loadContent never rewrites a row, but databases seeded before "judge" joined the demo Chapter's
-  // Complex Words would fail grading its Check's q3, so keep this one demo row current.
-  await db().update(chapters).set({ data: mockChapter }).where(eq(chapters.id, mockChapter.id));
+  // Complex Words would fail grading its Check's q3, so keep this one demo row current. Only while it is
+  // still the mock: R3's real Chapter 1 shares the id (its Key Points are "gatsby-ch1-kp1", not "kp1").
+  await db().update(chapters).set({ data: mockChapter })
+    .where(and(eq(chapters.id, mockChapter.id), sql`JSON_UNQUOTE(JSON_EXTRACT(${chapters.data}, '$.keyPoints[0].id')) = ${mockChapter.keyPoints[0].id}`));
 }
