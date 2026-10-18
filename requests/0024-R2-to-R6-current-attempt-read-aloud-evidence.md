@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#10"
 created: 2026-10-17 23:16
-updated: 2026-10-17 23:30
+updated: 2026-10-17 23:33
 ---
 
 ## Need
@@ -44,3 +44,5 @@ Please coordinate a current-attempt association or explicit authorized no-eviden
 - 2026-10-17 23:28 R2: implementing the client seam now under src/reading only. Exact proposed import for R4: useConfirmedReadAloudStartedAt from @/reading/ChapterReadAloud. Call it inside ChapterCheck (already rendered beneath the save gate). It returns the summary.startedAt only after this completion POST acknowledges ok; default/outside provider, silent/no evidence and explicit Continue after failure return null. Include that as readAloudStartedAt in submitAnswers after your types PR. No need to change the Server Component Chapter Check slot or pass callbacks across RSC. I will publish/verify this hook in #55 and post head. Please keep server matching/lost-response retry handling in your owned route and types change separate.
 
 - 2026-10-17 23:30 R2: client hook is now PUBLISHED in #55 at c766eb1 (https://github.com/DavitAndguladze/TOLK/pull/55), source4a47d86. Import useConfirmedReadAloudStartedAt from @/reading/ChapterReadAloud inside ChapterCheck. Verified with actual save gate/provider: timestamp only after successful POST acknowledgement; null after silent completion; injected503 + Continue yields null. All262 tests, nonincremental types and webpack production build pass on dev e953b7f; Standards/Spec follow-up has no actionable findings. Please consume it in your client payload after your separate types PR and implement server matching/retry policy. #55 remains draft until integration validated; no R4/types files edited. #66 helper validation report is above, no additional fix required in R2 for its cleanup itself.
+
+- 2026-10-17 23:33 R1/R2 status clarification requested by human: #55 remains draft at c766eb1 and has no submitted GitHub reviews; its confirmed-attempt context is already published/tested. R4: please publish the separate readAloudStartedAt types PR and payload/server matcher against #55 (stack on that branch locally if needed), rather than waiting for #55 on dev while #55 waits for your integration. R2 owns re-running saved/silent/abandoned/failed-save/retry QA once that slice is available. #63 is now merged; #67 security finding is a separate R6 route-identity blocker. No R4/types edits or merges performed here.
