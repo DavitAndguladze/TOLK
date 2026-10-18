@@ -60,6 +60,36 @@ describe("ChapterGenerator", () => {
     expect(result.provenance.attempts).toBe(2);
   });
 
+  it("corrects a missing source sentence using validation feedback in its single retry", async () => {
+    const result = await createChapterGenerator({ ...dependencies(), generateText: async (prompt) => {
+      const corrected = prompt.includes("Sentence mappings must cover the full original Chapter");
+      return JSON.stringify({ ...draft, sentences: corrected ? draft.sentences : draft.sentences.slice(0, 2) });
+    } }).generate(input());
+    expect(result.version.text).toBe(chapter.originalText);
+    expect(result.provenance.attempts).toBe(2);
+  });
+
+  it("keeps valid passages while correcting vocabulary and sentence length before generating the Check", async () => {
+    const next = input();
+    next.original.originalText += " He went home.".repeat(120);
+    const completed = new Set<number>();
+    const result = await createChapterGenerator({ ...dependencies(), generateText: async (prompt) => {
+      const { sentences } = JSON.parse(prompt.split("DATA:\n")[1]);
+      const first = sentences[0].originalSentenceIndex;
+      if (completed.has(first)) throw new Error("A successful passage is not available for regeneration");
+      const corrected = first > 0 || (prompt.includes("sentence-length:") && prompt.includes("vocabulary:"));
+      if (corrected) completed.add(first);
+      return JSON.stringify({ ...draft, sentences: corrected ? sentences : [
+        { ...sentences[0], text: "Nick saw a green light and went home with boundless hope." }, ...sentences.slice(1),
+      ] });
+    }, generateCheck: (original, version) => {
+      expect(version.text).not.toContain("boundless");
+      return generateChapterCheck(original, version);
+    } }).generate(next);
+    expect(result.version.text).toBe(next.original.originalText);
+    expect(result.provenance.attempts).toBe(2);
+  });
+
   it("allows an active Word Bank word beyond L1's frequency target when correctly reinforced", async () => {
     const next = input();
     next.original.originalText = "Nick felt vulnerable and could be hurt. He went home. He felt hope.";

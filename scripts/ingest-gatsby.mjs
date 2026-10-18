@@ -50,7 +50,7 @@ async function main() {
       throw new Error("OCI text generation failed. Verify the model, permissions and configuration without logging credentials or request bodies.");
     }
   };
-  const generateText = (prompt, options) => safeChat(prompt, { maxTokens: 4000, signal: options?.signal });
+  const generateText = (prompt, options) => safeChat(prompt, { maxTokens: 4000, json: true, signal: options?.signal });
   const generateCheck = createOciChapterCheckGenerator({ chat: safeChat, fallback: generateChapterCheck, timeoutMs: 15_000 });
   console.log("Extracting contextual metadata from complete Gatsby Chapters 1-4...");
   const content = await ingestGatsby(source, { generateText, budgetMs: 300_000, signal: controller.signal });
