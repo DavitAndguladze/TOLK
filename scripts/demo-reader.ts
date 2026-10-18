@@ -29,8 +29,12 @@ async function main() {
     console.log("Demo Reader reset: no progress, history, Word Bank or flags.");
   } else if (command === "seed" && bookId) {
     const id = await readerId(true);
-    // The returning Reader has already onboarded, so the Library doesn't redirect the demo to /onboarding.
-    if (!(await getReaderPreferences(id))) await setReaderPreferences(id, { readingGoals: [READING_GOALS[0]], favouriteGenres: [FAVOURITE_GENRES[0]] });
+    // The returning Reader has already onboarded, and Gatsby recommendations stay visible on every seed.
+    const preferences = await getReaderPreferences(id);
+    await setReaderPreferences(id, {
+      readingGoals: preferences?.readingGoals ?? [READING_GOALS[0]],
+      favouriteGenres: FAVOURITE_GENRES.filter((genre) => genre === "romance" || genre === "historical-fiction"),
+    });
     const seeded = await seedDemoReader(id, bookId);
     console.log(`Demo Reader seeded on ${bookId}: ${seeded.history.map((h) => `Chapter ${h.chapter} scored ${h.score}`).join(", ")}.`);
     console.log(`Resumes at ${seeded.resumeVersionId}. A Chapter 3 score of ${seeded.minimumPromotingScore ?? "(none)"} or more promotes to L2.`);
