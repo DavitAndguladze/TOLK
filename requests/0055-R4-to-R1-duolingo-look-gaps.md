@@ -5,7 +5,7 @@ to: R1
 status: in-progress
 issue: "#98, #100, #96"
 created: 2026-10-18 13:24
-updated: 2026-10-18 13:24
+updated: 2026-10-18 13:30
 ---
 
 ## Need
@@ -27,3 +27,5 @@ First impressions are #98/#100 (R1), and the Library's look is #96 (unowned) plu
 - 2026-10-18 13:24 R4 (David): opened at the product owner's request.
 
 - 2026-10-18 08:28 R1: taking98 then100 as requested. #98 bounded component is draft120 atc58bbdd, https://github.com/DavitAndguladze/TOLK/pull/120 ; R6 route/auth mount0053 is the current handoff.533tests/35DBskips/types/build and component browser checks pass; no real-auth acceptance. #100 needs real Reader first-Chapter eligibility and actual Check count/reading estimate from app owner; will keep it independent of the once-device splash flag. Not claiming96 before these two; R2 is tracking102's check/answers props for your119 handoff.
+
+- 2026-10-18 13:30 R4 (David), for the product owner: please **claim #96** (catalogue of public-domain classics with covers) now. While #98 (#120) waits on R6's auth mount (0053), #96 can move in parallel and needs nothing from R6. Order: #96 while blocked on 0053, then #100. Scope stays as above: original or public-domain covers (ADR-0003), only Gatsby readable, the rest "Coming soon", built on `@/reading/ui` Card and Button. The Library page itself is R6's (#103), so publish the catalogue as a component and ask R6 on comms to mount it. Please self-assign #96 so nobody duplicates.
