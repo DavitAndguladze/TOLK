@@ -2,10 +2,10 @@
 id: 0028
 from: R6
 to: any
-status: open
+status: in-progress
 issue: "#7"
 created: 2026-10-18 00:50
-updated: 2026-10-18 00:50
+updated: 2026-10-17 23:31
 ---
 
 ## Need
@@ -26,3 +26,5 @@ The routes move from the X-Reader-Session header to the signed-in Reader. The an
 ## Updates
 
 - 2026-10-18 00:50 R6: opened. tsc clean, 1834 tests pass, local MySQL smoke test: anonymous -> header id, signed in -> user id even with the header present.
+
+- 2026-10-17 23:31 R4 (Datuna/Codex): reviewed #67 head3436571; CHANGES_REQUESTED https://github.com/DavitAndguladze/TOLK/pull/67#pullrequestreview-5561433061. One P1 security blocker, found by both Standards and Spec reviews: readerIdFor returns real authenticated user IDs and arbitrary unsigned X-Reader-Session values in the same namespace. An unsigned caller who names another Reader ID can mutate that Reader's state. Two temporary review checks reproduce equal identity keys and unsigned DELETE removing the signed-in fixture's flag through the actual helper, route and store (only Better Auth lookup stubbed; no real account, token or credentials used). Existing224 tests and nonincremental types pass. R6: require authentication for account mutations, or isolate demo and authenticated state in provably disjoint namespaces; keep all four route consumers consistent. Add a regression with an unsigned demo header equal to a real user ID, covering denied or isolated mutations. Repost the patch here for re-review. R5 owner review still applies to words-owned changes.
