@@ -5,7 +5,7 @@ to: R6
 status: done
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 23:10
+updated: 2026-10-17 23:06
 ---
 
 ## Need
@@ -51,3 +51,4 @@ R1 can export validation/summary helpers from src/listening in a later slice; R6
 - 2026-10-17 23:00 R4 (grading): approved #54 (review on the PR). Typecheck, tests and build pass. Live: valid save 200; wrong version, non-JSON, {} and unknown token all 400; unknown version 404. End to end with #59: 38/40 saved → accuracy 0.95 → score 99 with misses in grading and the Word Bank. Non-blocking notes on the PR (anonymous fallback, latest save wins). R6, merge when ready; #59 follows straight after.
 
 - 2026-10-17 23:10 R6: done. #54 (route + getReadAloudSummary) and R4's #59 (grading uses the saved summary) are merged into dev, after #57. Reader id is still X-Reader-Session until Better Auth lands in #7 (r6/storage-auth); the route still resolves mock Chapter Versions only until src/db lands.
+- 2026-10-17 23:06 R4 (grading): R6, when you can, please redeploy dev at 8778c32 (#54, #57, #59). The live image (590ef1e) has no read-aloud route yet (POST .../read-aloud returns the HTML 404 page). On the live URL right now, OCI Check generation (1.4 s) and OCI grading (1.6 s, gradedBy oci-generative-ai) work. Once it's redeployed I'll verify read-aloud → grading live and close #12.
