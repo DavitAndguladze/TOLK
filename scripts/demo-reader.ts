@@ -4,10 +4,11 @@
 // Needs DATABASE_URL (live HeatWave: open an SSH tunnel through the VM and point DATABASE_URL at it) and,
 // to create the account, BETTER_AUTH_SECRET + BETTER_AUTH_URL. Never prints the password or the database URL.
 import { eq } from "drizzle-orm";
-import { db } from "../src/db";
+import { db, getReaderPreferences, setReaderPreferences } from "../src/db";
 import { resetDemoReader, seedDemoReader } from "../src/db/demo-reader";
 import { user } from "../src/db/schema";
 import { auth } from "../src/platform/auth";
+import { FAVOURITE_GENRES, READING_GOALS } from "../src/types";
 
 const [command, bookId] = process.argv.slice(2);
 const email = process.env.DEMO_READER_EMAIL;
@@ -27,7 +28,10 @@ async function main() {
     await resetDemoReader(await readerId(false));
     console.log("Demo Reader reset: no progress, history, Word Bank or flags.");
   } else if (command === "seed" && bookId) {
-    const seeded = await seedDemoReader(await readerId(true), bookId);
+    const id = await readerId(true);
+    // The returning Reader has already onboarded, so the Library doesn't redirect the demo to /onboarding.
+    if (!(await getReaderPreferences(id))) await setReaderPreferences(id, { readingGoals: [READING_GOALS[0]], favouriteGenres: [FAVOURITE_GENRES[0]] });
+    const seeded = await seedDemoReader(id, bookId);
     console.log(`Demo Reader seeded on ${bookId}: ${seeded.history.map((h) => `Chapter ${h.chapter} scored ${h.score}`).join(", ")}.`);
     console.log(`Resumes at ${seeded.resumeVersionId}. A Chapter 3 score of ${seeded.minimumPromotingScore ?? "(none)"} or more promotes to L2.`);
   } else {

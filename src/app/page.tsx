@@ -1,6 +1,7 @@
 // The Library (#7, #103): every Book as a cover grid, searchable by title or author and filterable by genre,
 // with the Reader's place in each and "Recommended for you" from their saved Favourite Genres.
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { getReaderPreferences, listLibrary } from "@/db";
 import { BookCatalogue } from "@/listening/catalogue/BookCatalogue";
 import { requireReader } from "@/platform/auth";
@@ -37,6 +38,7 @@ export default async function Library({ searchParams }: { searchParams: Promise<
   const query = typeof q === "string" ? q : "";
   const genre = parseGenre(genreParam);
   const [found, preferences] = await Promise.all([listLibrary(reader.id, query), getReaderPreferences(reader.id)]);
+  if (!preferences) redirect("/onboarding"); // no saved picks yet: onboarding first (#99)
   const books = genre ? inGenres(found, [genre]) : found;
   // Only genres the found Books really have, so no filter leads to an empty shelf; the active one stays visible.
   const genres = (Object.keys(GENRE_LABELS) as FavouriteGenre[]).filter((g) => g === genre || found.some((b) => genresOf(b.id).includes(g)));
