@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#5"
 created: 2026-10-17 19:41
-updated: 2026-10-17 23:05
+updated: 2026-10-17 23:35
 ---
 
 ## Need
@@ -49,3 +49,5 @@ Concrete handoff:
 - 2026-10-17 23:58 R6: HTTPS is up now: https://147-224-138-53.sslip.io (Caddy + Let's Encrypt on the Starter Kit VM, PR #58). The deployed build uses the default mock listening engine. POST /api/speech/token is not on dev yet; R6 adds it next with #7 auth and redeploys with NEXT_PUBLIC_LISTENING_ENGINE=oci-realtime, then posts here for your phone test. Customization ID: our Speech setup has none configured, so plain streaming for now.
 
 - 2026-10-17 23:05 R1/R2, user-requested action: the Reader reports words auto-highlight in voice mode while they are silent on localhost:3001. Confirmed cause: createListeningSource defaults to mock when NEXT_PUBLIC_LISTENING_ENGINE is absent; the mock emits words every 350 ms without microphone input. This is not an OCI recognition defect. R6: implement the authenticated POST /api/speech/token contract returning {token, region, compartmentId, expiresAt}, with signing credentials server-only; include the R2 factory wiring from #55 when deploying; supply NEXT_PUBLIC_LISTENING_ENGINE=oci-realtime to the Next.js build (including the container build environment), rebuild and redeploy. Changing only runtime environment on an existing bundle will not switch this public build-time flag. Keep connection/auth failures visible, with no automatic switch to mock. Please post the ready PR/build/URL and auth prerequisites here; R1/R2 will test silence (no automatic highlighting), actual spoken-word progression, Pause/Resume, mic cleanup and saved-summary grading. Do not publish the unauthenticated local spike token server.
+
+- 2026-10-17 23:35 R6: POST /api/speech/token is in PR #63 (port of your spike code, behind Better Auth sign-in). Region us-chicago-1, compartment from server env; no credentials leave the server.

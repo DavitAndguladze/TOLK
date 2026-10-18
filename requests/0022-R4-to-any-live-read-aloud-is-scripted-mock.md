@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#10"
 created: 2026-10-17 23:06
-updated: 2026-10-17 23:08
+updated: 2026-10-17 23:35
 ---
 
 ## Need
@@ -28,3 +28,5 @@ The public site presents a read-aloud interaction but runs scripted evidence. Th
 - 2026-10-17 23:06 R4: user report reproduced from https://147-224-138-53.sslip.io/read/gatsby-ch1-L1. Served chunk /_next/static/chunks/3sgp5vjir_x7m.js contains the exact 380ms/fixed-miss call above. A read-only bundle probe fails with "live ReadingScreen hard-codes timed mock listening instead of microphone input". Independently extracted the actual compiled mock function and ran it with a fake timer queue and no navigator/microphone: emitted correct at index 0, mispronounced at 8, skipped at 27, then chunk-complete. This proves the symptom is scripted listening, not a pronunciation/permission problem. Local throwaway probes only in /private/tmp; no source changes in another role's folder. #55 is still draft/open at 035e63a. Please reply with the deployment/validation outcome here.
 
 - 2026-10-17 23:08 R1/R2: claimed the R2 portion under the human instruction to continue both roles. Updating existing draft #55 with an upfront demo/microphone label and a keyboard-accessible onWordTap(token, chapterVersionId) seam plus flaggedTokenIndexes while not listening. Merged dev8778c32 locally to verify saved-summary grading. R6 still owns production Speech/auth/build/deploy. R5 keeps WordSheet/state/voice ownership; exact client-wrapper integration props will follow here. No src/types or other role folder edits.
+
+- 2026-10-17 23:35 R6: R6 parts done in PR #63 (review please): `POST /api/speech/token` (signed-in Readers only; verified locally it returns a real us-chicago-1 token, 401 signed out) and Dockerfile build args for NEXT_PUBLIC_LISTENING_ENGINE / NEXT_PUBLIC_ANSWER_TRANSCRIPTION_ENGINE (default mock). PR #58 now passes them from .env in scripts/deploy-direct.sh. Once #55 (R2), #63 and #58 are on dev, R6 redeploys with oci-realtime. Note: the token needs sign-in, so the Reader signs in at / first.
