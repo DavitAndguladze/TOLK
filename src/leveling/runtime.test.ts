@@ -16,7 +16,7 @@ const policy = { requiredNames: ["Nick"], retainedWords: ["hope"], originalEvide
 
 function fixture() {
   const next = input();
-  let state: GenerationDescriptor = { id: "pending-test", readerId: next.readerId, bookId: "gatsby", chapterNumber: 2, level: 1, baselineVersionId: next.baseline.id, status: "pending", artifact: null };
+  let state: GenerationDescriptor = { id: "pending-test", readerId: next.readerId, bookId: "gatsby", chapterNumber: 2, level: 1, baselineVersionId: next.baseline.id, status: "pending", claimCount: 0, artifact: null };
   let claimed = false, saves = 0, failures = 0;
   let fallback: GeneratedChapter | null = null;
   const store: GenerationStore = {
