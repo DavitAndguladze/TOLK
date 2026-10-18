@@ -1,0 +1,90 @@
+[
+  {
+    "gutenbergId": 11,
+    "sourceUrl": "https://www.gutenberg.org/ebooks/11",
+    "textUrl": "https://www.gutenberg.org/ebooks/11.txt.utf-8",
+    "sourceWordCount": 26630,
+    "sha256": "01b38ea4c710a84bc18d0bd41271a5a1a92b94e97b2812f4dece97d4a694725e",
+    "retrievedOn": "2026-10-18"
+  },
+  {
+    "gutenbergId": 1661,
+    "sourceUrl": "https://www.gutenberg.org/ebooks/1661",
+    "textUrl": "https://www.gutenberg.org/ebooks/1661.txt.utf-8",
+    "sourceWordCount": 104563,
+    "sha256": "922e2a12ccb43a4c9544c260b2166c6ad2097aeb5957faeee113f173bb857cd0",
+    "retrievedOn": "2026-10-18"
+  },
+  {
+    "gutenbergId": 120,
+    "sourceUrl": "https://www.gutenberg.org/ebooks/120",
+    "textUrl": "https://www.gutenberg.org/ebooks/120.txt.utf-8",
+    "sourceWordCount": 68648,
+    "sha256": "5bc08275eacea8640b1aa185c645283bb8c564d7b23df6b03437d229b4fc6ebd",
+    "retrievedOn": "2026-10-18"
+  },
+  {
+    "gutenbergId": 35,
+    "sourceUrl": "https://www.gutenberg.org/ebooks/35",
+    "textUrl": "https://www.gutenberg.org/ebooks/35.txt.utf-8",
+    "sourceWordCount": 32622,
+    "sha256": "2892e919000e17c83e1dac51b30f4675db50536b644d7579fe8a89bb399a9bdc",
+    "retrievedOn": "2026-10-18"
+  },
+  {
+    "gutenbergId": 1342,
+    "sourceUrl": "https://www.gutenberg.org/ebooks/1342",
+    "textUrl": "https://www.gutenberg.org/ebooks/1342.txt.utf-8",
+    "sourceWordCount": 127508,
+    "sha256": "3f6bb9d6f78e0293b56acd4714dd68cb7d6d1d293402031ce9d5a216bcaf9d75",
+    "retrievedOn": "2026-10-18"
+  },
+  {
+    "gutenbergId": 98,
+    "sourceUrl": "https://www.gutenberg.org/ebooks/98",
+    "textUrl": "https://www.gutenberg.org/ebooks/98.txt.utf-8",
+    "sourceWordCount": 136580,
+    "sha256": "d54c2b80d40a40b982cd88852c6180bb944d95acdb028af3d0e01a1750681784",
+    "retrievedOn": "2026-10-18"
+  },
+  {
+    "gutenbergId": 84,
+    "sourceUrl": "https://www.gutenberg.org/ebooks/84",
+    "textUrl": "https://www.gutenberg.org/ebooks/84.txt.utf-8",
+    "sourceWordCount": 75109,
+    "sha256": "7810cd483cffcf2cc8a1d8f0d5807931e69d4f48cd14149b8c76f88af82fead3",
+    "retrievedOn": "2026-10-18"
+  },
+  {
+    "gutenbergId": 345,
+    "sourceUrl": "https://www.gutenberg.org/ebooks/345",
+    "textUrl": "https://www.gutenberg.org/ebooks/345.txt.utf-8",
+    "sourceWordCount": 161376,
+    "sha256": "96cd16eacdbfebae8fdda5591f66e0cc8ee76be18e0cd1aca02bc00615782d28",
+    "retrievedOn": "2026-10-18"
+  },
+  {
+    "gutenbergId": 20203,
+    "sourceUrl": "https://www.gutenberg.org/ebooks/20203",
+    "textUrl": "https://www.gutenberg.org/ebooks/20203.txt.utf-8",
+    "sourceWordCount": 75162,
+    "sha256": "c5be0e49f68f0876be480074b9dc0712a8fdbc7faa7def3acc6765afba9bd128",
+    "retrievedOn": "2026-10-18"
+  },
+  {
+    "gutenbergId": 2680,
+    "sourceUrl": "https://www.gutenberg.org/ebooks/2680",
+    "textUrl": "https://www.gutenberg.org/ebooks/2680.txt.utf-8",
+    "sourceWordCount": 71763,
+    "sha256": "6977474f82a39dd88a4af31a59504821658174d33c177732c54357e4d680b96c",
+    "retrievedOn": "2026-10-18"
+  },
+  {
+    "gutenbergId": 1228,
+    "sourceUrl": "https://www.gutenberg.org/ebooks/1228",
+    "textUrl": "https://www.gutenberg.org/ebooks/1228.txt.utf-8",
+    "sourceWordCount": 154906,
+    "sha256": "362142cb7c6f90850477520cfe2a62fe423ae92ea8eb6d9cd8b30ddb39de60b9",
+    "retrievedOn": "2026-10-18"
+  }
+]
