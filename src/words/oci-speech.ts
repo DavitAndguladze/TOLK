@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { DefaultRequestSigner, Region, SimpleAuthenticationDetailsProvider, type HttpRequest } from "oci-common";
+import { OciQuotaError, takeOciCall } from "../platform/oci-quota";
 import { cacheSuccessful } from "./request-cache";
 
 /** Pronunciation is one word, never a Chapter read aloud for the Reader. */
@@ -20,9 +21,11 @@ export function createOciSpeech(env: NodeJS.ProcessEnv = process.env) {
   const uri = `https://speech.aiservice.${region.regionId}.oci.oraclecloud.com/20220101/actions/synthesizeSpeech`;
   const cached = cacheSuccessful<ArrayBuffer>(32);
 
-  return async (text: string): Promise<ArrayBuffer> => {
+  return async (text: string, readerId?: string): Promise<ArrayBuffer> => {
     if (!isSpeakableWord(text)) throw new RangeError("Choose one word to hear");
     return cached(text, async () => {
+      const wait = readerId ? takeOciCall(readerId) : null; // only a cache miss spends the Reader's budget
+      if (wait) throw new OciQuotaError(wait);
       const request: HttpRequest = {
         method: "POST", uri, headers: new Headers({ "Content-Type": "application/json" }),
         body: JSON.stringify({

@@ -1,5 +1,6 @@
 import { getChapter, getChapterVersion } from "../db";
 import { getReader } from "../platform/auth";
+import { OciQuotaError, ociQuotaResponse } from "../platform/oci-quota";
 import { meaningOf } from "./meaning";
 import { listFlags, removeFlag, saveFlag } from "./mysql-flags";
 import { isSpeakableWord } from "./oci-speech";
@@ -37,19 +38,21 @@ export async function wordMeaning(_req: Request, context: Context) {
   }
   const chapter = await getChapter(access.version.bookId, access.version.chapterNumber);
   if (!chapter) return json({ error: "Chapter not found" }, 404);
-  return json(await defineWord(access.version, index, chapter));
+  return json(await defineWord(access.version, index, chapter, access.reader.id));
 }
 
 export async function speakWord(req: Request) {
-  if (!(await getReader())) return json({ error: "Sign in to hear words." }, 401);
+  const reader = await getReader();
+  if (!reader) return json({ error: "Sign in to hear words." }, 401);
   if (wrongOrigin(req)) return json({ error: "Invalid request origin" }, 403);
   const body: unknown = await req.json().catch(() => null);
   const text = body && typeof body === "object" && "text" in body ? body.text : null;
   if (!isSpeakableWord(text)) return json({ error: "Choose one word to hear." }, 400);
   if (!synthesizeWord) return json({ error: "Pronunciation is unavailable. Try again shortly." }, 503);
   try {
-    return new Response(await synthesizeWord(text), { headers: { "Content-Type": "audio/mpeg", "Cache-Control": "private, no-store" } });
-  } catch {
+    return new Response(await synthesizeWord(text, reader.id), { headers: { "Content-Type": "audio/mpeg", "Cache-Control": "private, no-store" } });
+  } catch (err) {
+    if (err instanceof OciQuotaError) return ociQuotaResponse(err.retryAfter);
     return json({ error: "Pronunciation is unavailable. Try again shortly." }, 502);
   }
 }
