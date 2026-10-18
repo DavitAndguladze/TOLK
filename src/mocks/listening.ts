@@ -25,7 +25,7 @@ export function createMockListeningSource(opts: MockListeningOptions = {}): List
   const summary = (): ReadAloudSummary => {
     const misses: ReadAloudMiss[] = results
       .filter((r) => r.outcome === "mispronounced" || r.outcome === "skipped")
-      .map((r) => ({ word: tokens[r.tokenIndex].normalized, tokenIndex: r.tokenIndex, kind: r.outcome as ReadAloudMiss["kind"] }));
+      .map((r) => ({ word: tokens.find((t) => t.index === r.tokenIndex)!.normalized, tokenIndex: r.tokenIndex, kind: r.outcome as ReadAloudMiss["kind"] }));
     const correct = results.filter((r) => r.outcome === "correct").length;
     return {
       chapterVersionId: versionId,
