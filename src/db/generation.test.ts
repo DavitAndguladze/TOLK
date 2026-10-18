@@ -3,7 +3,7 @@ import { and, eq, inArray } from "drizzle-orm";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { generateChapterCheck } from "../comprehension/chapter-check-generator";
 import vocabulary from "../data/vocabulary/english-2018.json" with { type: "json" };
-import { createChapterGenerator, type FidelityInput, type FidelityReview } from "../leveling/generator";
+import { chapterArtifactDigest, createChapterGenerator, type FidelityInput, type FidelityReview } from "../leveling/generator";
 import { generateGatsbySeed } from "../leveling/seed";
 import type { Chapter, NextChapterInput } from "../types";
 
@@ -86,6 +86,48 @@ describe.skipIf(!testDatabase)("persisted Chapter generation", () => {
     expect(await store.getChapterPolicy(seed.content.chapters[1].id)).toEqual(seed.content.policies[seed.content.chapters[1].id]);
     expect(await store.getFallbackArtifact(bookId, 2, 1)).toEqual(seed.fallbacks[0]);
     expect(await content.getBookProgress(readerId, bookId)).toBeNull();
+  });
+
+  it("keeps the first validated metadata when the same shared content is generated and loaded again", async () => {
+    const { seed, bookId } = await setup();
+    const repeated = structuredClone(await generateGatsbySeed(seed.content, generator()));
+    expect(repeated.fallbacks[0].version.id).toBe(seed.fallbacks[0].version.id);
+    expect(repeated.fallbacks[0].version.generatedAt).not.toBe(seed.fallbacks[0].version.generatedAt);
+    expect(repeated.fallbacks[0].fidelity.digest).not.toBe(seed.fallbacks[0].fidelity.digest);
+    repeated.fallbacks[0].provenance.attempts = 2;
+    await store.loadGatsbySeed(repeated);
+    expect(await store.getFallbackArtifact(bookId, 2, 1)).toEqual(seed.fallbacks[0]);
+    expect(await content.getChapterVersion(seed.sharedChapterOne.version.id)).toEqual(seed.sharedChapterOne.version);
+    expect(await content.getChapterCheck(seed.sharedChapterOne.version.id)).toEqual(seed.sharedChapterOne.check);
+  });
+
+  it("rejects a changed Check under the same identity and atomically rolls back new seed content", async () => {
+    const { seed } = await setup();
+    const incoming = structuredClone(seed);
+    // A new shared identity is valid, but must not become visible if a later artifact collides.
+    const first = incoming.sharedChapterOne;
+    first.version.id = `shared-${randomUUID()}`;
+    first.check.id = `check-${first.version.id}`;
+    first.check.chapterVersionId = first.version.id;
+    first.fidelity.versionId = first.version.id;
+    first.fidelity.digest = chapterArtifactDigest(incoming.content.chapters[0], first.version, first.check);
+    const changed = incoming.fallbacks[0];
+    changed.check.questions[0].prompt = "What did Nick see?";
+    changed.fidelity.digest = chapterArtifactDigest(incoming.content.chapters[1], changed.version, changed.check);
+    await expect(store.loadGatsbySeed(incoming)).rejects.toThrow(/immutable/i);
+    expect(await content.getChapterVersion(first.version.id)).toBeNull();
+    expect(await content.getChapterCheck(first.version.id)).toBeNull();
+    expect(await store.getFallbackArtifact(changed.version.bookId, 2, 1)).toEqual(seed.fallbacks[0]);
+  });
+
+  it("does not reuse an existing artifact whose independent fidelity review is invalid", async () => {
+    const { seed } = await setup();
+    const stored = structuredClone(seed.fallbacks[0]);
+    stored.fidelity.plotPreserved = false;
+    await content.db().update(schema.chapterArtifacts).set({ data: stored }).where(eq(schema.chapterArtifacts.versionId, stored.version.id));
+    const repeated = await generateGatsbySeed(seed.content, generator());
+    await expect(store.loadGatsbySeed(repeated)).rejects.toThrow(/fidelity/i);
+    expect(await store.getFallbackArtifact(stored.version.bookId, 2, 1)).toEqual(stored);
   });
 
   it("stores fallback delivery provenance without rewriting its shared immutable artifact", async () => {

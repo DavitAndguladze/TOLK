@@ -8,7 +8,7 @@ import type { GatsbySeed } from "../leveling/seed";
 import type { IngestedChapterPolicy } from "../leveling/ingestion";
 import type { Level, NextChapterInput } from "../types";
 import { db, getBook, getChapter, getChapterVersion, loadContent } from ".";
-import { chapterArtifacts, chapterChecks, chapterGenerations, chapterPolicies, chapterVersions, chapters } from "./schema";
+import { books, chapterArtifacts, chapterChecks, chapterGenerations, chapterPolicies, chapterVersions, chapters } from "./schema";
 
 export { getChapter, getChapterVersion } from ".";
 
@@ -151,14 +151,14 @@ export async function loadGatsbySource(): Promise<void> {
   });
 }
 
-/** Validate every ready artifact before making a seed visible. Never synthesizes a ready Version. */
+/** Validate both attestations, retain the first identical shared artifact, and publish the entire seed atomically. */
 export async function loadGatsbySeed(seed: GatsbySeed): Promise<void> {
   const artifacts = [seed.sharedChapterOne, ...seed.fallbacks];
   const expected = ["1:1", ...[2, 3].flatMap((chapter) => [1, 2, 3, 4, 5].map((level) => `${chapter}:${level}`)), "4:1", "4:2"];
   if (artifacts.length !== expected.length || new Set(artifacts.map(({ version }) => `${version.chapterNumber}:${version.level}`)).size !== expected.length
     || artifacts.some(({ version }) => !expected.includes(`${version.chapterNumber}:${version.level}`))
     || seed.sharedChapterOne.version.chapterNumber !== 1 || seed.sharedChapterOne.version.level !== 1) throw new Error("Incomplete Gatsby seed artifacts");
-  for (const artifact of artifacts) {
+  function validateShared(artifact: GeneratedChapter): void {
     verifyProvenance(artifact);
     const { version } = artifact;
     const chapter = seed.content.chapters.find((candidate) => candidate.id === version.chapterId);
@@ -166,16 +166,17 @@ export async function loadGatsbySeed(seed: GatsbySeed): Promise<void> {
     if (!chapter || !policy || chapter.bookId !== seed.content.book.id || version.status !== "ready" || version.readerId !== null || version.reinforcedWords.length || artifact.provenance.personalized) throw new Error("Invalid shared seed artifact");
     verifyChapterArtifact(artifact, { original: chapter, level: version.level, readerId: null, wordBank: [], graduatedWords: [], reinforcement: "plain" }, { ...policy, vocabulary });
   }
-  // loadContent is the existing immutable content ingestion seam; detect collisions before publishing artifacts.
-  const existingBook = await getBook(seed.content.book.id);
-  if (existingBook) assertSame(existingBook, seed.content.book);
-  for (const chapter of seed.content.chapters) {
-    const existing = await getChapter(chapter.bookId, chapter.number);
-    if (existing) assertSame(existing, chapter);
-  }
-  await loadContent({ books: [seed.content.book], chapters: seed.content.chapters, versions: artifacts });
+  artifacts.forEach(validateShared);
   await db().transaction(async (tx) => {
+    // These content inserts share the artifact transaction: a later collision must publish nothing.
+    const book = seed.content.book;
+    await tx.insert(books).ignore().values({ id: book.id, title: book.title, author: book.author, data: book });
+    const [storedBook] = await tx.select().from(books).where(eq(books.id, book.id));
+    assertSame(storedBook?.data, book, `Book ${book.id}`);
     for (const chapter of seed.content.chapters) {
+      await tx.insert(chapters).ignore().values({ id: chapter.id, bookId: chapter.bookId, number: chapter.number, data: chapter });
+      const [storedChapter] = await tx.select().from(chapters).where(and(eq(chapters.bookId, chapter.bookId), eq(chapters.number, chapter.number)));
+      assertSame(storedChapter?.data, chapter, `Chapter ${chapter.id}`);
       const data = seed.content.policies[chapter.id];
       if (!data) throw new Error("Missing stored Chapter policy");
       await tx.insert(chapterPolicies).ignore().values({ chapterId: chapter.id, data });
@@ -183,13 +184,20 @@ export async function loadGatsbySeed(seed: GatsbySeed): Promise<void> {
       assertSame(stored?.data, data);
     }
     for (const artifact of artifacts) {
-      const [version] = await tx.select().from(chapterVersions).where(eq(chapterVersions.id, artifact.version.id));
-      const [check] = await tx.select().from(chapterChecks).where(eq(chapterChecks.chapterVersionId, artifact.version.id));
-      assertSame(version?.data, artifact.version);
-      assertSame(check?.data, artifact.check);
-      await tx.insert(chapterArtifacts).ignore().values({ versionId: artifact.version.id, data: artifact });
-      const [stored] = await tx.select().from(chapterArtifacts).where(eq(chapterArtifacts.versionId, artifact.version.id));
-      assertSame(stored?.data, artifact);
+      const { version, check } = artifact;
+      await tx.insert(chapterVersions).ignore().values({ id: version.id, readerId: version.readerId, bookId: version.bookId, chapterNumber: version.chapterNumber, level: version.level, data: version });
+      await tx.insert(chapterChecks).ignore().values({ id: check.id, chapterVersionId: version.id, data: check });
+      await tx.insert(chapterArtifacts).ignore().values({ versionId: version.id, data: artifact });
+      const [stored] = await tx.select().from(chapterArtifacts).where(eq(chapterArtifacts.versionId, version.id));
+      validateShared(stored.data);
+      // A regenerated shared identity may have a new timestamp and a new valid attestation.
+      // Only that timestamp is excluded from reading equality; the whole Check must match.
+      assertSame({ ...stored.data.version, generatedAt: undefined }, { ...version, generatedAt: undefined });
+      assertSame(stored.data.check, check);
+      const [storedVersion] = await tx.select().from(chapterVersions).where(eq(chapterVersions.id, version.id));
+      const [storedCheck] = await tx.select().from(chapterChecks).where(eq(chapterChecks.chapterVersionId, version.id));
+      assertSame(storedVersion?.data, stored.data.version);
+      assertSame(storedCheck?.data, stored.data.check);
     }
   });
 }
