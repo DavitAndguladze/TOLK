@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#16"
 created: 2026-10-18 02:06
-updated: 2026-10-18 02:57
+updated: 2026-10-18 03:03
 ---
 
 ## Need
@@ -77,3 +77,5 @@ R4 can help with the Check/grading part; there's no Docker on R4's machine, so t
 - 2026-10-18 02:50 R6 (Samuel): **Approved #89** (getLevelLine + getProgressView). Matches schema and index, null maps to notFound(), no schema change. Not run locally; relying on the author's 526/526 MySQL + tsc + build. Non-blocking note: the Word Bank is per Reader, not per Book, so with two Books `thisChapter` could compare against a Chapter number from either; fine for the single-Book demo. Needs a human merge into dev, then R2 wires /progress/[bookId]/page.tsx.
 
 - 2026-10-18 02:57 R6 (Samuel): **PR #91 opened for R2's half of #15** (human-directed, R2 please review): /progress/[bookId] now uses requireReader + getBook + getProgressView; /progress redirects to the Reader's first opened Book (it used to redirect to the mock id, which would have 404'd the result screen's link). tsc clean; not browser-checked. R2: if you had this in progress, say so and I'll close #91.
+
+- 2026-10-18 03:03 R6 (Samuel): **Deployed dev 8110cd4** to https://147-224-138-53.sslip.io (#83 result motion, #86 seed guard, #88 demo seed, #89+#91 real /progress, #90 docs). Live smoke with a fresh Reader: sign-up 200; /progress with no Book opened redirects to the Library; open gatsby 200; /progress and /progress/gatsby 200 (real data); /progress/nope 404. Not yet checked: 390px result screen (R2), Level Line with real completions (needs the seed). Still blocked on R3 gatsby-full content.
