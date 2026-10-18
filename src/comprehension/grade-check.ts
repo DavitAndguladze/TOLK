@@ -38,19 +38,28 @@ export async function gradeChapterCheck(
       if (question.kind === "complex-word") {
         // Multiple choice built from the Chapter's Complex Words, so the right answer is known: no AI needed.
         const { meaning } = chapter.complexWords.find((w) => w.word === question.word)!;
-        return answer === meaning
-          ? { questionId: question.id, grade: 2 as const, feedback: "Yes.", rereadSentenceIndex: null }
-          : {
-              questionId: question.id,
-              grade: 0 as const,
-              feedback: `'${question.word}' means ${meaning}.`,
-              rereadSentenceIndex: question.answerSentenceIndex,
-            };
+        if (answer === meaning) {
+          return { questionId: question.id, grade: 2 as const, feedback: "Yes.", rereadSentenceIndex: null, rereadSentence: null };
+        }
+        const missedSentence = version.sentences.find((s) => s.index === question.answerSentenceIndex)!;
+        return {
+          questionId: question.id,
+          grade: 0 as const,
+          feedback: `'${question.word}' means ${meaning}.`,
+          rereadSentenceIndex: question.answerSentenceIndex,
+          rereadSentence: missedSentence.text,
+        };
       }
       const keyPoint = chapter.keyPoints.find((kp) => kp.id === question.keyPointId)!;
       const sentence = version.sentences.find((s) => s.index === question.answerSentenceIndex)!;
       const { grade, feedback } = await deps.keyPointGrader({ question, keyPoint, answer, sentence });
-      return { questionId: question.id, grade, feedback, rereadSentenceIndex: grade < 2 ? sentence.index : null };
+      return {
+        questionId: question.id,
+        grade,
+        feedback,
+        rereadSentenceIndex: grade < 2 ? sentence.index : null,
+        rereadSentence: grade < 2 ? sentence.text : null,
+      };
     }),
   );
 

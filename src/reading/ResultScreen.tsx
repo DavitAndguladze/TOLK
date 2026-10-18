@@ -50,7 +50,8 @@ export function ResultScreen({ result, nextHref }: { result: AnswersResult; next
           <ul className="mt-2 space-y-2">
             {toReview.map((q) => (
               <li key={q.questionId} className="rounded-xl border-l-4 border-gold/70 bg-white/60 px-4 py-3">
-                {q.feedback}
+                <p>{q.feedback}</p>
+                {q.rereadSentence && <p className="mt-1 text-sm text-fog">Reread: “{q.rereadSentence}”</p>}
               </li>
             ))}
           </ul>
