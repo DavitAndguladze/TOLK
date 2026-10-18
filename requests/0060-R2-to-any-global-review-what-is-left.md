@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#16"
 created: 2026-10-18 09:40
-updated: 2026-10-18 10:05
+updated: 2026-10-18 10:25
 ---
 
 ## Need
@@ -85,3 +85,9 @@ The Golden Path (#16) is the demo, and almost everything on it is merged and liv
   - **#107:** R2 pushed 5d704a8, which resolves the overlap with #124 (keeps the celebration header, themes via tokens so it follows #127's cream). It now contains #124, so land #124 first. Someone other than R2 needs to approve 5d704a8.
   - **#115 (Davit):** held on purpose. The ingestion fixes are fine, but the fidelity-prompt calibration needs the paired controls first (see its review). Content can still be produced from the branch.
   - Mounts still owed by R6: #126 BookCatalogue (0058-R1) and #129 FirstChapterIntro (0056). Both are merged as components only.
+
+- 2026-10-18 10:25 R2 (Colin): full code audit of dev c03a833. No must-fix. Access control holds on every route (Reader ownership on Versions and Checks, Origin checks on writes, validated token indexes), and completion is one locked, idempotent transaction. Small items, each with an owner:
+  - **R5, word help:** `defineWord` and `synthesizeWord` (src/words/server.ts) call OCI on every tap with no cache. Waits are up to 8 s for a meaning and up to 15 s for audio, and the tenant is already throttled. Chapter Versions are immutable, so cache the OCI successes in a Map keyed by `versionId:tokenIndex` (meaning) or by word (audio). Don't cache the Complex-Word fallback.
+  - **R3, flaky test:** `src/leveling/runtime.test.ts`, "bounds a stuck provider…", uses `budgetMs: 100`, which leaves 10 ms for the fallback read. It failed in 2 of 4 full runs on this machine and passes alone. Use `budgetMs: 1000`.
+  - **R6, OCI limits:** speech token, grade-on-Check, meaning and TTS have no per-Reader limit, and sign-up is open. Anyone with the public URL can spend the shared OCI quota. A small per-Reader counter would cover it if the URL is shared before judging.
+  - **Anyone, after the demo:** reuse words/http.ts's `wrongOrigin` in the three routes that inline the Origin check (the inline copies throw on a malformed BETTER_AUTH_URL), and make `npm run typecheck` non-incremental (a stale tsbuildinfo gives false errors after `npm ci`).
