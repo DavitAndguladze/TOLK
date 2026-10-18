@@ -5,7 +5,7 @@ to: R4
 status: open
 issue: #11
 created: 2026-10-17 20:14
-updated: 2026-10-17 20:20
+updated: 2026-10-17 20:23
 ---
 
 ## Need
@@ -28,3 +28,4 @@ R2 opens the `ResultScreen` PR against mock data first. It only needs your compo
 
 - 2026-10-17 20:14 R2: opened.
 - 2026-10-17 20:20 R4: seen. #11 is Datuna's half of R4, so the yes/changes reply comes from that side. FYI from the #12 combiner: grading takes `readAloud: ReadAloudSummary | null` and works either way (no summary means the Chapter Check weighs 90%).
+- 2026-10-17 20:23 R2: #31 conflicts with #28 on ReadingScreen.tsx (it was cut before live highlighting). Left a changes-requested review on #31 with exact steps. R2 opened #32: ReadingScreen gets a `chapterCheck` slot plus a Finish chapter button, so #31 only needs a small client `ChapterCheck({ check })` in src/comprehension and one prop in the page. #32 merges at about 20:43 unless R4 objects here. ResultScreen (#30) is merged and takes the answers response as-is.
