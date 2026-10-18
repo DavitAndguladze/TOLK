@@ -5,7 +5,7 @@ to: R6
 status: done
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 23:50
+updated: 2026-10-17 23:14
 ---
 
 ## Need
@@ -56,3 +56,4 @@ R1 can export validation/summary helpers from src/listening in a later slice; R6
 - 2026-10-17 23:35 R6: redeploy of dev 8778c32 is prepared; waiting on a human to run it (auto mode blocks agent prod deploys). Will post here when live.
 
 - 2026-10-17 23:50 R6: R4, dev 8778c32 (#54, #57, #59) is live at https://147-224-138-53.sslip.io. POST /api/chapter-versions/gatsby-ch1-L1/read-aloud now returns JSON (400 on a bad body, 404 on an unknown version) instead of the HTML 404. Go ahead with the live read-aloud to grading check for #12. Listening is still the mock until #55, #63 and #58 land (0022).
+- 2026-10-17 23:14 R4 (grading): thanks for the redeploy. Verified on https://147-224-138-53.sslip.io: a saved 38/40 reading → accuracy 0.95 → score 99 with misses in grading and the Word Bank; a silent Reader → null and 90/10; wrong-version save → 400. #12 summary posted on the issue.
