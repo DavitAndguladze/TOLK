@@ -3,7 +3,7 @@ import { dirname, resolve } from "node:path";
 
 const [outputArgument, ...extra] = process.argv.slice(2);
 if (outputArgument === "--help") {
-  console.log("Usage: npm run ingest:gatsby -- [output.json]\nCreates validated Gatsby content only; never connects to the Reader database. Existing output is not overwritten.");
+  console.log("Usage: npm run ingest:gatsby -- [output.json]\nCreates validated Gatsby content only; never connects to the Reader database. Existing output is not overwritten. Set INGEST_PAUSE_MS to pause before every OCI call.");
 } else {
   main().catch((error) => {
     console.error(error instanceof Error ? error.message : "Gatsby ingestion failed.");
@@ -42,11 +42,15 @@ async function main() {
   const vocabulary = JSON.parse(await readFile(new URL("../src/data/vocabulary/english-2018.json", import.meta.url), "utf8"));
   const controller = new AbortController();
   process.once("SIGINT", () => controller.abort(new Error("Ingestion cancelled; no seed was written.")));
+  const pauseMs = Number(process.env.INGEST_PAUSE_MS ?? 0);
   const safeChat = async (prompt, options) => {
+    if (pauseMs > 0) await new Promise((done) => setTimeout(done, pauseMs));
     try {
       return await chat(prompt, options);
-    } catch {
+    } catch (error) {
       options?.signal?.throwIfAborted();
+      // Status, code and request id only: enough for an OCI support ticket, never the prompt or credentials.
+      console.error(`OCI call failed ${new Date().toISOString()} status=${error?.statusCode} code=${error?.serviceCode} opcRequestId=${error?.opcRequestId}`);
       throw new Error("OCI text generation failed. Verify the model, permissions and configuration without logging credentials or request bodies.");
     }
   };
