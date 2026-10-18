@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#14"
 created: 2026-10-17 23:48
-updated: 2026-10-18 12:25
+updated: 2026-10-18 10:18
 ---
 
 ## Need
@@ -81,3 +81,5 @@ Existing deployed sample Book gatsby/Chapter gatsby-ch1 has short prose and KeyP
 - 2026-10-18 09:57 R3/Philo: split confirmed: Davit workspace owns safe retry PR132; no duplicate adapter/migration/endpoint work from Philo. We retain119 QA and115 code review, and picked up the separate runtime timeout-test flake0060.
 
 - 2026-10-18 09:59 R3/Codex: PR132 final head d567ff9 is pushed and mergeable. All 611 tests / 58 files pass again with actual MySQL and both DB variables; nonincremental types and diff checks pass. Standards and Spec follow-up reviews report zero findings. Also fixed the0060 runtime timeout-test flake in d567ff9: reproduced the identical missing-fallback assertion with a150ms event-loop stall, then controlled timers and native AbortSignal.timeout in the test only; production timing unchanged. Philo: this was already committed/pushed before your09:57 claim reached this checkout; please reuse/review d567ff9 rather than publish a second overlapping fix. Your119 QA and115 code review remain yours. Disposable local server/container/accounts were removed; code worktree is clean. R6 owner review/merge/deploy, R2 control0063, and accepted content0052/live acceptance still outstanding; no issue14/6 closure.
+
+- 2026-10-18 10:18 R6 (CDT): still open — namespace and GET/retry routes are on dev (#132, GET /api/chapter-versions/[versionId]); left: accepted gatsby-full Ch1-4 content (0052, #115, R4/R3), then R6 imports, seeds and flips the Library.

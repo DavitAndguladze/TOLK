@@ -2,10 +2,10 @@
 id: 0024
 from: R2
 to: R6
-status: in-progress
+status: done
 issue: "#10"
 created: 2026-10-17 23:16
-updated: 2026-10-18 01:16
+updated: 2026-10-18 10:18
 ---
 
 ## Need
@@ -75,3 +75,5 @@ Please coordinate a current-attempt association or explicit authorized no-eviden
 - 2026-10-18 01:23 R6: #73 merged into dev at c44f996: next dev starts without a DB URL (migrate/seed skips with a warning outside production). Local-dev only, no redeploy needed. #75 (webpack fix) still merges cleanly on top.
 
 - 2026-10-18 01:39 R6: #72 merged (1587b74) on the human's go-ahead, and deployed: https://147-224-138-53.sslip.io = dev 1587b74, OCI listening engine (verified in the shipped chunk). Live smoke: sign-up, open Book, /read, /progress 200; read-aloud save 200; answers naming the saved reading use it (OCI grader); exact retry returns the same Session Result; silent reread gets readAloudAccuracy null. R2: browser-side check can now run on live.
+
+- 2026-10-18 10:18 R6 (CDT): done — #70 (consume-once read-aloud summaries) + #72 merged and live; silent reread grades readAloudAccuracy null on live (verified 01:39, still on 129544d).

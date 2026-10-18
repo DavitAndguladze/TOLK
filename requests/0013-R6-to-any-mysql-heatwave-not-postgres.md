@@ -2,10 +2,10 @@
 id: 0013
 from: R6
 to: any
-status: open
+status: done
 issue: "#4"
 created: 2026-10-17 21:35
-updated: 2026-10-17 21:58
+updated: 2026-10-18 10:18
 ---
 
 ## Need
@@ -28,3 +28,5 @@ R6 opens a PR into `dev`: ADR-0010 supersedes ADR-0006 (Better Auth and Drizzle 
 - 2026-10-17 21:50 R6: PR #40 into dev has everything: https://github.com/DavitAndguladze/TOLK/pull/40 . For you: after it merges, `npm run db:up` starts MySQL 8 (stop the old Postgres container first: `docker compose -f docker-compose.dev.yml down`). R4: the comments in src/comprehension/answers-store.ts and registry.ts say "Postgres"; reword when you next touch them (your folder, so not changed in #40).
 - 2026-10-17 21:30 R4: no objection from Comprehension. R4 has no SQL or schema yet: answers and Session Results are in-memory until the store lands, and grading is pure. The "Postgres" comments in src/comprehension/answers-store.ts and registry.ts get reworded in R4's next PR, so #37 stays as reviewed.
 - 2026-10-17 21:58 R5: no objection. src/words keeps flags in memory until R6's database lands, nothing Postgres-specific.
+
+- 2026-10-18 10:18 R6 (CDT): done — standing rule, see ADR-0010 (MySQL HeatWave) and #40; #4 closed, every role acknowledged.

@@ -2,10 +2,10 @@
 id: 0026
 from: R5
 to: R6
-status: in-progress
+status: done
 issue: "#9"
 created: 2026-10-17 23:23
-updated: 2026-10-18 02:05
+updated: 2026-10-18 10:18
 ---
 
 ## Need
@@ -51,3 +51,5 @@ R2's #55 word-tap seam is consumed locally in our #43 integration branch. R5 is 
 - 2026-10-18 01:10 R6: redeployed dev 8d9135d (#67 routes act for the signed-in Reader, #70 read-aloud summaries in MySQL, #71, #55 listening integration) to https://147-224-138-53.sslip.io. Verified live: sign-up, open Book persists progress, /read/gatsby-ch1-L1 + /progress/gatsby 200, signed-in read-aloud POST saves to MySQL (200). Full suite 295/295 + typecheck on dev against MySQL. NEXT_PUBLIC_LISTENING_ENGINE not switched to oci-realtime yet.
 
 - 2026-10-18 01:51 R6: #43 MERGED (ee4b6de) at the human's direction without waiting for R2's page review (R2: please still review src/app/read/[versionId]/page.tsx after the fact; R6 fixes forward). Deployed: https://147-224-138-53.sslip.io = dev ee4b6de, OCI listening. Live DB migrated to 0003/0004 on start. Pre-merge on merged tree: 496 passed/11 skipped on MySQL, tsc, build. Live smoke: sign-up, open Book, read page, GET Version 200, flag/unflag persist (MySQL), meaning GET 200 from OCI ("A father is a male parent who has a child."), TTS 200 audio/mpeg 3039B, answers 200, oci-realtime engine. Library still the sample Book (full Gatsby seed not accepted). R4/Datuna: #76 now needs a rebase onto dev ee4b6de; mark ready and R6 reviews 0005 + src/db/index.ts.
+
+- 2026-10-18 10:18 R6 (CDT): done — #43 merged (ee4b6de) and live: flags/meaning/TTS routes on MySQL; #9 closed.

@@ -2,10 +2,10 @@
 id: 0037
 from: R1
 to: R6
-status: in-progress
+status: done
 issue: "#10"
 created: 2026-10-18 00:53
-updated: 2026-10-18 03:06
+updated: 2026-10-18 10:18
 ---
 
 ## Need
@@ -57,3 +57,5 @@ Acceptance after deployment: silence leaves words pending; recognized speech dri
 - 2026-10-18 03:06 R1: R6 reports dev 8110cd4 deployed with #83, #89, #91 and #90; smoke covered sign-up, Book open, and real /progress routes. This is not a fresh current-attempt Chapter Check or next-Chapter run. The last reported full Chapter 1 completion remains bc870bb with nextVersionId null. #5 deployed silence/denial/token, phone, and calibrated latency/accuracy evidence is still missing.
 
 - 2026-10-18 07:46 R1: NEXT_PUBLIC_LISTENING_ENGINE=web-speech Next Webpack production build passed without source changes. Same existing standalone tracing warnings from parent dependencies. This confirms selectable build, not browser runtime/physical-phone acceptance. The deployed no-cookie token-denial401 remains the only new live evidence this slice.
+
+- 2026-10-18 10:18 R6 (CDT): done — dev built with the OCI listening engine and deployed; live = dev 129544d. Remaining #10 acceptance (deployed silence/denial, phone, latency) is R1's verification.

@@ -2,10 +2,10 @@
 id: 0035
 from: R6
 to: any
-status: open
+status: done
 issue: "#7"
 created: 2026-10-18 02:00
-updated: 2026-10-18 03:02
+updated: 2026-10-18 10:18
 ---
 
 ## Need
@@ -66,3 +66,5 @@ Review on GitHub and append a line here with the review link. No changes to src/
 
 - 2026-10-18 02:45 R1/R2: #34/#55 remain merged. Local evidence now includes one exact 33-word Chunk and four measured latency probes; it does not clear deployed silence/denial or phone checks. R2's malformed next-Version response fix is pushed in draft #83; latest dev 92164c7 includes #88. Full real next-Chapter and progress-page binding remain dependent on accepted Chapter 2 and an authenticated Progress API.
 - 2026-10-18 03:02 R1/R2: Item 5 is complete: #34/#55 are merged and the user confirms live microphone voice works. Remaining #5/#10 acceptance is tracked in 0037/0046; local desktop evidence does not replace silence/denial, phone, or deployed current-attempt/next-Chapter checks.
+
+- 2026-10-18 10:18 R6 (CDT): done — all five items landed: #67, #70, #72 (answers route), #43, #34/#55 merged; live dev 129544d with OCI listening. Open asks moved to 0058.

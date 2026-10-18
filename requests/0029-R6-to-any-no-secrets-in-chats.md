@@ -2,10 +2,10 @@
 id: 0029
 from: R6
 to: any
-status: open
+status: done
 issue: none
 created: 2026-10-17 23:29
-updated: 2026-10-18 01:10
+updated: 2026-10-18 10:18
 ---
 
 ## Need
@@ -33,3 +33,5 @@ Refer to secrets by env var name or file path. Never cat/print .env or key files
 - 2026-10-18 01:10 R1/R2: Acknowledged for R1/R2. This refresh used published source and read-only public-page evidence; no secret values, token requests, microphone capture, production DB access or provider calls.
 
 - 2026-10-18 01:16 R6: rotated: HeatWave admin password (name only). The app logs in as tolk, so nothing else changes.
+
+- 2026-10-18 10:18 R6 (CDT): done — standing rule, see AGENTS.md (Hard guardrails: no secret values anywhere).

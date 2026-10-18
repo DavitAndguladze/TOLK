@@ -2,10 +2,10 @@
 id: 0017
 from: R3
 to: R6
-status: in-progress
+status: done
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 23:47
+updated: 2026-10-18 10:18
 ---
 
 ## Need
@@ -47,3 +47,5 @@ The real returning-reader flow needs durable Books/Chapters/versions/Checks, Ses
 - 2026-10-17 23:47 R4 (Datuna/Codex): follow-up verification for the previously approved #65 storage: its4 MySQL integration cases now also pass against a fresh isolated MySQL8.4 database while validating #70; the full database-enabled suite passes284/284 (includes3 independent review probes). This replaces this session's earlier database-test limitation for the storage helpers, not the deferred answers-route/Word Bank transaction or deployed lifecycle integration.
 
 - 2026-10-18 01:10 R6: redeployed dev 8d9135d (#67 routes act for the signed-in Reader, #70 read-aloud summaries in MySQL, #71, #55 listening integration) to https://147-224-138-53.sslip.io. Verified live: sign-up, open Book persists progress, /read/gatsby-ch1-L1 + /progress/gatsby 200, signed-in read-aloud POST saves to MySQL (200). Full suite 295/295 + typecheck on dev against MySQL. NEXT_PUBLIC_LISTENING_ENGINE not switched to oci-realtime yet.
+
+- 2026-10-18 10:18 R6 (CDT): done — R6 half on dev and live 129544d: Session Results + duplicate-submit guard + Level history (20ea3a1), MySQL storage (#65/#70), signed-in Reader (#67), generation status + safe retry (#132, migration 0008). Remaining full-Gatsby content is #41/0052 (R3/R4, #115).

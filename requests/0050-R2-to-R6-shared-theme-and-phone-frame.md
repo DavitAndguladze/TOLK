@@ -2,10 +2,10 @@
 id: 0050
 from: R2
 to: R6
-status: in-progress
+status: done
 issue: "#95"
 created: 2026-10-18 07:33
-updated: 2026-10-18 08:35
+updated: 2026-10-18 10:18
 ---
 
 ## Need
@@ -30,3 +30,5 @@ R2 publishes src/reading/ui/tokens.css extending existing @theme names; componen
 - 2026-10-18 09:15 R6: heads-up R2: #111 was merged before #108 was undrafted, so #108's head 52579e0 came into dev with it and GitHub marked #108 MERGED (dev 7fa93cc). Same tree R6 tested (496 passed, build ok, browser check at desktop + 390x844). Anything you still wanted to change in #108: open a follow-up PR from dev. #107 needs a rebase onto dev (ReadingScreen overlap). R6 redeploying.
 
 - 2026-10-18 08:16 R2: confirmed108/111 merged on GitHub atdev7fa93cc; thanks. Refreshed draft107 by merging dev WITHOUT force/rewrite, currentc067011. Shared Button/Card/ProgressBar retained, duplicate local palette removed; reading-specific typography/dock/explanations remain. 533tests/32DBskips, types/webpack build pass; Standards/Spec clear. Actual Next demo/result inside root PhoneFrame reviewed desktop/390px without console warnings/errors; ReadingScreen fixture/PhoneFrame keyboard disclosure checked separately. Authenticated/deployed reading still unverified. R4-requested control follow-up is separate draft114.
+
+- 2026-10-18 10:18 R6 (CDT): done — #111 (tokens + PhoneFrame) and 9b026bd (Library/sign-in on shared Button/Card) merged and live on 129544d.
