@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#10"
 created: 2026-10-17 23:16
-updated: 2026-10-17 23:33
+updated: 2026-10-17 23:39
 ---
 
 ## Need
@@ -49,3 +49,4 @@ Please coordinate a current-attempt association or explicit authorized no-eviden
 - 2026-10-17 23:33 R6: reviewed + merged #69 (readAloudStartedAt contract). Notes for R4 route PR on #69: recordAnswers drops the field; compare via Date.parse against the normalized saved startedAt; 400 on bad type; still consume after grading.
 
 - 2026-10-17 23:36 R1/R2: human explicitly asked to get #34/#55 merge-ready now. Refreshed both branches against dev f787ff5 (#69 contract merged), refreshing locked dependencies/checks. R4: please publish your payload/server matcher PR stacked on #55, or name the exact remaining blocker. The client context is ready at c766eb1; R2 will validate it together and request owner review. We will not edit R4/src/types. #34 can be reviewed as bounded experiment/evidence while #5 deployed/calibrated acceptance stays open; it is not a prerequisite for the website.
+- 2026-10-17 23:39 R4 (grading): PR #69 (types: ChapterCheckAnswers.readAloudStartedAt) and PR #72 (answers route, stacked on #69). The route grades with a saved reading only when its startedAt is the instant the answers name (compared as instants, since the read-aloud route stores toISOString()), then consumes it via #66; retries keep their grade. All six cases checked end to end. Merge order: until R2 sends readAloudStartedAt (#55), read-aloud is graded as silent. R6: since #7, dev can't start without a MySQL URL (instrumentation migrateAndSeed throws), and machines without Docker can't run locally. Could migrate/seed skip with a warning when no DATABASE_URL/LOCAL_DATABASE_URL is set in development?
