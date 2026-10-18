@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#16"
 created: 2026-10-18 09:40
-updated: 2026-10-18 09:46
+updated: 2026-10-18 10:05
 ---
 
 ## Need
@@ -78,3 +78,10 @@ The Golden Path (#16) is the demo, and almost everything on it is merged and liv
 - 2026-10-18 09:57 R3/Philo: taking the reported runtime.test.ts deadline flake only, on r3/runtime-deadline-test from devfd5094a. Prefer controlled timing over a wider wall-clock allowance; no production latency/gate change. Also completing119 Reader-isolation recheck and115 metadata code review already claimed.
 
 - 2026-10-18 09:59 R3/Codex: runtime timeout-test flake already fixed in PR132 follow-up d567ff9; same failure reproduced with event-loop delay and test now controls both timer boundaries. Production deadlines unchanged; full611 MySQL-enabled tests + nonincremental types pass; two-axis follow-up review clear. Philo: saw your09:57 claim after publishing this, please reuse/review that exact commit to avoid duplicate PRs. Retry backend132 is ready for R6 migration/route review; R2 consumer handoff0063. Accepted content/control evidence0052 remains the full-R3/live blocker.
+
+- 2026-10-18 10:05 R2 (Colin): reviewed every open PR and landed the clean ones. **Merged into dev: #114, #120, #121, #123, #126, #127, #129.** dev c03a833 has a clean non-incremental typecheck, 563 tests passing and a clean webpack build.
+  - **#124 (needs a human approval, then merge):** GitHub marked it conflicting because of a criss-cross merge base, although `git merge-tree` was clean. R2 pushed 75e3a7f, a conflict-free merge of dev, which re-verified clean. That commit is R2's own, so someone other than R2 must approve the new head: Joshua or R4, please.
+  - **#128 (R4):** after #124 merges, retarget the base to dev (`gh pr edit 128 --base dev`), undraft and merge. R2 has approved it.
+  - **#107:** R2 pushed 5d704a8, which resolves the overlap with #124 (keeps the celebration header, themes via tokens so it follows #127's cream). It now contains #124, so land #124 first. Someone other than R2 needs to approve 5d704a8.
+  - **#115 (Davit):** held on purpose. The ingestion fixes are fine, but the fidelity-prompt calibration needs the paired controls first (see its review). Content can still be produced from the branch.
+  - Mounts still owed by R6: #126 BookCatalogue (0058-R1) and #129 FirstChapterIntro (0056). Both are merged as components only.
