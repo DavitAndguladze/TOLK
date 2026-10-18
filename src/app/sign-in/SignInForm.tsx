@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { authClient } from "@/platform/auth-client";
+import { Button } from "@/reading/ui/Button";
 
 const field =
   "mt-1 block min-h-11 w-full rounded-lg border border-hairline bg-white/70 px-3 text-base font-normal text-ink outline-light focus-visible:outline-2";
@@ -79,13 +80,9 @@ export function SignInForm() {
         </p>
       )}
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="min-h-11 w-full rounded-lg bg-light px-4 font-semibold text-white outline-light outline-offset-2 focus-visible:outline-2 disabled:opacity-60"
-      >
+      <Button type="submit" fullWidth loading={pending}>
         {pending ? "One moment…" : creating ? "Create account" : "Sign in"}
-      </button>
+      </Button>
     </form>
   );
 }
