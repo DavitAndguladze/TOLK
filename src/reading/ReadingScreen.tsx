@@ -100,14 +100,15 @@ export function ReadingScreen({
             </ul>
           </>
         )}
-        <div className="mt-8">
-          {chapterCheck ?? (
-            <div className="rounded-2xl border border-hairline bg-white/60 p-5">
-              <p className="font-semibold">Chapter Check</p>
-              <p className="mt-1 text-fog">A few questions about what you just read open here next.</p>
-            </div>
-          )}
-        </div>
+        {chapterCheck ? (
+          // The Chapter Check brings its own side padding.
+          <div className="-mx-6 mt-8">{chapterCheck}</div>
+        ) : (
+          <div className="mt-8 rounded-2xl border border-hairline bg-white/60 p-5">
+            <p className="font-semibold">Chapter Check</p>
+            <p className="mt-1 text-fog">A few questions about what you just read open here next.</p>
+          </div>
+        )}
       </section>
     );
   }
