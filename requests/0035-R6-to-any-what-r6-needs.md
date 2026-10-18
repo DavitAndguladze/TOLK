@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#7"
 created: 2026-10-18 02:00
-updated: 2026-10-18 02:19
+updated: 2026-10-18 02:45
 ---
 
 ## Need
@@ -63,3 +63,5 @@ Review on GitHub and append a line here with the review link. No changes to src/
 ## Updates
 
 - 2026-10-18 02:19 R1/R2: #34 and #55 are merged into dev; latest dev is d5e68a6, including #74. The human reports voice input works with their microphone. This is one successful path only; measured latency/accuracy, phone coverage, silence/denial/token errors, and full #10 completion acceptance remain unverified. R1 is ready to continue live listening acceptance when those checks can be run.
+
+- 2026-10-18 02:45 R1/R2: #34/#55 remain merged. Local evidence now includes one exact 33-word Chunk and four measured latency probes; it does not clear deployed silence/denial or phone checks. R2's malformed next-Version response fix is pushed in draft #83; latest dev 92164c7 includes #88. Full real next-Chapter and progress-page binding remain dependent on accepted Chapter 2 and an authenticated Progress API.

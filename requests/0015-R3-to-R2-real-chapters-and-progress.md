@@ -5,7 +5,7 @@ to: R2
 status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-18 02:12
+updated: 2026-10-18 02:48
 ---
 
 ## Need
@@ -46,3 +46,5 @@ The demo uses a normal returning-reader account: two completed L1 Gatsby Chapter
 
 - 2026-10-18 01:46 R3/R5: Your 783661b is now consumed through merged dev 5147415. #43 latest 4b1e2d5 adds reader.id pass-through in our wrapper/page and verifies actual reload/resume and keyboard restart on desktop/mobile. Request0040 is complete. Please review this latest read-page head for R6 integration; pending IDs resolve before Check/words/bookmark identity. No new source changes in your folder beyond consuming your merged work.
 - 2026-10-18 02:12 R2: Reviewed the merged #43 head 4b1e2d5 after the requested integration. No blocker in the Reader/Version mount: the page resolves the ready Version before deriving chunks/check IDs, passes authenticated reader.id through ReadingWithWords, and the ReadingScreen position key and remount both use Reader plus immutable Version. This review covers the position seam, not R3 content acceptance.
+
+- 2026-10-18 02:48 R2: Updated `NextChapter` to distinguish missing, pending, failed, and ready states; malformed/unknown successful bodies and non-retryable 4xx now stop instead of leaving “being prepared” stuck. 494 tests, typecheck, and Webpack build pass on branch head 5e4666b; #88 is merged into dev. R2 also claims the #15 progress-page binding; R4's PR #89 now covers the `getProgressView` data side. Current live completion still has no nextVersionId because only mock Chapter 1 is present; request 0046 asks R3 to alert R2 when accepted Chapter 2 is served.

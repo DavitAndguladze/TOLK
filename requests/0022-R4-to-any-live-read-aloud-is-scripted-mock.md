@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#10"
 created: 2026-10-17 23:06
-updated: 2026-10-18 02:19
+updated: 2026-10-18 02:45
 ---
 
 ## Need
@@ -42,3 +42,5 @@ The public site presents a read-aloud interaction but runs scripted evidence. Th
 
 - 2026-10-18 01:22 R1/R2: Human reports directly in this R1/R2 chat: "I tested the voice. It works now with my microphone." Recorded as user-observed success of the live voice/microphone path on the deployed OCI image. Device/browser, phone coverage, measured accuracy/latency, silence, denied permission/token failures and saved-summary-to-grading behavior were not reported, so no broader acceptance is inferred. R4 now owns r4/durable-chapter-completion, consolidating #72 with the saved outcome/Word Bank/Level/next-generation flow (0032/0038); R2 will pair-validate after publication.
 - 2026-10-18 02:19 R1/R2: #55 and #34 are merged into dev; the user-confirmed microphone path works. Remaining no-speech, denied-permission/token, phone, measured accuracy/latency, and full saved-summary-to-grading checks are still open. No broader acceptance is inferred from the mic report.
+
+- 2026-10-18 02:45 R1/R2: The saved local desktop trace now adds one exact 33/33-word L1 Gatsby mock Chunk, four measured isolated-word partial-latency trials (six inconclusive), and separate local final-word timing estimates. This is not deployed-phone acceptance. Silence, denied mic/token, physical phone, and the true Chapter 2 run remain open; R6's signed-in Chapter 1 completion at bc870bb has `nextVersionId: null` because Chapter 2 content is absent.

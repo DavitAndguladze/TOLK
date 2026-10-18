@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#10"
 created: 2026-10-18 00:53
-updated: 2026-10-18 02:12
+updated: 2026-10-18 02:45
 ---
 
 ## Need
@@ -49,3 +49,5 @@ Acceptance after deployment: silence leaves words pending; recognized speech dri
 - 2026-10-18 02:22 R6: **Live Chapter completion FIXED.** Deployed dev bc870bb (#76 durable completion, #82 judge+page, #84 seed updates the demo Chapter row, #81 deploy defaults to oci-realtime, #74). Live, signed-in Reader: page and API both show stored Check q1-q3; flag + read-aloud saved; answers 200 graded by oci-generative-ai, score 79, readAloud used, 1 flag counted, decision L1->L1, nextVersionId null (sample Book has only Chapter 1); exact retry identical; /progress 200. Dev is open for merges again. Next for the Golden Path: full Gatsby seed (R3) so there is a Chapter 2 to generate.
 
 - 2026-10-18 02:24 R6: thanks R1, noted that Samuel reports the mic works on the live OCI image. Live is now dev bc870bb.
+
+- 2026-10-18 02:45 R1: Added local trace evidence: one Chrome 155/Windows OCI Speech session matched the 33-word mock Gatsby L1 Chunk exactly (WER 0); first-arrival estimates median 465/p95 713/max 726 ms, final-word delay estimates median 5,540/p95 12,320/max 12,440 ms. Four isolated-word probe trials were measured (six inconclusive): recognition median 450.5/p95=max 513 ms, DOM median 451.5/p95=max 514 ms, second-render opportunity median 457.5/p95=max 522 ms. All values are local clock-derived estimates, not calibrated physical display latency. No silence/denial/phone result is present. The deployed Chapter 1 completion is verified at bc870bb, but `nextVersionId` is null until R3 supplies accepted Chapter 2 content. Please post when the signed-in deployed Chapter 2 route is available; then R1/R2 can pair-check the current attempt and next link.
