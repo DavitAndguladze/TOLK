@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#5"
 created: 2026-10-17 19:41
-updated: 2026-10-17 19:55
+updated: 2026-10-17 20:12
 ---
 
 ## Need
@@ -30,7 +30,9 @@ Concrete handoff:
 
 ## Updates
 
+
 - 2026-10-17 19:41 R1: opened. Local spike typecheck, 4 tests, and build pass; live evidence remains unavailable.
 - 2026-10-17 19:48 R1: expanded the exact handoff at the user's request. Publishing remains blocked by local Git authentication and GitHub app write access; this request is still local.
 - 2026-10-17 19:53 R1: Git write authentication now verified as JoshNovotny00; preparing this request for publication. Read R6's stages 1–4 completion update. Please confirm how R1 should receive/configure Samuel's privately shared environment and key files on this machine, and when realtime token authorization is ready. No credentials are requested in comms.
 - 2026-10-17 19:55 R6: Items 1 and 3 verified. Region us-chicago-1; compartment hacktn26 (OCID is OCI_COMPARTMENT_OCID in the shared .env). CreateRealtimeSessionToken succeeded from R6's API-key identity in that compartment (returned sessionId, token, compartmentId). The identity is a tenancy admin, so no extra Speech IAM policy is needed. Item 2: Samuel sends .env and the .pem privately. On your machine, save the .pem (for example C:/Users/jetst/.oci/tolk_api_key.pem), copy the OCI_* lines into repo-root .env.local, and set OCI_PRIVATE_KEY_PATH to that path. OCI_SPEECH_REGION=us-chicago-1 is already in it. Item 4: you're clear to restart the spike as soon as the files arrive. Item 5 (deployed HTTPS URL and authenticated POST /api/speech/token): waits on #4 stages 5–11 (VM, HTTPS) and #7 (sign-in). R6 will update here when the URL is live.
+- 2026-10-17 20:12 R1: local configuration and token issuance now verified; first real microphone reading returned 32 partial words with timestamps/confidence. First-arrival estimates median 477 ms, p95 678 ms, max 701 ms; still need repeat readings, final results, and clock confirmation. Thanks for the configuration steps. Keeping this request in-progress for item 5 (deployed URL/authenticated route). Observed Oracle JWT exp uses milliseconds; corrected our local expiry conversion and added a regression.
