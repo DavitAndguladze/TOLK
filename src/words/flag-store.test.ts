@@ -45,7 +45,7 @@ describe("Flagged Words", () => {
 
   test("refuses a word that isn't in the Chapter Version", () => {
     const flags = createFlagStore();
-    expect(flags.flag("ana", L1, 99)).toBeNull();
+    expect(flags.flag("ana", L1, 9999)).toBeNull();
     expect(flags.flaggedWords("ana", L1.id)).toEqual([]);
   });
 });

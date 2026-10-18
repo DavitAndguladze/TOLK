@@ -1,10 +1,14 @@
 import { describe, expect, test } from "vitest";
-import { LEVELS } from "../types";
+import { LEVELS, type ChapterVersion } from "../types";
 import { mockChapterVersion } from "../mocks";
 import { chunkChapterVersion, rereadChunk } from "./chunk";
 
 const sentenceIndexes = (chunks: ReturnType<typeof chunkChapterVersion>) =>
   chunks.map((chunk) => chunk.sentences.map((s) => s.index));
+
+/** The mock Chapter's first `count` sentences, for tests that count words in its opening. */
+const opening = (version: ChapterVersion, count: number) =>
+  ({ ...version, sentences: version.sentences.slice(0, count), tokens: version.tokens.filter((t) => t.sentenceIndex < count) });
 
 describe("chunkChapterVersion", () => {
   test("opens the part containing the Check's actual sentence index", () => {
@@ -16,16 +20,16 @@ describe("chunkChapterVersion", () => {
     expect(rereadChunk(chunkChapterVersion(mockChapterVersion(1)), sentence)).toBe(-1);
   });
   test("groups whole sentences into chunks that fit the word budget", () => {
-    // L1 sentences are 9, 5, 9 and 10 words long: the first three fill a budget of 23 exactly.
-    const chunks = chunkChapterVersion(mockChapterVersion(1), 23);
+    // L1's opening sentences are 9, 5, 9 and 10 words long: the first three fill a budget of 23 exactly.
+    const chunks = chunkChapterVersion(opening(mockChapterVersion(1), 4), 23);
 
     expect(sentenceIndexes(chunks)).toEqual([[0, 1, 2], [3]]);
     expect(chunks[1].tokens.map((t) => t.index)).toEqual([23, 24, 25, 26, 27, 28, 29, 30, 31, 32]);
   });
 
   test("gives a sentence longer than the budget a chunk of its own instead of splitting it", () => {
-    // The author's two sentences are 23 and 26 words long.
-    const chunks = chunkChapterVersion(mockChapterVersion(5), 20);
+    // The author's two opening sentences are 23 and 26 words long.
+    const chunks = chunkChapterVersion(opening(mockChapterVersion(5), 2), 20);
 
     expect(sentenceIndexes(chunks)).toEqual([[0], [1]]);
     expect(chunks.map((c) => c.tokens.length)).toEqual([23, 26]);
