@@ -4,16 +4,17 @@ import { connection } from "next/server";
 import { getReader } from "@/platform/auth";
 import { SignInForm } from "./SignInForm";
 
-export default async function SignInPage() {
+export default async function SignInPage({ searchParams }: { searchParams: Promise<{ mode?: string | string[] }> }) {
   await connection(); // per request, so `next build` never prerenders it (no database at build)
   if (await getReader()) redirect("/");
+  const { mode } = await searchParams;
 
   return (
     <main className="min-h-full px-6 pt-[max(3rem,env(safe-area-inset-top))] pb-12">
       <div className="mx-auto max-w-sm">
         <h1 className="font-book text-[2.25rem] leading-tight font-medium">TOLK</h1>
         <p className="mt-1 font-book text-[1.0625rem] text-fog italic">Read aloud, one Level closer to the original.</p>
-        <SignInForm />
+        <SignInForm initialMode={mode === "create" ? "create" : "sign-in"} />
       </div>
     </main>
   );
