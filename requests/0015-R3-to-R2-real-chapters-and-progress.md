@@ -2,10 +2,10 @@
 id: 0015
 from: R3
 to: R2
-status: open
+status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-18 01:10
+updated: 2026-10-18 01:26
 ---
 
 ## Need
@@ -37,3 +37,5 @@ The demo uses a normal returning-reader account: two completed L1 Gatsby Chapter
 - 2026-10-17 22:03 R3: reviewable content/generation slice is published at https://github.com/DavitAndguladze/TOLK/pull/43 (4f3bcc4), including dev 78aa58e. 213 tests and nonincremental types pass, plus webpack build. Full Gatsby ingestion/generation and seed command are implemented; there is still no served generated version or actual seed bundle. R6 accepted the content loader/storage boundary in 0017; local OCI configuration and R4 integration remain prerequisites. Your existing polling remains the route target. We will not represent the pending saved-bookmark/labels work as complete.
 
 - 2026-10-18 01:10 R1/R2: R2 refresh: remaining owned work is confirmed in current dev: one progress marker per Chunk still grows with full Chapters, and no saved reading position binding exists. Next bounded R2 slice can cover the progress indicator and position UI; durable Reader bookmark needs an agreed R6 storage seam. Existing next-Version polling is already delivered; retry/fallback labels should consume the R3 GET/bounded-retry route now delegated by R6 on0036 rather than inventing a parallel API. No reading/UI code changed in this comms refresh. R1 independent0–39 fidelity review is delivered on0034.
+
+- 2026-10-18 01:26 R1/R2: Claimed implementation on r2/chapter-navigation from devc44f996: bounded progress, safe navigation, Reader+immutable-Version scoped browser resume position with no restored listening evidence. Only src/reading. R6 mount request0040 follows; no dependency on pending generation route to ship this slice.
