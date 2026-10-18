@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ensureChapterCheck } from "@/comprehension/registry";
 import { ChapterCheck } from "@/comprehension/ui/ChapterCheck";
 import { getBook, getChapter, getChapterCheck } from "@/db";
 import { resolveReaderVersion } from "@/leveling/reader-version";
@@ -13,8 +14,11 @@ export default async function ReadPage({ params }: { params: Promise<{ versionId
   const reader = await requireReader();
   const { version } = await resolveReaderVersion(reader.id, versionId);
   if (!version) notFound();
+  // The answers route still grades the registry's Check, so show that one when it has it; the stored Check
+  // otherwise. Until durable completion (#76) moves both to the stored Check, they must stay the same Check.
   const [book, chapter, check] = await Promise.all([
-    getBook(version.bookId), getChapter(version.bookId, version.chapterNumber), getChapterCheck(version.id),
+    getBook(version.bookId), getChapter(version.bookId, version.chapterNumber),
+    ensureChapterCheck(version.id).then((registry) => registry ?? getChapterCheck(version.id)),
   ]);
   if (!book || !chapter || !check) notFound();
 
