@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, test } from "vitest";
 import { mockChapterVersion } from "../mocks";
 import { createFlagStore } from "./flag-store";
 
@@ -6,13 +6,13 @@ import { createFlagStore } from "./flag-store";
 const L1 = mockChapterVersion(1);
 
 describe("Flagged Words", () => {
-  it("flagging a word puts it in the Reader's Flagged Words for that Chapter Version", () => {
+  test("flagging a word puts it in the Reader's Flagged Words for that Chapter Version", () => {
     const flags = createFlagStore();
     flags.flag("ana", L1, 8);
     expect(flags.flaggedWords("ana", L1.id)).toEqual(["advice"]);
   });
 
-  it("unflagging a word tapped by mistake takes it back out", () => {
+  test("unflagging a word tapped by mistake takes it back out", () => {
     const flags = createFlagStore();
     flags.flag("ana", L1, 8);
     flags.flag("ana", L1, 5);
@@ -20,7 +20,7 @@ describe("Flagged Words", () => {
     expect(flags.flaggedWords("ana", L1.id)).toEqual(["father"]);
   });
 
-  it("keeps each Reader's flags apart, and each Chapter Version's", () => {
+  test("keeps each Reader's flags apart, and each Chapter Version's", () => {
     const flags = createFlagStore();
     const L2 = mockChapterVersion(2);
     flags.flag("ana", L1, 8);
@@ -32,7 +32,7 @@ describe("Flagged Words", () => {
     expect(flags.flaggedWords("ben", L2.id)).toEqual([]);
   });
 
-  it("lists a word once, however many times or places the Reader tapped it", () => {
+  test("lists a word once, however many times or places the Reader tapped it", () => {
     const flags = createFlagStore();
     flags.flag("ana", L1, 8);
     flags.flag("ana", L1, 8);
@@ -43,7 +43,7 @@ describe("Flagged Words", () => {
     expect(flags.flaggedWords("ana", L1.id)).toEqual(["advice", "had"]);
   });
 
-  it("refuses a word that isn't in the Chapter Version", () => {
+  test("refuses a word that isn't in the Chapter Version", () => {
     const flags = createFlagStore();
     expect(flags.flag("ana", L1, 99)).toBeNull();
     expect(flags.flaggedWords("ana", L1.id)).toEqual([]);
