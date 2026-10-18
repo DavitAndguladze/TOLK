@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { mockChapterVersion } from "../mocks";
-import { createFlagStore } from "./flags";
+import { createFlagStore } from "./flag-store";
 
 // L1 tokens: 0 "When", 1 "I", 2 "was", 3 "young,", 4 "my", 5 "father", 6 "gave", 7 "me", 8 "advice."
 const L1 = mockChapterVersion(1);

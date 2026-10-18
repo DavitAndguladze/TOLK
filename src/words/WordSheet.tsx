@@ -78,14 +78,19 @@ export function WordSheet({ chapterVersionId, token, onClose }: { chapterVersion
             type="button"
             aria-label="Close"
             onClick={() => dialog.current?.close()}
-            className="-mr-3 grid size-12 shrink-0 cursor-pointer place-items-center rounded-full text-fog transition outline-light hover:bg-white/70 hover:text-ink focus-visible:outline-2"
+            className="-mr-3 grid size-12 shrink-0 cursor-pointer place-items-center rounded-full text-fog transition outline-light hover:bg-white/70 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-95"
           >
             <Icon d={CLOSE} />
           </button>
         </div>
         <p aria-live="polite" className="mt-2 min-h-14 text-lg leading-snug text-pretty">
-          {meaning ?? (failed ? "Couldn't reach your Word Bank. Check your connection and tap Flag to try again." : <span className="text-fog">Looking it up…</span>)}
+          {meaning ?? (failed ? null : <span className="text-fog">Looking it up…</span>)}
         </p>
+        {failed && (
+          <p role="alert" className="mt-1 border-l-4 border-gold pl-3 font-semibold text-ink">
+            Couldn't reach your Word Bank. Check your connection and try again.
+          </p>
+        )}
         <div className="mt-5 flex gap-3">
           <button type="button" onClick={() => hear(word)} disabled={!speech} className={`${button} bg-light text-white hover:bg-[#125f3f]`}>
             <Icon d={SPEAKER} />
@@ -98,6 +103,7 @@ export function WordSheet({ chapterVersionId, token, onClose }: { chapterVersion
         </div>
         <p aria-live="polite" className="mt-3 text-sm text-fog">
           {flagged ? "Flagged. It goes to your Word Bank, and you'll meet it again." : "Not flagged. It stays out of your Word Bank."}
+          {!speech && " This browser can't say words aloud."}
         </p>
       </div>
     </dialog>

@@ -9,8 +9,10 @@ const EMPTY: ReadonlySet<number> = new Set();
 const flagged = new Map<string, ReadonlySet<number>>();
 const meanings = new Map<string, string>();
 const listeners = new Set<() => void>();
-// One request at a time, so a quick flag-then-unflag can't reach the server in the wrong order.
-let queue: Promise<unknown> = Promise.resolve();
+// One request at a time per word, so a quick flag-then-unflag can't reach the server in the wrong order.
+const queues = new Map<string, Promise<unknown>>();
+
+const keyOf = (chapterVersionId: string, tokenIndex: number) => `${chapterVersionId}:${tokenIndex}`;
 
 // Same per-browser Reader id as the Chapter Check (src/comprehension/ui/ChapterCheck.tsx) until sign-in (#7).
 function readerSessionId(): string {
@@ -34,15 +36,16 @@ function setFlag(chapterVersionId: string, tokenIndex: number, on: boolean) {
   for (const listener of listeners) listener();
 }
 
-function send<T>(chapterVersionId: string, tokenIndex: number, on: boolean, request: () => Promise<Response>): Promise<T> {
-  const was = flagged.get(chapterVersionId)?.has(tokenIndex) ?? false;
+function send<T>(chapterVersionId: string, tokenIndex: number, on: boolean, url: string, init: RequestInit): Promise<T> {
+  const was = isFlagged(chapterVersionId, tokenIndex);
   setFlag(chapterVersionId, tokenIndex, on);
-  const done = queue.then(async () => {
-    const res = await request();
+  const key = keyOf(chapterVersionId, tokenIndex);
+  const done = (queues.get(key) ?? Promise.resolve()).then(async () => {
+    const res = await fetch(url, { ...init, signal: AbortSignal.timeout(8000) });
     if (!res.ok) throw new Error(`${res.status}`);
     return (await res.json()) as T;
   });
-  queue = done.catch(() => undefined);
+  queues.set(key, done.catch(() => undefined));
   return done.catch((e: unknown) => {
     setFlag(chapterVersionId, tokenIndex, was);
     throw e;
@@ -64,27 +67,25 @@ export function isFlagged(chapterVersionId: string, tokenIndex: number): boolean
 }
 
 export function knownMeaning(chapterVersionId: string, tokenIndex: number): string | undefined {
-  return meanings.get(`${chapterVersionId}:${tokenIndex}`);
+  return meanings.get(keyOf(chapterVersionId, tokenIndex));
 }
+
+const flagsUrl = (chapterVersionId: string) => `/api/chapter-versions/${encodeURIComponent(chapterVersionId)}/flags`;
 
 /** Flags the word and resolves to its in-context meaning. */
 export async function flagWord(chapterVersionId: string, token: Token): Promise<string> {
-  const { meaning } = await send<FlagResponse>(chapterVersionId, token.index, true, () =>
-    fetch(`/api/chapter-versions/${encodeURIComponent(chapterVersionId)}/flags`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Reader-Session": readerSessionId() },
-      body: JSON.stringify({ word: token.normalized, tokenIndex: token.index }),
-    }),
-  );
-  meanings.set(`${chapterVersionId}:${token.index}`, meaning);
+  const { meaning } = await send<FlagResponse>(chapterVersionId, token.index, true, flagsUrl(chapterVersionId), {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-Reader-Session": readerSessionId() },
+    body: JSON.stringify({ word: token.normalized, tokenIndex: token.index }),
+  });
+  meanings.set(keyOf(chapterVersionId, token.index), meaning);
   return meaning;
 }
 
 export async function unflagWord(chapterVersionId: string, token: Token): Promise<void> {
-  await send(chapterVersionId, token.index, false, () =>
-    fetch(`/api/chapter-versions/${encodeURIComponent(chapterVersionId)}/flags/${token.index}`, {
-      method: "DELETE",
-      headers: { "X-Reader-Session": readerSessionId() },
-    }),
-  );
+  await send(chapterVersionId, token.index, false, `${flagsUrl(chapterVersionId)}/${token.index}`, {
+    method: "DELETE",
+    headers: { "X-Reader-Session": readerSessionId() },
+  });
 }
