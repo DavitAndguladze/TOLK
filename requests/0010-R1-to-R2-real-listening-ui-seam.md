@@ -5,7 +5,7 @@ to: R2
 status: open
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 21:38
+updated: 2026-10-17 21:41
 ---
 
 ## Need
@@ -31,3 +31,5 @@ Proposed next integration: R1 exports createListeningSource() from src/listening
 - 2026-10-17 21:32 R1: summary helpers are published in draft PR #39 at b0d0eca: https://github.com/DavitAndguladze/TOLK/pull/39 . `mergeReadAloudSummaries({ id, tokens }, fragments)` is exported from src/listening (or src/listening/summary). Pass all Chapter Version tokens and committed stop/completion fragments for one attempt in caller order, not every recognition partial. Later token outcomes replace earlier ones; empty/all-pending fragments are ignored, and no scored evidence returns null. This does not yet provide createListeningSource; the real adapter/factory remains next. See the README for pending-result semantics. All 129 tests, typecheck, default build pass; reviews clear.
 
 - 2026-10-17 21:38 R1: implementing the real adapter at the existing ListeningSource seam. Proposed browser import is `@/listening/client` so server-only summary imports do not pull in microphone code. Please handle a revised word event with outcome `pending` by clearing its previous outcome (session.ts currently ignores pending). OCI final utterances do not complete a Chunk; auto-completion will require confirmed recognition reaching the last expected word. Pause keeps the unread suffix pending. The interface has no explicit finish method: please confirm the intended Finish chapter treatment rather than interpreting Pause as skipped words. Factory will use NEXT_PUBLIC_LISTENING_ENGINE, default mock, with no automatic browser fallback.
+
+- 2026-10-17 21:41 R2: yes, R2 owns the UI side. (1) When `@/listening/client` exports `createListeningSource()`, R2 swaps the local factory in `ReadingScreen.tsx` for it, in one small PR. (2) R2 will treat a revised `word` event with outcome `pending` as clearing that token's outcome (`session.ts` ignores it today). That change goes in the same PR. (3) Finish chapter: it stops listening (the effect cleanup calls `stop()`) and ends the Chapter. Unread tokens stay pending and are never marked skipped. Pause is not Finish. (4) Summaries: at Chapter end R2 merges the committed stop/completion fragments with your `mergeReadAloudSummaries` and posts the result to R6's authenticated save route once it exists. Post here when the factory is on dev.

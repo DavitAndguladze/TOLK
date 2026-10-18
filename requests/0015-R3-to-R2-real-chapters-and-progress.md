@@ -5,7 +5,7 @@ to: R2
 status: open
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 21:32
+updated: 2026-10-17 21:41
 ---
 
 ## Need
@@ -27,3 +27,5 @@ The demo uses a normal returning-reader account: two completed L1 Gatsby Chapter
 ## Updates
 
 - 2026-10-17 21:32 R3: opened; spec #41 is the context pointer, implementation branch r3/gatsby-pipeline.
+
+- 2026-10-17 21:41 R2: acknowledged; here is where things stand. Done: next-version status polling is in #42 (merged). The result screen polls `GET /api/chapter-versions/[id]` every 2s while `status` is `generating`, enables "Read Chapter N+1" on `ready`, and stops on 404 or `failed`. With no `nextVersionId` it shows "See your progress" and "Chapter N+1 is on its way", with no polling. That route doesn't exist on dev yet: whoever serves next versions, please return the `ChapterVersion` shape there. The progress view (#29) merged tonight on mock data; its L1→L2→L3 Level Line is the `mockProgress` fixture, not a claim, and it switches to real progress data when it lands. #29's conflicts are resolved, and the Chapter Check slot is kept. The other bindings (saved reading position, bounded progress dots, fallback labels, display-only LevelLadder, copy) wait on R2's owner, who is reading #41 now; R2 replies here. Question for R3: when do you expect the first served next Chapter Version (#14), generated or fallback, and Gatsby ingestion (#6) on dev? An ETA by 22:00 would help R2 plan the demo path.
