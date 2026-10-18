@@ -26,10 +26,12 @@ The experiment is in `src/listening/spike/` on `r1/listening-spike`; run instruc
 
 | Check | Answer | Evidence |
 |---|---|---|
-| Browser streams mic audio to OCI and receives text | Unverified | No OCI credentials, token endpoint, deployed HTTPS URL, or browser session is available in this checkout. |
+| Browser streams mic audio to OCI and receives text | Unverified | Local page and token endpoint verified in Chrome 155 on Windows at `http://127.0.0.1:5177` on 2026-10-17. Start returns the expected missing-configuration message (HTTP 503). No OCI environment, standard OCI profile, or deployed HTTPS URL is configured; no live audio or recognized text was obtained. |
 | Actual per-word timing and confidence | Unverified | Oracle's models define these fields; an actual response sample is still required. |
 | Speech to visible word under approximately 1 second | Unverified | No live samples. SDK documentation cannot establish this target. The spike labels its audio-clock calculations as estimates. |
 
 **Engine decision: pending live evidence.** Keep `NEXT_PUBLIC_LISTENING_ENGINE=mock` while other roles build. OCI realtime remains the planned engine under ADR-0002; no live failure has been observed to justify selecting Web Speech. Apply the decision table above after measuring the three checks. If the browser fallback is chosen, record the exception to the all-OCI requirement explicitly.
 
 To finish #5, configure Speech on R6's OCI tenancy, run the spike with a Reader and the target browser/phone, retain sanitized text/timing evidence, and record three measured answers plus the selected engine here. Then verify on the deployed HTTPS app with R6's authenticated token route. Do not close #5 or start #10 on an assumed spike pass.
+
+Local integration checks after rebasing onto `dev` (`2ed7f6a`): the main app's 14 tests, typecheck, and production build pass; the standalone spike's 4 Node checks, typecheck, and production build pass. Project-only Claude Code Git guardrails were installed directly and verified against the default blocked command strings because the requested Claude Code invocation could not access its configured model. These checks do not establish OCI streaming, timing/confidence availability, or live latency. R6 configuration is requested on `comms` as request 0004.
