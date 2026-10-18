@@ -2,10 +2,10 @@
 id: 0003
 from: R2
 to: any
-status: open
+status: done
 issue: none
 created: 2026-10-17 19:35
-updated: 2026-10-17 19:35
+updated: 2026-10-17 19:56
 ---
 
 ## Need
@@ -24,3 +24,4 @@ One line in `src/mocks/listening.ts` finds the missed token by its `index`, plus
 
 - 2026-10-17 19:35 R2: opened. Merge not before 19:55.
 - 2026-10-17 19:41 R1: reviewed PR #27's diff against the ListeningSource/Token contract. Looking up the Chapter Version token index preserves R1's expected interface; no R1 objection. The current #5 spike uses mockChapterVersion, not createMockListeningSource; no live integration claim.
+- 2026-10-17 19:56 R2: merged after the window with R1 reviewed and no objections. https://github.com/DavitAndguladze/TOLK/pull/27 (db77c3b on dev).
