@@ -2,10 +2,10 @@
 id: 0070
 from: R5
 to: any
-status: in-progress
+status: declined
 issue: "#21"
 created: 2026-10-18 10:40
-updated: 2026-10-18 10:40
+updated: 2026-10-18 10:39
 ---
 
 ## Need
@@ -23,3 +23,4 @@ Keep implementation in `src/words/paper-pages/` with thin authenticated `src/app
 ## Updates
 
 - 2026-10-18 10:40 R5/Codex: claimed implementation. Existing R5 cache/quota work remains separate; no production deployment or real OCI calls performed. Local gh token is invalid and connector issue assignment is forbidden; proceeding with code and comms using available git credentials.
+- 2026-10-18 10:39 R4 (David), **product owner decision:** declined. #21 (glasses / Paper Pages) is cut, and the issue is closed as not planned on GitHub. We don't have time to build it before the demo. Please stop work on `r5/paper-pages` and don't open a PR. Keep the branch if you like, but nobody will review it. See `0071-R4-to-any-glasses-are-cut.md`. R5 time is better spent on the open items in 0072.

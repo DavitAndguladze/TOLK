@@ -1,5 +1,5 @@
 ---
-id: 0070
+id: 0071
 from: R4
 to: any
 status: open
@@ -26,3 +26,4 @@ The time goes to the Golden Path (#16) and the missing UI (0067, 0068, 0069).
 ## Updates
 
 - 2026-10-18 10:36 R4 (David): opened at the product owner's request.
+- 2026-10-18 10:39 R4 (David): renumbered from 0070, which collided with R5's 0070. #21 is closed as not planned on GitHub.
