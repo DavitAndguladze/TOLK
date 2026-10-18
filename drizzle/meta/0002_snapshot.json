@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "1a132510-ca4a-4dd6-bee3-6fffa95b01a2",
+  "id": "17617e62-5720-4775-b5b0-1df1e723bcb0",
   "prevId": "4233aada-31ca-433f-af5e-6b16c3ca5c58",
   "tables": {
     "account": {
@@ -263,51 +263,6 @@
       "uniqueConstraints": {},
       "checkConstraint": {}
     },
-    "chapter_artifacts": {
-      "name": "chapter_artifacts",
-      "columns": {
-        "version_id": {
-          "name": "version_id",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "data": {
-          "name": "data",
-          "type": "json",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "chapter_artifacts_version_id_chapter_versions_id_fk": {
-          "name": "chapter_artifacts_version_id_chapter_versions_id_fk",
-          "tableFrom": "chapter_artifacts",
-          "tableTo": "chapter_versions",
-          "columnsFrom": [
-            "version_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "chapter_artifacts_version_id": {
-          "name": "chapter_artifacts_version_id",
-          "columns": [
-            "version_id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "checkConstraint": {}
-    },
     "chapter_checks": {
       "name": "chapter_checks",
       "columns": {
@@ -351,189 +306,6 @@
           ]
         }
       },
-      "checkConstraint": {}
-    },
-    "chapter_generations": {
-      "name": "chapter_generations",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "reader_id": {
-          "name": "reader_id",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "book_id": {
-          "name": "book_id",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "chapter_number": {
-          "name": "chapter_number",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "level": {
-          "name": "level",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "baseline_version_id": {
-          "name": "baseline_version_id",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "status": {
-          "name": "status",
-          "type": "varchar(16)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'pending'"
-        },
-        "artifact_version_id": {
-          "name": "artifact_version_id",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "claim_token": {
-          "name": "claim_token",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp(3)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(now())"
-        }
-      },
-      "indexes": {
-        "chapter_generations_reader_baseline": {
-          "name": "chapter_generations_reader_baseline",
-          "columns": [
-            "reader_id",
-            "baseline_version_id"
-          ],
-          "isUnique": true
-        }
-      },
-      "foreignKeys": {
-        "chapter_generations_reader_id_user_id_fk": {
-          "name": "chapter_generations_reader_id_user_id_fk",
-          "tableFrom": "chapter_generations",
-          "tableTo": "user",
-          "columnsFrom": [
-            "reader_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "chapter_generations_baseline_version_id_chapter_versions_id_fk": {
-          "name": "chapter_generations_baseline_version_id_chapter_versions_id_fk",
-          "tableFrom": "chapter_generations",
-          "tableTo": "chapter_versions",
-          "columnsFrom": [
-            "baseline_version_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "chapter_generations_artifact_version_id_chapter_versions_id_fk": {
-          "name": "chapter_generations_artifact_version_id_chapter_versions_id_fk",
-          "tableFrom": "chapter_generations",
-          "tableTo": "chapter_versions",
-          "columnsFrom": [
-            "artifact_version_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "chapter_generations_id": {
-          "name": "chapter_generations_id",
-          "columns": [
-            "id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
-      "checkConstraint": {}
-    },
-    "chapter_policies": {
-      "name": "chapter_policies",
-      "columns": {
-        "chapter_id": {
-          "name": "chapter_id",
-          "type": "varchar(191)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "data": {
-          "name": "data",
-          "type": "json",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "chapter_policies_chapter_id_chapters_id_fk": {
-          "name": "chapter_policies_chapter_id_chapters_id_fk",
-          "tableFrom": "chapter_policies",
-          "tableTo": "chapters",
-          "columnsFrom": [
-            "chapter_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "chapter_policies_chapter_id": {
-          "name": "chapter_policies_chapter_id",
-          "columns": [
-            "chapter_id"
-          ]
-        }
-      },
-      "uniqueConstraints": {},
       "checkConstraint": {}
     },
     "chapter_versions": {
@@ -659,8 +431,8 @@
       "uniqueConstraints": {},
       "checkConstraint": {}
     },
-    "flagged_words": {
-      "name": "flagged_words",
+    "read_aloud_summaries": {
+      "name": "read_aloud_summaries",
       "columns": {
         "reader_id": {
           "name": "reader_id",
@@ -676,57 +448,30 @@
           "notNull": true,
           "autoincrement": false
         },
-        "token_index": {
-          "name": "token_index",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
         "data": {
           "name": "data",
           "type": "json",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "flagged_words_reader_id_user_id_fk": {
-          "name": "flagged_words_reader_id_user_id_fk",
-          "tableFrom": "flagged_words",
-          "tableTo": "user",
-          "columnsFrom": [
-            "reader_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "flagged_words_chapter_version_id_chapter_versions_id_fk": {
-          "name": "flagged_words_chapter_version_id_chapter_versions_id_fk",
-          "tableFrom": "flagged_words",
-          "tableTo": "chapter_versions",
-          "columnsFrom": [
-            "chapter_version_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {
-        "flagged_words_reader_id_chapter_version_id_token_index_pk": {
-          "name": "flagged_words_reader_id_chapter_version_id_token_index_pk",
+        "read_aloud_summaries_reader_id_chapter_version_id_pk": {
+          "name": "read_aloud_summaries_reader_id_chapter_version_id_pk",
           "columns": [
             "reader_id",
-            "chapter_version_id",
-            "token_index"
+            "chapter_version_id"
           ]
         }
       },

@@ -19,15 +19,22 @@
     {
       "idx": 2,
       "version": "5",
-      "when": 1792297932007,
-      "tag": "0002_words-and-generation",
+      "when": 1792297952876,
+      "tag": "0002_read_aloud_summaries",
       "breakpoints": true
     },
     {
       "idx": 3,
       "version": "5",
-      "when": 1792298170230,
-      "tag": "0003_generation-delivery-provenance",
+      "when": 1792299152008,
+      "tag": "0003_words-and-generation",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1792299152009,
+      "tag": "0004_generation-delivery-provenance",
       "breakpoints": true
     }
   ]

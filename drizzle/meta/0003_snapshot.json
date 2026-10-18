@@ -1,8 +1,6 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "7eaa6a6c-1a0e-4263-8f63-632bfdc497a5",
-  "prevId": "1a132510-ca4a-4dd6-bee3-6fffa95b01a2",
   "tables": {
     "account": {
       "name": "account",
@@ -420,13 +418,6 @@
           "notNull": false,
           "autoincrement": false
         },
-        "provenance": {
-          "name": "provenance",
-          "type": "json",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp(3)",
@@ -734,6 +725,53 @@
             "reader_id",
             "chapter_version_id",
             "token_index"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "read_aloud_summaries": {
+      "name": "read_aloud_summaries",
+      "columns": {
+        "reader_id": {
+          "name": "reader_id",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "chapter_version_id": {
+          "name": "chapter_version_id",
+          "type": "varchar(191)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "data": {
+          "name": "data",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "read_aloud_summaries_reader_id_chapter_version_id_pk": {
+          "name": "read_aloud_summaries_reader_id_chapter_version_id_pk",
+          "columns": [
+            "reader_id",
+            "chapter_version_id"
           ]
         }
       },
@@ -1083,12 +1121,13 @@
   },
   "views": {},
   "_meta": {
-    "schemas": {},
     "tables": {},
     "columns": {}
   },
   "internal": {
     "tables": {},
     "indexes": {}
-  }
+  },
+  "id": "b5f2cc06-afd1-4194-b02d-822ce1509b98",
+  "prevId": "17617e62-5720-4775-b5b0-1df1e723bcb0"
 }
