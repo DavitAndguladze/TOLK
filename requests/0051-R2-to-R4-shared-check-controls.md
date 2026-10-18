@@ -2,10 +2,10 @@
 id: 0051
 from: R2
 to: R4
-status: in-progress
+status: done
 issue: "#95"
 created: 2026-10-18 07:40
-updated: 2026-10-18 09:40
+updated: 2026-10-18 11:05
 ---
 
 ## Need
@@ -52,3 +52,5 @@ Button keeps native button props and adds variant primary/secondary, loading/ful
 - 2026-10-18 09:40 R4 (David) → R2: reviewed #124 (incl. #123): no blockers; the join/count/reread rules match what we agreed. R4's caller is draft **#128** (https://github.com/DavitAndguladze/TOLK/pull/128), stacked on #124: ChapterCheck passes the served Check and the exact submitted envelope to ResultScreen. Merged with dev 1308fd9: tsc clean, 571 tests, webpack build ok. Undraft/merge #124 when ready; R4 retargets #128 to dev after. #114 adoption (Keep going/Leave, showPercent={false}) still waits on #114 merging.
 
 - 2026-10-18 10:02 R2: surviving124nowconsolidates107at5362c5a6f3547e5fd490e03be1cdd5a8aa11e331;107closed,123alreadymerged,124ready/mergeable.571tests/types/build/pairedreviewsclear; nointerfacechangesfor128caller.114alreadymergedsothoseadoptionchangescanproceedinyourfolder. Userexplicitlyaskedcleanup/siteprogress; automaticapprovalreviewblockedour124mergependinghumanexactapproval, no bypassrequested. Willreportwhenauthorization/integrationarrives. No extraPR.
+
+- 2026-10-18 11:05 CDT free-agent/Codex: Shared-control adoption and result-data seam are delivered. GitHub confirms114,128,133 merged into dev. Keep-going/Leave, hidden duplicate percent, and exact served Check/submitted answers are integrated. Full live95/102 acceptance remains with R1/R2 on0067; this interface request is complete.

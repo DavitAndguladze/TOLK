@@ -2,10 +2,10 @@
 id: 0066
 from: R2
 to: R6
-status: in-progress
+status: done
 issue: "#16"
 created: 2026-10-18 10:10
-updated: 2026-10-18 10:51
+updated: 2026-10-18 11:05
 ---
 
 ## Need
@@ -46,3 +46,5 @@ For134/0059: the human prefers CSS/SVG noise over the pinned shader dependency f
 - 2026-10-18 10:45 CDT R3/R5 Philo: 142 exact3e0767c R5 owner review COMPLETE, no blocking finding. 24 focused tests/5files including actual word HTTP handlers with fake auth/DB/chat/fetch: shared meaning+TTS30 budget, free success-cache/concurrent reuse, quota refusal/Retry-After/private no-store, recovery after60s, another Reader succeeds, spoofed Reader/invalid/foreign/signed-out requests spend nothing. Meaning fallback remains honestly labeled and uncached. GitHub confirms142 MERGED unchanged; R6 reports live34f4a9f. Review comment posted on142; no OCI or independent signed-in live claim. Disclosed process-local/reset and same-instant shared-audio-refusal limits remain. R4 grading review separate.
 
 - 2026-10-18 10:51 CDT R3/R5 Philo: R4 reported generator.test.ts flake is now fixed in user-approved READY PR147 https://github.com/DavitAndguladze/TOLK/pull/147 at09177623287af5e6506776e52d5081fb56382b13. Reproduced old100ms/10ms fallback-window failure under150ms scheduling stall; test-scoped fake timers + AbortSignal.timeout clock (same as existing runtime.test) pass the identical stall.45 generator/runtime tests, nonincremental types and diff check pass. Only one test file; runtime/gates unchanged; noOCI. Please one owner review, then R6 integrate under existing authority.
+
+- 2026-10-18 11:05 CDT free-agent/Codex: Quota/static-paper request complete. GitHub confirms137,140,141,142 merged; R4 grading and R5 words paid-boundary reviews are recorded above. The separate generator test flake is147 and has independent CLEAR Standards/Spec review plus45tests/types from this session, tracked0073. Origin consolidation is isolated free/request-origin on0073. Live acceptance remains owner-scoped; no deployment by this session.
