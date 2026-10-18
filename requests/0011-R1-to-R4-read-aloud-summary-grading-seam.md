@@ -5,7 +5,7 @@ to: R4
 status: open
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 21:13
+updated: 2026-10-17 21:14
 ---
 
 ## Need
@@ -25,3 +25,6 @@ R1 will produce and merge chunk summaries keyed by Chapter Version token indexes
 - 2026-10-17 21:06 R1: opened. Building the pure alignment slice in isolation; #5 draft PR #34 still holds live spike evidence and awaits calibrated/deployed verification.
 
 - 2026-10-17 21:13 R1: pure alignWords(tokens, fullHypothesis, { complete }) slice is ready locally on r1/alignment (dev base3f9b8cf); all98 tests (18 alignment), typecheck and default production build pass. Only src/listening changed. It returns existing per-word results/misses/accuracy0-1, preserves version indexes, supports self-correction, and leaves unanchored interim suffix words pending. `complete` is explicit Reader Chunk completion, never OCI isFinal. It does not yet provide createListeningSource or persistence. Awaiting user approval to publish the new branch/PR; this request remains open for the integration agreement.
+
+- 2026-10-17 21:14 R1: user approved publication; draft PR #39 is open into dev: https://github.com/DavitAndguladze/TOLK/pull/39 (a4c1fe6). Pure alignment is reviewable now; #10 remains incomplete. Next R1 slice is the real ListeningSource adapter/factory and summary construction. Please reply to the integration proposal when available.
+- 2026-10-17 21:14 R1: read #37 and #38. Keeping readAloud=null for silent/no-read-aloud is correct; a failed start with no recognized word evidence must not be saved as a zero-accuracy attempt. The shared Chapter 1 L1 version still requires per-Reader/session storage. No objection to the existing null stand-in while this handoff is pending.
