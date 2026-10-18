@@ -97,21 +97,55 @@ comparison across a ~900-sentence candidate in one pass, no matter how the promp
 the lesson in this doc and the `reasoning` field idea (schema-only, not yet applied), not the
 specific wording tried here.
 
+## Path 1 was tested too: one call per Key Point instead of one call per chapter
+
+Rather than reviewing the whole ~900-sentence candidate in one call, each Key Point was checked
+separately: just the original and served text for a small window of sentences around it (the
+cited sentence plus 3 before it, not the whole chapter), one focused call per Key Point, asking
+specifically whether that one claim still holds and whether any fact got negated.
+
+**This is a real improvement, not a wash.** Run against the deliberately broken candidate (the
+same "another woman" → "no other woman" plant from above): the per-Key-Point check **caught it,
+twice, in two separate runs** — `gatsby-ch1-kp4: preserved=false`, with reasoning that correctly
+named the exact negation. The whole-chapter review, in both its original and rewritten forms,
+missed this same error entirely. Smaller scope does make the model notice more.
+
+It isn't perfect, though, and the imperfections are worth recording honestly:
+
+- With only the single cited sentence as context (no surrounding window), it false-positived on
+  one Key Point (kp5, the green light) because the claim depends on the *preceding* few sentences
+  ("after seeing Gatsby outside"), which weren't in view. Widening the window to 3 sentences of
+  context fixed this.
+- Even with that fix, one Key Point (kp5 again) was **not stable across runs**: one run said
+  `preserved: true`; a later run said `preserved: false`, while its own reasoning text argued
+  the opposite conclusion from its own boolean at the end of the same response ("...so upon closer
+  inspection, it is actually preserved" — on a response that returned `preserved: false`). Same
+  prompt, same input, temperature 0. This is noise, not a bug, in the sense that the model itself
+  isn't fully consistent run to run.
+- 300 output tokens was too tight and caused one outright truncation failure; 500 was enough in
+  this sample but isn't a verified safe margin.
+
+None of this was wired into the codebase — it's a validated *design direction*, tested live and
+compared head-to-head with what exists, not a drop-in replacement. `generator.ts` is unchanged.
+
 ## What this means for #6
 
-This candidate's content quality is still not the blocker. But the fix isn't a quick prompt edit
-either — the evidence now points at a deeper issue: a single holistic review call may not reliably
-catch small, serious errors in a long chapter, and loosening it to stop false-positiving on style
-risks false-negativing on substance. Two honest paths forward, neither decided here:
+This candidate's content quality is still not the blocker. The per-Key-Point approach is
+meaningfully more reliable than a single whole-chapter call — it's the first version of this gate,
+in any form, to actually catch a planted plot error — but "meaningfully more reliable" is not the
+same as "reliable enough to gate real content" given the observed run-to-run flip on one Key
+Point. Three honest paths forward, none decided here:
 
-1. **A structurally different fidelity check** — e.g. one call per Key Point/sentence-group instead
-   of one call for the whole chapter, so the model has less to track per call and a planted error
-   has nowhere to hide among hundreds of other sentences. Untested; would need its own live
-   experiment before trusting it.
+1. **Build out the per-Key-Point check for real**, with a wider or smarter context window, a
+   larger token budget, and a way to handle disagreement across repeated calls (e.g. require two
+   consistent runs before trusting a `true`, or always re-run a `false` once to confirm) — then
+   validate it on more than one planted error and more than two runs before trusting it.
 2. **Accept that Level 1 can't reliably pass an LLM-based fidelity gate** and treat structural
    validation plus careful, independent human/agent review (what slices 1–10 already did, and what
    caught this project's actual errors so far) as the real acceptance bar for Level 1, reserving
    the model gate for Levels closer to the original where tone has more room to survive.
+3. **Some combination**: use the per-Key-Point check as one more signal alongside human review,
+   not as an automated pass/fail gate on its own, given its demonstrated inconsistency.
 
 This is a product and architecture decision, not something to patch with another prompt tweak
 and hope.
