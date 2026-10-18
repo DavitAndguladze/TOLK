@@ -134,6 +134,7 @@ describe("combineGrading", () => {
     });
   });
 
+  // Silent reading fallback (#18): the Reader skipped reading aloud, so no ReadAloudSummary exists.
   describe("without a read-aloud summary", () => {
     test("weighs the Chapter Check 90% and Flagged Words 10%", () => {
       // Check 4/6 → 60, no flags → 10.
