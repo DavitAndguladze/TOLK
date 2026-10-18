@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { nextChapterPollResponse } from "./result";
+import controls from "./ui/DesignSystem.module.css";
 
 const POLL_MS = 2000;
 
-const primary =
-  "flex min-h-13 items-center justify-center rounded-2xl bg-light px-4 font-semibold text-white outline-light transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98]";
+const primary = `${controls.button} ${controls.primary} ${controls.fullWidth}`;
 
 /** The result screen's way on: Chapter N+1 once its Chapter Version is ready, the progress view until then. */
 export function NextChapter({ versionId, href, chapterNumber }: { versionId: string | null; href: string | null; chapterNumber: number }) {

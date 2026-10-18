@@ -8,6 +8,12 @@ export interface Chunk {
   tokens: Token[];
 }
 
+/** Resolve a reread link only within the served immutable Chapter Version. */
+export function rereadChunk(chunks: readonly Chunk[], sentence: string | null): number {
+  if (sentence === null || !/^\d+$/.test(sentence)) return -1;
+  return chunks.findIndex(chunk => chunk.sentences.some(item => item.index === Number(sentence)));
+}
+
 /** Greedy: add whole sentences until the next one would pass `maxWords`. A longer sentence gets a chunk to itself. */
 export function chunkChapterVersion(version: Pick<ChapterVersion, "sentences" | "tokens">, maxWords = 30): Chunk[] {
   const chunks: Chunk[] = [];

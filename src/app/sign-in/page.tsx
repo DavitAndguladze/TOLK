@@ -9,7 +9,7 @@ export default async function SignInPage() {
   if (await getReader()) redirect("/");
 
   return (
-    <main className="min-h-dvh px-6 pt-[max(3rem,env(safe-area-inset-top))] pb-12">
+    <main className="min-h-full px-6 pt-[max(3rem,env(safe-area-inset-top))] pb-12">
       <div className="mx-auto max-w-sm">
         <h1 className="font-book text-[2.25rem] leading-tight font-medium">TOLK</h1>
         <p className="mt-1 font-book text-[1.0625rem] text-fog italic">Read aloud, one Level closer to the original.</p>
