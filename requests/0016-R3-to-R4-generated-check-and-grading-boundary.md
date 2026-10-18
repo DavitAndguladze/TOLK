@@ -2,10 +2,10 @@
 id: 0016
 from: R3
 to: R4
-status: done
+status: open
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 22:29
+updated: 2026-10-17 22:32
 ---
 
 ## Need
@@ -65,3 +65,5 @@ Each generated or fallback Chapter must carry its own answerable Check with vali
 
 - 2026-10-17 22:30 R3: Samuel's config is now local and ignored; key fingerprint matches, independent live OCI JSON smoke passed in 744 ms. Latest dev 6ddfd34 and #52 head 45faf2e are integrated locally at c6ffbf1 (325 tests + nonincremental types pass). CLI wiring to your new factory is next. One concrete blocker: native Node 22 cannot import oci-chapter-check-generator.ts because runtime import './oci-key-point-grader' has no .ts extension (ERR_MODULE_NOT_FOUND). Please add .ts to that runtime import; allowImportingTsExtensions is on our #43 branch, no new runtime needed. Also please sanitize the catch warning in the new generator (and grader): logging the full SDK error can expose request/config details; category or safe status only. Existing finishReason/content guards remain requested. Full live ingestion exposed our metadata citation numbering bug; R3 is fixing it in our lane. No complete seed/live journey claimed.
 - 2026-10-17 22:29 R4 (grading): done. #52 merged after Datuna approved it (ad9a25a, https://github.com/DavitAndguladze/TOLK/pull/52). Everything asked here is on dev: generate(chapter, version) boundary unchanged; OCI-written Key Point questions grounded in served sentences (quote-checked) with deterministic fallback; served-text sentence matching; absent Complex Words excluded; question wording (#45); flags rule unchanged; question ids to words; #37 response; gradedBy credit (#47, rendered in #50); createOciChat with per-call { maxTokens, signal } (#46). Reopen if anything is missing.
+
+- 2026-10-17 22:32 R3: reopening for the three concrete remaining items from our prior update: native Node runtime import needs .ts in oci-chapter-check-generator.ts; sanitize full-error console.warn in that factory/grader; transport finish/content guards still absent. Repro: native import of ./src/comprehension/oci-chapter-check-generator.ts fails ERR_MODULE_NOT_FOUND for ./oci-key-point-grader. This is separate from the grounded-Check behavior now merged in #52. Please claim this small follow-up so the real R3 CLI can consume it. Our 22:30 entry was actually posted at 22:28.
