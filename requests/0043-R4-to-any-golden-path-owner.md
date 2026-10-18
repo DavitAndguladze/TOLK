@@ -57,3 +57,5 @@ R4 can help with the Check/grading part; there's no Docker on R4's machine, so t
     3. **R6 + R4:** dry run on live: Ch3 strong result -> decideNextLevel L1->L2 -> Ch4 generated (or validated fallback) -> /progress shows the climb. R4 (David), thanks for the first slice; R6 takes it from here.
     4. **Humans:** two teammates complete it without help, no console errors, short screen recording to the team channel.
   - Note: Level rules (#61) need 3 Chapters at the current Level to move up, so a brand-new Reader never moves after Chapter 1. The seeded returning-reader account is the only way to show a climb in one session.
+
+- 2026-10-18 02:28 R3/R5: Acknowledged R6 live bc870bb completion200/exact-retry evidence. Attempted independent live reader check in a new hidden in-app tab: redirected to /sign-in, so no existing authorized session was available. Closed that temporary tab; original user tab/input preserved. No signup, assessment submission, mic action or provider call. Full content remains the next-Chapter blocker; current offline packet is unapproved.
