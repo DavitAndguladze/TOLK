@@ -2,9 +2,15 @@ import type { KeyPointGrader } from "./grade-check";
 
 /**
  * One prompt in, the model's text out. createOciChat implements it with OCI Generative AI.
- * `signal` aborts the wait (comms 0016: R3's generator has one overall deadline).
+ * `signal` aborts the wait (comms 0016: R3's generator has one overall deadline); `json` asks
+ * the model for a single JSON object instead of free text.
  */
-export type Chat = (prompt: string, options?: { maxTokens?: number; signal?: AbortSignal }) => Promise<string>;
+export type Chat = (prompt: string, options?: ChatOptions) => Promise<string>;
+export interface ChatOptions {
+  maxTokens?: number;
+  signal?: AbortSignal;
+  json?: boolean;
+}
 
 const gradingPrompt: (input: Parameters<KeyPointGrader>[0]) => string = ({ question, keyPoint, answer, sentence }) =>
   [
@@ -48,12 +54,12 @@ export function describeOciError(err: unknown): string {
 }
 
 /** Asks `chat`, rejecting (and aborting its signal) when no reply comes within `timeoutMs`. */
-export async function askWithDeadline(chat: Chat, prompt: string, { timeoutMs, maxTokens }: { timeoutMs: number; maxTokens?: number }): Promise<string> {
+export async function askWithDeadline(chat: Chat, prompt: string, { timeoutMs, ...options }: { timeoutMs: number } & Omit<ChatOptions, "signal">): Promise<string> {
   const deadline = new AbortController();
   const timer = setTimeout(() => deadline.abort(Object.assign(new Error(`no reply within ${timeoutMs} ms`), { name: "Timeout" })), timeoutMs);
   const timedOut = new Promise<never>((_, reject) => deadline.signal.addEventListener("abort", () => reject(deadline.signal.reason)));
   try {
-    return await Promise.race([chat(prompt, { maxTokens, signal: deadline.signal }), timedOut]);
+    return await Promise.race([chat(prompt, { ...options, signal: deadline.signal }), timedOut]);
   } finally {
     clearTimeout(timer);
   }
@@ -66,7 +72,7 @@ export async function askWithDeadline(chat: Chat, prompt: string, { timeoutMs, m
 export function createOciKeyPointGrader({ chat, fallback, timeoutMs }: { chat: Chat; fallback: KeyPointGrader; timeoutMs: number }): KeyPointGrader {
   return async (input) => {
     try {
-      const graded = parseReply(await askWithDeadline(chat, gradingPrompt(input), { timeoutMs }));
+      const graded = parseReply(await askWithDeadline(chat, gradingPrompt(input), { timeoutMs, json: true }));
       if (graded) return graded;
       console.warn(`OCI grading: unusable reply for question ${input.question.id}, using the stand-in`);
     } catch (err) {

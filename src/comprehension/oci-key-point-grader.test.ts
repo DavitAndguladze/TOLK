@@ -76,6 +76,16 @@ describe("createOciKeyPointGrader", () => {
     });
   });
 
+  test("asks OCI for a JSON object, not free text", async () => {
+    let json: boolean | undefined;
+    await gradeWith(async (_, options) => {
+      json = options?.json;
+      return '{"grade": 2, "feedback": "Yes."}';
+    });
+
+    expect(json).toBe(true);
+  });
+
   test("asks about the Key Point, with the sentence that answers it and the Reader's answer", async () => {
     let prompt = "";
     await gradeWith(async (p) => {
