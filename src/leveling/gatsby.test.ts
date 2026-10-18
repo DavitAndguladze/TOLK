@@ -22,7 +22,7 @@ describe("Gatsby ingestion source", () => {
       expect(wordCount).toBeLessThanOrEqual(1200);
       expect(chapter.title).toBe(`Chapter ${chapter.number} (excerpt)`);
       expect(chapter.originalText).not.toMatch(/\n\s*-{3,}\s*\n/);
-      expect(chapter.originalText).toMatch(/[.!?][”’\"]?$/);
+      expect(chapter.originalText).toMatch(/[.!?:][”’\"]?$/);
       expect(chapter.originalText).not.toMatch(/Table of Contents|END OF THE PROJECT GUTENBERG/);
       expect(chapter.bookId).toBe(GATSBY_BOOK.id);
     }

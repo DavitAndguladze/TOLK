@@ -10,7 +10,7 @@ export const GATSBY_BOOK: Book = {
 
 export type OriginalChapter = Omit<Chapter, "keyPoints" | "complexWords">;
 
-const EXCERPT_TARGET_WORDS = 1_000;
+const EXCERPT_TARGET_WORDS = 800;
 const EXCERPT_MIN_WORDS = 800;
 const EXCERPT_MAX_WORDS = 1_200;
 
