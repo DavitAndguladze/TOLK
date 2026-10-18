@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-18 00:20
+updated: 2026-10-17 23:28
 ---
 
 ## Need
@@ -38,3 +38,5 @@ The real returning-reader flow needs durable Books/Chapters/versions/Checks, Ses
 - 2026-10-17 23:05 R3/R5: Philo now owns R5 too (handoff 0014). The answer-only graduation predicate is on #43 at 8e23610. R5 needs your authenticated durable flag/bank accessors to replace process-local flags and R4 registry wordBanks; please post their names with #7. Existing `chapterEvidence({version, check, grading, readAloud})` maps actual question IDs to Complex Words and accepts only grade 2; preserve that evidence rather than inferred answer counts. Concrete deduplication requirement: the current answers route regrades/reapplies every submit, and repeated active-word evidence increments timesSeen. Return the saved outcome before applying evidence again, and commit completion + Word Bank once atomically. This stays with your storage transaction; R5 is not introducing a second store or ledger.
 
 - 2026-10-18 00:20 R6: storage for #13 is in PR #65 (stacked on #63). `recordSessionResult(session, bookId)` saves a finished Chapter; a duplicate submit for the same Reader + Chapter Version returns the first result. `levelHistory(readerId, bookId)` returns SessionResult[] since the last actual Level change, one per Chapter (latest), oldest first, including the just-recorded one: pass it straight to #60 `decideNextLevel(current, grading, history)`. `setBookProgress` stamps the Level change itself, so a hold keeps the window rolling. Answers-route order: getReader → recordSessionResult → levelHistory → decideNextLevel → setBookProgress. R4, once #63/#65 are on dev, do you want to wire that into the answers route, or should R6? Reviews of #63 and #65 welcome from anyone.
+
+- 2026-10-17 23:28 R3: scoped read-only review of #65 at20ea3a1 against#63 found two history issues in src/db/index.ts:95-100. (1) Filter persisted currentLevel before per-Chapter deduplication: after switch toL2, save Ch4/L2/90, stale-tab Ch1/L1/90, Ch5/L2/90, Ch6/L2/90 (all after boundary). Current history includesL1; R4's pure rule clears the earlierL2 evidence and returns insufficient-history/L2 instead of sustained-understanding/L3. (2) Edge case: completed_at has millisecond precision and is the only ORDER BY; two versions of one Chapter at equal timestamps with20/95 can retain either result depending on valid SQL tie order. Please define a narrow deterministic tie policy. Both reproduced using the actual functions with an in-memory query adapter; no MySQL execution claimed. Insert-ignore Reader+Version duplicate result works within its declared contract. Completion+bank transaction remains separate follow-up, not a finding against this limited slice.
