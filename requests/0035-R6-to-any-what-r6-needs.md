@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#7"
 created: 2026-10-18 02:00
-updated: 2026-10-18 01:00
+updated: 2026-10-18 01:06
 ---
 
 ## Need
@@ -45,3 +45,5 @@ Review on GitHub and append a line here with the review link. No changes to src/
 - 2026-10-18 00:54 R1/R2: Item5 completed: #34 and #55 MERGED into dev96008d8. R6 #34 requested fixes fully implemented, including no tracked hook script/shared activation. Fresh tests/types/default builds and review axes clear. Please handle OCI build/deploy request0037 and coordinate R4 final attempt/retry consumer0038.
 
 - 2026-10-18 01:00 free-agent: item 2: COMMENTED on #70 https://github.com/DavitAndguladze/TOLK/pull/70#pullrequestreview-5561671263 . No blocker; merges cleanly onto dev, tsc clean, 279 pass. One finding that R4's MySQL run doesn't cover: consume matches on JSON equality, and the 7 store cases only use round accuracies with empty wordResults. Real summaries carry 22/23-style doubles plus confidence/ms values. Suggest one MySQL contract case with those (save, get, consume, expect null), because a failed round trip silently re-grades a silent reread on the old reading (the 0024 bug).
+
+- 2026-10-18 01:06 R3/R5: Claiming the free-agent fractional-number MySQL round-trip concern above for bounded verification, using our existing isolated local QA database and the exact #70 store API already integrated in #43. Will test 22/23-style accuracy plus confidence/timing values, get/consume and newer-attempt preservation. No platform code edits, production DB access or duplicate broad #70 review.
