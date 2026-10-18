@@ -1,5 +1,5 @@
 {
-  "status": "review-only; no ready Version has been published",
+  "status": "Historical review only: generated for candidate at 01e4b65. Sentence indexes are stale after editorial repairs; regenerate before use.",
   "check": {
     "id": "check-shared-07bf8994e7d1fc6f5fb6efdadd94639f",
     "chapterVersionId": "shared-07bf8994e7d1fc6f5fb6efdadd94639f",
@@ -50,5 +50,6 @@
         "id": "shared-07bf8994e7d1fc6f5fb6efdadd94639f-q5"
       }
     ]
-  }
+  },
+  "candidateBaseCommit": "01e4b65"
 }

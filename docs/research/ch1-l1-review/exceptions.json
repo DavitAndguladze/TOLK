@@ -1793,6 +1793,96 @@
       "originalSentenceIndex": 360,
       "quote": "have been the end of a dock",
       "reason": "Identifies the possible dock at the green light."
+    },
+    {
+      "word": "preyed",
+      "originalSentenceIndex": 14,
+      "quote": "No—Gatsby turned out all right at the end; it is what preyed on Gatsby, what foul dust floated in the wake of his dreams that temporarily closed out my interest in the abortive sorrows and short-winded elations of men.",
+      "reason": "Preserves that an external force harmed Gatsby, rather than blaming his wishes."
+    },
+    {
+      "word": "foul",
+      "originalSentenceIndex": 14,
+      "quote": "No—Gatsby turned out all right at the end; it is what preyed on Gatsby, what foul dust floated in the wake of his dreams that temporarily closed out my interest in the abortive sorrows and short-winded elations of men.",
+      "reason": "Preserves the negative, corrupting quality of the dust metaphor."
+    },
+    {
+      "word": "dust",
+      "originalSentenceIndex": 14,
+      "quote": "No—Gatsby turned out all right at the end; it is what preyed on Gatsby, what foul dust floated in the wake of his dreams that temporarily closed out my interest in the abortive sorrows and short-winded elations of men.",
+      "reason": "Preserves the source image of harmful dust following Gatsby’s dreams."
+    },
+    {
+      "word": "floated",
+      "originalSentenceIndex": 14,
+      "quote": "No—Gatsby turned out all right at the end; it is what preyed on Gatsby, what foul dust floated in the wake of his dreams that temporarily closed out my interest in the abortive sorrows and short-winded elations of men.",
+      "reason": "Preserves the motion of the dust in the source metaphor."
+    },
+    {
+      "word": "wake",
+      "originalSentenceIndex": 14,
+      "quote": "No—Gatsby turned out all right at the end; it is what preyed on Gatsby, what foul dust floated in the wake of his dreams that temporarily closed out my interest in the abortive sorrows and short-winded elations of men.",
+      "reason": "Preserves the image of something harmful trailing Gatsby’s dreams."
+    },
+    {
+      "word": "dreams",
+      "originalSentenceIndex": 14,
+      "quote": "No—Gatsby turned out all right at the end; it is what preyed on Gatsby, what foul dust floated in the wake of his dreams that temporarily closed out my interest in the abortive sorrows and short-winded elations of men.",
+      "reason": "Preserves Gatsby’s imagined future in the original dust metaphor."
+    },
+    {
+      "word": "interest",
+      "originalSentenceIndex": 14,
+      "quote": "No—Gatsby turned out all right at the end; it is what preyed on Gatsby, what foul dust floated in the wake of his dreams that temporarily closed out my interest in the abortive sorrows and short-winded elations of men.",
+      "reason": "Preserves Nick’s temporary loss of interest rather than making a permanent judgment."
+    },
+    {
+      "word": "sorrows",
+      "originalSentenceIndex": 14,
+      "quote": "No—Gatsby turned out all right at the end; it is what preyed on Gatsby, what foul dust floated in the wake of his dreams that temporarily closed out my interest in the abortive sorrows and short-winded elations of men.",
+      "reason": "Preserves the unsuccessful sorrows contrasted with short-lived joy."
+    },
+    {
+      "word": "well-to-do",
+      "originalSentenceIndex": 15,
+      "quote": "My family have been prominent, well-to-do people in this Middle Western city for three generations.",
+      "reason": "Preserves comfortable family wealth without overstating it as extreme riches."
+    },
+    {
+      "word": "generations",
+      "originalSentenceIndex": 15,
+      "quote": "My family have been prominent, well-to-do people in this Middle Western city for three generations.",
+      "reason": "Preserves the exact three-generation duration without inventing a fourth generation."
+    },
+    {
+      "word": "grandfather’s",
+      "originalSentenceIndex": 16,
+      "quote": "The Carraways are something of a clan, and we have a tradition that we’re descended from the Dukes of Buccleuch, but the actual founder of my line was my grandfather’s brother, who came here in fifty-one, sent a substitute to the Civil War, and started the wholesale hardware business that my father carries on today.",
+      "reason": "Preserves the founder’s exact relationship to Nick."
+    },
+    {
+      "word": "great-uncle",
+      "originalSentenceIndex": 17,
+      "quote": "I never saw this great-uncle, but I’m supposed to look like him—with special reference to the rather hard-boiled painting that hangs in father’s office.",
+      "reason": "Preserves the exact family relationship instead of a generic uncle."
+    },
+    {
+      "word": "painting",
+      "originalSentenceIndex": 17,
+      "quote": "I never saw this great-uncle, but I’m supposed to look like him—with special reference to the rather hard-boiled painting that hangs in father’s office.",
+      "reason": "Preserves the specified painted portrait rather than an unspecified picture."
+    },
+    {
+      "word": "hangs",
+      "originalSentenceIndex": 17,
+      "quote": "I never saw this great-uncle, but I’m supposed to look like him—with special reference to the rather hard-boiled painting that hangs in father’s office.",
+      "reason": "Preserves the portrait’s placement in the office, not a scene of someone at work."
+    },
+    {
+      "word": "office",
+      "originalSentenceIndex": 17,
+      "quote": "I never saw this great-uncle, but I’m supposed to look like him—with special reference to the rather hard-boiled painting that hangs in father’s office.",
+      "reason": "Preserves the location of the portrait in Nick’s father’s office."
     }
   ]
 }

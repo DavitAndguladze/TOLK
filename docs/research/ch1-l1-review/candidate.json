@@ -74,7 +74,24 @@
     "humanReviewed": false,
     "ociCheckPerformed": false,
     "independentFidelityPerformed": false,
-    "policyImplementationChanged": false
+    "policyImplementationChanged": false,
+    "overnightRepairs": [
+      {
+        "date": "2026-10-18",
+        "originalSentenceIndexes": [
+          5,
+          14,
+          15,
+          16,
+          17
+        ],
+        "reviewedSourceRange": [
+          0,
+          19
+        ],
+        "independentAcceptance": false
+      }
+    ]
   },
   "draft": {
     "level": 1,
@@ -145,19 +162,19 @@
         "originalSentenceIndex": 4
       },
       {
-        "text": "I often did not ask for their secret talk.",
+        "text": "I did not ask for most of their secret talk.",
         "originalSentenceIndex": 5
       },
       {
-        "text": "I would act as if I wanted to sleep.",
+        "text": "I would act as if I had gone to sleep.",
         "originalSentenceIndex": 5
       },
       {
-        "text": "Sometimes I would act busy, or laugh at them.",
+        "text": "Sometimes I would act busy, or make fun of them.",
         "originalSentenceIndex": 5
       },
       {
-        "text": "I did this when a secret talk was coming.",
+        "text": "I did this when I knew secret talk was coming.",
         "originalSentenceIndex": 5
       },
       {
@@ -269,27 +286,39 @@
         "originalSentenceIndex": 13
       },
       {
-        "text": "No, Gatsby was all right in the end.",
+        "text": "No, Gatsby turned out all right in the end.",
         "originalSentenceIndex": 14
       },
       {
-        "text": "It was what hurt Gatsby that made me feel bad.",
+        "text": "But something preyed on Gatsby.",
         "originalSentenceIndex": 14
       },
       {
-        "text": "Bad things came from what he wanted from life.",
+        "text": "Foul dust floated in the wake of his dreams.",
         "originalSentenceIndex": 14
       },
       {
-        "text": "For a while, other people did not seem interesting.",
+        "text": "That made me lose interest in the sorrows of men.",
         "originalSentenceIndex": 14
       },
       {
-        "text": "They had short happy times and lost their hope.",
+        "text": "Their sorrows came to nothing.",
         "originalSentenceIndex": 14
       },
       {
-        "text": "My family has been rich and important here for years.",
+        "text": "Their happy times did not last.",
+        "originalSentenceIndex": 14
+      },
+      {
+        "text": "I lost interest in those happy times too.",
+        "originalSentenceIndex": 14
+      },
+      {
+        "text": "This was only for a while.",
+        "originalSentenceIndex": 14
+      },
+      {
+        "text": "My family has been well-to-do and important here.",
         "originalSentenceIndex": 15
       },
       {
@@ -297,11 +326,7 @@
         "originalSentenceIndex": 15
       },
       {
-        "text": "My parents and their parents made their home here.",
-        "originalSentenceIndex": 15
-      },
-      {
-        "text": "The parents before them did too.",
+        "text": "This has been true for three generations.",
         "originalSentenceIndex": 15
       },
       {
@@ -313,19 +338,19 @@
         "originalSentenceIndex": 16
       },
       {
-        "text": "But our real start was with an uncle.",
+        "text": "But my grandfather’s brother really started our family line.",
         "originalSentenceIndex": 16
       },
       {
-        "text": "He was the uncle of my father.",
+        "text": "He came here in '51.",
         "originalSentenceIndex": 16
       },
       {
-        "text": "He came here in 1851.",
+        "text": "He sent another man to the Civil War.",
         "originalSentenceIndex": 16
       },
       {
-        "text": "He paid another man to fight in the Civil War.",
+        "text": "That man went in his place.",
         "originalSentenceIndex": 16
       },
       {
@@ -341,11 +366,11 @@
         "originalSentenceIndex": 16
       },
       {
-        "text": "My father is still the boss today.",
+        "text": "My father is still in charge of that business.",
         "originalSentenceIndex": 16
       },
       {
-        "text": "I never saw that uncle.",
+        "text": "I never saw this great-uncle.",
         "originalSentenceIndex": 17
       },
       {
@@ -353,11 +378,11 @@
         "originalSentenceIndex": 17
       },
       {
-        "text": "My father has a picture of him at work.",
+        "text": "The painting hangs in the office of my father.",
         "originalSentenceIndex": 17
       },
       {
-        "text": "He looks rather hard in that picture.",
+        "text": "He looks like a hard man in that painting.",
         "originalSentenceIndex": 17
       },
       {
