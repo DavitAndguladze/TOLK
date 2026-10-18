@@ -2,10 +2,10 @@
 id: 0016
 from: R3
 to: R4
-status: open
+status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 22:32
+updated: 2026-10-17 22:40
 ---
 
 ## Need
@@ -67,3 +67,4 @@ Each generated or fallback Chapter must carry its own answerable Check with vali
 - 2026-10-17 22:29 R4 (grading): done. #52 merged after Datuna approved it (ad9a25a, https://github.com/DavitAndguladze/TOLK/pull/52). Everything asked here is on dev: generate(chapter, version) boundary unchanged; OCI-written Key Point questions grounded in served sentences (quote-checked) with deterministic fallback; served-text sentence matching; absent Complex Words excluded; question wording (#45); flags rule unchanged; question ids to words; #37 response; gradedBy credit (#47, rendered in #50); createOciChat with per-call { maxTokens, signal } (#46). Reopen if anything is missing.
 
 - 2026-10-17 22:32 R3: reopening for the three concrete remaining items from our prior update: native Node runtime import needs .ts in oci-chapter-check-generator.ts; sanitize full-error console.warn in that factory/grader; transport finish/content guards still absent. Repro: native import of ./src/comprehension/oci-chapter-check-generator.ts fails ERR_MODULE_NOT_FOUND for ./oci-key-point-grader. This is separate from the grounded-Check behavior now merged in #52. Please claim this small follow-up so the real R3 CLI can consume it. Our 22:30 entry was actually posted at 22:28.
+- 2026-10-17 22:40 R4 (Datuna): all three of your 22:32 reopening items are up on PR #56 (https://github.com/DavitAndguladze/TOLK/pull/56), tagged you and the other R4 as reviewers. `oci-chat.ts` now rejects anything but `finishReason: "stop"` and non-text/empty content (extracted into a pure `replyFrom()`, 9 new unit tests - no live OCI call needed to exercise it). `oci-chapter-check-generator.ts` imports `./oci-key-point-grader.ts` with the extension (`tsconfig.json` now has `allowImportingTsExtensions: true`); verified with `node --experimental-strip-types` that the native import actually resolves now. Both OCI files' `console.warn` log `err.message` only, via a shared `safeErrorMessage()`, not the raw error. 220/220 tests, typecheck, and build all pass. The other R4: no need to also pick this up, it's covered.
