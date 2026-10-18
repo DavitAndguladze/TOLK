@@ -1,13 +1,16 @@
 import { NextResponse } from "next/server";
+import { completionKey } from "@/comprehension/completion-key";
 import { gradeChapterCheck } from "@/comprehension/grade-check";
+import { readAloudForAttempt } from "@/comprehension/read-aloud-attempt";
 import { AnswerValidationError } from "@/comprehension/record-answers";
 import {
-  answersStore, checksById, ensureChapterCheck, findMockVersion, holdLevel, keyPointGrader, recordWordBank, sessionResults,
+  answersStore, checksById, completedChecks, ensureChapterCheck, findMockVersion, holdLevel, keyPointGrader, recordWordBank,
+  sessionResults,
 } from "@/comprehension/registry";
 import { submitCheckAnswers } from "@/comprehension/service";
 import { mockChapter } from "@/mocks";
 import { readerIdFor } from "@/platform/auth";
-import { getReadAloudSummary } from "@/platform/registry";
+import { consumeReadAloudSummary, getReadAloudSummary } from "@/platform/registry";
 import type { Api, ChapterCheckAnswers } from "@/types";
 import { flagStore } from "@/words/registry";
 import { chapterEvidence } from "@/words/word-bank";
@@ -27,12 +30,18 @@ export async function POST(req: Request, { params }: { params: Promise<{ checkId
 
   try {
     const submission = (await req.json()) as ChapterCheckAnswers;
+    // A retry of the same completion (e.g. after a lost response) gets the result it already has,
+    // without grading again, spending a reading, or touching the Word Bank twice (comms 0024).
+    const key = completionKey(submission);
+    const done = completedChecks.get(storageKey);
+    if (done?.key === key) return NextResponse.json(done.res);
+
     await submitCheckAnswers(check, submission, answersStore, storageKey);
     const answers = (await answersStore.get(storageKey))!;
     const flaggedWords = flagStore.flaggedWords(sessionId, version.id);
-    // The clean summary R6's read-aloud route saved for this Reader and Version (comms 0011). Null
-    // when they read silently, so the Chapter Check and Flagged Words weigh 90%/10% between them.
-    const readAloud = await getReadAloudSummary(sessionId, version.id);
+    // Only the reading this completion names: a silent reread, an abandoned attempt, a failed save or
+    // an already-spent reading gets null, so the Chapter Check and Flagged Words weigh 90%/10%.
+    const readAloud = readAloudForAttempt(submission.readAloudStartedAt, await getReadAloudSummary(sessionId, version.id));
 
     const session = await gradeChapterCheck(
       { check, chapter: mockChapter, version, answers, readAloud, flaggedWords, readerId: sessionId },
@@ -47,6 +56,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ checkId
       wordBank: recordWordBank(sessionId, evidence),
       nextVersionId: null, // the next Chapter Version is generated in #14
     };
+    completedChecks.set(storageKey, { key, res });
+    // Spent only once the Word Bank has it, so the next completion starts without it (#66).
+    if (readAloud) await consumeReadAloudSummary(sessionId, readAloud);
     return NextResponse.json(res);
   } catch (err) {
     if (err instanceof AnswerValidationError) return NextResponse.json({ error: err.message }, { status: 400 });
