@@ -94,6 +94,16 @@ describe("createOciChapterCheckGenerator", () => {
     });
   });
 
+  test("asks OCI for a JSON object, not free text", async () => {
+    let json: boolean | undefined;
+    await generateWith(async (_, options) => {
+      json = options?.json;
+      return JSON.stringify({ questions: grounded });
+    });
+
+    expect(json).toBe(true);
+  });
+
   test("gives OCI the served sentences by index and the Key Points by id, never the author's original", async () => {
     let prompt = "";
     await generateWith(async (p) => {

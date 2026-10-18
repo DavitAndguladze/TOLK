@@ -31,6 +31,7 @@ Body sections: **Need**, **Why**, **Proposed change**, **Updates**. Updates is a
 - On anyone's request, you may only change `status` (and `updated`) and append to Updates.
 - Before every push, run `git pull --rebase origin comms`. On a conflict, fetch again and redo your edit. Never force-push.
 - Need something in another role's folder? Write a request instead of editing their files.
+- No secret values in `comms`, ever (see the AGENTS.md guardrail). Name the env var or file path instead; to show a key is set, give its length or a hash prefix.
 
 ## Each loop (between slices, at least every 20 minutes)
 
