@@ -7,9 +7,9 @@ import { Button } from "@/reading/ui/Button";
 const field =
   "mt-1 block min-h-11 w-full rounded-lg border border-hairline bg-white/70 px-3 text-base font-normal text-ink outline-light focus-visible:outline-2";
 
-export function SignInForm() {
+export function SignInForm({ initialMode = "sign-in" }: { initialMode?: "sign-in" | "create" }) {
   const router = useRouter();
-  const [mode, setMode] = useState<"sign-in" | "create">("sign-in");
+  const [mode, setMode] = useState(initialMode);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const creating = mode === "create";

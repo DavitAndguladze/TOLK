@@ -71,7 +71,7 @@
 .dialog { width: min(22rem, calc(100vw - 2rem)); max-height: calc(100dvh - 3rem); margin: auto; padding: 1.5rem; border: 1px solid var(--color-hairline); border-radius: 1.5rem; color: var(--color-ink); background: var(--color-paper); overflow-y: auto; }
 .dialog::backdrop { background: rgb(11 25 70 / 45%); }
 .dialogTitle { font-size: 1.5rem; font-weight: 800; line-height: 1.2; margin: 0 0 1rem; }
-.dialogActions { margin-top: 1.5rem; display: flex; justify-content: flex-end; }
+.dialogActions { margin-top: 1.5rem; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.75rem; }
 
 .stage { min-height: 100dvh; background: #e6f1ff; }
 .frame { position: relative; isolation: isolate; width: 100%; height: 100dvh; overflow: hidden; background: var(--color-mist); transform: translateZ(0); }
