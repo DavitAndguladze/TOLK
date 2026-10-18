@@ -87,4 +87,10 @@ describe("readingReducer", () => {
 
     expect(rereading.lastRead).toBe(0);
   });
+
+  test("finishing the Chapter without reading aloud goes straight to the end", () => {
+    const finished = run(initialReadingState(2), { type: "go-to-chunk", index: 1 }, { type: "finish-chapter" });
+
+    expect(finished.status).toBe("chapter-done");
+  });
 });

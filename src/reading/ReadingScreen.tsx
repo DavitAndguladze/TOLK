@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useEffect, useReducer, useRef } from "react";
+import { Fragment, useEffect, useReducer, useRef, type ReactNode } from "react";
 import type { ListeningSource, Token, WordOutcome } from "../types";
 import { createMockListeningSource } from "../mocks";
 import type { Chunk } from "./chunk";
@@ -43,7 +43,16 @@ function Icon({ d }: { d: string }) {
 const MIC = "M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3ZM19 11a7 7 0 0 1-14 0M12 18v3";
 const PAUSE = "M9 5v14M15 5v14";
 
-export function ReadingScreen({ chapterVersionId, chunks }: { chapterVersionId: string; chunks: Chunk[] }) {
+/** `chapterCheck` replaces the placeholder card when the Chapter ends (R4's Chapter Check, #11). */
+export function ReadingScreen({
+  chapterVersionId,
+  chunks,
+  chapterCheck,
+}: {
+  chapterVersionId: string;
+  chunks: Chunk[];
+  chapterCheck?: ReactNode;
+}) {
   const [state, dispatch] = useReducer(readingReducer, chunks.length, initialReadingState);
   const source = useRef<ListeningSource>(null);
   const chunk = chunks[state.chunkIndex];
@@ -74,7 +83,9 @@ export function ReadingScreen({ chapterVersionId, chunks }: { chapterVersionId: 
       <section aria-live="polite" className="mx-auto max-w-xl animate-page-in px-6 pt-10 pb-12">
         <h2 className="font-book text-[1.75rem] leading-tight">You reached the end of the Chapter.</h2>
         <p className="mt-3 text-lg text-fog">
-          {clear} of {tokens.length} words came through clearly.
+          {tokens.some((t) => state.outcomes[t.index])
+            ? `${clear} of ${tokens.length} words came through clearly.`
+            : "You read this Chapter without reading it aloud."}
         </p>
         {practice.length > 0 && (
           <>
@@ -88,9 +99,13 @@ export function ReadingScreen({ chapterVersionId, chunks }: { chapterVersionId: 
             </ul>
           </>
         )}
-        <div className="mt-8 rounded-2xl border border-hairline bg-white/60 p-5">
-          <p className="font-semibold">Chapter Check</p>
-          <p className="mt-1 text-fog">A few questions about what you just read open here next.</p>
+        <div className="mt-8">
+          {chapterCheck ?? (
+            <div className="rounded-2xl border border-hairline bg-white/60 p-5">
+              <p className="font-semibold">Chapter Check</p>
+              <p className="mt-1 text-fog">A few questions about what you just read open here next.</p>
+            </div>
+          )}
         </div>
       </section>
     );
@@ -155,15 +170,21 @@ export function ReadingScreen({ chapterVersionId, chunks }: { chapterVersionId: 
               <Icon d={listening ? PAUSE : MIC} />
               {listening ? "Pause" : state.status === "paused" ? "Resume" : "Read aloud"}
             </button>
-            <button
-              type="button"
-              aria-label="Next part"
-              disabled={listening || state.chunkIndex === chunks.length - 1}
-              onClick={() => dispatch({ type: "go-to-chunk", index: state.chunkIndex + 1 })}
-              className={stepButton}
-            >
-              <Icon d="m9 18 6-6-6-6" />
-            </button>
+            {state.chunkIndex === chunks.length - 1 ? (
+              <button type="button" aria-label="Finish chapter" disabled={listening} onClick={() => dispatch({ type: "finish-chapter" })} className={stepButton}>
+                <Icon d="M20 6 9 17l-5-5" />
+              </button>
+            ) : (
+              <button
+                type="button"
+                aria-label="Next part"
+                disabled={listening}
+                onClick={() => dispatch({ type: "go-to-chunk", index: state.chunkIndex + 1 })}
+                className={stepButton}
+              >
+                <Icon d="m9 18 6-6-6-6" />
+              </button>
+            )}
           </div>
         </div>
       </footer>
