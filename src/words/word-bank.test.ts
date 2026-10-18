@@ -61,19 +61,19 @@ describe("Word Bank", () => {
     expect(ch2.wordsLearnedTotal).toBe(0);
   });
 
-  test("doesn't graduate a word missed again in the Chapter it was also read correctly", () => {
+  test("graduates a Complex Word answered correctly even when it was mispronounced aloud in that Chapter", () => {
     const ch1 = updateWordBank([], chapter(1, { flagged: ["judge"] }));
-    const ch2 = updateWordBank(ch1.bank, chapter(2, { missed: ["judge"], readCorrectly: ["judge"] }));
-    expect(ch2.wordsLearnedTotal).toBe(0);
+    const ch2 = updateWordBank(ch1.bank, chapter(2, { missed: ["judge"], answeredCorrectly: ["judge"] }));
+    expect(ch2.graduatedThisChapter).toEqual(["judge"]);
   });
 
-  test("returns a Graduated Word flagged again to the bank, and Words Learned drops", () => {
+  test("returns a Graduated Word flagged again to the bank, keeping its times seen, and Words Learned drops", () => {
     const ch1 = updateWordBank([], chapter(1, { flagged: ["vulnerable", "advice"] }));
     const ch2 = updateWordBank(ch1.bank, chapter(2, { readCorrectly: ["vulnerable", "advice"] }));
     expect(ch2.wordsLearnedTotal).toBe(2);
     const ch3 = updateWordBank(ch2.bank, chapter(3, { flagged: ["vulnerable"], readCorrectly: ["vulnerable"] }));
     expect(ch3.bank.find((e) => e.word === "vulnerable")).toEqual({
-      word: "vulnerable", source: "flagged", timesSeen: 1, graduated: false, addedInChapter: 3, graduatedInChapter: null,
+      word: "vulnerable", source: "flagged", timesSeen: 2, graduated: false, addedInChapter: 3, graduatedInChapter: null,
     });
     expect(ch3.wordsLearnedTotal).toBe(1);
     expect(ch3.graduatedThisChapter).toEqual([]);
@@ -125,6 +125,32 @@ describe("Chapter evidence from a graded Chapter", () => {
     };
     const evidence = chapterEvidence({ version, check: mockChapterCheck, grading, readAloud: null });
     expect(evidence).toMatchObject({ missed: ["judge"], answeredCorrectly: [] });
+  });
+
+  test("a word read correctly in one place but mispronounced in another isn't read correctly", () => {
+    // Tokens 26 "had" and 32 "had.”".
+    const evidence = chapterEvidence({
+      version,
+      check: mockChapterCheck,
+      grading: mockGrading,
+      readAloud: {
+        wordResults: [
+          { tokenIndex: 26, outcome: "correct", hesitationMs: 0 },
+          { tokenIndex: 32, outcome: "mispronounced", hesitationMs: 0 },
+        ],
+      },
+    });
+    expect(evidence.readCorrectly).toEqual([]);
+  });
+
+  test("normalizes token words the same way as missed and flagged words", () => {
+    const evidence = chapterEvidence({
+      version: { chapterNumber: 2, tokens: [{ index: 0, text: "Well-known", normalized: "well-known", sentenceIndex: 0 }] },
+      check: { ...mockChapterCheck, questions: [] },
+      grading: { questionGrades: [], missedWords: [{ word: "Well-known,", source: "read-aloud" }] },
+      readAloud: null,
+    });
+    expect(evidence).toMatchObject({ seen: ["wellknown"], missed: ["wellknown"] });
   });
 
   test("has nothing read correctly when the Reader read silently", () => {
