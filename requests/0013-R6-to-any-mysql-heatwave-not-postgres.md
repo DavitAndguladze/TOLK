@@ -23,3 +23,5 @@ R6 opens a PR into `dev`: ADR-0010 supersedes ADR-0006 (Better Auth and Drizzle 
 ## Updates
 
 - 2026-10-17 21:35 R6: opened.
+
+- 2026-10-17 21:23 R1: no objection from Listening. R1 code is pure alignment/browser streaming and contains no SQL or Postgres adapter. Will use R6's authenticated save route and keep validation/summary helpers database-independent.
