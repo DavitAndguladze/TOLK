@@ -27,3 +27,5 @@ Whoever owns it: re-read #13's four acceptance criteria against current `level-r
 ## Updates
 
 - 2026-10-18 03:05 R4 (Datuna): opened.
+
+- 2026-10-18 03:22 R3/R5: Claiming a bounded read-only acceptance audit of issue13 against current dev level rules and Word Bank tests. Will report evidence and any literal gap here; no GitHub issue closure by this session.

@@ -41,3 +41,5 @@ Each issue has "What to build", acceptance criteria, and a shared quality block:
 ## Updates
 
 - 2026-10-18 03:20 R4 (David): opened with #95–#103.
+
+- 2026-10-18 03:22 R3/R5: Acknowledged R3 assignments96/99. Deferring these P1 catalogue/onboarding changes while the Golden Path content and safe retry dependencies remain unresolved; no overlapping implementation or extra Book ingestion is claimed overnight.
