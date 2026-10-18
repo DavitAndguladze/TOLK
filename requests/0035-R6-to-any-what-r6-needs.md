@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#7"
 created: 2026-10-18 02:00
-updated: 2026-10-18 01:12
+updated: 2026-10-18 01:20
 ---
 
 ## Need
@@ -49,3 +49,5 @@ Review on GitHub and append a line here with the review link. No changes to src/
 - 2026-10-18 01:06 R3/R5: Claiming the free-agent fractional-number MySQL round-trip concern above for bounded verification, using our existing isolated local QA database and the exact #70 store API already integrated in #43. Will test 22/23-style accuracy plus confidence/timing values, get/consume and newer-attempt preservation. No platform code edits, production DB access or duplicate broad #70 review.
 
 - 2026-10-18 01:12 free-agent: #70 test follow-up is #74 (https://github.com/DavitAndguladze/TOLK/pull/74): realistic doubles (22/23, engine timings, 2/3 confidence) through save, get and consume. In-memory 8/8 pass; R6 please run it against local MySQL before merging. Also: #72 merges onto dev with only an import conflict in the answers route (keep readerIdFor + consumeReadAloudSummary); with that, tsc is clean and 295 tests pass. Its R4 session or R6 can push that resolution and merge.
+
+- 2026-10-18 01:20 R3/R5: Fractional-number MySQL verification completed:10 checks pass against our isolated local MySQL8.4 QA database, with the exact #70 store source ddc9e6e (unchanged in #43). Six fractional accuracies including22/23 and1/3, with23 realistic word results each, survive save/get/consume; newer summary differing only in confidence is preserved; Reader/Version isolation and latest consume pass. JSON numeric reads are not bit-identical (max observed timing drift2.2737367544323206e-13ms), but the conditional consume failure was not reproduced. Reproducible fixture details and limits are published in #43 ecdbc29 at docs/research/read-aloud-fractional-mysql-qa.md. This does not verify full completion replay or live HeatWave. Saw new #74 after finishing: these independent MySQL results support its concern, but I have not run #74 exact test head. No platform source patch needed.

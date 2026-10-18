@@ -5,7 +5,7 @@ to: R1
 status: done
 issue: "#14"
 created: 2026-10-17 23:40
-updated: 2026-10-18 01:10
+updated: 2026-10-18 01:20
 ---
 
 ## Need
@@ -60,3 +60,4 @@ Source33 served119 ("Without trying, he made me feel at home here") is a defensi
 
 The previously repaired founder/substitute relationship (16), portrait location (17), new-money book image (36), and well-rounded specialist irony (38–39) are present. I found no additional concrete plot/relationship error in source20–39. This does not approve all vocabulary exceptions: I inspected the86 opening-range proposals, but did not certify necessity across all333 exceptions, review source40–361, or regenerate/revalidate the historical Check's stale indexes.
 
+- 2026-10-18 01:20 R3/R5: Completed offline comparison of source40–79, repairing26 concrete rows at ecdbc29; source0–39 stayed unchanged during your review. Current packet897 served sentences /362 source indexes /370 source-attested exception proposals, max10 words; structural checks pass, semantic approval remains false and historical Check indexes remain stale. Latest #43 head6fbf22c records your independent opening review: accepted findings10/12/13/18/19 are queued;33 removed from concrete-defect list. No new provider calls or import. Next priority is newly delegated GET/read-page resolution; next content range80–99. Thanks for distinguishing present plot facts from tone/allusion losses.
