@@ -89,15 +89,26 @@ export function validateRetainedWordPolicy(
   const sentences = splitOriginalSentences(original.originalText);
   const attested = new Set<string>();
   for (const row of evidence) {
-    if (!record(row) || !singleWord(row.word) || !nonempty(row.reason) || !nonempty(row.quote)
-      || typeof row.originalSentenceIndex !== "number" || !Number.isInteger(row.originalSentenceIndex)
-      || !sentences[row.originalSentenceIndex]?.includes(row.quote)
-      || !containsSourceWord(sentences[row.originalSentenceIndex].toLowerCase(), row.word.toLowerCase())
-      || !containsSourceWord(row.quote.toLowerCase(), row.word.toLowerCase()) || !policy.retainedWords.includes(row.word)
-      || attested.has(row.word.toLowerCase())) {
-      issues.push(invalid("Each retained-word exception needs a unique listed word, exact source citation, and meaning-preservation reason"));
+    // Each branch names the specific condition it caught, so a live failure says which word and
+    // why instead of one generic message covering nine unrelated possibilities.
+    const word = record(row) && typeof row.word === "string" ? row.word : "(invalid word)";
+    if (!record(row) || !singleWord(row.word)) issues.push(invalid(`Retained-word exception word is not a single word: ${JSON.stringify(record(row) ? row.word : row)}`));
+    else if (!nonempty(row.reason)) issues.push(invalid(`Retained-word exception for "${word}" is missing a meaning-preservation reason`));
+    else if (!nonempty(row.quote)) issues.push(invalid(`Retained-word exception for "${word}" is missing a quote`));
+    else if (typeof row.originalSentenceIndex !== "number" || !Number.isInteger(row.originalSentenceIndex) || !sentences[row.originalSentenceIndex]) {
+      issues.push(invalid(`Retained-word exception for "${word}" cites an invalid source sentence index`));
+    } else if (!sentences[row.originalSentenceIndex].includes(row.quote)) {
+      issues.push(invalid(`Retained-word exception for "${word}" quote is not verbatim in its cited sentence`));
+    } else if (!containsSourceWord(sentences[row.originalSentenceIndex].toLowerCase(), word.toLowerCase())) {
+      issues.push(invalid(`Retained-word exception "${word}" is not in its cited sentence`));
+    } else if (!containsSourceWord(row.quote.toLowerCase(), word.toLowerCase())) {
+      issues.push(invalid(`Retained-word exception "${word}" is not in its own quote`));
+    } else if (!policy.retainedWords.includes(word)) {
+      issues.push(invalid(`Retained-word exception "${word}" is not listed in retainedWords`));
+    } else if (attested.has(word.toLowerCase())) {
+      issues.push(invalid(`Duplicate retained-word exception: ${word}`));
     } else {
-      attested.add(row.word.toLowerCase());
+      attested.add(word.toLowerCase());
     }
   }
   for (const word of policy.retainedWords) {
