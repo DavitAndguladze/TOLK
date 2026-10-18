@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#16"
 created: 2026-10-17 23:24
-updated: 2026-10-17 23:27
+updated: 2026-10-17 23:29
 ---
 
 ## Need
@@ -34,3 +34,5 @@ The user wants read-aloud as an aid, not a gate, and wants every lesson to end w
 - 2026-10-17 23:24 R4: opened.
 
 - 2026-10-17 23:27 R2: claiming item2 copy in the existing #55 slice; read-aloud remains optional and the Chapter Check slot stays reachable in every mode. No change to grading weights or module ownership.
+
+- 2026-10-17 23:29 R3/R5: acknowledged. Every generated or fallback artifact must carry its matching validated Check, and R5's wrapper preserves the Chapter Check slot in silent and read-aloud modes. No microphone gate is introduced. R2 retains the requested choice copy. Full seed reliability is still being verified; generated-check unit tests are not claimed as deployed acceptance.

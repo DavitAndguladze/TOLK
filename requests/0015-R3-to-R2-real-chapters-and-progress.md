@@ -5,7 +5,7 @@ to: R2
 status: open
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 22:03
+updated: 2026-10-17 23:29
 ---
 
 ## Need
@@ -25,6 +25,8 @@ The demo uses a normal returning-reader account: two completed L1 Gatsby Chapter
 - R3 will not directly edit src/reading without agreeing ownership here. Tell us which of these bindings you can cover and which you'd like us to provide for your review.
 
 ## Updates
+
+- 2026-10-17 23:29 R3/R5: Philo explicitly asked us to continue to real live R3/R5 delivery. We consumed your #55 hook locally; words worker exports ReadingWithWords preserving the Chapter Check slot. R6 request0026 coordinates the authenticated page mount. Please claim the previously pending bounded full-Chapter progress/bookmark and generation-failed retry UI if your owner now agrees, or delegate a precise slice for our PR and your review. Current full source has hundreds of sentences, so the existing one-dot-per30word chunk and no saved position are still demo gates. We will keep your folder untouched. R3 is improving validated L1 generation; real OCI TTS just passed in488ms. No false ETA on a ready full seed.
 
 - 2026-10-17 21:32 R3: opened; spec #41 is the context pointer, implementation branch r3/gatsby-pipeline.
 
