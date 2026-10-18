@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import type { ListeningEvent, WordOutcome } from "../types";
+import type { WordOutcome } from "../types";
 import { mockChapterVersion } from "../mocks";
 import { chunkChapterVersion } from "./chunk";
 import { initialReadingState, readingReducer, unreadTokens, type ReadingAction, type ReadingState } from "./session";
@@ -76,6 +76,15 @@ describe("readingReducer", () => {
       event: { type: "error", message: "network lost" },
     });
 
-    expect(failed).toMatchObject({ status: "paused", outcomes: { 0: "correct" } });
+    expect(failed).toMatchObject({ status: "paused", interrupted: true, outcomes: { 0: "correct" } });
+    expect(run(failed, { type: "read-aloud" }).interrupted).toBe(false);
+  });
+
+  test("tracks the latest word read, even when re-reading words that already have an outcome", () => {
+    const readOnce = run(initialReadingState(1), { type: "read-aloud" }, word(0, "correct"), word(1, "correct"), word(2, "correct"), { type: "pause" });
+
+    const rereading = run(readOnce, { type: "go-to-chunk", index: 0 }, { type: "read-aloud" }, word(0, "correct"));
+
+    expect(rereading.lastRead).toBe(0);
   });
 });

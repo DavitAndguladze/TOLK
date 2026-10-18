@@ -11,6 +11,9 @@ export interface ReadingState {
   outcomes: Record<number, Exclude<WordOutcome, "pending">>;
   /** The token the Reader hesitated on, until it is read. */
   stuckOn: number | null;
+  lastRead: number | null;
+  /** Listening stopped on an error rather than a Pause tap. */
+  interrupted: boolean;
 }
 
 export type ReadingAction =
@@ -25,12 +28,14 @@ export const initialReadingState = (chunkCount: number): ReadingState => ({
   status: "ready",
   outcomes: {},
   stuckOn: null,
+  lastRead: null,
+  interrupted: false,
 });
 
 export function readingReducer(state: ReadingState, action: ReadingAction): ReadingState {
   switch (action.type) {
     case "read-aloud":
-      return { ...state, status: "listening" };
+      return { ...state, status: "listening", interrupted: false };
     case "pause":
       return { ...state, status: "paused", stuckOn: null };
     case "go-to-chunk":
@@ -49,6 +54,7 @@ function onListeningEvent(state: ReadingState, event: ListeningEvent): ReadingSt
         ...state,
         outcomes: { ...state.outcomes, [tokenIndex]: outcome },
         stuckOn: state.stuckOn === tokenIndex ? null : state.stuckOn,
+        lastRead: tokenIndex,
       };
     }
     case "hesitation":
@@ -58,7 +64,7 @@ function onListeningEvent(state: ReadingState, event: ListeningEvent): ReadingSt
         ? { ...state, status: "chapter-done", stuckOn: null }
         : { ...state, chunkIndex: state.chunkIndex + 1 };
     case "error":
-      return { ...state, status: "paused", stuckOn: null };
+      return { ...state, status: "paused", stuckOn: null, interrupted: true };
   }
 }
 

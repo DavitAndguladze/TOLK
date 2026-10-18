@@ -4,7 +4,7 @@ import { Fragment, useEffect, useReducer, useRef } from "react";
 import type { ListeningSource, Token, WordOutcome } from "../types";
 import { createMockListeningSource } from "../mocks";
 import type { Chunk } from "./chunk";
-import { initialReadingState, readingReducer, unreadTokens, type ReadingState } from "./session";
+import { initialReadingState, readingReducer, unreadTokens } from "./session";
 
 // R1's engine factory replaces this (#10). The scripted misses and pause show every word state on stage.
 const createListeningSource = () =>
@@ -21,9 +21,7 @@ const outcomeClass: Record<WordOutcome, string> = {
   skipped: "text-fog underline decoration-fog/70 decoration-dotted decoration-2 underline-offset-[7px]",
 };
 
-function Word({ token, state, latest }: { token: Token; state: ReadingState; latest: boolean }) {
-  const outcome = state.outcomes[token.index] ?? "pending";
-  const stuck = state.stuckOn === token.index;
+function Word({ token, outcome, latest, stuck }: { token: Token; outcome: WordOutcome; latest: boolean; stuck: boolean }) {
   return (
     <span
       className={`-mx-0.5 rounded-md px-0.5 transition-colors duration-200 ${outcomeClass[outcome]} ${
@@ -56,8 +54,14 @@ export function ReadingScreen({ chapterVersionId, chunks }: { chapterVersionId: 
     source.current ??= createListeningSource();
     const active = source.current;
     const unread = unreadTokens(chunk, state);
-    active.start({ chapterVersionId, tokens: unread.length ? unread : chunk.tokens }, (event) => dispatch({ type: "listening", event }));
-    return () => void active.stop();
+    let live = true;
+    active
+      .start({ chapterVersionId, tokens: unread.length ? unread : chunk.tokens }, (event) => live && dispatch({ type: "listening", event }))
+      .catch((e: unknown) => live && dispatch({ type: "listening", event: { type: "error", message: String(e) } }));
+    return () => {
+      live = false;
+      void active.stop();
+    };
     // Restart only when listening starts or the Chunk changes, never on each word.
   }, [listening, state.chunkIndex]);
 
@@ -65,19 +69,20 @@ export function ReadingScreen({ chapterVersionId, chunks }: { chapterVersionId: 
     const tokens = chunks.flatMap((c) => c.tokens);
     const clear = tokens.filter((t) => state.outcomes[t.index] === "correct").length;
     const missed = tokens.filter((t) => state.outcomes[t.index] === "mispronounced" || state.outcomes[t.index] === "skipped");
+    const practice = [...new Set(missed.map((t) => t.normalized).filter(Boolean))];
     return (
       <section aria-live="polite" className="mx-auto max-w-xl animate-page-in px-6 pt-10 pb-12">
         <h2 className="font-book text-[1.75rem] leading-tight">You reached the end of the Chapter.</h2>
         <p className="mt-3 text-lg text-fog">
           {clear} of {tokens.length} words came through clearly.
         </p>
-        {missed.length > 0 && (
+        {practice.length > 0 && (
           <>
             <p className="mt-6 font-semibold">Words to practice</p>
             <ul className="mt-2 flex flex-wrap gap-2">
-              {missed.map((t) => (
-                <li key={t.index} className="rounded-full border border-gold/50 bg-white/60 px-3 py-1 font-book text-lg">
-                  {t.normalized}
+              {practice.map((w) => (
+                <li key={w} className="rounded-full border border-gold/50 bg-white/60 px-3 py-1 font-book text-lg">
+                  {w}
                 </li>
               ))}
             </ul>
@@ -91,8 +96,6 @@ export function ReadingScreen({ chapterVersionId, chunks }: { chapterVersionId: 
     );
   }
 
-  const read = chunk.tokens.filter((t) => state.outcomes[t.index]);
-  const latest = listening ? read.at(-1)?.index : undefined;
   const stuckWord = chunk.tokens.find((t) => t.index === state.stuckOn);
 
   return (
@@ -102,7 +105,12 @@ export function ReadingScreen({ chapterVersionId, chunks }: { chapterVersionId: 
           {chunk.tokens.map((token, i) => (
             <Fragment key={token.index}>
               {i > 0 && " "}
-              <Word token={token} state={state} latest={token.index === latest} />
+              <Word
+                token={token}
+                outcome={state.outcomes[token.index] ?? "pending"}
+                latest={listening && token.index === state.lastRead}
+                stuck={token.index === state.stuckOn}
+              />
             </Fragment>
           ))}
         </p>
@@ -113,7 +121,9 @@ export function ReadingScreen({ chapterVersionId, chunks }: { chapterVersionId: 
           <div className="flex items-center justify-between text-sm text-fog">
             <p aria-live="polite">
               {stuckWord ? (
-                <span className="font-semibold text-ink">Take your time with “{stuckWord.normalized}”</span>
+                <span className="font-semibold text-ink">Take your time with “{stuckWord.normalized || stuckWord.text}”</span>
+              ) : state.interrupted ? (
+                <span className="font-semibold text-ink">Listening stopped. Tap Resume to try again.</span>
               ) : (
                 <>
                   Part {state.chunkIndex + 1} of {chunks.length}
