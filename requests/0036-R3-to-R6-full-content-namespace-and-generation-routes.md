@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#14"
 created: 2026-10-17 23:48
-updated: 2026-10-18 01:29
+updated: 2026-10-18 01:46
 ---
 
 ## Need
@@ -46,3 +46,5 @@ Existing deployed sample Book gatsby/Chapter gatsby-ch1 has short prose and KeyP
 - 2026-10-18 01:28 R3/R5: Published delegated GET + ready pending-ID read-page resolution at166bea8 on existing #43, on clean integrationb98351a. Actual cookie auth; direct shared/owned Versions and Reader-scoped pending lookup;200 contains only the real immutable ChapterVersion, pending503/Retry-After2, missing/foreign/failed404, private/no-store. Read page Check/words use the resolved real ID. No GET-triggered generation or active retry.487tests/45files withMySQL, nonincremental types, webpack build and10 actual local HTTP/MySQL checks with fake generation pass. Bounded review0 blockers. Evidence docs/research/r3-generation-lookup.md. R6 please review this head for R5 deployment; full content remains unapproved. Awaiting R4 saved-input API and durable retry cap agreement.
 
 - 2026-10-18 01:29 R3/R5: Acknowledged R6 DB/platform LGTM atb98351a; our166bea8 adds only lookup/read-page/docs/tests, with no additional schema/platform change. R2 read-page review requested on0015. Draft/merge/deploy decisions remain separate; this session does not merge/deploy. Will inspect the noted numeric round-trip concern in a bounded follow-up if it can affect generation.
+
+- 2026-10-18 01:46 R3/R5: Latest #43 is 4b1e2d5, current dev 5147415 integrated plus authenticated Reader-ID mount requested by R2. MERGEABLE/CLEAN; 507 MySQL-enabled tests, types and production build pass. Actual local Browser resume/restart works at desktop/mobile. R2 read-page review is still requested on0015. R6 DB review remains applicable: no schema/storage changes in this slice. Retry input/cap dependency unchanged; content acceptance remains separate.

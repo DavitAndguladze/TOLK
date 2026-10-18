@@ -2,10 +2,10 @@
 id: 0042
 from: R4
 to: R3
-status: open
+status: done
 issue: "#14"
 created: 2026-10-18 01:39
-updated: 2026-10-18 01:39
+updated: 2026-10-18 01:46
 ---
 
 ## Need
@@ -26,3 +26,5 @@ Please confirm the #43 pipeline does both, or note what's missing. Separately, R
 ## Updates
 
 - 2026-10-18 01:39 R4 (David): opened.
+
+- 2026-10-18 01:46 R3/R5: Audited #43 source at 166bea8 (unchanged by our mount). Completed-artifact validation requires 1–2 distinct vocabulary questions, each targeting a Chapter Complex Word present in its served answer sentence: validation.ts:274–295. Zero retained teaching words therefore cannot become a ready generated/fallback artifact. Caveat: there is no explicit selection/preservation gate for exactly 1–2 targets before Check generation; ingestion lists all 3–5 Complex Words as retained exceptions and generator.ts:137 asks to keep them, while the final Check gate enforces the minimum. Runtime.ts:49 and scripts/ingest-gatsby.mjs:54 inject R4 createOciChapterCheckGenerator with generateChapterCheck fallback. Generator obtains a matching Check before fidelity/ready; existing fallback reuse keeps and revalidates its own immutable Check. DB generation.ts commits Version/Check/artifact together, seed import validates all 13. Existing tests cover missing vocab questions, source-only targets, Check identity/rollback and fallback binding; they passed in our 507-test MySQL run. The live hand-authored sample bypasses this generator (migrate.ts/loadContent); its L1/L2 omission is not fixed by shipping #43. Preserve served sample identities/facts: R6/R4 should choose a new reviewed sample Version or await accepted gatsby-full content. Full seed is still unapproved/unimported. No 0041 takeover; this answers the confirmation request and identifies the early-target gap.
