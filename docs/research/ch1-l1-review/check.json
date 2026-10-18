@@ -1,0 +1,55 @@
+{
+  "status": "Historical review only: generated for candidate at 01e4b65. Sentence indexes are stale after editorial repairs; regenerate before use.",
+  "check": {
+    "id": "check-shared-07bf8994e7d1fc6f5fb6efdadd94639f",
+    "chapterVersionId": "shared-07bf8994e7d1fc6f5fb6efdadd94639f",
+    "questions": [
+      {
+        "kind": "key-point",
+        "prompt": "Which Egg is less fashionable according to Nick?",
+        "keyPointId": "gatsby-ch1-kp2",
+        "answerSentenceIndex": 155,
+        "id": "shared-07bf8994e7d1fc6f5fb6efdadd94639f-q1"
+      },
+      {
+        "kind": "key-point",
+        "prompt": "Who did Nick have dinner with at East Egg?",
+        "keyPointId": "gatsby-ch1-kp3",
+        "answerSentenceIndex": 182,
+        "id": "shared-07bf8994e7d1fc6f5fb6efdadd94639f-q2"
+      },
+      {
+        "kind": "key-point",
+        "prompt": "What did Nick see across the water after noticing Gatsby?",
+        "keyPointId": "gatsby-ch1-kp5",
+        "answerSentenceIndex": 890,
+        "id": "shared-07bf8994e7d1fc6f5fb6efdadd94639f-q3"
+      },
+      {
+        "kind": "complex-word",
+        "prompt": "What does 'abnormal' mean in this chapter?",
+        "choices": [
+          "showing disdainful arrogance in manner",
+          "referring to a self‑proclaimed superior Northern European race",
+          "unusual or different from what is considered normal"
+        ],
+        "word": "abnormal",
+        "answerSentenceIndex": 11,
+        "id": "shared-07bf8994e7d1fc6f5fb6efdadd94639f-q4"
+      },
+      {
+        "kind": "complex-word",
+        "prompt": "What does 'supercilious' mean in this chapter?",
+        "choices": [
+          "referring to a self‑proclaimed superior Northern European race",
+          "showing disdainful arrogance in manner",
+          "unusual or different from what is considered normal"
+        ],
+        "word": "supercilious",
+        "answerSentenceIndex": 231,
+        "id": "shared-07bf8994e7d1fc6f5fb6efdadd94639f-q5"
+      }
+    ]
+  },
+  "candidateBaseCommit": "01e4b65"
+}
