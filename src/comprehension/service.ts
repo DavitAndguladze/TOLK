@@ -1,6 +1,6 @@
 import type { Chapter, ChapterCheck, ChapterCheckAnswers, ChapterVersion } from "../types";
 import type { AnswersStore } from "./answers-store";
-import { fallbackChecks, type ChapterCheckGenerator } from "./chapter-check-generator";
+import type { ChapterCheckGenerator } from "./chapter-check-generator";
 import { recordAnswers } from "./record-answers";
 
 export interface ChapterCheckDeps {
@@ -14,7 +14,7 @@ export interface ChapterCheckDeps {
   cache: Map<string, Promise<ChapterCheck>>;
 }
 
-/** Generates a Chapter Version's check once and caches it (an AI-written one; see `fallbackChecks`) - this is what makes "opens with no spinner" true. */
+/** Generates a Chapter Version's check once and caches it - this is what makes "opens with no spinner" true. */
 export async function getChapterCheckForVersion(
   chapter: Chapter,
   version: ChapterVersion,
@@ -23,17 +23,10 @@ export async function getChapterCheckForVersion(
   const cached = deps.cache.get(version.id);
   if (cached) return cached;
 
-  const pending = deps.generate(chapter, version).then(
-    (check) => {
-      // A fallback Check opens the chapter now, but isn't pinned: the next request tries the AI again.
-      if (fallbackChecks.has(check) && deps.cache.get(version.id) === pending) deps.cache.delete(version.id);
-      return check;
-    },
-    (err) => {
-      deps.cache.delete(version.id); // let the next call retry instead of caching a permanent failure
-      throw err;
-    },
-  );
+  const pending = deps.generate(chapter, version).catch((err) => {
+    deps.cache.delete(version.id); // let the next call retry instead of caching a permanent failure
+    throw err;
+  });
   deps.cache.set(version.id, pending);
   return pending;
 }

@@ -1,5 +1,5 @@
 import type { Chapter, ChapterVersion, CheckQuestion } from "../types";
-import { fallbackChecks, type ChapterCheckGenerator } from "./chapter-check-generator";
+import type { ChapterCheckGenerator } from "./chapter-check-generator";
 // ".ts" so R3's CLI can import this file with native Node type stripping (comms 0016).
 import { askWithDeadline, describeOciError, jsonObjectIn, type Chat } from "./oci-key-point-grader.ts";
 
@@ -61,7 +61,6 @@ export function createOciChapterCheckGenerator({ chat, fallback, timeoutMs }: { 
         console.warn(`OCI Check generation failed for ${version.id} (${describeOciError(err)})${retry}`);
       }
     }
-    fallbackChecks.add(base); // the service returns it but doesn't cache it, so OCI is tried again next time
     return base;
   };
 }

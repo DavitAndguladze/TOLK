@@ -3,13 +3,6 @@ import type { Chapter, ChapterCheck, ChapterVersion, ComplexWord, Sentence } fro
 /** The seam Role 4 implements. Role 3's real Chapter generator calls this instead of writing its own questions. */
 export type ChapterCheckGenerator = (chapter: Chapter, version: ChapterVersion) => Promise<ChapterCheck>;
 
-/**
- * Checks a generator wrote as a stand-in because the AI failed. The service returns these but
- * doesn't cache them, so the next request tries the AI again. A WeakSet keeps the
- * `ChapterCheckGenerator` signature (and src/types) unchanged.
- */
-export const fallbackChecks = new WeakSet<ChapterCheck>();
-
 const FILLER_CHOICES = ["to decide something quickly", "to speak very loudly"];
 
 /** Picks the served sentence whose text shares the most words with `needle`; falls back to the first sentence. */

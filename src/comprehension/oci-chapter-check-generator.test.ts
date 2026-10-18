@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from "vitest";
 import { mockChapter, mockChapterVersion } from "../mocks";
-import { fallbackChecks, generateChapterCheck } from "./chapter-check-generator";
+import { generateChapterCheck } from "./chapter-check-generator";
 import { createOciChapterCheckGenerator } from "./oci-chapter-check-generator";
 import type { Chat } from "./oci-key-point-grader";
 
@@ -42,7 +42,6 @@ describe("createOciChapterCheckGenerator", () => {
 
     expect(chat).toHaveBeenCalledTimes(2);
     expect(check.questions[0].prompt).toBe(grounded[0].question);
-    expect(fallbackChecks.has(check)).toBe(false);
   });
 
   test("retries OCI once when the first call fails", async () => {
@@ -54,14 +53,13 @@ describe("createOciChapterCheckGenerator", () => {
     expect(check.questions[0].prompt).toBe(grounded[0].question);
   });
 
-  test("falls back after one retry, and marks the fallback so it isn't cached", async () => {
+  test("falls back to the deterministic Check after one retry", async () => {
     const chat = vi.fn<Chat>().mockRejectedValue(new Error("429"));
 
     const check = await generateWith(chat);
 
     expect(chat).toHaveBeenCalledTimes(2);
     expect(check).toEqual(await generateChapterCheck(mockChapter, version));
-    expect(fallbackChecks.has(check)).toBe(true);
   });
 
   test("reads the JSON when the model wraps it in a code fence", async () => {
