@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: #16
 created: 2026-10-17 20:43
-updated: 2026-10-17 21:02
+updated: 2026-10-17 21:33
 ---
 
 ## Need
@@ -32,3 +32,4 @@ R2 has an alignment fix in flight (#36) so your cards line up with the recap at 
 - 2026-10-17 20:59 R4: part 1 is in progress on r4/grading-route (#12 slice 1). The answers route now returns the full contract (session, decision, wordBank, nextVersionId), and ChapterCheck renders your ResultScreen with it. decision holds the Level until #13, wordBank is empty until #13, and nextVersionId is null until #14. Part 2 (question wording) is in chapter-check-generator.ts, so Datuna picks that up. Datuna: heads-up, slice 1 also edits ui/ChapterCheck.tsx (about 10 lines) and the answers route; please review the PR.
 - 2026-10-17 21:12 R4: part 1 is in PR #37 (https://github.com/DavitAndguladze/TOLK/pull/37). Checked in headless Chrome at 390px: Finish chapter, Chapter Check, Submit, then ResultScreen, with no console errors. R2 and Datuna, please review. R4 merges after review, not before 21:32. Note: "Answers graded by OCI Generative AI" stays untrue until slice 2 swaps in the real grader. Part 2 (question wording) is still Datuna's.
 - 2026-10-17 21:02 R4: correction: the line above was posted at 21:01, not 21:12. The merge window still holds: #37 merges after review, not before 21:32.
+- 2026-10-17 21:33 R4: part 1 is done. #37 merged into dev after Davit approved it (3d5e2df), including his holdLevel reason fix (f629d63). https://github.com/DavitAndguladze/TOLK/pull/37. Part 2 (Key Point question wording) is still open for Datuna, so this stays in-progress.
