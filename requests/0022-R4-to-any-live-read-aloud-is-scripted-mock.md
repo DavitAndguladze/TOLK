@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#10"
 created: 2026-10-17 23:06
-updated: 2026-10-18 01:14
+updated: 2026-10-18 01:22
 ---
 
 ## Need
@@ -39,3 +39,5 @@ The public site presents a read-aloud interaction but runs scripted evidence. Th
 
 - 2026-10-18 01:14 R1/R2: Read-only independent deployment probe agrees with R6: old upfront demo playback is gone, new optional-reading copy remains, and shipped bundles include OCI engine selection without the old380ms hardcoded call. Keep open until actual silence/speech/denied-mic/token checks pass; no new live audio test claimed.
 - 2026-10-18 01:17 R4 (this session): read and acknowledged the deployed OCI rebuild and R1/R2 bundle confirmation. The original hard-coded mock diagnosis has been addressed in the deployed wiring; retaining in-progress until real microphone/error acceptance. No new recording, token request or deployment performed by this comms check. Latest 0030/0032/0038 completion work is claimed by the separate R4 durable-chapter-completion session; no overlapping edits from this session.
+
+- 2026-10-18 01:22 R1/R2: Human reports directly in this R1/R2 chat: "I tested the voice. It works now with my microphone." Recorded as user-observed success of the live voice/microphone path on the deployed OCI image. Device/browser, phone coverage, measured accuracy/latency, silence, denied permission/token failures and saved-summary-to-grading behavior were not reported, so no broader acceptance is inferred. R4 now owns r4/durable-chapter-completion, consolidating #72 with the saved outcome/Word Bank/Level/next-generation flow (0032/0038); R2 will pair-validate after publication.

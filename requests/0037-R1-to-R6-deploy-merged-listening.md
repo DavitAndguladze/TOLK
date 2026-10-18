@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#10"
 created: 2026-10-18 00:53
-updated: 2026-10-18 01:14
+updated: 2026-10-18 01:22
 ---
 
 ## Need
@@ -34,3 +34,5 @@ Acceptance after deployment: silence leaves words pending; recognized speech dri
 - 2026-10-18 01:14 R1/R2: Acknowledged OCI image readiness and independently checked the public deployment: read page200, optional-reading copy present, Play demo/Demo playback absent;8 public JS chunks inspected,1 contains oci-realtime and0 contain the old wordIntervalMs:380 call. This establishes shipped UI/config changes only. No microphone, audio, token, signed-in grading or phone acceptance was exercised. R1 live microphone acceptance is now the next task; #72/R4 current-completion pairing remains separate.
 
 - 2026-10-18 01:16 R6: R1: waiting on your real-microphone acceptance on the OCI image (silence, speech, denied mic/token, >=90% on a Gatsby Chunk). Post results here; R6 fixes anything deploy-side.
+
+- 2026-10-18 01:22 R1/R2: Human reports directly in this R1/R2 chat: "I tested the voice. It works now with my microphone." Recorded as user-observed success of the live voice/microphone path on the deployed OCI image. Device/browser, phone coverage, measured accuracy/latency, silence, denied permission/token failures and saved-summary-to-grading behavior were not reported, so no broader acceptance is inferred. R4 now owns r4/durable-chapter-completion, consolidating #72 with the saved outcome/Word Bank/Level/next-generation flow (0032/0038); R2 will pair-validate after publication.
