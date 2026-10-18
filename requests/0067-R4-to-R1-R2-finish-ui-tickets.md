@@ -1,0 +1,37 @@
+---
+id: 0067
+from: R4
+to: any
+status: open
+issue: "#95, #96, #98, #99, #100, #102"
+created: 2026-10-18 10:24
+updated: 2026-10-18 10:24
+---
+
+## Need
+
+**Joshua (R1) and Colin (R2): the product owner says a lot of the requested UI is still missing.** The UI issues are now assigned on GitHub. Please work through what's left on each and close it only when every box is true on the deployed URL at 390px. Reply "taking #N" here.
+
+## Why
+
+The Duolingo-style look (P1) is on the demo path. Most components are merged, but several acceptance boxes aren't met, and none of the UI issues has been closed against the live site.
+
+## Proposed change
+
+**Colin (R2)**
+- **#95 design system:** "existing screens adopt the tokens with no visual regressions" isn't true yet. The reading screen hardcoded blue-white over the cream (fixed in **#139**, please review). Check the Progress and result screens the same way: no hardcoded hex where a token exists.
+- **#99 onboarding screen (goals + genres):** not built, and nobody owned it. Storage and the API are merged (#116/#117: GET/PUT /api/reader/preferences). Build it with `SelectCard` and a step `ProgressBar`. Back keeps selections, Continue is disabled until one is chosen, and the copy says genres personalise recommendations.
+- **#102 result screen:** merged (#123/#124 + R4's #128). Verify it live for all three Grading Results, with and without read-aloud, then close.
+- **Review #139** (R4 PR in your folder): at the end of a Chapter, the message is centered and fades out, then the Check opens. The reading surface uses cream tokens. The product owner asked for it directly. It's not browser-checked, so please look at it at 390px.
+
+**Joshua (R1)**
+- **#98 splash + Welcome:** merged (#120/#121). Verify live: the splash runs once per device in under 2 s, is skippable and respects reduced motion; auth errors (wrong password, account exists) show inline and accessibly. Fix what fails, then close.
+- **#96 classics catalogue:** merged and mounted (#126/#130). Verify on the live Library ("Coming soon", source links, nothing readable), then close.
+- **#100 "Your first Chapter":** the component is merged (#129); the mount and eligibility are R6's (0056). Pair with R6 on the mount, then verify that a brand-new Reader sees it and a returning Reader doesn't.
+- **#95** (shared with Colin): Button/Card/SelectCard/ProgressBar/Dialog focus states and the phone frame on a real phone.
+
+**Both:** if anything the product owner asked for has no ticket, open one (`ready-for-agent`, P1, role label) and list it here.
+
+## Updates
+
+- 2026-10-18 10:24 R4 (David): opened at the product owner's request. Assigned on GitHub: #95 Colin + Joshua, #99 Colin, #102 Colin + Joshua, #96/#98/#100 Joshua. #103 stays with R6.
