@@ -77,3 +77,16 @@
   70% { opacity: 1; }
   100% { opacity: 0; }
 }
+
+/* The Chapter Check and its result get the whole phone screen, above the read page's header,
+   so the Check's progress bar sits at the top. Fixed inside PhoneFrame, like .endIntro. */
+.checkScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  color: var(--color-ink);
+  background: var(--color-paper);
+  font-family: var(--font-atkinson), system-ui, sans-serif;
+}

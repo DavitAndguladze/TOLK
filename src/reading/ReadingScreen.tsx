@@ -53,6 +53,8 @@ interface ReadingScreenProps {
   readerId?: string;
   chunks: Chunk[];
   chapterCheck?: ReactNode;
+  /** This Reader already finished this Version: open on the saved result, not the text (0076). */
+  completed?: boolean;
   onWordTap?: (token: Token, chapterVersionId: string) => void;
   flaggedTokenIndexes?: ReadonlySet<number>;
 }
@@ -67,16 +69,19 @@ function ChapterReadingScreen({
   readerId,
   chunks,
   chapterCheck,
+  completed = false,
   onWordTap,
   flaggedTokenIndexes,
 }: ReadingScreenProps) {
-  const [state, dispatch] = useReducer(readingReducer, chunks.length, initialReadingState);
+  // A finished Chapter reopens on its result (same on server and client, so no flash of the text).
+  const [state, dispatch] = useReducer(readingReducer, chunks.length, (count: number) =>
+    completed ? { ...initialReadingState(count), status: "chapter-done" as const } : initialReadingState(count));
   const source = useRef<ReturnType<typeof createReadingAttempt>>(null);
   const [listeningLabel, setListeningLabel] = useState("Connecting…");
   const [positionReady, setPositionReady] = useState(false);
   const [resumedPart, setResumedPart] = useState<number | null>(null);
   const [reviewSentence, setReviewSentence] = useState<number | null>(null);
-  const [endIntroDone, setEndIntroDone] = useState(false);
+  const [endIntroDone, setEndIntroDone] = useState(completed);
   const [controlsExpanded, setControlsExpanded] = useState(true);
   const passage = useRef<HTMLParagraphElement>(null);
   const positionKey = readerId ? `tolk-reading-position:${encodeURIComponent(readerId)}:${encodeURIComponent(chapterVersionId)}` : null;
@@ -87,7 +92,7 @@ function ChapterReadingScreen({
     const sentence = new URLSearchParams(window.location.search).get("sentence");
     const target = rereadChunk(chunks, sentence);
     if (target >= 0) {
-      dispatch({ type: "restore-position", index: target });
+      dispatch({ type: completed ? "reread" : "restore-position", index: target });
       setReviewSentence(Number(sentence));
       setPositionReady(true);
       return;
@@ -177,7 +182,8 @@ function ChapterReadingScreen({
       </section>
     );
     return (
-      <section aria-label="End of Chapter" className={`${theme.surface} mx-auto max-w-xl animate-page-in px-6 pt-10 pb-12`}>
+      <section aria-label="End of Chapter" className={theme.checkScreen}>
+        <div className="mx-auto max-w-xl animate-page-in px-6 pt-[max(1.5rem,env(safe-area-inset-top))] pb-12">
         {demoListening && source.current && <p className="text-fog">Demo results are simulated. The microphone was not used.</p>}
         {practice.length > 0 && (
           <>
@@ -200,6 +206,7 @@ function ChapterReadingScreen({
             <p className="mt-1 text-fog">A few questions about what you just read open here next.</p>
           </div>
         )}</ChapterReadAloud>
+        </div>
       </section>
     );
   }
