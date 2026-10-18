@@ -21,20 +21,24 @@ export function createOciChat(env: NodeJS.ProcessEnv = process.env): Chat | null
   });
   client.region = region;
 
-  return async (prompt) => {
+  return async (prompt, { maxTokens = 200, signal } = {}) => {
+    signal?.throwIfAborted();
     const text: models.TextContent = { type: "TEXT", text: prompt };
-    const response = await client.chat({
+    const request = client.chat({
       chatDetails: {
         compartmentId,
         servingMode: { servingType: "ON_DEMAND", modelId },
         chatRequest: {
           apiFormat: "GENERIC",
           messages: [{ role: "USER", content: [text] }],
-          maxTokens: 200,
+          maxTokens,
           temperature: 0,
         },
       },
     });
+    // The SDK can't cancel an HTTP call, so an abort only stops waiting for it.
+    const aborted = new Promise<never>((_, reject) => signal?.addEventListener("abort", () => reject(signal.reason), { once: true }));
+    const response = await Promise.race([request, aborted]);
     if (!response || !("chatResult" in response)) throw new Error("OCI Generative AI returned no chat result");
     const choice = "choices" in response.chatResult.chatResponse ? response.chatResult.chatResponse.choices[0] : undefined;
     const reply = choice?.message.content?.map((c) => ("text" in c ? (c as models.TextContent).text : "")).join("");

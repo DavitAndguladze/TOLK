@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { mockChapter, mockChapterVersion } from "../mocks";
 import type { KeyPointGrader } from "./grade-check";
-import { createOciKeyPointGrader } from "./oci-key-point-grader";
+import { createOciKeyPointGrader, type Chat } from "./oci-key-point-grader";
 
 const keyPoint = mockChapter.keyPoints[0]; // "Nick's father told him not to criticize other people."
 const sentence = mockChapterVersion(1).sentences[2]; // "He said, “Do not be quick to judge people."
@@ -11,7 +11,7 @@ const answer = "Not to judge people";
 const fallback: KeyPointGrader = async () => ({ grade: 1, feedback: "fallback", gradedBy: "stand-in" });
 const fellBack = { grade: 1, feedback: "fallback", gradedBy: "stand-in" };
 
-const gradeWith = (chat: (prompt: string) => Promise<string>, timeoutMs = 1000) =>
+const gradeWith = (chat: Chat, timeoutMs = 1000) =>
   createOciKeyPointGrader({ chat, fallback, timeoutMs })({ question, keyPoint, answer, sentence });
 
 describe("createOciKeyPointGrader", () => {
@@ -47,10 +47,15 @@ describe("createOciKeyPointGrader", () => {
       expect(result).toEqual(fellBack);
     });
 
-    test("when OCI Generative AI doesn't answer in time", async () => {
-      const never = () => new Promise<string>(() => {});
+    test("when OCI Generative AI doesn't answer in time, and tells the call to stop", async () => {
+      let signal: AbortSignal | undefined;
+      const never: Chat = (_, options) => {
+        signal = options?.signal;
+        return new Promise<string>(() => {});
+      };
 
       expect(await gradeWith(never, 20)).toEqual(fellBack);
+      expect(signal?.aborted).toBe(true);
     });
   });
 
