@@ -1,32 +1,19 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import type { Api, Token } from "../types";
+import type { Api, FlaggedWord, Token } from "../types";
+import type { WordMeaning } from "./meaning";
 
 type FlagResponse = Api["POST /api/chapter-versions/[versionId]/flags"]["res"];
 
 const EMPTY: ReadonlySet<number> = new Set();
 const flagged = new Map<string, ReadonlySet<number>>();
-const meanings = new Map<string, string>();
 const listeners = new Set<() => void>();
 // One request at a time per word, so a quick flag-then-unflag can't reach the server in the wrong order.
 const queues = new Map<string, Promise<unknown>>();
+const loading = new Map<string, symbol>();
 
 const keyOf = (chapterVersionId: string, tokenIndex: number) => `${chapterVersionId}:${tokenIndex}`;
-
-// Same per-browser Reader id as the Chapter Check (src/comprehension/ui/ChapterCheck.tsx) until sign-in (#7).
-function readerSessionId(): string {
-  try {
-    let id = localStorage.getItem("tolk-reader-session");
-    if (!id) {
-      id = crypto.randomUUID();
-      localStorage.setItem("tolk-reader-session", id);
-    }
-    return id;
-  } catch {
-    return "anonymous";
-  }
-}
 
 function setFlag(chapterVersionId: string, tokenIndex: number, on: boolean) {
   const next = new Set(flagged.get(chapterVersionId));
@@ -37,19 +24,17 @@ function setFlag(chapterVersionId: string, tokenIndex: number, on: boolean) {
 }
 
 function send<T>(chapterVersionId: string, tokenIndex: number, on: boolean, url: string, init: RequestInit): Promise<T> {
-  const was = isFlagged(chapterVersionId, tokenIndex);
-  setFlag(chapterVersionId, tokenIndex, on);
   const key = keyOf(chapterVersionId, tokenIndex);
   const done = (queues.get(key) ?? Promise.resolve()).then(async () => {
-    const res = await fetch(url, { ...init, signal: AbortSignal.timeout(8000) });
+    const res = await fetch(url, { ...init, credentials: "same-origin", signal: AbortSignal.timeout(10000) });
     if (!res.ok) throw new Error(`${res.status}`);
-    return (await res.json()) as T;
+    const data = await res.json();
+    if (on ? data?.flagged?.tokenIndex !== tokenIndex || data?.flagged?.chapterVersionId !== chapterVersionId || typeof data?.meaning !== "string" : data?.ok !== true) throw new Error("Invalid Word Bank response");
+    setFlag(chapterVersionId, tokenIndex, on);
+    return data as T;
   });
   queues.set(key, done.catch(() => undefined));
-  return done.catch((e: unknown) => {
-    setFlag(chapterVersionId, tokenIndex, was);
-    throw e;
-  });
+  return done;
 }
 
 function subscribe(listener: () => void) {
@@ -66,26 +51,47 @@ export function isFlagged(chapterVersionId: string, tokenIndex: number): boolean
   return flagged.get(chapterVersionId)?.has(tokenIndex) ?? false;
 }
 
-export function knownMeaning(chapterVersionId: string, tokenIndex: number): string | undefined {
-  return meanings.get(keyOf(chapterVersionId, tokenIndex));
+const flagsUrl = (chapterVersionId: string) => `/api/chapter-versions/${encodeURIComponent(chapterVersionId)}/flags`;
+
+/** Refresh on reading-screen mount; the cookie-authenticated server owns durable Reader scope. */
+export function loadFlags(chapterVersionId: string): Promise<void> {
+  const request = Symbol();
+  loading.set(chapterVersionId, request);
+  return (async () => {
+    const res = await fetch(flagsUrl(chapterVersionId), { credentials: "same-origin", cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!res.ok) throw new Error(`${res.status}`);
+    const data: { flags?: FlaggedWord[] } = await res.json();
+    if (!Array.isArray(data.flags) || data.flags.some((flag) => !Number.isSafeInteger(flag?.tokenIndex) || flag.tokenIndex < 0 || flag.chapterVersionId !== chapterVersionId)) throw new Error("Invalid saved flags");
+    if (loading.get(chapterVersionId) === request) {
+      flagged.set(chapterVersionId, new Set(data.flags.map((flag) => flag.tokenIndex)));
+      for (const listener of listeners) listener();
+    }
+  })().finally(() => { if (loading.get(chapterVersionId) === request) loading.delete(chapterVersionId); });
 }
 
-const flagsUrl = (chapterVersionId: string) => `/api/chapter-versions/${encodeURIComponent(chapterVersionId)}/flags`;
+/** Meaning retry is independent of flagging, so it never re-flags a word removed by the Reader. */
+export async function lookupWordMeaning(chapterVersionId: string, tokenIndex: number, signal?: AbortSignal): Promise<WordMeaning> {
+  const res = await fetch(`/api/chapter-versions/${encodeURIComponent(chapterVersionId)}/words/${tokenIndex}/meaning`, {
+    credentials: "same-origin", cache: "no-store", signal: signal ? AbortSignal.any([signal, AbortSignal.timeout(10000)]) : AbortSignal.timeout(10000),
+  });
+  if (!res.ok) throw new Error(`${res.status}`);
+  const result: WordMeaning = await res.json();
+  if (!result || typeof result.meaning !== "string" || !result.meaning.trim() || !["oci-generative-ai", "chapter", "unavailable"].includes(result.source)) throw new Error("Invalid word meaning");
+  return result;
+}
 
 /** Flags the word and resolves to its in-context meaning. */
 export async function flagWord(chapterVersionId: string, token: Token): Promise<string> {
   const { meaning } = await send<FlagResponse>(chapterVersionId, token.index, true, flagsUrl(chapterVersionId), {
     method: "POST",
-    headers: { "Content-Type": "application/json", "X-Reader-Session": readerSessionId() },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ word: token.normalized, tokenIndex: token.index }),
   });
-  meanings.set(keyOf(chapterVersionId, token.index), meaning);
   return meaning;
 }
 
 export async function unflagWord(chapterVersionId: string, token: Token): Promise<void> {
   await send(chapterVersionId, token.index, false, `${flagsUrl(chapterVersionId)}/${token.index}`, {
     method: "DELETE",
-    headers: { "X-Reader-Session": readerSessionId() },
   });
 }

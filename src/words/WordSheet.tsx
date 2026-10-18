@@ -2,8 +2,9 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import type { Token } from "../types";
-import { flagWord, isFlagged, knownMeaning, unflagWord, useFlaggedWords } from "./flagged-words";
-import { canHear, hear } from "./hear";
+import { flagWord, isFlagged, lookupWordMeaning, unflagWord, useFlaggedWords } from "./flagged-words";
+import { canHear, hear, hearInBrowser } from "./hear";
+import type { WordMeaning } from "./meaning";
 
 const button =
   "flex min-h-13 flex-1 cursor-pointer items-center justify-center gap-2 rounded-2xl px-4 text-base font-semibold transition outline-light focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100";
@@ -32,33 +33,74 @@ export function WordSheet({ chapterVersionId, token, onClose }: { chapterVersion
   const dialog = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const flagged = useFlaggedWords(chapterVersionId).has(token.index);
-  const [meaning, setMeaning] = useState(() => knownMeaning(chapterVersionId, token.index));
-  const [failed, setFailed] = useState(false);
-  const [speech, setSpeech] = useState(false);
+  const [meaning, setMeaning] = useState<WordMeaning | null>(null);
+  const [meaningFailed, setMeaningFailed] = useState(false);
+  const [meaningAttempt, setMeaningAttempt] = useState(0);
+  const [flagFailed, setFlagFailed] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [speech, setSpeech] = useState<"idle" | "loading" | "playing" | "failed">("idle");
+  const [browserVoice, setBrowserVoice] = useState(false);
+  const playback = useRef<AbortController | null>(null);
   const word = displayWord(token);
 
   useEffect(() => {
     if (!dialog.current?.open) dialog.current?.showModal();
-    setSpeech(canHear());
+    return () => playback.current?.abort();
   }, []);
 
   useEffect(() => {
-    if (isFlagged(chapterVersionId, token.index) && knownMeaning(chapterVersionId, token.index) !== undefined) return;
+    if (isFlagged(chapterVersionId, token.index)) return;
     let live = true;
+    setSaving(true);
     flagWord(chapterVersionId, token).then(
-      (m) => live && setMeaning(m),
-      () => live && setFailed(true),
-    );
+      () => live && setFlagFailed(false),
+      () => live && setFlagFailed(true),
+    ).finally(() => live && setSaving(false));
     return () => {
       live = false;
     };
     // Keyed on the index, not the Token object, so a re-render never re-flags a word the Reader just unflagged.
   }, [chapterVersionId, token.index]);
 
-  function toggleFlag() {
-    setFailed(false);
-    const done = flagged ? unflagWord(chapterVersionId, token) : flagWord(chapterVersionId, token).then(setMeaning);
-    done.catch(() => setFailed(true));
+  useEffect(() => {
+    const request = new AbortController();
+    setMeaning(null);
+    setMeaningFailed(false);
+    lookupWordMeaning(chapterVersionId, token.index, request.signal).then(
+      (value) => !request.signal.aborted && setMeaning(value),
+      () => !request.signal.aborted && setMeaningFailed(true),
+    );
+    return () => request.abort();
+  }, [chapterVersionId, token.index, meaningAttempt]);
+
+  async function toggleFlag() {
+    setFlagFailed(false);
+    setSaving(true);
+    try {
+      if (flagged) await unflagWord(chapterVersionId, token);
+      else await flagWord(chapterVersionId, token);
+    } catch { setFlagFailed(true); }
+    finally { setSaving(false); }
+  }
+
+  async function play(browser = false) {
+    playback.current?.abort();
+    const request = new AbortController();
+    playback.current = request;
+    setBrowserVoice(browser);
+    setSpeech(browser ? "playing" : "loading");
+    try {
+      if (browser) await hearInBrowser(word, request.signal);
+      else await hear(word, request.signal, () => !request.signal.aborted && setSpeech("playing"));
+      if (!request.signal.aborted) setSpeech("idle");
+    } catch {
+      if (!request.signal.aborted) setSpeech("failed");
+    }
+  }
+
+  function stopPlayback() {
+    playback.current?.abort();
+    setSpeech("idle");
   }
 
   return (
@@ -84,26 +126,32 @@ export function WordSheet({ chapterVersionId, token, onClose }: { chapterVersion
           </button>
         </div>
         <p aria-live="polite" className="mt-2 min-h-14 text-lg leading-snug text-pretty">
-          {meaning ?? (failed ? null : <span className="text-fog">Looking it up…</span>)}
+          {meaning?.meaning ?? (meaningFailed ? "The meaning couldn’t load. You can keep reading and try again." : <span className="text-fog">Looking it up…</span>)}
         </p>
-        {failed && (
+        {meaning?.source === "chapter" && <p className="mt-1 text-sm text-fog">Prepared Chapter meaning. Live lookup is unavailable.</p>}
+        {(meaningFailed || meaning?.source === "unavailable" || meaning?.source === "chapter") && <button type="button" onClick={() => setMeaningAttempt((n) => n + 1)} className="min-h-11 cursor-pointer text-sm font-semibold text-light underline outline-light focus-visible:outline-2">Retry meaning</button>}
+        {flagFailed && (
           <p role="alert" className="mt-1 border-l-4 border-gold pl-3 font-semibold text-ink">
-            Couldn't reach your Word Bank. Check your connection and try again.
+            Your flag change couldn’t be confirmed. Check your connection and try again.
           </p>
         )}
         <div className="mt-5 flex gap-3">
-          <button type="button" onClick={() => hear(word)} disabled={!speech} className={`${button} bg-light text-white hover:bg-[#125f3f]`}>
+          <button type="button" onClick={speech === "playing" ? stopPlayback : () => void play()} disabled={speech === "loading"} className={`${button} bg-light text-white hover:bg-[#125f3f]`}>
             <Icon d={SPEAKER} />
-            Hear it
+            {speech === "loading" ? "Loading voice…" : speech === "playing" ? "Stop voice" : speech === "failed" ? "Retry voice" : "Hear it"}
           </button>
-          <button type="button" onClick={toggleFlag} className={`${button} border border-hairline bg-white/60 text-ink hover:bg-white`}>
+          <button type="button" onClick={toggleFlag} disabled={saving} className={`${button} border border-hairline bg-white/60 text-ink hover:bg-white`}>
             <Icon d={FLAG} />
-            {flagged ? "Unflag" : "Flag"}
+            {saving ? "Saving…" : flagged ? "Unflag" : "Flag"}
           </button>
         </div>
+        {speech === "failed" && <p role="alert" className="mt-3 text-sm text-ink">
+          {browserVoice ? "Browser voice couldn’t play." : "OCI pronunciation couldn’t play."}
+          {canHear() && <button type="button" onClick={() => void play(true)} className="ml-2 min-h-11 cursor-pointer font-semibold text-light underline outline-light focus-visible:outline-2">Try browser voice</button>}
+        </p>}
+        {speech === "playing" && <p role="status" className="mt-3 text-sm text-fog">{browserVoice ? "Browser voice fallback" : "OCI Speech pronunciation"}</p>}
         <p aria-live="polite" className="mt-3 text-sm text-fog">
-          {flagged ? "Flagged. It goes to your Word Bank, and you'll meet it again." : "Not flagged. It stays out of your Word Bank."}
-          {!speech && " This browser can't say words aloud."}
+          {saving ? "Saving your word…" : flagged ? "Flagged. It goes to your Word Bank, and you'll meet it again." : "Not flagged. It stays out of your Word Bank."}
         </p>
       </div>
     </dialog>
