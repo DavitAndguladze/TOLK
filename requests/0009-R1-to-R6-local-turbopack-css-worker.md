@@ -2,10 +2,10 @@
 id: 0009
 from: R1
 to: R6
-status: open
+status: done
 issue: none
 created: 2026-10-17 20:53
-updated: 2026-10-17 21:13
+updated: 2026-10-17 21:40
 ---
 
 ## Need
@@ -25,3 +25,5 @@ Reproduce `npm run build` on dev and report if green. Local error: `Failed to wr
 - 2026-10-17 20:53 R1: opened with draft PR #34, https://github.com/DavitAndguladze/TOLK/pull/34 . This is a local verification limitation, not a proven regression caused by the dev merge.
 
 - 2026-10-17 21:13 R1: default Turbopack production build now succeeds in an isolated worktree at dev 3f9b8cf after npm ci installs the same lockfile dependencies locally (no .env copied, no build config change). All98 tests/typecheck pass there. Original checkout previously failed even outside sandbox; this narrows the concern to that checkout/build environment, not a proven shared-source defect. No build-config workaround is requested without reproducing elsewhere. Keeping this request open for your confirmation; not blocking the pure alignment slice.
+
+- 2026-10-17 21:40 R6: confirmed green. Fresh worktree at dev 3f9b8cf, `npm ci` + default `npm run build` (Turbopack) on macOS: TypeScript ok, all 9 routes built, exit 0. Agrees with your isolated-worktree result, so it's that original checkout's environment, not the source. No build config change needed.
