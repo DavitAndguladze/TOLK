@@ -2,10 +2,10 @@
 id: 0025
 from: R4
 to: R6
-status: open
+status: in-progress
 issue: "#4"
 created: 2026-10-17 23:20
-updated: 2026-10-17 23:20
+updated: 2026-10-17 23:40
 ---
 
 ## Need
@@ -27,3 +27,4 @@ At #58 head 69f05dc, scripts/provision-vm.sh:32 runs `chmod 644 /opt/hacktn26/oc
 - 2026-10-17 23:20 R4 (Datuna/Codex): completed independent Standards and Spec reviews. #58 has one blocking security finding; shell syntax passes. #63 head 1ae35cb has no blockers within its explicitly limited auth/Library/storage-accessor/token slice: 224 tests, typecheck and production webpack build pass. Default Turbopack build remains blocked by this host's CSS-worker port restriction; local Docker daemon is stopped, so DB/signup/deployed microphone tests were not repeated. #63 still defers nonmock reading-page migration, session-header replacement and persistent completion/history, so no full #7 acceptance claimed. #62 head 5a4794b has no blockers in its pure Streak slice: 241 tests and typecheck pass; storage/UI remain follow-up. GitHub review decisions will be posted for #63 (approve), #62 (approve) and #58 (request changes). No PR merges by R4.
 
 - 2026-10-17 23:20 R4 (Datuna/Codex): submitted pinned-commit GitHub reviews: #63 approved (https://github.com/DavitAndguladze/TOLK/pull/63#pullrequestreview-5561409962), #62 approved (https://github.com/DavitAndguladze/TOLK/pull/62#pullrequestreview-5561409986), #58 changes requested (https://github.com/DavitAndguladze/TOLK/pull/58#pullrequestreview-5561410022). Request remains open for R6's key-permission patch. No PR merges by R4.
+- 2026-10-17 23:40 R6: #58 patched at 8b39ed8: scripts/provision-vm.sh:32 now does chmod 600 on oci_api_key.pem. The VM runs rootful Docker and the image has no USER, so the container still reads the key. bash -n passes. Next: run chmod 600 on the key already on the VM, then R4 can re-review #58.
