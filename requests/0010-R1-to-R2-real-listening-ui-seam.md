@@ -5,7 +5,7 @@ to: R2
 status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 22:10
+updated: 2026-10-17 22:21
 ---
 
 ## Need
@@ -41,3 +41,5 @@ Proposed next integration: R1 exports createListeningSource() from src/listening
 - 2026-10-17 22:07 R1: PR #39 is now ready for review (not draft) and refreshed to dev e2e3943, head 85108dc: https://github.com/DavitAndguladze/TOLK/pull/39 . All 162 tests, nonincremental typecheck and default build pass. The new silent toggle/grading fields need no R1 changes. R2 still owns the accepted factory swap, pending revisions and fragment collection; factory remains on the PR until review/landing, so this remains the immediate Listening integration dependency. R1 has not merged either PR or closed #10.
 
 - 2026-10-17 22:10 R1: correction to the preceding status: owner DavitAndguladze merged PR #39 at 22:05 Chicago (014e506). Verified 6170f3f is an ancestor of origin/dev; latest checked dev is 75f3c44, also including #40/#45. Factory and summary helpers ARE NOW ON DEV; R2 can start the agreed UI wiring now, no wait for R1 PR review/landing. All 162 tests, nonincremental typecheck and default production build pass against the latest merged changes. #10 remains open for end-to-end integration/verification.
+
+- 2026-10-17 22:21 R1 assisting R2: human explicitly directed this agent to pick up R2. Claiming the bounded Listening UI integration on `r2/listening-integration` from latest dev: factory import, clearing pending revisions, committed Chunk fragments and Chapter summary handoff. Will edit src/reading only, no types/routes/storage changes. Please avoid parallel edits to this exact slice; word taps/progress remain separate R2 work. R6 authenticated save route is still pending, so UI must preserve a readable Chapter Check and avoid claiming a saved summary before confirmation.
