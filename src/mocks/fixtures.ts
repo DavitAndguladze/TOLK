@@ -133,7 +133,7 @@ export const mockGrading: Grading = {
   barelyPassed: true,
   questionGrades: mockQuestionGrades,
   missedWords: [{ word: "advice", source: "read-aloud" }, { word: "quick", source: "flagged" }],
-  basis: { readAloudAccuracy: 0.94, checkScore: 5, checkMax: 6, flaggedCount: 1 },
+  basis: { readAloudAccuracy: 0.94, checkScore: 5, checkMax: 6, flaggedCount: 1, gradedBy: "oci-generative-ai" },
 };
 
 export const mockSession: SessionResult = {

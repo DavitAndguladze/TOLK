@@ -204,6 +204,13 @@ export interface QuestionGrade {
 
 export type GradingResult = "fully-understood" | "partly-understood" | "struggled";
 
+/**
+ * Who graded the Key Point answers: OCI Generative AI, or the word-match stand-in that runs when
+ * OCI isn't configured or fails. "oci-generative-ai" only if OCI graded every one. Complex Word
+ * answers are multiple choice, always graded exactly.
+ */
+export type KeyPointGradedBy = "oci-generative-ai" | "stand-in";
+
 /** Output of the deterministic grading combiner (pure). */
 export interface Grading {
   result: GradingResult;
@@ -212,8 +219,8 @@ export interface Grading {
   barelyPassed: boolean;
   questionGrades: QuestionGrade[];
   missedWords: { word: string; source: "read-aloud" | "chapter-check" | "flagged" }[];
-  /** Shown to Reader and judges: what the grade was based on. */
-  basis: { readAloudAccuracy: number | null; checkScore: number; checkMax: number; flaggedCount: number };
+  /** Shown to Reader and judges: what the grade was based on, and who graded the answers. */
+  basis: { readAloudAccuracy: number | null; checkScore: number; checkMax: number; flaggedCount: number; gradedBy: KeyPointGradedBy };
 }
 
 /** Pure grading combiner input: AI question grades + signals. */
@@ -222,6 +229,7 @@ export interface GradingInput {
   readAloud: ReadAloudSummary | null;
   flaggedWords: string[];
   complexWordMisses: string[];
+  gradedBy: KeyPointGradedBy;
 }
 
 export interface SessionResult {
