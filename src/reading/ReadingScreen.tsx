@@ -74,7 +74,9 @@ export function ReadingScreen({ chapterVersionId, chunks }: { chapterVersionId: 
       <section aria-live="polite" className="mx-auto max-w-xl animate-page-in px-6 pt-10 pb-12">
         <h2 className="font-book text-[1.75rem] leading-tight">You reached the end of the Chapter.</h2>
         <p className="mt-3 text-lg text-fog">
-          {clear} of {tokens.length} words came through clearly.
+          {tokens.some((t) => state.outcomes[t.index])
+            ? `${clear} of ${tokens.length} words came through clearly.`
+            : "You read this Chapter without reading it aloud."}
         </p>
         {practice.length > 0 && (
           <>
@@ -155,15 +157,21 @@ export function ReadingScreen({ chapterVersionId, chunks }: { chapterVersionId: 
               <Icon d={listening ? PAUSE : MIC} />
               {listening ? "Pause" : state.status === "paused" ? "Resume" : "Read aloud"}
             </button>
-            <button
-              type="button"
-              aria-label="Next part"
-              disabled={listening || state.chunkIndex === chunks.length - 1}
-              onClick={() => dispatch({ type: "go-to-chunk", index: state.chunkIndex + 1 })}
-              className={stepButton}
-            >
-              <Icon d="m9 18 6-6-6-6" />
-            </button>
+            {state.chunkIndex === chunks.length - 1 ? (
+              <button type="button" aria-label="Finish chapter" disabled={listening} onClick={() => dispatch({ type: "finish-chapter" })} className={stepButton}>
+                <Icon d="M20 6 9 17l-5-5" />
+              </button>
+            ) : (
+              <button
+                type="button"
+                aria-label="Next part"
+                disabled={listening}
+                onClick={() => dispatch({ type: "go-to-chunk", index: state.chunkIndex + 1 })}
+                className={stepButton}
+              >
+                <Icon d="m9 18 6-6-6-6" />
+              </button>
+            )}
           </div>
         </div>
       </footer>
