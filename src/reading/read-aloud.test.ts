@@ -43,3 +43,22 @@ test("Stop cancels a queued resume so it cannot restart the stream after the Rea
   expect(events).toEqual([]);
   expect(await attempt.finish()).toBeNull();
 });
+
+test("a partial reread replaces the previous Chunk score instead of retaining its old unread suffix", async () => {
+  vi.useFakeTimers();
+  const fixture = mockChapterVersion(1);
+  const version = { id: fixture.id, tokens: fixture.tokens.slice(0, 2) };
+  const attempt = createReadingAttempt(version, createMockListeningSource({ wordIntervalMs: 10 }));
+  const chunk = { chapterVersionId: version.id, tokens: version.tokens };
+  await attempt.start(chunk, () => {});
+  await vi.advanceTimersByTimeAsync(20);
+  expect((await attempt.finish())?.accuracy).toBe(1);
+  await attempt.start(chunk, () => {});
+  await vi.advanceTimersByTimeAsync(10);
+  const reread = await attempt.finish();
+  expect(reread?.wordResults.map(word => word.outcome)).toEqual(["correct", "pending"]);
+  expect(reread?.accuracy).toBe(0.5);
+  await attempt.start(chunk, () => {});
+  await attempt.stop();
+  expect(await attempt.finish()).toEqual(reread); // An empty failed restart must not erase the prior attempt.
+});

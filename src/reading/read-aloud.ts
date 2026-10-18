@@ -1,18 +1,20 @@
-import type { ChapterVersion, ListeningSource, ReadAloudSummary } from "../types";
+import type { ChapterVersion, ListeningSource, ReadAloudSummary, Token } from "../types";
 import { mergeReadAloudSummaries } from "../listening/summary";
 
 /** One Reader's attempt. Uses the ListeningSource interface; finish also waits for Pause cleanup. */
 export function createReadingAttempt(version: Pick<ChapterVersion, "id" | "tokens">, source: ListeningSource): ListeningSource & {
   finish(): Promise<ReadAloudSummary | null>;
 } {
-  type Run = { live: boolean; committed: boolean; stopping?: Promise<ReadAloudSummary> };
+  type Run = { tokens: Token[]; live: boolean; committed: boolean; stopping?: Promise<ReadAloudSummary> };
   let run: Run | undefined;
   let request = 0;
   const fragments: ReadAloudSummary[] = [];
   const commit = (current: Run, summary: ReadAloudSummary) => {
     if (current.committed) return;
     current.committed = true;
-    fragments.push(summary);
+    // Mock stop summaries are sparse; a scored reread must replace its entire token scope.
+    const scoped = mergeReadAloudSummaries({ id: version.id, tokens: current.tokens }, [summary]);
+    if (scoped) fragments.push(scoped);
   };
   const stopRun = (current: Run) => {
     current.live = false;
@@ -28,7 +30,7 @@ export function createReadingAttempt(version: Pick<ChapterVersion, "id" | "token
       const ticket = ++request;
       if (run) await stopRun(run);
       if (ticket !== request) return;
-      const current: Run = { live: true, committed: false };
+      const current: Run = { tokens: chunk.tokens, live: true, committed: false };
       run = current;
       try {
         await source.start(chunk, event => {
