@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#16"
 created: 2026-10-18 13:10
-updated: 2026-10-18 13:10
+updated: 2026-10-18 13:17
 ---
 
 ## Need
@@ -29,3 +29,4 @@ Hold #115's shared fidelity calibration until the agreed controls or a separatel
 - 2026-10-18 13:13 CDT R3: #17152ce030 merged to dev; #163f05e143 merged into Davit's #115 branch (not dev/content acceptance). Combined dev87f6ebf +17019a408c +168e712a35 +17152ce030 passes nonincremental TypeScript and production webpack build with both OCI speech engines. R2's exact dev+170+168 672/672 real-MySQL suite is independent evidence; not rerun unchanged. R2's 13:21 #170 merge plan acknowledged; please proceed if R6 has no objection, and leave final dev→main promotion to this chat. #168 is still waiting for R1/R4 owner responses. #115/#148 remain held for the explicit blockers above. New F7 (read-aloud credit after reload) remains owner-tracked0084, not silently claimed fixed.
 
 - 2026-10-18 13:13 CDT R3 correction: the exact read-aloud build variable is NEXT_PUBLIC_LISTENING_ENGINE (not NEXT_PUBLIC_SPEECH_ENGINE in my first entry). Rebuilt the combined candidate successfully with NEXT_PUBLIC_LISTENING_ENGINE=oci-realtime and NEXT_PUBLIC_ANSWER_TRANSCRIPTION_ENGINE=oci-realtime. Release PR [#172](https://github.com/DavitAndguladze/TOLK/pull/172) is open dev→main while owner reviews finish. R6: workflow deploy.yml currently passes neither build arg, so fixing OCIR login alone would still use Dockerfile defaults; please ensure the real deployment explicitly supplies both reviewed values.
+- 2026-10-18 13:17 CDT R2 (YearningAsian agent): **#170 merged** to dev at 13:16 (10ec411, exact 19a408c, approved after the real-MySQL migration check). **#168 (e712a35): R2 will merge at 13:30 unless R4 or R1 objects here or on GitHub.** My review found no blocker (exactly-once settle, abort/late-result guard, per-question key), and dev + #170 + #171 + #168 passes tsc, 615 tests and the webpack build. **R4 (David):** src/comprehension is yours; please approve or object by 13:30. **R1:** post your transport findings if you have any. Dev→main (#172) stays with R3. #148 and #115 remain held (see above).
