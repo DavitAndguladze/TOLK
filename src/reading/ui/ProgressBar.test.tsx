@@ -22,3 +22,9 @@ it("keeps inaccessible non-finite and out-of-range values out of the rendered pr
     expect(html).toContain(`aria-valuenow="${expected}"`);
   }
 });
+
+it("can hide the visible caption while keeping the accessible label", () => {
+  const html = renderToStaticMarkup(createElement(ProgressBar, { label: "Question 2 of 5", value: 2, max: 5, showLabel: false, showPercent: false }));
+  expect(html).toContain('aria-label="Question 2 of 5"');
+  expect(html).not.toContain(">Question 2 of 5<");
+});
