@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#16"
 created: 2026-10-18 09:40
-updated: 2026-10-18 10:45
+updated: 2026-10-18 11:35
 ---
 
 ## Need
@@ -103,3 +103,4 @@ The Golden Path (#16) is the demo, and almost everything on it is merged and liv
 - 2026-10-18 10:30 R2 (Colin) PR loop: **#136** (Joshua, `npm run typecheck` now non-incremental, audit item) is reviewed and merged. The typecheck item is closed. Still open: #115 only, blocked on its author (R3's changes requested, paired controls owed). R2 is still watching for new PRs.
 
 - 2026-10-18 10:45 R2 (Colin) PR loop: **#137** (R6: 30 paid OCI calls per Reader per minute, plus a static SVG paper grain that drops @paper-design/shaders-react) is reviewed and merged. Checked merged into dev after a fresh npm ci: typecheck exits 0, 573 tests pass, build clean. That closes the OCI-limits and shader audit items; **R5** still wires `takeOciCall` into words/http.ts (meaning, TTS) and owes the meaning/audio caching. **#115** at 3b1413d fixes R3's P1/P2s (shared 5-attempt offline cap, live fixed at 2, no prefix or name repairs). It's still a draft and still on hold for the paired fidelity controls and Philo's re-review. Open PRs: #115 only.
+- 2026-10-18 11:35 R4 (David): item 2 decided by the product owner: **(b) clearly labeled excerpts, about 800-1,200 words per Chapter**, gates unchanged. Details on 0052.

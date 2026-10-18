@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#16"
 created: 2026-10-18 09:30
-updated: 2026-10-18 11:24
+updated: 2026-10-18 11:35
 ---
 
 ## Need
@@ -89,3 +89,10 @@ If R3 comes back online before this lands: please say so here immediately so we 
 - 2026-10-18 11:24 R4 (Davit): Samuel’s paced rerun completed metadata extraction for all four Chapters and reached Gatsby L1 generation. Command: `INGEST_PAUSE_MS=2000 INGEST_VERSION_BUDGET_MS=900000 npm run ingest:gatsby -- .scratch/gatsby-seed-2026-10-18.json`. The shared request queue serialized calls (`inFlight: 1`); 80 calls completed. No HTTP status, OCI service code, or `opc-request-id` errors occurred. One SDK response was truncated at the 4,000-token output cap (`2026-10-18T16:17:43.141Z`, `inFlight: 1`). Chapter 1 did not pass our own gates: its L1 rewrite repeatedly exceeded the 10-word sentence limit, used vocabulary outside the top-1,000 band, and changed/omitted required names; the 15-minute per-Version budget then expired. No seed file was written and no DB/Library state was changed. Fixed the observed Chapter 2 optional retained-word evidence issue (`weatherproof` had no source support) by dropping only unsupported optional exceptions; required Complex Words/names remain strict. Regression + full suite pass (2,796 passed, 206 skipped), typecheck passes. Next: adjust the Chapter 1 rewrite prompt/repair loop to satisfy the existing L1 gates, then rerun. Reviewed PR #148; changes requested because it omits the provider message and its per-worker pause still permits concurrent calls. https://github.com/DavitAndguladze/TOLK/pull/148#pullrequestreview-5563789916
 
 - 2026-10-18 11:27 CDT R3/Philo: Acknowledged11:24 real run reachedL1 after metadata and failed content validation, without reportedOCI errors. Davit retains prompt/repair changes. Taking bounded read-only policy-plumbing check at published115 head4a791d1 against our human-approved faithful-natural vocabulary exceptions; no generation or duplicate prose edits. Please preserve/send the exact failed draft plus validator report and generating commit (no secrets), so we can analyze concrete rejected sentences/names offline. Eighty calls without a validChapter must not be described as seed readiness. Exact13-artifact identity/Check/fidelity/human acceptance handoff remains prerequisite for R6 import; no gate bypass requested. Our148 cancellation finding is fixed in076eb1e and R1/R2 independently reproduced it; their remaining pacing finding and Davit provider-message request still stand.
+- 2026-10-18 11:35 R4 (David), **PRODUCT OWNER DECISION, content scope: option (b), clearly labeled excerpts** (0060 item 2). **Davit, Philo:** stop trying to get full Chapters through L1. Instead:
+  - **Each demo Chapter is one excerpt of about 800-1,200 words** of the original text: a 5-10 minute lesson, which is what the product owner wants a Chapter to feel like. Start at the Chapter's opening and end at a natural paragraph break.
+  - **Label it honestly** in the Chapter title or subtitle, for example "Chapter 1 (excerpt)", so nothing implies it's the full Chapter.
+  - **Gates are unchanged.** L1 limits, required names, fidelity controls and the human read all still apply. Only the input is shorter.
+  - Key Points and Complex Words come from the excerpt, so the Chapter Check only asks about text the Reader saw.
+  - Same 13-artifact shape and the same `gatsby-full` namespace (or a clearly named excerpt variant, your call), then hand the commit + digest to R6 for import, seed, Library flip and #16 as planned.
+  Post an ETA once the first excerpt passes L1.
