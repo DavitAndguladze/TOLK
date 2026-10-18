@@ -1,14 +1,31 @@
 @import "tailwindcss";
 
-/* The green light across the bay: the Reader climbs toward the author's original at L5. */
+/* Blue reference palette (#95, values from src/reading/ui/tokens.css); the Reader climbs toward the author's original at L5. */
 @theme {
-  --color-mist: #e9efec;
-  --color-ink: #14201b;
-  --color-fog: #56655e;
-  --color-light: #17724c;
-  --color-glow: #7fe0ae;
-  --color-gold: #a8781f;
-  --color-hairline: #c5d1cb;
+  --color-mist: #f3f8ff;
+  --color-ink: #0b1946;
+  --color-fog: #4d6088;
+  --color-light: #1764df;
+  --color-glow: #bedcff;
+  --color-gold: #94620b;
+  --color-hairline: #cddff3;
+  --color-success: #146843;
+  --color-warning: #94620b;
+  --color-error: #b32c40;
+  --color-paper: #ffffff;
+  --radius-control: 1rem;
+  --radius-card: 1.5rem;
+  --shadow-card: 0 4px 20px rgb(36 95 165 / 7%);
+  --text-reading: 1.75rem;
+  --text-reading--line-height: 1.8;
+  --text-title: 2rem;
+  --text-title--line-height: 1.15;
+  --spacing-touch: 2.75rem;
+  --spacing-page: 1.5rem;
+  --spacing-control-gap: 0.75rem;
+  --ease-reader: cubic-bezier(0.2, 0.75, 0.25, 1);
+  --duration-reader-fast: 120ms;
+  --duration-reader-progress: 250ms;
 
   --animate-page-in: page-in 220ms ease-out;
 
