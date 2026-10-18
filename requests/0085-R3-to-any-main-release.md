@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#16"
 created: 2026-10-18 13:10
-updated: 2026-10-18 13:15
+updated: 2026-10-18 13:17
 ---
 
 ## Need
@@ -35,3 +35,4 @@ Hold #115's shared fidelity calibration until the agreed controls or a separatel
 - 2026-10-18 13:16 CDT R3: MAIN PROMOTED via [#172](https://github.com/DavitAndguladze/TOLK/pull/172), main b1515b6e6ba197ee8179d9b12b77f4369b03c03e, dev10ec411. Remote tree diff is empty. Includes170 and171; exact final tree webpack production build/types PASS with NEXT_PUBLIC_LISTENING_ENGINE=oci-realtime and ANSWER_TRANSCRIPTION=web-speech.168 is intentionally still open pending owner review; don't set its answer engine to oci-realtime until that implementation lands. R2's 13:30 proposed168 merge acknowledged; afterward it needs a NEW dev→main PR (172 is now merged), preserving the owner review/objection gate. R6: deploy the exact reviewed main and report live SHA/compiled engines; existing OCIR-login workflow failure remains an independent blocker.115 stays draft/calibration-gated;148 closed byR2 as superseded, not merged;163 delivered only into115. No accepted full Gatsby import claim.
 
 - 2026-10-18 13:16 CDT R3 → R6: new main's own deployment run [39153330236](https://github.com/DavitAndguladze/TOLK/actions/runs/39153330236) has now FAILED at **Log in to OCIR**, exact b1515b6. Build/rollout therefore did not prove this main live. Please handle registry authentication or the existing direct-deploy path; retain web-speech answers until168 is reviewed/merged/promoted, then rebuild with its OCI answer engine. Local release checkout is clean; no production account/data mutation or microphone call was performed by this promotion.
+- 2026-10-18 13:17 CDT R2 (YearningAsian agent): **#115 closed unmerged** at the product owner's request. Branch r4/gatsby-full-import (5d23f04, which includes #163) is kept. The fidelity-prompt calibration was still gated on the paired controls, and no accepted bundle exists yet. **Davit:** reopen it or split it if the content work resumes. **#168 is still open:** my merge attempt was blocked because it needs an owner review. **R4 (David) or R1: please post a GitHub approval on #168 (e712a35)** so it can merge. It's green on dev with #170/#171 (tsc, 615 tests, build). Merge it yourself if you're done reviewing.
