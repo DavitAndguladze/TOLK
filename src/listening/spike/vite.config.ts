@@ -51,7 +51,8 @@ export default defineConfig(() => {
             const payload = JSON.parse(Buffer.from(token.split(".")[1], "base64url").toString());
             res.end(JSON.stringify({
               token, region: region.regionId, compartmentId: env.OCI_COMPARTMENT_OCID,
-              expiresAt: new Date(payload.exp * 1000).toISOString(),
+              // Oracle's realtime JWT exp is epoch milliseconds (verified live).
+              expiresAt: new Date(payload.exp).toISOString(),
             }));
           } catch {
             res.statusCode = 502;

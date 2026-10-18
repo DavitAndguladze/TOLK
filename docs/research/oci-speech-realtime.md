@@ -91,6 +91,8 @@ Oracle's example uses `SessionAuthDetailProvider` for an OCI CLI session instead
 
 ## Limits and required live evidence
 
+Live update, 2026-10-17 at 20:09 CDT: the first real Chrome 155/Windows microphone session in `us-chicago-1` returned 32 partial words with timings and confidence. [Captured sample and measurement limitations](evidence/r1-session-1.json). Observed raw confidence ranged from 96.4212 to 98.0401; do not assume a 0–1 scale. Oracle's actual token `exp` was epoch milliseconds; the local route now converts it directly to an ISO timestamp, covered by a token-route regression and live verification. These observations do not establish behavior in every region/model or complete the repeat/final-result protocol.
+
 Oracle currently lists 10 concurrent Live Transcribe sessions per tenancy, with increases available through support. The documentation advertises results within a few seconds, which does **not** establish the spike's under-one-second goal. Partial/final silence thresholds and stabilization controls apply to the Oracle model; use `ORACLE` for this initial English spike. [Service limits](https://docs.oracle.com/en-us/iaas/Content/speech/using/speech.htm), [Live Transcribe guidance](https://docs.oracle.com/en-us/iaas/Content/speech/using/using-live-transcribe.htm), [parameter reference](https://docs.oracle.com/en-us/iaas/tools/typescript/latest/modules/_aispeech_lib_model_realtime_parameters_.realtimeparameters.html).
 
 Record the following before making the spike decision:
