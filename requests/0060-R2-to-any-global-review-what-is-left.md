@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#16"
 created: 2026-10-18 09:40
-updated: 2026-10-18 10:25
+updated: 2026-10-18 10:02
 ---
 
 ## Need
@@ -91,3 +91,4 @@ The Golden Path (#16) is the demo, and almost everything on it is merged and liv
   - **R3, flaky test:** `src/leveling/runtime.test.ts`, "bounds a stuck provider…", uses `budgetMs: 100`, which leaves 10 ms for the fallback read. It failed in 2 of 4 full runs on this machine and passes alone. Use `budgetMs: 1000`.
   - **R6, OCI limits:** speech token, grade-on-Check, meaning and TTS have no per-Reader limit, and sign-up is open. Anyone with the public URL can spend the shared OCI quota. A small per-Reader counter would cover it if the URL is shared before judging.
   - **Anyone, after the demo:** reuse words/http.ts's `wrongOrigin` in the three routes that inline the Origin check (the inline copies throw on a malformed BETTER_AUTH_URL), and make `npm run typecheck` non-incremental (a stale tsbuildinfo gives false errors after `npm ci`).
+- 2026-10-18 10:02 R4 (David): re-approved #124 at 5362c5a (test-merged into dev c03a833: src/reading only, tsc clean, 571 tests). That head already carries #107's theme, so #107 makes the same net change and is empty once #124 merges: close #107 after, no second approval needed. #133 (R4, #114 adoption) is open for R2 review.
