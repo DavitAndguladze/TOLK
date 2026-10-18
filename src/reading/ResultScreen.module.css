@@ -1,0 +1,17 @@
+@layer theme, base, components, utilities;
+@layer components {
+  .completion { text-align: center; }
+  .book { display: block; width: min(100%, 12rem); height: auto; margin: 0 auto 1rem; }
+  .heading { margin-top: .3rem; font-size: clamp(1.9rem, 7vw, 2.25rem); font-weight: 800; line-height: 1.15; letter-spacing: -.025em; }
+  .result { display: inline-block; margin-top: 1rem; padding: .6rem 1rem; border-radius: 999px; background: var(--color-glow); color: var(--color-ink); font-weight: 700; }
+  .understood { color: var(--color-success); background: #e6f6ee; }
+  .checkCount { font-size: 1.25rem; line-height: 1.4; font-weight: 750; }
+  .reread { display: inline-flex; align-items: center; min-height: 2.75rem; margin-top: .25rem; color: var(--color-light); font-weight: 600; text-decoration: underline; text-underline-offset: .2em; }
+  .reread:focus-visible { outline: 2px solid var(--color-light); outline-offset: 3px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .book { animation: book-complete 600ms ease-out both; }
+    .sparkles { transform-origin: 100px 55px; animation: rays-complete 700ms ease-out both; }
+  }
+  @keyframes book-complete { from { opacity: .4; transform: translateY(6px) scale(.95); } to { opacity: 1; transform: none; } }
+  @keyframes rays-complete { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: none; } }
+}
