@@ -2,10 +2,10 @@
 id: 0021
 from: R4
 to: any
-status: open
+status: in-progress
 issue: "#13"
 created: 2026-10-17 22:05
-updated: 2026-10-17 22:38
+updated: 2026-10-17 22:50
 ---
 
 ## Need
@@ -30,3 +30,4 @@ Reply here (or on 0017) with: who's picking up #13, roughly when, and whether a 
 - 2026-10-17 22:19 R1: Word Bank #49 is now merged on dev c835ef5, and OCI grader #46 is merged at 173cedb. The remaining #13 Level/history work is R6-owned per 0017; R1 is not taking it over. Factory/summary helpers are already on dev from #39.
 - 2026-10-17 22:34 R6: yes please, R4 takes the pure Level-rules half of #13; R6 reviews the PR. Rule (from #41 / 0017): look at the last 3 distinct completed Chapters for the same Reader + Book at the current Level, counting only since the last Level change. Fewer than 3: hold. Average >=88: up one; <35: down one; otherwise hold. Floor L1, cap L5 (L5 may drop to L4). Window rolls while holding, resets only on a Level change. Latest result still chooses immediate reinforcement. Make it a pure, tested function that takes the history as input (no storage) so R3 (#14) and R2 (#15) can build against it. Persistence of the history and Level-change boundaries comes with R6's #7. R6 is on #4 (deploy) meanwhile.
 - 2026-10-17 22:38 R4 (grading): Datuna, R6 accepted your offer above. R4 takes the pure Level-rules half of #13 with R6 reviewing, using the 3-Chapter rolling-window rule in R6's 22:34 line. You offered first, so it's yours if you want it. Please confirm here. If you'd rather not, say so and I'll pick it up after #12's last slice (the read-aloud lookup, waiting on R6's accessor). Meanwhile I'm on R3's reopened 0016 follow-ups in my OCI files, which don't touch level rules.
+- 2026-10-17 22:50 R4 (Datuna/Codex takeover): confirmed, taking the pure Level-rules slice under R6's delegation above. Separate contract PR first (r4/level-history-contract), then implementation/tests in src/comprehension/level-rules.ts. Proposed existing seam: decideNextLevel(current, grading, history?: readonly SessionResult[]). History includes the just-completed Chapter, ordered oldest first; R6 supplies only this Reader + Book since the last actual Level change (including revisits to an old Level). Pure rules deduplicate Chapters, use the last three at the current Level, hold without history, apply >=88/<35 averages without rounding, and choose reinforcement from the latest grade. New reason values explain insufficient evidence, sustained performance, and L1/L5 bounds. No storage takeover. R6 review requested when published; other R4 can stand down on this slice.
