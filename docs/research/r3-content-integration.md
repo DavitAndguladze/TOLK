@@ -26,7 +26,7 @@ After the completion transaction commits, R4 can call `runGeneration(pendingId, 
 
 ## Outstanding owner boundaries
 
-Product decision, 2026-10-18: preserve faithful, natural text with documented source-word exceptions when the frequency target would erase meaning. Keep short sentences and simple language. The explicit exception implementation and new content run follow this integration slice; the old constrained Chapter 1 diagnostic has known semantic losses and must not be imported.
+Product decision, 2026-10-18: preserve faithful, natural text with documented source-word exceptions when the frequency target would erase meaning. Keep short sentences and simple language. The implemented [exception policy](../leveling-vocabulary-policy.md) requires exact source word, sentence, quote and reason; unlisted vocabulary is still rejected. The old constrained Chapter 1 diagnostic must not be imported.
 
 Canonical migrations now retain R6's `0002_read_aloud_summaries` unchanged, followed by R3/R5 `0003_words-and-generation` and `0004_generation-delivery-provenance`. Fresh installation and upgrade from the exact R6 migration history both passed in isolated MySQL. Shared seed reload validates incoming and stored artifacts, retains canonical timestamps/fidelity, and writes the whole bundle atomically.
 
@@ -46,3 +46,11 @@ Full original Chapter 3 (L5) passed the integrated Maverick Check generator and 
 A diagnostic JSON_OBJECT request returned valid single-object JSON in 2.24 seconds. A full L1 run in that diagnostic mode failed source mapping validation after two attempts/54.9 seconds. Capturing the failing passage showed the parser counted a Gutenberg dashed section divider as a sentence; the model omitted that layout line. The shared splitter now excludes divider-only paragraphs while preserving the exact original L5 text. This changes source sentence indexes: previously captured metadata and Check artifacts must be regenerated/revalidated before import. No experimental bundle has been shipped.
 
 The post-fix full L1 diagnostic still failed after two attempts/53.8 seconds; its final attempt omitted actual prose at source indexes 212 and 215. Coverage validation correctly rejected it. JSON mode and the divider fix do not establish reliable complete-Chapter rewriting or the 20-second live budget. The pre-generated bundle is still unfinished.
+
+## Faithful-policy evidence, 2026-10-18
+
+The new policy passed all 482 integrated tests, including real MySQL, nonincremental TypeScript and the complete webpack build. Its bounded review found no actionable bugs.
+
+An editorial Chapter 1 candidate repairs 66 documented loss rows, covers all 362 source indexes in 894 sentences of at most 10 words, and proposes 299 source-attested word exceptions. It passed the passage structural gates, but two actual Check/fidelity attempts failed the separate review gate. The model's follow-up explanation contained false omissions and an invented question. Grouping adjacent served sentences corrected its plot/answerability verdicts, but tone and complete Key Point evidence still failed. Nothing was marked ready. The [review packet](ch1-l1-review/README.md) is for R1's independent review, not import.
+
+A separate genuine automatic rewrite under the new policy made 35 provider calls in 41.8 seconds before tenant throttling. It did not reach Check/fidelity or emit a ready artifact. Saved feedback still showed unlisted vocabulary, missing names and sentence-length violations. No further provider run was started. The exact vocabulary target remains an automation reliability limitation; validated offline content and owner integration are still required for the demo.
