@@ -7,6 +7,8 @@ import type { AnswerTranscriber } from "../transcription";
  */
 export interface ChapterCheckPanelProps {
   check: ChapterCheck;
+  /** The signed-in Reader, so a saved draft belongs to them alone. */
+  readerId: string;
   gradeAnswer: (questionId: string, entry: ChapterCheckAnswers["answers"][number]) => Promise<QuestionGrade>;
   onSubmit: (answers: ChapterCheckAnswers) => Promise<void>;
   transcriber?: AnswerTranscriber;

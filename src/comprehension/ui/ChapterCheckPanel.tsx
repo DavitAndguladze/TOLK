@@ -12,7 +12,8 @@ import { AnswerInput } from "./AnswerInput";
 import { checkFlow, initialCheckFlow, type CheckFlowAction, type CheckFlowState } from "./check-flow";
 import type { ChapterCheckPanelProps } from "./types";
 
-const storageKey = (checkId: string) => `tolk-check-flow:${checkId}`;
+// Per Reader: two Readers can share a tab and a Chapter Version (ADR-0008 shares Chapter 1), so drafts must not cross.
+const storageKey = (readerId: string, checkId: string) => `tolk-check-flow:${readerId}:${checkId}`;
 
 function FeedbackPanel({ grade }: { grade: QuestionGrade }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -28,22 +29,25 @@ function FeedbackPanel({ grade }: { grade: QuestionGrade }) {
 }
 
 /** One question per screen (#101): answer → Check answer (graded by #97) → feedback → Continue; the last Continue submits the whole Check. */
-export function ChapterCheckPanel({ check, gradeAnswer, onSubmit, transcriber = getAnswerTranscriber() }: ChapterCheckPanelProps) {
+export function ChapterCheckPanel({ check, readerId, gradeAnswer, onSubmit, transcriber = getAnswerTranscriber() }: ChapterCheckPanelProps) {
   const router = useRouter();
   const [state, setState] = useState<CheckFlowState>(() => initialCheckFlow(check));
+  const untouched = useRef(state);
+  const key = storageKey(readerId, check.id);
   const [exiting, setExiting] = useState(false);
   const dispatch = (action: CheckFlowAction) => setState((s) => checkFlow(s, action, check));
 
   // Restores after mount (sessionStorage isn't there during server render), so a refresh reopens the same question.
   useEffect(() => {
     try {
-      const saved = sessionStorage.getItem(storageKey(check.id));
+      const saved = sessionStorage.getItem(key);
       if (saved) setState(initialCheckFlow(check, JSON.parse(saved)));
     } catch {} // blocked storage or a bad entry: start fresh
-  }, [check]);
+  }, [check, key]);
   useEffect(() => {
-    try { sessionStorage.setItem(storageKey(check.id), JSON.stringify(state)); } catch {}
-  }, [check.id, state]);
+    if (state === untouched.current) return; // the mount pass would overwrite the saved draft before it is restored
+    try { sessionStorage.setItem(key, JSON.stringify(state)); } catch {}
+  }, [key, state]);
 
   const question = check.questions[state.index];
   const answer = state.answers[question.id];
@@ -70,7 +74,7 @@ export function ChapterCheckPanel({ check, gradeAnswer, onSubmit, transcriber = 
     };
     try {
       await onSubmit(submission);
-      try { sessionStorage.removeItem(storageKey(check.id)); } catch {}
+      try { sessionStorage.removeItem(key); } catch {}
     } catch {
       dispatch({ type: "failed", message: "Couldn't save your answers. Try again." });
     }
