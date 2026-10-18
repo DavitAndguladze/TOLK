@@ -107,3 +107,39 @@ One more defensible, unforced call: 326 completes Daisy's intentionally truncate
 4. **Independent model fidelity gate**: every actual attempt so far has failed (throttling after 35 calls, omitted real passages, a validator that gave false explanations of its own rejections). A human-approved candidate does not equal a passing fidelity run; that gate still has to actually pass before this is importable.
 5. **R1's independent review** only covered 0–39 so far; 40–361 (including this session's slices) has had editorial repair but no second, independent reader.
 6. This is Chapter 1 of 4 needed (Ch 2–4 are fallback/original-only so far, per `r3-content-integration.md`) before the Golden Path's content blocker clears.
+
+## Slice 7 — 2026-10-18 (Davit/R4): folded in R3/R5's local fixes, full vocabulary re-verification
+
+R3/R5 had separately, locally repaired R1's five accepted findings (source 10/12/13/18/19 — the military "moral attention" imagery, personality-as-gestures, impressionability/romantic readiness, the "Teutonic migration" allusion, and restless-not-distressed) as local commit `e62b87b`, unpublished since #43 had already merged by the time it was made. That work wasn't reachable from here, so it had diverged from the candidate this session finished. Re-applied all five from the exact replacement text R3/R5 posted in comms (request 0034), plus their 23 new source-word exceptions. Result matches their own reported counts exactly: 903 served sentences, 393 exceptions.
+
+Also ran a full, independent re-implementation of the real vocabulary-rank check (`validateChapterVersion`'s exemption/matching logic in `src/leveling/validation.ts`, not just a word-count check) against the entire candidate — every sentence, every session's work, not just this session's range. First pass found 20 apparent violations (hyphenated/accented words like "great-uncle" and "Hôtel" that the tokenizer mangles into unmatched tokens); investigation found this was a case-sensitivity bug in the verification script itself (comparing an un-normalized exception key), not a real defect — those words were already correctly documented in `exceptions.json`. Fixed the script and reran: **zero real vocabulary violations** across all 903 sentences.
+
+**Chapter 1's editorial review, including R1's five accepted findings, is now complete and independently vocabulary-verified**: 362/362 source sentences compared, 903 served sentences, all 362 source indexes in strict order, every sentence ≤10 words, every word either within the L1 frequency target, a required name, or an individually documented exception. What's still outstanding is unchanged from the list above (items 1–6) — this slice closes out the five R1 findings specifically, not the remaining Key Points/Check/fidelity-gate/independent-review work.
+
+## Slice 8 — 2026-10-18 (Davit/R4): Key Points and Complex Words compared
+
+Compared the Chapter's 5 real Key Points and 5 Complex Words (`gatsby-ch1` in `src/data/gatsby/content.json` — distinct from the short demo chapter used elsewhere in the app) against the candidate.
+
+**Key Points**, checked against their cited original sentence:
+
+1. "Nick's father advises him to remember that other people have not had his advantages" (source 1) — supported: "Not everyone has had the good things you have had."
+2. "Nick lives in West Egg, the less fashionable of the two Eggs" (source 45) — supported: "It was, well, the less fashionable of the two."
+3. "Nick goes to East Egg to have dinner with the Tom Buchanans" (source 51) — **fixed**: the served sentences had split the original's one long sentence into four, and the explicit link between "East Egg" and "dinner with the Buchanans" was lost across the split (the dinner sentence just said "to the Tom Buchanans," two sentences after East Egg was mentioned). Rewrote the closing sentence to "I drove to East Egg for dinner with the Buchanans," so the Key Point is answerable from one sentence, not an inference across three. Verified: "drove" is an existing documented exception (`exceptions.json`, justified at source 60) — the match is word-level, not tied to a specific sentence, and source 51's original text also literally contains "drove" ("I drove over there to have dinner"), so no new exception was needed.
+4. "Miss Baker tells Nick that Tom has another woman in New York" (source 236) — supported verbatim.
+5. "Nick sees a distant green light across the water after seeing Gatsby outside" (source 360) — supported verbatim, with the preceding sentences (355–359, already verified in slice 6) establishing Gatsby standing outside.
+
+**Complex Words**, checked for presence in a clear, standalone-answerable served sentence (needed since each becomes a multiple-choice Check question):
+
+- abnormal (source 4): "An abnormal mind can quickly see this in someone normal."
+- supercilious (source 65): "He was supercilious, as if better than other people."
+- Nordics (source 195): "The idea is that we are Nordics."
+- Midas (source 36): "Only Midas, Morgan, and Maecenas knew those secrets."
+- green (source 360): "I saw only one little green light far away."
+
+All five are present exactly once each, in sentences that give some contextual signal toward the meaning (none of these repeat the earlier "judge"-style bug where a Check referenced a word missing from the Chapter's Complex Words — all five are genuinely in both the Chapter's complex-word list and the served text).
+
+Published the formal evidence artifact at `docs/research/ch1-l1-review/key-point-evidence.json`, in the shape `ContentValidationPolicy.keyPointEvidence` expects (`{source, points: [{keyPointId, sentenceIndex, quote}]}`, where `sentenceIndex` is the served sentence's array position, not the original index) — this didn't exist before this slice. Verified each entry resolves to a real, unique sentence whose text literally contains the quoted substring.
+
+Re-ran both full checks after the one edit: 903 served sentences, all 362 source indexes in order, ≤10 words each, **zero vocabulary violations**.
+
+**Key Points item (2) on the outstanding list is now done.** Still outstanding: the Chapter Check itself (`check.json`) is stale and needs regenerating against this final candidate — it should now use `key-point-evidence.json` for its Key Point questions' evidence, plus fresh evidence for its 1–2 Complex Word questions. The independent model fidelity gate, R1's independent review of 40–361, and Chapters 2–4 remain unchanged and still outstanding.
