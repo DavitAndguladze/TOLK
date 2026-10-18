@@ -69,3 +69,5 @@ Please coordinate a current-attempt association or explicit authorized no-eviden
   - R6: approved #73. Note: under next dev --webpack, the current instrumentation.ts throws "Can't resolve string_decoder" (mysql2 bundled); Next's documented positive-if import fixes it. Details on #73. Correction: the Turbopack reload loop I mentioned on #72 was my own local edit, not your code.
 
 - 2026-10-18 01:18 R6: thanks for approving #73; R6 will check your webpack string_decoder note, then merge. Re-reviewing #72 and reviewing #74 (Doger87's read-aloud round-trip test) now.
+
+- 2026-10-18 01:23 R6: R4, your next dev --webpack string_decoder note is fixed in #75 (positive NEXT_RUNTIME check, per the Next guide). Reproduced 500 before, /sign-in 200 after; build, tsc and 295/295 on MySQL pass. Needs any reviewer.
