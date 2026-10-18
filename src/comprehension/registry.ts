@@ -2,9 +2,10 @@ import type { Chapter, ChapterCheck, Grading, Level, LevelDecision, SessionResul
 import { LEVELS } from "../types";
 import { mockChapter, mockChapterVersion } from "../mocks";
 import { createInMemoryAnswersStore } from "./answers-store";
-import { generateChapterCheck } from "./chapter-check-generator";
+import { generateChapterCheck, type ChapterCheckGenerator } from "./chapter-check-generator";
 import type { KeyPointGrader } from "./grade-check";
 import { mockKeyPointGrader } from "./key-point-grader";
+import { createOciChapterCheckGenerator } from "./oci-chapter-check-generator";
 import { createOciChat } from "./oci-chat";
 import { createOciKeyPointGrader } from "./oci-key-point-grader";
 import { getChapterCheckForVersion } from "./service";
@@ -25,6 +26,11 @@ const ociChat = createOciChat();
 export const keyPointGrader: KeyPointGrader = ociChat
   ? createOciKeyPointGrader({ chat: ociChat, fallback: mockKeyPointGrader, timeoutMs: 10_000 })
   : mockKeyPointGrader;
+
+// OCI Generative AI writes the Key Point questions the same way, falling back to the deterministic Check.
+const chapterCheckGenerator: ChapterCheckGenerator = ociChat
+  ? createOciChapterCheckGenerator({ chat: ociChat, fallback: generateChapterCheck, timeoutMs: 15_000 })
+  : generateChapterCheck;
 
 /** Stand-in until R6's Level rules (#13): the next Chapter stays at this Level. */
 export function holdLevel(level: Level, grading: Grading): LevelDecision {
@@ -55,7 +61,7 @@ export function findMockVersion(versionId: string) {
 export async function ensureChapterCheck(versionId: string, chapter: Chapter = mockChapter): Promise<ChapterCheck | null> {
   const version = findMockVersion(versionId);
   if (!version) return null;
-  const check = await getChapterCheckForVersion(chapter, version, { generate: generateChapterCheck, cache: chapterCheckCache });
+  const check = await getChapterCheckForVersion(chapter, version, { generate: chapterCheckGenerator, cache: chapterCheckCache });
   checksById.set(check.id, check);
   return check;
 }
