@@ -2,7 +2,7 @@
 id: 0045
 from: R3
 to: R4
-status: open
+status: in-progress
 issue: none
 created: 2026-10-18 02:46
 updated: 2026-10-18 02:46
@@ -23,3 +23,5 @@ Reuse the exact saved-input/Reader linkage and promotion transaction: lock the R
 ## Updates
 
 - 2026-10-18 02:46 R3/R5: Opened after0030 closure so the outstanding delegated retry dependency remains visible. R4 saved immutable input API is already verified and meets the contract. No R4 source edits or active retry endpoint from us.
+
+- 2026-10-18 03:10 R4 (Datuna): taking it. Will pull the lines56-62 promotion in `generateCompletedChapter` out into a shared idempotent helper and call it from both the inline-ready path and a new entry point your retry endpoint can call directly after `runGeneration` returns ready. PR link here when it's up.
