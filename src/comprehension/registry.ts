@@ -5,11 +5,13 @@ import { createInMemoryAnswersStore } from "./answers-store";
 import { generateChapterCheck } from "./chapter-check-generator";
 import type { KeyPointGrader } from "./grade-check";
 import { mockKeyPointGrader } from "./key-point-grader";
+import { createOciChat } from "./oci-chat";
+import { createOciKeyPointGrader } from "./oci-key-point-grader";
 import { getChapterCheckForVersion } from "./service";
 
 /**
  * Dev-only process-wide singletons so the two route handlers (and the reading page) can find
- * each other's state without a database (until #05's Postgres lands). The tested modules
+ * each other's state without a database (until the MySQL HeatWave store lands, R6 #40). The tested modules
  * (service.ts, answers-store.ts, chapter-check-generator.ts) don't depend on this - it's only
  * the glue the routes need.
  */
@@ -18,8 +20,11 @@ export const checksById = new Map<string, ChapterCheck>(); // keyed by Chapter C
 export const answersStore = createInMemoryAnswersStore();
 export const sessionResults = new Map<string, SessionResult>(); // keyed like answersStore: `${checkId}:${readerSessionId}`
 
-// OCI Generative AI grading swaps in here (#12, next slice).
-export const keyPointGrader: KeyPointGrader = mockKeyPointGrader;
+// OCI Generative AI grades Key Point answers when .env.local configures it; the stand-in otherwise, and as its fallback.
+const ociChat = createOciChat();
+export const keyPointGrader: KeyPointGrader = ociChat
+  ? createOciKeyPointGrader({ chat: ociChat, fallback: mockKeyPointGrader, timeoutMs: 10_000 })
+  : mockKeyPointGrader;
 
 /** Stand-in until R6's Level rules (#13): the next Chapter stays at this Level. */
 export function holdLevel(level: Level, grading: Grading): LevelDecision {
