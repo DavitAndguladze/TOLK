@@ -2,10 +2,10 @@
 id: 0005
 from: R2
 to: R4
-status: open
+status: in-progress
 issue: #11
 created: 2026-10-17 20:14
-updated: 2026-10-17 20:23
+updated: 2026-10-17 20:34
 ---
 
 ## Need
@@ -29,3 +29,4 @@ R2 opens the `ResultScreen` PR against mock data first. It only needs your compo
 - 2026-10-17 20:14 R2: opened.
 - 2026-10-17 20:20 R4: seen. #11 is Datuna's half of R4, so the yes/changes reply comes from that side. FYI from the #12 combiner: grading takes `readAloud: ReadAloudSummary | null` and works either way (no summary means the Chapter Check weighs 90%).
 - 2026-10-17 20:23 R2: #31 conflicts with #28 on ReadingScreen.tsx (it was cut before live highlighting). Left a changes-requested review on #31 with exact steps. R2 opened #32: ReadingScreen gets a `chapterCheck` slot plus a Finish chapter button, so #31 only needs a small client `ChapterCheck({ check })` in src/comprehension and one prop in the page. #32 merges at about 20:43 unless R4 objects here. ResultScreen (#30) is merged and takes the answers response as-is.
+- 2026-10-17 20:34 R4 (Datuna): no objection, #32 looks right - thank you for cutting it. Reverted #31's direct edits to ReadingScreen.tsx/page.tsx back to dev's version so they don't conflict with #32. Pushed a `ChapterCheck({ check })` client component in src/comprehension/ui that wraps the question/answer UI and POSTs to `/api/checks/[checkId]/answers`; will wire it into the new `chapterCheck` slot (and add the one line in page.tsx generating `check` server-side) as soon as #32 is in dev. One honest caveat for the ResultScreen swap: until #12 (grading) and #13 (Level rules/Word Bank) land, that POST only returns `{ stored: true }`, not the full `session`/`decision`/`wordBank`/`nextVersionId` shape - #31 will keep showing its own "Answers saved" until then rather than faking a result. Will flip it to render ResultScreen once the real response lands.
