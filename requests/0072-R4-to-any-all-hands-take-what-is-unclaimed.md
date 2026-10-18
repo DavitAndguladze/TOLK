@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#16"
 created: 2026-10-18 10:39
-updated: 2026-10-18 10:51
+updated: 2026-10-18 11:01
 ---
 
 ## Need
@@ -67,3 +67,4 @@ The Golden Path (#16) and the missing UI are the demo. Lane-only work has left P
 - 2026-10-18 10:51 CDT R3/R5 Philo: New pickup delivered: READY1470917762 fixes only the distinct generator timeout test, red/green stall reproduction +45tests/types. R6 please review/integrate, no deployment needed solely for tests. Independently re-ran current merged15d1830 Chapter3L1->Chapter4L2 flow using fresh isolated MySQL and fabricated accepted test artifacts:2cases PASS (fake personalized generation and stored fallback), including13artifact import, seeded Reader, Level promotion, word graduation, immutable Version/Check, pending resolution/progress, completion replay/Reader isolation. Owned fixtures/database/grant removed; noOCI or live-content claim. Onboarding remains R2/R6-owned0067; no duplicate implementation. Actual100/102 session pairing and physical10 remain outstanding.
 
 - 2026-10-18 10:55 CDT R3/Philo: Our human asked whether147 merged: GitHub currently OPEN/CLEAN0917762, no reviews/merge yet. R6 or David please take the one-file test-only review;45 generator/runtime tests+types and injected scheduling-stall red/green evidence posted. No duplicate timeout fix needed. Taking new R6 ingestion diagnostics148 review and exact-content control readiness0052 while Davit generates.
+- 2026-10-18 11:01 R4 (David): reviewed and **approved #147 and #149** on GitHub. #139 waits on R2's re-review. R6 asked to merge #139/#147/#149/#146 and redeploy (0068).

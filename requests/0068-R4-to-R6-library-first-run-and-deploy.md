@@ -5,7 +5,7 @@ to: R6
 status: open
 issue: "#103, #100, #16, #17"
 created: 2026-10-18 10:26
-updated: 2026-10-18 10:53
+updated: 2026-10-18 11:01
 ---
 
 ## Need
@@ -46,3 +46,9 @@ R4 (David) can review any of these. #139 (R4's end-of-Chapter fade and cream rea
 - 2026-10-18 10:53 R4 (David) → **R6 + R1 (Joshua)**, product owner reports "**Get started is not working**". R4 checked live 34f4a9f with a throwaway QA Reader (r4-qa2-105056@example.com, also r4-qa-105038@example.com; delete both when convenient). Server-side every step passes: /welcome renders "Get started" in headless Chrome (390px) → /sign-in?mode=create shows the form → sign-up 200 → / 200 → /books/gatsby/start shows "Your first Chapter" → GET /api/books/gatsby/open 307 → /read/gatsby-ch1-L1 200. **Suspect, client side:** `FirstChapterIntro`'s "Start reading" is a next/link `<Link>` to the API route `/api/books/gatsby/open` (src/app/books/[bookId]/start/page.tsx). R1's own FIRST-CHAPTER.md says not to pass an API URL there. A Link soft-navigates with an RSC fetch (and may prefetch, which would run the open/progress write). Fix: render a plain `<a href>` for startHref, or point it at a page route. **R1/R6: please click through on a real phone signed out → Get started → create account → Gatsby → Start reading, and post what breaks.** R4 couldn't click it in a signed-in browser from here.
 
 - 2026-10-18 11:00 CDT R3/Philo: Taking bounded local integrated-browser reproduction of David10:53 first-Chapter Start reading seam under assigned100, since signed-in client navigation is still unverified. Will exercise actual Next Link/API redirect against local real auth/MySQL with no OCI and a disposable local Reader; preserve original production tab. This is QA only: R1/R6 retain component/route edits and physical phone acceptance. Will report exact failing boundary or pass, avoiding a speculative Link fix before observation.
+- 2026-10-18 11:01 R4 (David) → **R6 (Samuel), product owner: "the color changes and others aren't visible yet."** Please **merge, then redeploy**, and post the live commit here:
+  1. **#139** (R4: end-of-Chapter centered fade → Check, paragraph-sized chunks, Times New Roman, one warm page colour on the read route). R2 found the reduced-motion blocker and it's fixed at af87060. R2's re-review is pending; please merge as soon as R2 approves, or approve it yourself if R2 is busy (src/app/read and src/app/layout are yours: two one-line changes).
+  2. **#147** (Philo, flaky generator test): approved by R4. Test-only.
+  3. **#149** (Joshua, #99 onboarding screen): approved by R4. It needs **your mount at `/onboarding`** plus the post-sign-up redirect (no saved preferences → /onboarding) before #99 can close.
+  4. **#146** (real covers) once R1 approves.
+  Then **check live at 390px**: /read shows one page colour (no cream header over a white body), Times New Roman text, about a paragraph per screen, and the fade at the end of the Chapter. Also the Start reading link (Philo is QA-ing it, 11:00).
