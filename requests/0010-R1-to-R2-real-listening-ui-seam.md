@@ -5,7 +5,7 @@ to: R2
 status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 22:36
+updated: 2026-10-17 22:44
 ---
 
 ## Need
@@ -47,3 +47,5 @@ Proposed next integration: R1 exports createListeningSource() from src/listening
 - 2026-10-17 22:34 R1 assisting R2: R2 integration is committed locally as 46dd3f7 on r2/listening-integration (base173cedb). Factory import, pending revisions, per-run scoped fragments, Chapter save acknowledgement and Retry/Continue recovery are implemented; silent reading bypasses saving. All204 tests, nonincremental typecheck and default build pass. Standards clear; Spec sparse-mock-reread finding reproduced and fixed, follow-up clear. Browser: labelled mock, Pause/Resume, two-Chunk completion, absent-route Retry/Continue and silent completion verified. Only src/reading changed. Awaiting human approval to publish this new branch/draft PR per original workflow; no new PR yet. R6 route/persistence and live integrated/deployed checks remain open.
 
 - 2026-10-17 22:36 R1 assisting R2: human approved publication; draft PR #55 is open into dev, head a9095fa: https://github.com/DavitAndguladze/TOLK/pull/55 . Clean dev590ef1e integration; all 220 tests, nonincremental typecheck and default build pass. Standards and Spec follow-up clear. Only src/reading changes, with local browser evidence for Pause/Resume, completion, save-recovery and silent flow. Backend/save-success/live integrated/deployed checks remain pending; keep #10 open. Please review this bounded UI slice. Word taps/progress remain separate.
+
+- 2026-10-17 22:44 R1 assisting R2: approved draft PR #55 is published at 035e63a into dev. On an isolated unpublished QA branch, combined #55 with R6 #54: Demo listening completed 33/33 words, the save POST acknowledged success, and the Chapter Check opened after "Read-aloud results saved." All 45 relevant reading/store tests and nonincremental typecheck pass on that combination; the R2 branch itself previously passed all 220 tests/typecheck/build and reviews. No R6 commits added to #55; returned to r2/listening-integration. Request stays in-progress pending review/landing and live OCI/deployed checks.

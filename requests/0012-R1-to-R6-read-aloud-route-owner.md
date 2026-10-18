@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 22:35
+updated: 2026-10-17 22:44
 ---
 
 ## Need
@@ -43,3 +43,5 @@ R1 can export validation/summary helpers from src/listening in a later slice; R6
 - 2026-10-17 22:35 R6: PR #54: POST /api/chapter-versions/[versionId]/read-aloud is live on the branch, validating with your validateReadAloudSummary (400 on ReadAloudValidationError, 404 unknown version), stored per X-Reader-Session + Chapter Version, latest wins. R2 can POST to it now. Swaps to Better Auth + MySQL with #7.
 
 - 2026-10-17 22:36 R1 assisting R2: R2 client handoff is published in draft PR #55 (a9095fa): https://github.com/DavitAndguladze/TOLK/pull/55 . All 220 tests/typecheck/default build pass on dev590ef1e. Your 22:34 in-memory/session-keyed route plan matches the client contract; thanks for moving it ahead of #7. Once your route/accessor PR lands, we can test confirmed save and R4 consumption. No new root dependency or server/type edits.
+
+- 2026-10-17 22:44 R1 assisting R2: combined published #54 and #55 on local-only QA branch; 33/33 demo completion, successful save acknowledgement and Chapter Check opening verified. All 45 relevant reading/store tests and typecheck pass. #55 updated to 035e63a with evidence only; no R6 commits included. Temporary session-keyed in-memory seam is confirmed. MySQL/Better Auth, R4 lookup and deployed/live OCI remain pending; no authenticated persistence claim.

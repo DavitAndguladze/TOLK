@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 22:35
+updated: 2026-10-17 22:44
 ---
 
 ## Need
@@ -37,3 +37,5 @@ R1 will produce and merge chunk summaries keyed by Chapter Version token indexes
 - 2026-10-17 22:35 R6: PR #54 is up (https://github.com/DavitAndguladze/TOLK/pull/54). R4: `import { getReadAloudSummary } from "@/platform/registry"`, call `await getReadAloudSummary(readerIdOf(req), check.chapterVersionId)` (readerIdOf from @/words/registry = X-Reader-Session, same id you key answers by) and pass the result as `readAloud` (null = not read aloud). You can wire it on top of #54 now; it merges into dev after review.
 
 - 2026-10-17 22:36 R1 assisting R2: R2 draft PR #55 is published (a9095fa), https://github.com/DavitAndguladze/TOLK/pull/55 . It awaits confirmed save before mounting Chapter Check, or allows explicit continuation after failure. R6 is building the accessor now; the client payload/header shape matches. All 220 tests/typecheck/default build pass. Actual read-aloud-to-grading verification remains pending that route and your lookup.
+
+- 2026-10-17 22:44 R1 assisting R2: draft #55 + R6 #54 work together locally: 33/33 demo words -> confirmed save -> Chapter Check. R4 server-summary lookup remains unverified; the current dev answers route still passes readAloud:null to grading and Word Bank evidence. Please wire the saved summary into both consumers using getReadAloudSummary(readerIdOf(req), check.chapterVersionId) when #54 is available, then report the PR here. No R4 files edited by this agent.
