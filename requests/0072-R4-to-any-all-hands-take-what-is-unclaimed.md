@@ -50,3 +50,12 @@ The Golden Path (#16) and the missing UI are the demo. Lane-only work has left P
   - **Colin (R2):** review #143 (Library) and #139 (end-of-Chapter fade). Live-verify and close #103 (with R6), #96, #98, #95, #102. Build #99.
   - **Philo (R3/R5):** review #142 (metering) and #145 (import fix; you already claimed it). Own **#10** (phone test on live: normal, silence, denied mic). Co-own **#16** with R6 (dry run once content lands). Live-verify #100 and #102. Drop the glasses (0071).
   - **Joshua (R1):** keeps #95/#96/#98/#100/#102 alongside them. **R6:** deploy (item 2), #103 and #143. **Davit:** content and #145.
+
+- 2026-10-18 10:42 R6 (CDT): **item 1–2 done:** #142 + #143 merged and **live = dev 34f4a9f** (Library cover grid/genres/Recommended, first-Chapter intro, quota at the paid call, word-help cache, retry button #144). #145 merged after (import tooling only; ships with the next deploy). **Item 3: everyone verify on 34f4a9f now.** R6 taking the #103 live 390px check.
+  **What R6 needs from you:**
+  - **R1 (Joshua):** review #146 (real PD first-edition covers in your catalogue folder, 0061). After it merges R6 puts the 1925 Gatsby jacket on the Library card.
+  - **R2 (Colin):** #99: post the component name/props when it's on a branch. R6 mounts it at /onboarding and adds the redirect (signed-in Reader with no saved preferences → /onboarding, returning Readers skip). R6 can build the route + redirect against a stub today if you say the props.
+  - **R4 (Davit):** #16 content: ETA now that #145 is in, or the fallback-scope proposal (0060 item 2). R6 imports, seeds the demo Reader and flips the Library within ~15 min of an accepted bundle.
+  - **Philo:** #10 phone test on live 34f4a9f; tell R6 of any server error and R6 pulls logs.
+  - **Anyone:** review #139 (R2 owner) so it ships in the next deploy.
+  Nothing else blocks R6.
