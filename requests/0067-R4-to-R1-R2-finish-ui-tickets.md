@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#95, #96, #98, #99, #100, #102"
 created: 2026-10-18 10:24
-updated: 2026-10-18 10:24
+updated: 2026-10-18 10:53
 ---
 
 ## Need
@@ -43,3 +43,4 @@ The Duolingo-style look (P1) is on the demo path. Most components are merged, bu
 - 2026-10-18 10:48 R2: #99 now on r2/onboarding offdev15d1830. Exact proposed export `OnboardingScreen` from `@/reading/OnboardingScreen`, props `{readerId: string; initialPreferences: ReaderPreferences | null}`. Client screen owns same-origin PUT /api/reader/preferences, error display and router.replace("/") + refresh after success; no callback crosses Server/Client boundary. Reader-scoped sessionStorage draft restores incomplete goals/genres and step; native Back retains selections, shared SelectCard/ProgressBar/Button. R6 can mount /onboarding with authenticatedreader.id and getReaderPreferences(reader.id), own redirect/nullpreferences decision. No app-folder edits byR2. Also taking exact-head139 and146 ownerreviews now.
 
 - 2026-10-18 10:50 R2 ownerreview139 at1826ab00: Standards and Spec both found reduced-motion blocker. endIntro uses unconditional forwards animation endingopacity0; global reduce rule makes it0.01ms but the timer remains2200ms, leaving blank overlay. R4 please gate animation under no-preference and default readable opacity1 (or skipdelay with reducedmotion). No timer cleanup/mic blocker. Please return exactfixhead for bounded rereview; R2 stays on99 rather than duplicating your branch.
+- 2026-10-18 10:53 R4 (David) → R2: thanks for the #139 review. **Fixed at af87060:** the end-intro is opacity 1 by default, and the fade only runs under `prefers-reduced-motion: no-preference`, so a reduced-motion Reader sees the message still, then the Check (no blank overlay). #139 also now carries the **product owner's core reading asks** (72cf498): about a paragraph per screen (chunk default 30 → 100 words), `--font-book` = Times New Roman for the reading text and headings (Newsreader no longer downloaded), and the whole read route on one warm `--color-paper` (it was a cream header over a white body). tsc clean, 595 tests, build ok. **Please re-review and merge, and R6 deploy.** The product owner keeps asking for exactly this flow: finish → centered message fades → Check.

@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#16"
 created: 2026-10-18 09:30
-updated: 2026-10-18 10:51
+updated: 2026-10-18 10:53
 ---
 
 ## Need
@@ -79,3 +79,4 @@ If R3 comes back online before this lands: please say so here immediately so we 
 - 2026-10-18 10:52 CDT R4 (Davit): I want a complete, faithful Gatsby demo. Acknowledged Samuel's single successful OCI capacity probe; I am resuming bounded generation and will stop/back off on a 429. Philo, please review the generated artifacts and run the paired fidelity controls when the exact bundle is ready; I will do the human content read. Samuel, please deploy `15d1830` when ready; after acceptance, import the exact bundle, seed the demo Reader, activate Gatsby in the Library, and run the live Library → Chapter → Check flow. I will send the artifact commit/digest as soon as it passes.
 
 - 2026-10-18 10:55 CDT R3/Philo: Acknowledged Davit10:52 request. Taking exact-bundle validation and paired faithful-positive/negation/relationship/attitude controls once you publish the generated bundle commit/digest and evaluator head; preparing the existing offline harness now, no competing generation/provider calls. Please include each Version/Check identity, source/policy snapshot and your human-read findings; controls will test changed semantics with recomputed identity/digest rather than merely fail stale hashes. R1 retains independent acceptance. Also taking bounded R3 review of R6 PR1483ca8f19 ingestion diagnostics/pacing, no application/provider work.
+- 2026-10-18 10:53 R4 (David) → **Davit:** R6's 10:45 probe says OCI answers again (no 429), and #145 is merged. Please resume the gatsby-full run now with backoff on 429. The product owner says reading is the core: live still serves the 4-sentence mock Chapter 1, so every Reader sees "the same sentence". Real Chapters are the fix. Post the commit + digest for R6 as soon as it's accepted.

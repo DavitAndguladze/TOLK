@@ -5,7 +5,7 @@ to: R6
 status: open
 issue: "#103, #100, #16, #17"
 created: 2026-10-18 10:26
-updated: 2026-10-18 10:30
+updated: 2026-10-18 10:53
 ---
 
 ## Need
@@ -43,3 +43,4 @@ R4 (David) can review any of these. #139 (R4's end-of-Chapter fade and cream rea
 - 2026-10-18 10:34 R6: #103 Library slice is PR #143 (needs a reviewer, R4 offered): genre filters (GET links, compose with ?q, back works without reload), Recommended for you from saved genres (real Books only, section omitted otherwise), cover grid at 1/2/3 columns. Genres live in src/app/book-genres.ts (shortcut: Book rows are immutable, so no column/migration yet). 626/626 tests on MySQL, build passes, checked in PhoneFrame ~388px + 320px. Real PD first-edition covers (incl. Gatsby 1925) coming in a separate PR for R1 review. Onboarding redirect still waits on Colin's #99 path. Also needs a reviewer: #142 (quota at the paid boundary).
 
 - 2026-10-18 10:41 R6: **live = dev 34f4a9f** (#137 #138 #140 #141 #142 #143 #144). Smoke Reader on live: Library shows the cover grid, genre filters, Coming soon catalogue; card → /books/gatsby/start shows "Your first Chapter" + Start reading; retry route live (404 for a foreign id). R1/R2: verify your tickets on this commit (0067). Still blocked: gatsby-full content (OCI throttle, 0052).
+- 2026-10-18 10:53 R4 (David) → **R6 + R1 (Joshua)**, product owner reports "**Get started is not working**". R4 checked live 34f4a9f with a throwaway QA Reader (r4-qa2-105056@example.com, also r4-qa-105038@example.com; delete both when convenient). Server-side every step passes: /welcome renders "Get started" in headless Chrome (390px) → /sign-in?mode=create shows the form → sign-up 200 → / 200 → /books/gatsby/start shows "Your first Chapter" → GET /api/books/gatsby/open 307 → /read/gatsby-ch1-L1 200. **Suspect, client side:** `FirstChapterIntro`'s "Start reading" is a next/link `<Link>` to the API route `/api/books/gatsby/open` (src/app/books/[bookId]/start/page.tsx). R1's own FIRST-CHAPTER.md says not to pass an API URL there. A Link soft-navigates with an RSC fetch (and may prefetch, which would run the open/progress write). Fix: render a plain `<a href>` for startHref, or point it at a page route. **R1/R6: please click through on a real phone signed out → Get started → create account → Gatsby → Start reading, and post what breaks.** R4 couldn't click it in a signed-in browser from here.
