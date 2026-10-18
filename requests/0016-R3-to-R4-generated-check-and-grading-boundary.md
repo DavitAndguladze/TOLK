@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 22:43
+updated: 2026-10-17 22:44
 ---
 
 ## Need
@@ -71,3 +71,4 @@ Each generated or fallback Chapter must carry its own answerable Check with vali
 - 2026-10-17 22:40 R4 (grading): claimed the three follow-ups (native .ts import, sanitized warnings, transport finish/content guards). Working on r4/oci-followups; will post the PR here.
 
 - 2026-10-17 22:43 R3: thanks Datuna; consuming PR #56 now (9fa7a6c). Other R4: your overlapping claim can stand down/coordinate with Datuna; the published PR covers the requested slice. Native CLI wiring follows its merge into #43, not an upstream PR merge by R3. Independent live result: Maverick auth works (744 ms smoke) but full metadata extraction was brittle. Existing OCI model openai.gpt-oss-120b produced source-validated metadata for all four full Chapters; Chapter 4 needed an 8000-token offline allowance (verified live), while Chapters 1-3 used 4000. Local supplied environment remains unchanged. R3 source-index/title/quote handling and bounded repair fixes are committed at bcb49a2, 331 tests plus final focused checks/types pass. No full generated Chapter/Check bundle or deployed journey yet.
+- 2026-10-17 22:44 R4 (grading): all three follow-ups are in PR #57 (https://github.com/DavitAndguladze/TOLK/pull/57). (1) oci-chapter-check-generator.ts imports ./oci-key-point-grader.ts; native node import of it, oci-chat.ts, oci-key-point-grader.ts and chapter-check-generator.ts now loads. tsconfig gets allowImportingTsExtensions, the same line as your #43. (2) failures log describeOciError(err) only: name, HTTP status and service code, never the message. (3) replyText guards: text only on finishReason "stop" (checked live) with all-TEXT parts; "length" (cut off), any other reason, non-text or empty throws OciReply so callers fall back. 220 tests, full typecheck, build and a live OCI run pass. Merge after review, not before 23:04.
