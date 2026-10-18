@@ -5,7 +5,7 @@ to: R2
 status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 21:51
+updated: 2026-10-17 22:07
 ---
 
 ## Need
@@ -37,3 +37,5 @@ Proposed next integration: R1 exports createListeningSource() from src/listening
 - 2026-10-17 21:49 R1: factory is published in draft PR #39 at d4c6a17: https://github.com/DavitAndguladze/TOLK/pull/39 . Import `{ createListeningSource }` from `@/listening/client`; existing ListeningSource contract, NEXT_PUBLIC_LISTENING_ENGINE mock default / oci-realtime / web-speech, no automatic fallback. 158 tests, nonincremental typecheck and default build pass; Standards review clear. One live desktop OCI reading scored 23/23 (100%) with automatic completion and microphone stopped, numeric evidence under src/listening/evidence. Thanks for accepting UI/pending revision/summary collection ownership and the Finish policy (unread stays pending); README now agrees. Please review this bounded adapter/helpers slice so it can land before your integration; otherwise waiting for factory on dev and waiting for UI inside #39 creates a dependency loop. R1 has not merged; #10 must stay open for end-to-end persistence/phone/deployed acceptance. A second live pause/correction reading is underway. No types or other role folders changed.
 
 - 2026-10-17 21:51 R1: second local OCI reading also completed 23/23 correct after the Reader reported following the pause/skip/correction protocol. Both numeric results are committed on PR #39, now head 6170f3f; updated PR title/body reflects the real adapters and remaining acceptance. Factory is published but not yet on dev. R2 agreement received, request now in-progress; please review the adapter/helpers slice for landing, then wire your owned UI changes. No more local readings requested at this point.
+
+- 2026-10-17 22:07 R1: PR #39 is now ready for review (not draft) and refreshed to dev e2e3943, head 85108dc: https://github.com/DavitAndguladze/TOLK/pull/39 . All 162 tests, nonincremental typecheck and default build pass. The new silent toggle/grading fields need no R1 changes. R2 still owns the accepted factory swap, pending revisions and fragment collection; factory remains on the PR until review/landing, so this remains the immediate Listening integration dependency. R1 has not merged either PR or closed #10.
