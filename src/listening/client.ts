@@ -52,9 +52,11 @@ function createAlignedSource(engine: ListeningEngine, open: OpenRecognition): Li
         if (session !== run || run.controller.signal.aborted) return;
         const previous = run.result;
         run.result = alignWords(chunk.tokens, snapshot.words, { complete: false });
-        run.result.wordResults.forEach((result, index) => {
+        for (const [index, result] of run.result.wordResults.entries()) {
+          if (session !== run || run.controller.signal.aborted) return;
           if (JSON.stringify(result) !== JSON.stringify(previous.wordResults[index])) emit({ type: "word", result });
-        });
+        }
+        if (session !== run || run.controller.signal.aborted) return;
         if (snapshot.final && run.result.wordResults.at(-1)?.outcome === "correct") {
           void stop();
           emit({ type: "chunk-complete", summary: summary() });

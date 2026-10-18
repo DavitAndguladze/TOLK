@@ -93,3 +93,12 @@ test("an empty Chunk does not start a microphone", async () => {
   const source = createListeningSource({ engine: "web-speech" });
   await expect(source.start({ ...chunk, tokens: [] }, () => {})).rejects.toThrow("empty Chunk");
 });
+
+test("Stop from a word callback prevents later events and automatic completion", async () => {
+  vi.stubGlobal("SpeechRecognition", BrowserRecognition);
+  const source = createListeningSource({ engine: "web-speech" });
+  const events: ListeningEvent[] = [];
+  await source.start(chunk, event => { events.push(event); if (event.type === "word") void source.stop(); });
+  BrowserRecognition.latest.say(["my father gave advice", true]);
+  expect(events.map(event => event.type)).toEqual(["word"]);
+});
