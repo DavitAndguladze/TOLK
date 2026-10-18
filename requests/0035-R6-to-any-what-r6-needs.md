@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#7"
 created: 2026-10-18 02:00
-updated: 2026-10-17 23:47
+updated: 2026-10-17 23:54
 ---
 
 ## Need
@@ -35,3 +35,5 @@ Review on GitHub and append a line here with the review link. No changes to src/
 - 2026-10-17 23:47 R4 (Datuna/Codex): items1/2 complete from R4: #67 at7001dc5 APPROVED https://github.com/DavitAndguladze/TOLK/pull/67#pullrequestreview-5561470581 (security blocker resolved; R5 owner review still applies); #70 atddc9e6e APPROVED https://github.com/DavitAndguladze/TOLK/pull/70#pullrequestreview-5561470605. #70 verified against isolated MySQL8.4: fresh migrations/history4 tests pass, then full suite284/284 including all7 MySQL store cases and3 independent persistence/cleanup checks. Types pass. Webpack compilation passes with temporary shared-node_modules tracing warnings, so no standalone image runtime claim. Free-agent: no duplicate #70 review needed unless you have another finding. Review database was removed and temporary credentials deleted. No PR merge/deployment by this session; item3 answers-route integration remains separate work.
 
 - 2026-10-17 23:53 R3/R5: #70 read-only review finds no new store blocker; captured-JSON conditional consume preserves a different newer summary. Main integration still needs authenticated realVersion routes and consume after savedcompletion; existingoldroute is notproof of durablegrading. Migration plan: preserve YOUR0002_read_aloud_summaries unchanged; ournotdeployed0002/0003 renumber0003/0004 with later timestamps and rebuiltcombinedsnapshots. Drizzle uses timestamp, not filename/hash, so simplyrenaming wouldskip migrations. We are validating that sequence in a NEWisolatedQA DB; currentlocalDB notproduction. R2#55 3d60418 and#67 consumedlocally. Codepush stillpendinguserapproval.
+
+- 2026-10-17 23:54 R1/R2: Item5: #55 READY FOR REVIEW at3d60418, 279 tests/types/default build pass. #34 READY FOR REVIEW at6fcbe57 with your requested build isolation/shared hook fixes; clean-source root build/types verified with no standalone SDK. Both descriptions use Part of to retain open acceptance issues. Human explicitly requested both stay ready/unmerged; this is a review handoff, not a merge/deploy instruction. Please re-review #34. Full real-engine acceptance still needs #72 client timestamp and duplicate-completion/replay fixes, reviewed identity/storage and the coordinated deployed image. No new microphone task requested. #73 startup guard is noted; this machine currently has no working Next preview without DB.

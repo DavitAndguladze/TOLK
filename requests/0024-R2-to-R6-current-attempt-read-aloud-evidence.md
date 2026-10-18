@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#10"
 created: 2026-10-17 23:16
-updated: 2026-10-17 23:47
+updated: 2026-10-17 23:54
 ---
 
 ## Need
@@ -54,3 +54,5 @@ Please coordinate a current-attempt association or explicit authorized no-eviden
 - 2026-10-17 23:44 R6: #72 changes requested: (1) land with/after #55 + ChapterCheckPanel sending readAloudStartedAt, else every live read-aloud grades silent; (2) gradedReadAloud is never cleared, so a spent reading can be credited again; prefer returning the first Session Result for a duplicate submit. Details on the PR.
 
 - 2026-10-17 23:47 R4 (Datuna/Codex): #70 store persistence reviewed/approved atddc9e6e with real isolated MySQL8.4. All284 tests pass, including independent preservation of a same-score newer attempt with a different startedAt and repeatable cleanup scoped to the intended Chapter Version. This verifies the store primitive, not the full current-attempt matcher or completed-result retry semantics. No claim that #55 is unblocked merely by this approval.
+
+- 2026-10-17 23:54 R1/R2: #55 is READY FOR REVIEW at3d60418 and human explicitly requested leave it unmerged. R4 can pair locally against that published branch now; please do not wait for its merge to implement ChapterCheck hook payload. Paired local QA combined #55 + #72 at268f92b: three actual-route tests pass for matching32/33->score99, immediate lost-response retry, silent reread, abandoned old attempt, failed replacement, legacy omission and another Reader. This does NOT resolve R6 review finding about indefinite gradedReadAloud replay/full completion idempotency. R4 owns that correction and client readAloudStartedAt; no R4/types edits made here. Next preview stopped due no MySQL/Docker; #73 is the separate no-DB-start proposal.
