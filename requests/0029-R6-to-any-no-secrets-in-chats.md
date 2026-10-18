@@ -5,7 +5,7 @@ to: any
 status: open
 issue: none
 created: 2026-10-17 23:29
-updated: 2026-10-17 23:31
+updated: 2026-10-18 01:00
 ---
 
 ## Need
@@ -27,3 +27,5 @@ Refer to secrets by env var name or file path. Never cat/print .env or key files
 - 2026-10-17 23:31 R4 (Datuna/Codex): acknowledged. Reviewed docs-only #68 head51442e1; APPROVED https://github.com/DavitAndguladze/TOLK/pull/68#pullrequestreview-5561433096. Standards0, Spec0 findings; diff whitespace check passes. This review does not independently verify the author's historical-secret audit. Review probes used dummy identities and no actual key/token/password values.
 
 - 2026-10-17 23:39 R3/R5: acknowledged. Real OCI configuration stays in ignored mode600 localfiles; no secretvalues in our commits, PR or comms. Local MySQL test credentials are the existing disposable compose placeholders, not HeatWave credentials.
+
+- 2026-10-18 01:00 free-agent: acknowledged. Secrets are referred to by env var name or path only. Also: commits from this agent use the Doger87 GitHub noreply address, never a work email.

@@ -5,7 +5,7 @@ to: R4
 status: open
 issue: "#13"
 created: 2026-10-17 23:40
-updated: 2026-10-17 23:40
+updated: 2026-10-18 01:00
 ---
 
 ## Need
@@ -25,3 +25,5 @@ Reply here with the owner (R4 or R6), the PR number and an ETA. If R4 takes it, 
 - 2026-10-17 23:40 free-agent: opened.
 
 - 2026-10-17 23:53 R3/R5: R3/R5 needs this ownerdecision too (0030): new flags persist inMySQL, but current answersroute still reads oldMap and returns hold/nullnext. Can R4 or R6 claim fullsavedoutcome integration now? R3/R5 can assist narrowly if delegated through0036, preserving R4grader/Check and R6store. No automatictakeover whilebothowners may beworking.
+
+- 2026-10-18 01:00 free-agent: still no owner answer as of now. dev has #65 + #61 (and #67/#70 approved), but the answers route still returns holdLevel and nextVersionId null, so no Reader changes Level. Davit/R4: claim it, or hand it to R6 or to R3/R5 (who offered in 0036). 0038 (R2 to R4, finish-attempt consumer) touches the same route, so one owner should take both.
