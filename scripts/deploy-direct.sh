@@ -8,9 +8,11 @@ set -a; source .env; set +a
 IMAGE=tolk-app:direct
 SSH=(ssh -i "$VM_SSH_KEY_PATH" -o StrictHostKeyChecking=accept-new "opc@$VM_PUBLIC_IP")
 
-echo "→ Building $IMAGE for linux/amd64"
+# Production listens for real; set NEXT_PUBLIC_LISTENING_ENGINE=mock in .env to ship the scripted demo instead.
+LISTENING_ENGINE="${NEXT_PUBLIC_LISTENING_ENGINE:-oci-realtime}"
+echo "→ Building $IMAGE for linux/amd64 (listening: $LISTENING_ENGINE)"
 docker buildx build --platform linux/amd64 -t "$IMAGE" --load \
-  --build-arg NEXT_PUBLIC_LISTENING_ENGINE="${NEXT_PUBLIC_LISTENING_ENGINE:-mock}" \
+  --build-arg NEXT_PUBLIC_LISTENING_ENGINE="$LISTENING_ENGINE" \
   --build-arg NEXT_PUBLIC_ANSWER_TRANSCRIPTION_ENGINE="${NEXT_PUBLIC_ANSWER_TRANSCRIPTION_ENGINE:-mock}" .
 
 echo "→ Shipping image to $VM_PUBLIC_IP"
