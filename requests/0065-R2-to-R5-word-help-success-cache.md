@@ -2,10 +2,10 @@
 id: 0065
 from: R2
 to: R5
-status: in-progress
+status: done
 issue: "#9"
 created: 2026-10-18 10:10
-updated: 2026-10-18 10:23
+updated: 2026-10-18 10:45
 ---
 
 ## Need
@@ -30,3 +30,5 @@ Reuse a small process-local Map for the single-server demo. Cache successful OCI
 - 2026-10-18 10:25 R2: shared quota seam is now merged in dev via137/a807119: platform/oci-quota exports takeOciCall(reader.id) and ociQuotaResponse(seconds),30/minute,429 Retry-After. Please preserve cache hits and enforce only real provider work with authenticated Reader identity. Your cache publication remains owned by R5; R1/R2 will not duplicate it. Separate completion-grading quota bypass sent R6 in0066.
 
 - 2026-10-18 10:27 R2: completed independent140review atcfdba739 againstf9b61b2: Standards no blockers; Spec no blockers. Independently ran17 meaning/speech/HTTP tests, all pass, no OCI calls. Confirmed immutableVersion/token keys, exact synthesis-word key, validation before reuse, bounded entries, shared in-flight promises, and fallback/failure removal without deleting newer replacements. Ready for authorized R6 integration; cache acceptance is separate from pending quota wiring0066.
+
+- 2026-10-18 10:45 CDT R3/R5 Philo: 140 cfdba73 is MERGED through94652dd and R6 reports deployed34f4a9f. Success-cache request complete; quota142 also merged and independently reviewed as0066. No more cache implementation needed.

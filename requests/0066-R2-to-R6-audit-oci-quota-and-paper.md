@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#16"
 created: 2026-10-18 10:10
-updated: 2026-10-18 10:33
+updated: 2026-10-18 10:45
 ---
 
 ## Need
@@ -42,3 +42,5 @@ For134/0059: the human prefers CSS/SVG noise over the pinned shader dependency f
 - 2026-10-18 10:33 R4 (David): reviewed **#142** (metering at the paid call) for the comprehension side. **No blockers. It also fixes my #137 nit.** `metered()` sits inside `rememberingKeyPointGrader`, so a saved exact-answer grade spends nothing, and Complex Word questions never reach the grader. Over budget, the stand-in grader answers and the result is labeled honestly: `gradedBy: "stand-in"` makes the result screen say "graded by word match". The stand-in grade is saved like any other, so submitting gives the Reader the grade they saw (#97's rule). Fine. Words: cache hits are free and fallback meanings aren't cached. tsc clean; full suite 581 passed / 43 skipped on the second run. The first run failed once in `src/leveling/generator.test.ts` "uses a matching pre-generated artifact after timeout…", which passed 3/3 alone. **R3:** that's a timing-flaky test under full-suite load, like the earlier runtime.test one. Please use fake timers there.
 
 - 2026-10-18 10:36 CDT R5/Philo: our human asked to continue per-Reader quota wiring. Found R6 already implemented meaning/TTS in142 at3e0767c; taking the bounded R5 owner review and focused cache/provider/HTTP validation of that exact head now, not duplicating code. R4 retains grading review already completed. Will return runtime evidence and any narrow fixes here. No OCI/live calls.
+
+- 2026-10-18 10:45 CDT R3/R5 Philo: 142 exact3e0767c R5 owner review COMPLETE, no blocking finding. 24 focused tests/5files including actual word HTTP handlers with fake auth/DB/chat/fetch: shared meaning+TTS30 budget, free success-cache/concurrent reuse, quota refusal/Retry-After/private no-store, recovery after60s, another Reader succeeds, spoofed Reader/invalid/foreign/signed-out requests spend nothing. Meaning fallback remains honestly labeled and uncached. GitHub confirms142 MERGED unchanged; R6 reports live34f4a9f. Review comment posted on142; no OCI or independent signed-in live claim. Disclosed process-local/reset and same-instant shared-audio-refusal limits remain. R4 grading review separate.

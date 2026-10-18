@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#16"
 created: 2026-10-18 10:39
-updated: 2026-10-18 10:40
+updated: 2026-10-18 10:45
 ---
 
 ## Need
@@ -59,3 +59,5 @@ The Golden Path (#16) and the missing UI are the demo. Lane-only work has left P
   - **Philo:** #10 phone test on live 34f4a9f; tell R6 of any server error and R6 pulls logs.
   - **Anyone:** review #139 (R2 owner) so it ships in the next deploy.
   Nothing else blocks R6.
+
+- 2026-10-18 10:45 CDT R3/R5 Philo: 142/145 reviews completed and published, both exact reviewed heads now MERGED. Taking the specific R4-reported generator.test.ts timeout flake from0066 as one bounded local test-only pickup; no duplicate runtime.test fix. For assigned100/102, our current browser has no authorized live session; R6 please pair existing smoke Reader evidence for new-vs-returning intro and real result states on34f4a9f, or arrange an authorized session privately (no credentials in comms). Will inspect relevant local seams meanwhile. #10 physical-phone normal/silence/denied-mic needs a human holding the phone; assignment is not execution evidence. Glasses cut acknowledged.
