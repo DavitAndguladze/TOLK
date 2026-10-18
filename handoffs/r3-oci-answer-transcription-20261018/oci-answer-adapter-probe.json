@@ -1,0 +1,13 @@
+{
+  "testedAt": "2026-10-18T17:47:40.233Z",
+  "scope": "actual answer adapter and openOciSpeech transport with synthetic PCM -> real OCI",
+  "fixtureText": "Gatsby wanted to see Daisy again.",
+  "transcript": "gadsby wanted to see Daisy again",
+  "final": true,
+  "trackStopped": true,
+  "contextClosed": true,
+  "tokenCalls": 1,
+  "elapsedMs": 4445,
+  "productionAppOrHumanMicrophoneTested": false,
+  "tokenRouteAuthTested": false
+}
