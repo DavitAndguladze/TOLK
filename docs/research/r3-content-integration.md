@@ -4,7 +4,7 @@ This is implementation for #6/#14 and spec #41. PR #43 remains draft while share
 
 ## Run offline ingestion
 
-Use Node with native TypeScript support (Node 22.18+), `npm ci`, the team's existing OCI configuration in `.env` or `.env.local`, and the private-key path from that configuration. Do not commit credentials. Generation imports R4's `createOciChat` from PR #46; that dependency must be present with per-call `maxTokens` and cancellation support. It requests at most 4,000 output tokens, in bounded passages. The CLI reports a clear dependency error if the shared client has not landed.
+Use Node with native TypeScript support (Node 22.18+), `npm ci`, the team's existing OCI configuration in `.env` or `.env.local`, and the private-key path from that configuration. Do not commit credentials. This branch includes R4's `createOciChat` from PR #46 at d19c5fe, with per-call `maxTokens` and `signal` options. It requests at most 4,000 output tokens, in bounded passages. Cancellation stops waiting; the SDK's underlying request can still finish. The R3 generator prevents late results from replacing a returned artifact.
 
 ```sh
 npm run ingest:gatsby -- .scratch/gatsby-seed.json
@@ -22,7 +22,7 @@ R6 must persist the ready version and Check together, scope access to the authen
 
 ## Outstanding owner boundaries
 
-- R4: shared OCI client's generation options and grounded Check questions. The current deterministic Check generator is a stand-in and may be rejected by validation; a question's original-text match does not establish an answer in the served text. Requests are tracked in `comms` request 0016.
+- R4: transport guards for truncated/filtered responses, and grounded Check questions. The current deterministic Check generator is a stand-in and may be rejected by validation; a question's original-text match does not establish an answer in the served text. The owner has approved the OCI Check generator handoff. Follow-ups are tracked in `comms` request 0016.
 - R6: MySQL/auth schema, seed import, durable completion, duplicate submission protection, history-based Level rules, pending/ready/failed storage and version route (0017).
 - R5/R6: contextual vocabulary graduation and Word Bank persistence (0018).
 - R2: saved reading position, bounded full-Chapter navigation, fallback labels, display-only Level ladder and updated progression copy (0015). Existing next-version polling is reused.
