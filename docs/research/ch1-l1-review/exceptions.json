@@ -1997,6 +1997,228 @@
       "originalSentenceIndex": 38,
       "quote": "most limited of all specialists",
       "reason": "Preserves the paradox of calling the well-rounded man a specialist, which a generic statement about broad knowledge erases."
+    },
+    {
+      "word": "rented",
+      "originalSentenceIndex": 40,
+      "quote": "I should have rented a house",
+      "reason": "Preserves that the rental arrangement already existed, rather than merely finding a house and planning to pay later."
+    },
+    {
+      "word": "communities",
+      "originalSentenceIndex": 40,
+      "quote": "one of the strangest communities in North America",
+      "reason": "Preserves the surrounding social community as the thing Nick judges unusual, rather than only the house or physical site."
+    },
+    {
+      "word": "formations",
+      "originalSentenceIndex": 41,
+      "quote": "two unusual formations of land",
+      "reason": "Preserves the two distinct landforms whose shapes the following sentences compare, rather than arbitrary pieces of land lying next to each other."
+    },
+    {
+      "word": "natural",
+      "originalSentenceIndex": 41,
+      "quote": "among other natural curiosities",
+      "reason": "Preserves that the other unusual features belong to nature; strange things alone could refer to inhabitants or buildings."
+    },
+    {
+      "word": "eggs",
+      "originalSentenceIndex": 42,
+      "quote": "a pair of enormous eggs, identical in contour",
+      "reason": "Preserves the paired egg-shaped landforms underlying the place names and the following Columbus-egg comparison."
+    },
+    {
+      "word": "contour",
+      "originalSentenceIndex": 42,
+      "quote": "identical in contour",
+      "reason": "Preserves identical outline rather than claiming the two places look alike in every respect, which the next contrast explicitly denies."
+    },
+    {
+      "word": "salt",
+      "originalSentenceIndex": 42,
+      "quote": "body of salt water in the Western hemisphere",
+      "reason": "Preserves the kind of water rather than leaving Long Island Sound open to being understood as fresh water."
+    },
+    {
+      "word": "Western",
+      "originalSentenceIndex": 42,
+      "quote": "in the Western hemisphere",
+      "reason": "Preserves the named half of the world that bounds the source’s geographic description."
+    },
+    {
+      "word": "hemisphere",
+      "originalSentenceIndex": 42,
+      "quote": "in the Western hemisphere",
+      "reason": "Preserves the hemispheric geographic scope rather than changing it to a continent or unspecified western region."
+    },
+    {
+      "word": "shape",
+      "originalSentenceIndex": 44,
+      "quote": "except shape and size",
+      "reason": "Preserves the exact physical quality the two places share; round alone contradicts their imperfect oval outlines."
+    },
+    {
+      "word": "size",
+      "originalSentenceIndex": 44,
+      "quote": "except shape and size",
+      "reason": "Preserves equal overall dimensions as a distinct similarity from equal shape."
+    },
+    {
+      "word": "fashionable",
+      "originalSentenceIndex": 45,
+      "quote": "the less fashionable of the two",
+      "reason": "Preserves the social-status distinction between the Eggs rather than replacing it with a judgment of beauty."
+    },
+    {
+      "word": "sinister",
+      "originalSentenceIndex": 45,
+      "quote": "the bizarre and not a little sinister contrast",
+      "reason": "Preserves an ominous quality in the contrast rather than inventing an explicit personal fear in Nick."
+    },
+    {
+      "word": "squeezed",
+      "originalSentenceIndex": 46,
+      "quote": "squeezed between two huge places",
+      "reason": "Preserves the cramped placement of Nick’s house between the much larger properties; between alone loses that relation."
+    },
+    {
+      "word": "season",
+      "originalSentenceIndex": 46,
+      "quote": "twelve or fifteen thousand a season",
+      "reason": "Preserves the stated rental period without interpreting it as the whole hot part of the year."
+    },
+    {
+      "word": "gentleman",
+      "originalSentenceIndex": 49,
+      "quote": "a gentleman of that name",
+      "reason": "Preserves Nick’s formally respectful, socially distant description while he corrects his claim about a person he does not know."
+    },
+    {
+      "word": "palaces",
+      "originalSentenceIndex": 51,
+      "quote": "the white palaces of fashionable East Egg",
+      "reason": "Preserves the grand-house image and identifies the buildings, rather than making all of East Egg itself white."
+    },
+    {
+      "word": "glittered",
+      "originalSentenceIndex": 51,
+      "quote": "glittered along the water",
+      "reason": "Preserves the sparkling appearance of the houses along the waterfront rather than merely saying the area was full of light."
+    },
+    {
+      "word": "generation",
+      "originalSentenceIndex": 56,
+      "quote": "a man in my own generation",
+      "reason": "Preserves a shared age cohort without asserting that Tom and Nick are exactly the same age."
+    },
+    {
+      "word": "wistfully",
+      "originalSentenceIndex": 59,
+      "quote": "seeking, a little wistfully",
+      "reason": "Preserves the sadness and longing within the imagined search for a football experience that cannot return, rather than bare wanting."
+    },
+    {
+      "word": "cheerful",
+      "originalSentenceIndex": 61,
+      "quote": "a cheerful red-and-white Georgian Colonial mansion",
+      "reason": "Preserves the pleasing visual character of the mansion rather than treating the house as emotionally happy."
+    },
+    {
+      "word": "drifting",
+      "originalSentenceIndex": 62,
+      "quote": "drifting up the side in bright vines",
+      "reason": "Preserves the softer, floating upward motion after the lawn’s run; simply going up loses that change in movement."
+    },
+    {
+      "word": "leaning",
+      "originalSentenceIndex": 66,
+      "quote": "always leaning aggressively forward",
+      "reason": "Preserves the apparent forward tilt of Tom’s body rather than readiness to move forward later."
+    },
+    {
+      "word": "aggressively",
+      "originalSentenceIndex": 66,
+      "quote": "always leaning aggressively forward",
+      "reason": "Preserves the threatening manner of the apparent lean without converting it into a literal intention to fight."
+    },
+    {
+      "word": "effeminate",
+      "originalSentenceIndex": 67,
+      "quote": "the effeminate swank of his riding clothes",
+      "reason": "Preserves Nick’s judgment of feminine style and display in Tom’s clothing, distinct from saying the garments look designed for women."
+    },
+    {
+      "word": "cruel",
+      "originalSentenceIndex": 68,
+      "quote": "a cruel body",
+      "reason": "Preserves the narrator’s moral judgment, which the mere capacity to hurt someone does not convey."
+    },
+    {
+      "word": "contempt",
+      "originalSentenceIndex": 70,
+      "quote": "a touch of paternal contempt",
+      "reason": "Preserves the scorn in Tom’s voice rather than only superiority or making other people seem unimportant."
+    },
+    {
+      "word": "liked",
+      "originalSentenceIndex": 70,
+      "quote": "even toward people he liked",
+      "reason": "Preserves Tom’s personal affection for those people, distinct from considering them nice."
+    },
+    {
+      "word": "stronger",
+      "originalSentenceIndex": 71,
+      "quote": "I’m stronger and more of a man than you are",
+      "reason": "Preserves the direct comparison of physical strength rather than uncertain or general power."
+    },
+    {
+      "word": "opinion",
+      "originalSentenceIndex": 71,
+      "quote": "my opinion on these matters is final",
+      "reason": "Preserves that Tom is speaking of his judgment on particular matters, rather than every word he says."
+    },
+    {
+      "word": "final",
+      "originalSentenceIndex": 71,
+      "quote": "my opinion on these matters is final",
+      "reason": "Preserves the claimed decisiveness of Tom’s opinion, not merely whether another person must agree."
+    },
+    {
+      "word": "defiant",
+      "originalSentenceIndex": 72,
+      "quote": "some harsh, defiant wistfulness of his own",
+      "reason": "Preserves resistance and refusal to yield within Tom’s wish to be liked; a fighting manner can suggest physical aggression instead."
+    },
+    {
+      "word": "wistfulness",
+      "originalSentenceIndex": 72,
+      "quote": "some harsh, defiant wistfulness of his own",
+      "reason": "Preserves the sad longing within Tom’s desire for Nick’s liking, rather than inventing a need or dependence."
+    },
+    {
+      "word": "sunken",
+      "originalSentenceIndex": 75,
+      "quote": "a sunken Italian garden",
+      "reason": "Preserves the garden’s lowered position relative to its surroundings, rather than implying it was simply placed into the ground."
+    },
+    {
+      "word": "politely",
+      "originalSentenceIndex": 77,
+      "quote": "politely and abruptly",
+      "reason": "Preserves the observed courtesy of Tom’s action rather than an uncertain attempt to be nice."
+    },
+    {
+      "word": "abruptly",
+      "originalSentenceIndex": 77,
+      "quote": "politely and abruptly",
+      "reason": "Preserves the sudden, unprepared nature of the turn rather than merely its speed."
+    },
+    {
+      "word": "burning",
+      "originalSentenceIndex": 62,
+      "quote": "burning gardens",
+      "reason": "Preserves the vivid fire image within the lawn’s imagined run without inventing literal flames."
     }
   ]
 }

@@ -121,6 +121,42 @@
           9
         ],
         "independentAcceptance": false
+      },
+      {
+        "date": "2026-10-18",
+        "originalSentenceIndexes": [
+          40,
+          41,
+          42,
+          44,
+          45,
+          46,
+          49,
+          51,
+          54,
+          55,
+          56,
+          58,
+          59,
+          61,
+          62,
+          63,
+          66,
+          67,
+          68,
+          70,
+          71,
+          72,
+          73,
+          74,
+          75,
+          77
+        ],
+        "reviewedSourceRange": [
+          40,
+          79
+        ],
+        "independentAcceptance": false
       }
     ]
   },
@@ -697,27 +733,27 @@
         "originalSentenceIndex": 39
       },
       {
-        "text": "By chance, I found a house to live in.",
+        "text": "By chance, I rented a house in a strange place.",
         "originalSentenceIndex": 40
       },
       {
-        "text": "I would pay to stay in this very strange place.",
+        "text": "Few communities in North America were as strange.",
         "originalSentenceIndex": 40
       },
       {
-        "text": "Few in North America were as strange.",
-        "originalSentenceIndex": 40
-      },
-      {
-        "text": "It was on Long Island, east of New York.",
+        "text": "It was on a slender island.",
         "originalSentenceIndex": 41
       },
       {
-        "text": "That long piece of land was full of strange things.",
+        "text": "The island goes straight east from New York.",
         "originalSentenceIndex": 41
       },
       {
-        "text": "One strange piece of that land was by another.",
+        "text": "It had two strange formations of land.",
+        "originalSentenceIndex": 41
+      },
+      {
+        "text": "These were only two of its strange natural things.",
         "originalSentenceIndex": 41
       },
       {
@@ -725,11 +761,15 @@
         "originalSentenceIndex": 42
       },
       {
-        "text": "They look like one very big egg and another.",
+        "text": "They look like two very big eggs.",
         "originalSentenceIndex": 42
       },
       {
-        "text": "There is only a little water between them.",
+        "text": "Their contour is the same.",
+        "originalSentenceIndex": 42
+      },
+      {
+        "text": "Only a bay is between them.",
         "originalSentenceIndex": 42
       },
       {
@@ -737,7 +777,7 @@
         "originalSentenceIndex": 42
       },
       {
-        "text": "That sea water has people all around.",
+        "text": "That is salt water in the Western hemisphere.",
         "originalSentenceIndex": 42
       },
       {
@@ -761,11 +801,11 @@
         "originalSentenceIndex": 44
       },
       {
-        "text": "In almost every way, those two are different.",
+        "text": "Their shape and size are the same.",
         "originalSentenceIndex": 44
       },
       {
-        "text": "But each is as big and round as the other.",
+        "text": "They are different in every other way.",
         "originalSentenceIndex": 44
       },
       {
@@ -773,7 +813,7 @@
         "originalSentenceIndex": 45
       },
       {
-        "text": "It was the one that people thought less beautiful.",
+        "text": "It was, well, the less fashionable of the two.",
         "originalSentenceIndex": 45
       },
       {
@@ -781,7 +821,7 @@
         "originalSentenceIndex": 45
       },
       {
-        "text": "How different they were was strange, and made me afraid.",
+        "text": "They were different in a strange, rather sinister way.",
         "originalSentenceIndex": 45
       },
       {
@@ -793,15 +833,11 @@
         "originalSentenceIndex": 46
       },
       {
-        "text": "It was between one very big house and another.",
+        "text": "It was squeezed between one very big house and another.",
         "originalSentenceIndex": 46
       },
       {
-        "text": "People paid 12,000 or 15,000 to stay in each house.",
-        "originalSentenceIndex": 46
-      },
-      {
-        "text": "That was for the hot part of the year.",
+        "text": "Each house was 12,000 or 15,000 for one season.",
         "originalSentenceIndex": 46
       },
       {
@@ -837,11 +873,11 @@
         "originalSentenceIndex": 48
       },
       {
-        "text": "Or rather, a man called Mr. Gatsby had that house.",
+        "text": "Or rather, I did not actually know Mr. Gatsby.",
         "originalSentenceIndex": 49
       },
       {
-        "text": "I did not actually know him.",
+        "text": "A gentleman of that name made his home there.",
         "originalSentenceIndex": 49
       },
       {
@@ -869,19 +905,19 @@
         "originalSentenceIndex": 50
       },
       {
-        "text": "Across the water was beautiful white East Egg.",
+        "text": "Across the bay was fashionable East Egg.",
         "originalSentenceIndex": 51
       },
       {
-        "text": "It looked rich and full of light.",
+        "text": "Its white palaces glittered along the water.",
         "originalSentenceIndex": 51
       },
       {
-        "text": "My story of that time really started with dinner there.",
+        "text": "My story of that summer really started one evening.",
         "originalSentenceIndex": 51
       },
       {
-        "text": "One evening I went by car to the Tom Buchanans.",
+        "text": "I went by car to the Tom Buchanans for dinner.",
         "originalSentenceIndex": 51
       },
       {
@@ -905,11 +941,11 @@
         "originalSentenceIndex": 54
       },
       {
-        "text": "He was among the most powerful ends at New Haven.",
+        "text": "He played football at New Haven.",
         "originalSentenceIndex": 54
       },
       {
-        "text": "He played football.",
+        "text": "He was one of their most powerful ends ever.",
         "originalSentenceIndex": 54
       },
       {
@@ -917,7 +953,7 @@
         "originalSentenceIndex": 54
       },
       {
-        "text": "At 21, he was very good at that one thing.",
+        "text": "At 21, he was already great at that one thing.",
         "originalSentenceIndex": 54
       },
       {
@@ -937,7 +973,7 @@
         "originalSentenceIndex": 55
       },
       {
-        "text": "His rich way of moving here took your breath away.",
+        "text": "The way he came East took your breath away.",
         "originalSentenceIndex": 55
       },
       {
@@ -945,11 +981,11 @@
         "originalSentenceIndex": 55
       },
       {
-        "text": "That was hard to believe about someone my age.",
+        "text": "Someone from my own generation had that much money.",
         "originalSentenceIndex": 56
       },
       {
-        "text": "How could he have so much money?",
+        "text": "It was hard to believe.",
         "originalSentenceIndex": 56
       },
       {
@@ -957,7 +993,7 @@
         "originalSentenceIndex": 57
       },
       {
-        "text": "They spent a year in France for no clear reason.",
+        "text": "They spent a year in France for no special reason.",
         "originalSentenceIndex": 58
       },
       {
@@ -969,7 +1005,7 @@
         "originalSentenceIndex": 58
       },
       {
-        "text": "Daisy said on the phone that they would stay here.",
+        "text": "Daisy said on the phone they would stay for good.",
         "originalSentenceIndex": 59
       },
       {
@@ -985,7 +1021,11 @@
         "originalSentenceIndex": 59
       },
       {
-        "text": "He wanted the dramatic turbulence of an old football game.",
+        "text": "He would keep looking a little wistfully.",
+        "originalSentenceIndex": 59
+      },
+      {
+        "text": "He would want the dramatic turbulence of some football game.",
         "originalSentenceIndex": 59
       },
       {
@@ -1009,7 +1049,7 @@
         "originalSentenceIndex": 61
       },
       {
-        "text": "It was a happy red-and-white Georgian Colonial mansion.",
+        "text": "It was a cheerful red-and-white Georgian Colonial mansion.",
         "originalSentenceIndex": 61
       },
       {
@@ -1029,15 +1069,19 @@
         "originalSentenceIndex": 62
       },
       {
-        "text": "It went through gardens that looked on fire.",
+        "text": "It was like jumping over burning gardens.",
         "originalSentenceIndex": 62
       },
       {
-        "text": "At the house, its run did not seem to stop.",
+        "text": "At the house, it was drifting up the side.",
         "originalSentenceIndex": 62
       },
       {
-        "text": "It went up the side in bright vines.",
+        "text": "It went up in bright vines.",
+        "originalSentenceIndex": 62
+      },
+      {
+        "text": "It was as if its run kept it going.",
         "originalSentenceIndex": 62
       },
       {
@@ -1053,11 +1097,11 @@
         "originalSentenceIndex": 63
       },
       {
-        "text": "Tom Buchanan was on the front porch in riding clothes.",
+        "text": "Tom Buchanan was standing on the front porch.",
         "originalSentenceIndex": 63
       },
       {
-        "text": "His legs were apart.",
+        "text": "He was in riding clothes, with his legs apart.",
         "originalSentenceIndex": 63
       },
       {
@@ -1089,15 +1133,15 @@
         "originalSentenceIndex": 66
       },
       {
-        "text": "They were the first thing you saw in his face.",
+        "text": "They took over his face.",
         "originalSentenceIndex": 66
       },
       {
-        "text": "They made him look ready to move forward and fight.",
+        "text": "They made him look as if always leaning aggressively forward.",
         "originalSentenceIndex": 66
       },
       {
-        "text": "His rich riding clothes looked almost like clothes for women.",
+        "text": "His riding clothes had an effeminate look, meant for show.",
         "originalSentenceIndex": 67
       },
       {
@@ -1105,7 +1149,7 @@
         "originalSentenceIndex": 67
       },
       {
-        "text": "His glistening boots seemed too full of him.",
+        "text": "He seemed too big for his glistening boots.",
         "originalSentenceIndex": 67
       },
       {
@@ -1113,11 +1157,11 @@
         "originalSentenceIndex": 67
       },
       {
-        "text": "When his shoulder moved, you could see muscle moving.",
+        "text": "A lot of muscle moved when his shoulder moved.",
         "originalSentenceIndex": 67
       },
       {
-        "text": "His thin coat did not hide it.",
+        "text": "You could see it under his thin coat.",
         "originalSentenceIndex": 67
       },
       {
@@ -1125,7 +1169,7 @@
         "originalSentenceIndex": 68
       },
       {
-        "text": "It was a body that could hurt people.",
+        "text": "It was a cruel body.",
         "originalSentenceIndex": 68
       },
       {
@@ -1141,35 +1185,27 @@
         "originalSentenceIndex": 70
       },
       {
-        "text": "He made other people seem less important.",
+        "text": "There was a little contempt in his voice.",
         "originalSentenceIndex": 70
       },
       {
-        "text": "He did this even with people he thought were nice.",
+        "text": "He talked this way even to people he liked.",
         "originalSentenceIndex": 70
       },
       {
-        "text": "Some men at New Haven had real hate for him.",
+        "text": "Some men at New Haven had great hate for him.",
         "originalSentenceIndex": 70
       },
       {
-        "text": "This is what he made me feel he was saying.",
+        "text": "This was what he seemed to say:",
         "originalSentenceIndex": 71
       },
       {
-        "text": "\"I may have more power than you.",
+        "text": "\"I am stronger and more of a man than you.",
         "originalSentenceIndex": 71
       },
       {
-        "text": "I am more of a man than you.",
-        "originalSentenceIndex": 71
-      },
-      {
-        "text": "But that does not make my word the last word.",
-        "originalSentenceIndex": 71
-      },
-      {
-        "text": "Do not think you must agree with me.\"",
+        "text": "That does not make my opinion about these things final.\"",
         "originalSentenceIndex": 71
       },
       {
@@ -1189,23 +1225,19 @@
         "originalSentenceIndex": 72
       },
       {
-        "text": "He wanted me to like him.",
+        "text": "I thought he wanted me to like him.",
         "originalSentenceIndex": 72
       },
       {
-        "text": "He wanted this in his own hard, fighting way.",
+        "text": "That wish was hard and defiant, with some wistfulness.",
         "originalSentenceIndex": 72
       },
       {
-        "text": "It was as if he needed it from me.",
-        "originalSentenceIndex": 72
-      },
-      {
-        "text": "We talked for a few minutes outside the house.",
+        "text": "We talked on the porch for a few minutes.",
         "originalSentenceIndex": 73
       },
       {
-        "text": "We were in the sun, just before the door.",
+        "text": "We were in the sun.",
         "originalSentenceIndex": 73
       },
       {
@@ -1213,11 +1245,7 @@
         "originalSentenceIndex": 74
       },
       {
-        "text": "His eyes kept moving all around.",
-        "originalSentenceIndex": 74
-      },
-      {
-        "text": "He could not seem to rest.",
+        "text": "His eyes kept moving quickly all around, without rest.",
         "originalSentenceIndex": 74
       },
       {
@@ -1229,11 +1257,11 @@
         "originalSentenceIndex": 75
       },
       {
-        "text": "There was an Italian garden set down in the ground.",
+        "text": "There was a sunken Italian garden.",
         "originalSentenceIndex": 75
       },
       {
-        "text": "There was 0.5 acre of deep, pungent roses.",
+        "text": "There was half an acre of deep, pungent roses.",
         "originalSentenceIndex": 75
       },
       {
@@ -1245,11 +1273,7 @@
         "originalSentenceIndex": 76
       },
       {
-        "text": "He turned me around again.",
-        "originalSentenceIndex": 77
-      },
-      {
-        "text": "He did it quickly but tried to be nice.",
+        "text": "He turned me around again, politely and abruptly.",
         "originalSentenceIndex": 77
       },
       {
