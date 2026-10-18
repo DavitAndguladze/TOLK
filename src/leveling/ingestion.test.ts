@@ -179,6 +179,20 @@ describe("Gatsby ingestion", () => {
     } })).rejects.toThrow("is absent from its quote");
   });
 
+  it("drops a multi-word phrase the model put straight into retainedWords instead of crashing", async () => {
+    // Real observed model behavior: putting a whole phrase like "West Egg" directly into
+    // retainedWords (not via retainedWordEvidence), which validateRetainedWordPolicy's own
+    // single-word check rejects with no chapter context - drop it instead, it is an optional
+    // extra allowance, not required content.
+    const content = await ingestGatsby(source, { generateText: async (prompt) => {
+      const data = JSON.parse(prompt.split("DATA:\n")[1]);
+      const value = metadata(data.number);
+      return JSON.stringify(data.number === 1 ? { ...value, retainedWords: [...value.retainedWords, "West Egg"] } : value);
+    } });
+    expect(content.policies["gatsby-full-ch1"].retainedWords).not.toContain("West Egg");
+    expect(content.policies["gatsby-full-ch1"].retainedWords).toEqual(expect.arrayContaining(["younger", "vulnerable", "turning"]));
+  });
+
   it("still rejects a name with no word present anywhere in the Chapter", async () => {
     await expect(ingestGatsby(source, { generateText: async (prompt) => {
       const data = JSON.parse(prompt.split("DATA:\n")[1]);

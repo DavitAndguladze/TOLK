@@ -157,10 +157,15 @@ DATA:\n${JSON.stringify({ ...original, originalText: undefined,
         // but it inconsistently drops some; validateRetainedWordPolicy already treats a Complex
         // Word as retained with or without this echo, so repair the list from the data the code
         // already has instead of failing a correct extraction over the model's own duplicate echo.
-        const repairedRetained = [...new Set([...retained.map((word) => renamed.get(word) ?? word),
+        // It also sometimes puts a whole multi-word phrase (e.g. "West Egg") straight into
+        // retainedWords instead of a single word - drop those rather than crash deep inside
+        // validateRetainedWordPolicy's own single-word check with no chapter context; it is an
+        // optional extra allowance, not required content, so dropping one loses nothing essential.
+        const singleWord = (word: string) => /^[\p{L}]+(?:['’-][\p{L}]+)*$/u.test(word);
+        const repairedRetained = [...new Set([...retained.map((word) => renamed.get(word) ?? word).filter(singleWord),
           ...complexWords.map((entry) => entry.word)])];
         const retainedIssues = validateRetainedWordPolicy(chapter, { retainedWords: repairedRetained, retainedWordEvidence });
-        if (retainedIssues.length) throw new Error(retainedIssues.map((issue) => issue.message).join("; "));
+        if (retainedIssues.length) throw new Error(`${original.id}: ${retainedIssues.map((issue) => issue.message).join("; ")}`);
         chapters.push(chapter);
         policies[original.id] = {
           requiredNames: [...new Set(names as string[])], retainedWords: [...new Set(repairedRetained)],
