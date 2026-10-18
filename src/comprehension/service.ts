@@ -5,8 +5,13 @@ import { recordAnswers } from "./record-answers";
 
 export interface ChapterCheckDeps {
   generate: ChapterCheckGenerator;
-  /** Keyed by Chapter Version id. Shared across calls so a check is generated at most once per version. */
-  cache: Map<string, ChapterCheck>;
+  /**
+   * Keyed by Chapter Version id, holding the in-flight or resolved check. Caching the promise
+   * (not just the resolved value) matters because Chapter 1's L1 version is shared across every
+   * Reader (ADR-0008): two Readers requesting it before it's cached must not trigger two
+   * generations.
+   */
+  cache: Map<string, Promise<ChapterCheck>>;
 }
 
 /** Generates a Chapter Version's check once and caches it - this is what makes "opens with no spinner" true. */
@@ -18,9 +23,12 @@ export async function getChapterCheckForVersion(
   const cached = deps.cache.get(version.id);
   if (cached) return cached;
 
-  const check = await deps.generate(chapter, version);
-  deps.cache.set(version.id, check);
-  return check;
+  const pending = deps.generate(chapter, version).catch((err) => {
+    deps.cache.delete(version.id); // let the next call retry instead of caching a permanent failure
+    throw err;
+  });
+  deps.cache.set(version.id, pending);
+  return pending;
 }
 
 /**

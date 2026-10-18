@@ -16,6 +16,35 @@ describe("getChapterCheckForVersion", () => {
     expect(second).toBe(mockChapterCheck);
     expect(generate).toHaveBeenCalledTimes(1);
   });
+
+  test("two concurrent first requests for the same version share one generation (no race)", async () => {
+    // Regression for: Chapter 1's L1 version is shared across every Reader (ADR-0008), so two
+    // Readers can request it before it's cached.
+    const version = mockChapterVersion(1);
+    const generate = vi.fn().mockResolvedValue(mockChapterCheck);
+    const cache = new Map();
+
+    const [first, second] = await Promise.all([
+      getChapterCheckForVersion(mockChapter, version, { generate, cache }),
+      getChapterCheckForVersion(mockChapter, version, { generate, cache }),
+    ]);
+
+    expect(first).toBe(mockChapterCheck);
+    expect(second).toBe(mockChapterCheck);
+    expect(generate).toHaveBeenCalledTimes(1);
+  });
+
+  test("a failed generation isn't cached, so the next call retries", async () => {
+    const version = mockChapterVersion(1);
+    const generate = vi.fn().mockRejectedValueOnce(new Error("AI gateway down")).mockResolvedValueOnce(mockChapterCheck);
+    const cache = new Map();
+
+    await expect(getChapterCheckForVersion(mockChapter, version, { generate, cache })).rejects.toThrow("AI gateway down");
+    const retried = await getChapterCheckForVersion(mockChapter, version, { generate, cache });
+
+    expect(retried).toBe(mockChapterCheck);
+    expect(generate).toHaveBeenCalledTimes(2);
+  });
 });
 
 describe("submitCheckAnswers", () => {

@@ -28,6 +28,9 @@ function complexWordChoices(target: ComplexWord, all: ComplexWord[]): string[] {
  * same signature - keep the shape (not the prose) the thing tests depend on.
  */
 export const generateChapterCheck: ChapterCheckGenerator = async (chapter, version) => {
+  // Caps at the ticket's 2-3 / 1-2 ranges. A Chapter with fewer Key Points/Complex Words than
+  // that (none exist yet - ingestion always provides 3-5 per the spec) degrades to fewer
+  // questions rather than throwing; revisit if #04's real ingestion ever produces a sparse Chapter.
   const keyPointCount = Math.min(3, Math.max(2, chapter.keyPoints.length));
   const complexWordCount = Math.min(2, Math.max(1, chapter.complexWords.length));
 

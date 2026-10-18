@@ -4,6 +4,10 @@ export class AnswerValidationError extends Error {}
 
 /** Validates a Chapter Check submission. No grading here - that's ticket #10. */
 export function recordAnswers(check: ChapterCheck, submission: ChapterCheckAnswers): ChapterCheckAnswers {
+  if (!Array.isArray(submission?.answers)) {
+    throw new AnswerValidationError("Submission must include an `answers` array");
+  }
+
   const validIds = new Set(check.questions.map((q) => q.id));
   const byQuestion = new Map<string, ChapterCheckAnswers["answers"][number]>();
 

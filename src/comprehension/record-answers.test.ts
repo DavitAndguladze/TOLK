@@ -19,6 +19,10 @@ describe("recordAnswers", () => {
     expect(() => recordAnswers(mockChapterCheck, submission)).toThrow(AnswerValidationError);
   });
 
+  test("rejects a submission with no answers array", () => {
+    expect(() => recordAnswers(mockChapterCheck, {} as never)).toThrow(AnswerValidationError);
+  });
+
   test("rejects an empty answer", () => {
     const submission = { answers: [{ questionId: mockChapterCheck.questions[0].id, answer: "   ", via: "typed" as const }] };
 
