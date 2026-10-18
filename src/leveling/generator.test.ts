@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { generateChapterCheck } from "../comprehension/chapter-check-generator.ts";
 import { mockChapterVersion } from "../mocks/fixtures.ts";
+import vocabulary from "../data/vocabulary/english-2018.json" with { type: "json" };
 import type { Chapter, NextChapterInput } from "../types";
 import { createChapterGenerator, type FidelityInput, type FidelityReview } from "./generator.ts";
 
@@ -59,6 +60,26 @@ describe("ChapterGenerator", () => {
     expect(result.provenance.attempts).toBe(2);
   });
 
+  it("allows an active Word Bank word beyond L1's frequency target when correctly reinforced", async () => {
+    const next = input();
+    next.original.originalText = "Nick felt vulnerable and could be hurt. He went home. He felt hope.";
+    next.original.keyPoints[0].text = "Nick felt vulnerable and could be hurt.";
+    next.wordBank = [{ word: "vulnerable", source: "wrong", timesSeen: 1, graduated: false, addedInChapter: 1, graduatedInChapter: null }];
+    const supported = { ...draft,
+      sentences: [{ text: "Nick felt vulnerable and could be hurt.", originalSentenceIndex: 0 }, ...draft.sentences.slice(1)],
+      reinforcedWords: [{ word: "vulnerable", reinforcement: "context-clue", sentenceIndex: 0 }],
+    };
+    const settings = dependencies();
+    const result = await createChapterGenerator({ ...settings,
+      policyForChapter: () => ({ ...settings.policyForChapter(), vocabulary }),
+      generateText: async () => JSON.stringify(supported),
+    }).generate(next);
+    expect(vocabulary.ranks.vulnerable).toBe(4491);
+    expect(result.version.level).toBe(1);
+    expect(result.version.reinforcedWords).toEqual(supported.reinforcedWords);
+    expect(result.fidelity.reinforcementAppropriate).toBe(true);
+  });
+
   it("creates shared L1 Chapter 1 without inventing a preceding version", async () => {
     const first = { ...chapter, number: 1, id: "gatsby-ch1", keyPoints: chapter.keyPoints.map((point) => ({ ...point, chapterId: "gatsby-ch1" })) };
     const result = await createChapterGenerator(dependencies()).generateSharedChapterOne(first);
@@ -66,6 +87,46 @@ describe("ChapterGenerator", () => {
     expect(result.version).toMatchObject({ chapterNumber: 1, readerId: null, baselineVersionId: null, level: 1 });
     expect(result.provenance.personalized).toBe(false);
     expect(result.version.id).toBe(repeated.version.id);
+    expect(result.check).toEqual(repeated.check);
+    expect(result.fidelity.versionId).toBe(result.version.id);
+    expect(result.fidelity.checkEvidence.map((evidence) => evidence.questionId)).toEqual(result.check.questions.map((question) => question.id));
+  });
+
+  it.each(["prompt", "choices"] as const)("gives a different immutable shared identity when Check %s change", async (field) => {
+    const first = await createChapterGenerator(dependencies()).generatePreGenerated(chapter, 1);
+    const originalArtifact = structuredClone(first);
+    const second = await createChapterGenerator({ ...dependencies(), generateCheck: async (original, version) => {
+      const check = await generateChapterCheck(original, version);
+      if (field === "prompt") check.questions[0].prompt = "What color was the light Nick saw?";
+      else check.questions.at(-1)!.choices!.reverse();
+      return check;
+    } }).generatePreGenerated(chapter, 1);
+    expect(second.version.text).toBe(first.version.text);
+    expect(second.version.id).not.toBe(first.version.id);
+    expect(second.check.id).not.toBe(first.check.id);
+    expect(second.check.chapterVersionId).toBe(second.version.id);
+    expect(second.check.questions.every((question) => !first.check.questions.some((old) => old.id === question.id))).toBe(true);
+    expect(second.fidelity.versionId).toBe(second.version.id);
+    expect(second.fidelity.checkEvidence.map((evidence) => evidence.questionId)).toEqual(second.check.questions.map((question) => question.id));
+    expect(first).toEqual(originalArtifact);
+  });
+
+  it("keeps live version identities distinct for identical text and Check content", async () => {
+    const generator = createChapterGenerator(dependencies());
+    const first = await generator.generate(input());
+    const second = await generator.generate(input());
+    expect(first.version.id).not.toBe(second.version.id);
+    expect(first.check.id).not.toBe(second.check.id);
+  });
+
+  it.each(["version", "check", "question"] as const)("does not repair invalid %s identities while assigning shared IDs", async (field) => {
+    await expect(createChapterGenerator({ ...dependencies(), generateCheck: async (original, version) => {
+      const check = await generateChapterCheck(original, version);
+      if (field === "version") check.chapterVersionId = "unrelated-version";
+      else if (field === "check") check.id = "";
+      else check.questions[1].id = check.questions[0].id;
+      return check;
+    } }).generatePreGenerated(chapter, 1)).rejects.toMatchObject({ code: "CHAPTER_GENERATION_UNAVAILABLE" });
   });
 
   it("serves exact L5 original without rewriting it", async () => {

@@ -125,6 +125,26 @@ test("requires an explicit frequency source instead of silently waiving vocabula
   expect(validateChapterVersion(version, input, policy).issues).toContainEqual(expect.objectContaining({ code: "vocabulary" }));
 });
 
+test.each([
+  { reinforcedWords: [] },
+  { reinforcedWords: [{ word: "vulnerable", reinforcement: "inline-definition", sentenceIndex: 0 }] },
+  { reinforcedWords: [{ word: "vulnerable", reinforcement: "plain", sentenceIndex: 1 }] },
+])("does not exempt an unreinforced or incorrectly referenced bank word: %j", ({ reinforcedWords }) => {
+  const { version, input, policy } = setup();
+  input.graduatedWords = [];
+  input.wordBank = [{ word: "vulnerable", source: "flagged", timesSeen: 1, graduated: false, addedInChapter: 1, graduatedInChapter: null }];
+  policy.vocabulary.ranks = { ...policy.vocabulary.ranks, vulnerable: 4491 };
+  expect(validateChapterVersion({ ...version, reinforcedWords }, input, policy).issues)
+    .toContainEqual(expect.objectContaining({ code: "vocabulary" }));
+});
+
+test("does not exempt an unrelated unknown word alongside supported reinforcement", () => {
+  const { version, input, policy } = setup();
+  replaceSentence(version, 1, "Tom gave Nick advice mystifyingly.");
+  expect(validateChapterVersion(version, input, policy).issues)
+    .toContainEqual(expect.objectContaining({ code: "vocabulary", message: expect.stringContaining("mystifyingly") }));
+});
+
 test("uses the LevelSpec sentence limit, including exactly ten words at L1", () => {
   const { version, input, policy } = setup();
   replaceSentence(version, 2, "Nick kept that advice that Nick kept that advice that.");

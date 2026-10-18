@@ -123,6 +123,19 @@ export function validateChapterVersion(
     return !actual || actual.index !== token.index || actual.text !== token.text
       || actual.normalized !== token.normalized || actual.sentenceIndex !== token.sentenceIndex;
   })) issue("tokens", "Tokens must match served sentences with unchanged global indexes");
+  const reinforced = new Set<string>();
+  for (const word of value.reinforcedWords) {
+    const normalized = words(word.word).join(" ");
+    const sentence = value.sentences[word.sentenceIndex];
+    if (!normalized || reinforced.has(normalized) || !sentence || !wordCount(sentence.text, word.word)
+      || !context.wordBank.some((entry) => !entry.graduated && words(entry.word).join(" ") === normalized)
+      || context.graduatedWords.some((entry) => words(entry).join(" ") === normalized)
+      || word.reinforcement !== context.reinforcement) {
+      issue("reinforcement", "Reinforcement must cite an active Word Bank word in its served sentence and match the requested support");
+    } else {
+      reinforced.add(normalized);
+    }
+  }
   const spec = LEVEL_SPECS[value.level];
   if (spec.maxSentenceWords !== null && value.sentences.some((sentence) => words(sentence.text).length > spec.maxSentenceWords!)) {
     issue("sentence-length", `Sentences exceed L${value.level}'s ${spec.maxSentenceWords}-word limit`);
@@ -133,6 +146,7 @@ export function validateChapterVersion(
       const exemptions = new Set([
         ...policy.requiredNames.flatMap((name) => words(`${name} ${name}'s ${name}’s`)),
         ...context.graduatedWords.flatMap(words), ...policy.retainedWords.flatMap(words),
+        ...[...reinforced].flatMap(words),
       ]);
       const outsideTarget = [...new Set(expectedTokens.map((token) => token.normalized).filter(Boolean))].filter((word) => {
         const rank = policy.vocabulary.ranks[word];
@@ -155,18 +169,6 @@ export function validateChapterVersion(
     for (const word of context.graduatedWords) {
       if (wordCount(rewritten, word) < wordCount(source, word) * occurrences) issue("graduated-word", `Graduated Word must remain in its original passage: ${word}`);
     }
-  }
-  const reinforced = new Set<string>();
-  for (const word of value.reinforcedWords) {
-    const normalized = words(word.word).join(" ");
-    const sentence = value.sentences[word.sentenceIndex];
-    if (!normalized || reinforced.has(normalized) || !sentence || !wordCount(sentence.text, word.word)
-      || !context.wordBank.some((entry) => !entry.graduated && words(entry.word).join(" ") === normalized)
-      || context.graduatedWords.some((entry) => words(entry).join(" ") === normalized)
-      || word.reinforcement !== context.reinforcement) {
-      issue("reinforcement", "Reinforcement must cite an active Word Bank word in its served sentence and match the requested support");
-    }
-    reinforced.add(normalized);
   }
   const evidence = policy.keyPointEvidence;
   if (!nonempty(evidence?.source) || !Array.isArray(evidence?.points)) issue("key-point-evidence", "Key Point evidence must have a separate named source");
