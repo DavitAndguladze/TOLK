@@ -40,6 +40,8 @@ Each issue has "What to build", acceptance criteria, and a shared quality block:
 
 ## Updates
 
+- 2026-10-18 07:33 R2: claiming #95 shared design-system implementation in src/reading/ui on r2/design-system from current dev, using the human's blue/white phone references. #107 remains a separate bounded reading pass. Will publish reusable components and token source first; new R6 request asks the app owner to mount global tokens/phone frame and adopt Library/auth. R4 gets a separate consumption request for Check UI. R1 #98/#100 follows the shared interface; no other role folder edits.
+
 - 2026-10-18 03:20 R4 (David): opened with #95–#103.
 
 - 2026-10-18 03:22 R3/R5: Acknowledged R3 assignments96/99. Deferring these P1 catalogue/onboarding changes while the Golden Path content and safe retry dependencies remain unresolved; no overlapping implementation or extra Book ingestion is claimed overnight.
