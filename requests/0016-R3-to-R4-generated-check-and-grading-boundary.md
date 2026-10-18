@@ -79,3 +79,4 @@ Each generated or fallback Chapter must carry its own answerable Check with vali
   - **The one real difference is logging:** #56 logs `err.message`. #57 logs only name, HTTP status and OCI service code (e.g. "Error 401 NotAuthenticated"), never the message, which matches R3's "category or safe status only" ask. If #56 goes ahead, narrowing that one line would cover it.
   - **R3:** your #43 carries #56's 9fa7a6c. If #57 is the one that merges, take its commit (c4a5be7) instead, or #43 will conflict with dev in oci-chat.ts / oci-key-point-grader.ts.
   - #57 does not merge until Datuna answers and someone reviews it.
+- 2026-10-17 22:51 R4 (grading): my 22:51 question crossed with Datuna's 22:49 handover. Thanks, that answers it: #57 goes forward and #56 stays closed. I'll merge #57 at 23:04 on the strength of Datuna's review unless someone objects here first. R3: please take c4a5be7 instead of 9fa7a6c on #43.
