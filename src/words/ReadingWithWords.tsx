@@ -4,12 +4,13 @@ import { useEffect, useState, type ReactNode } from "react";
 import { ReadingScreen } from "../reading/ReadingScreen";
 import type { Chunk } from "../reading/chunk";
 import type { Token } from "../types";
-import { loadFlags, useFlaggedWords } from "./flagged-words";
+import { createFlagScope, disposeFlags, loadFlags, useFlaggedWords } from "./flagged-words";
 import { WordSheet } from "./WordSheet";
 
 /** Server parents pass serializable reading data and the Chapter Check slot. */
 export function ReadingWithWords({ chapterVersionId, chunks, chapterCheck }: { chapterVersionId: string; chunks: Chunk[]; chapterCheck?: ReactNode }) {
-  const flags = useFlaggedWords(chapterVersionId);
+  const [flagScope] = useState(createFlagScope);
+  const flags = useFlaggedWords(chapterVersionId, flagScope);
   const [selected, setSelected] = useState<Token | null>(null);
   const [loadedVersion, setLoadedVersion] = useState<string | null>(null);
   const [failed, setFailed] = useState(false);
@@ -19,18 +20,18 @@ export function ReadingWithWords({ chapterVersionId, chunks, chapterCheck }: { c
     setSelected(null);
     setLoadedVersion(null);
     setFailed(false);
-    loadFlags(chapterVersionId).then(
+    loadFlags(chapterVersionId, flagScope).then(
       () => live && setLoadedVersion(chapterVersionId),
       () => live && setFailed(true),
     );
-    return () => { live = false; };
-  }, [chapterVersionId, attempt]);
+    return () => { live = false; disposeFlags(flagScope); };
+  }, [chapterVersionId, attempt, flagScope]);
   const ready = loadedVersion === chapterVersionId;
   return <>
     {!ready && <p role={failed ? "alert" : "status"} className="mx-auto max-w-xl px-6 pt-4 text-sm text-fog">
       {failed ? <>Saved words couldn’t load. You can keep reading. <button type="button" onClick={() => setAttempt((n) => n + 1)} className="min-h-11 cursor-pointer font-semibold text-light underline outline-light focus-visible:outline-2">Retry saved words</button></> : "Loading saved words…"}
     </p>}
     <ReadingScreen chapterVersionId={chapterVersionId} chunks={chunks} chapterCheck={chapterCheck} onWordTap={ready ? setSelected : undefined} flaggedTokenIndexes={ready ? flags : undefined} />
-    {selected && <WordSheet key={`${chapterVersionId}:${selected.index}`} chapterVersionId={chapterVersionId} token={selected} onClose={() => setSelected(null)} />}
+    {selected && <WordSheet key={`${chapterVersionId}:${selected.index}`} chapterVersionId={chapterVersionId} token={selected} flagScope={flagScope} onClose={() => setSelected(null)} />}
   </>;
 }

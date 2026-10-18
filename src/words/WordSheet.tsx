@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import type { Token } from "../types";
-import { flagWord, isFlagged, lookupWordMeaning, unflagWord, useFlaggedWords } from "./flagged-words";
+import { flagWord, isFlagged, lookupWordMeaning, unflagWord, useFlaggedWords, type FlagScope } from "./flagged-words";
 import { canHear, hear, hearInBrowser } from "./hear";
 import type { WordMeaning } from "./meaning";
 
@@ -29,10 +29,10 @@ function displayWord(token: Token): string {
  * Opens when the Reader taps a word. Tapping a word flags it (CONTEXT.md: Flagged Word), so the
  * sheet flags it on open, shows its in-context meaning, plays it aloud, and lets the Reader unflag it.
  */
-export function WordSheet({ chapterVersionId, token, onClose }: { chapterVersionId: string; token: Token; onClose: () => void }) {
+export function WordSheet({ chapterVersionId, token, flagScope, onClose }: { chapterVersionId: string; token: Token; flagScope: FlagScope; onClose: () => void }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const titleId = useId();
-  const flagged = useFlaggedWords(chapterVersionId).has(token.index);
+  const flagged = useFlaggedWords(chapterVersionId, flagScope).has(token.index);
   const [meaning, setMeaning] = useState<WordMeaning | null>(null);
   const [meaningFailed, setMeaningFailed] = useState(false);
   const [meaningAttempt, setMeaningAttempt] = useState(0);
@@ -49,10 +49,10 @@ export function WordSheet({ chapterVersionId, token, onClose }: { chapterVersion
   }, []);
 
   useEffect(() => {
-    if (isFlagged(chapterVersionId, token.index)) return;
+    if (isFlagged(chapterVersionId, token.index, flagScope)) return;
     let live = true;
     setSaving(true);
-    flagWord(chapterVersionId, token).then(
+    flagWord(chapterVersionId, token, flagScope).then(
       () => live && setFlagFailed(false),
       () => live && setFlagFailed(true),
     ).finally(() => live && setSaving(false));
@@ -60,7 +60,7 @@ export function WordSheet({ chapterVersionId, token, onClose }: { chapterVersion
       live = false;
     };
     // Keyed on the index, not the Token object, so a re-render never re-flags a word the Reader just unflagged.
-  }, [chapterVersionId, token.index]);
+  }, [chapterVersionId, token.index, flagScope]);
 
   useEffect(() => {
     const request = new AbortController();
@@ -77,8 +77,8 @@ export function WordSheet({ chapterVersionId, token, onClose }: { chapterVersion
     setFlagFailed(false);
     setSaving(true);
     try {
-      if (flagged) await unflagWord(chapterVersionId, token);
-      else await flagWord(chapterVersionId, token);
+      if (flagged) await unflagWord(chapterVersionId, token, flagScope);
+      else await flagWord(chapterVersionId, token, flagScope);
     } catch { setFlagFailed(true); }
     finally { setSaving(false); }
   }
