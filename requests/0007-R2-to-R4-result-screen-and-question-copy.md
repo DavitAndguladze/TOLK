@@ -2,10 +2,10 @@
 id: 0007
 from: R2
 to: R4
-status: in-progress
+status: done
 issue: #16
 created: 2026-10-17 20:43
-updated: 2026-10-17 21:33
+updated: 2026-10-17 21:55
 ---
 
 ## Need
@@ -33,3 +33,4 @@ R2 has an alignment fix in flight (#36) so your cards line up with the recap at 
 - 2026-10-17 21:12 R4: part 1 is in PR #37 (https://github.com/DavitAndguladze/TOLK/pull/37). Checked in headless Chrome at 390px: Finish chapter, Chapter Check, Submit, then ResultScreen, with no console errors. R2 and Datuna, please review. R4 merges after review, not before 21:32. Note: "Answers graded by OCI Generative AI" stays untrue until slice 2 swaps in the real grader. Part 2 (question wording) is still Datuna's.
 - 2026-10-17 21:02 R4: correction: the line above was posted at 21:01, not 21:12. The merge window still holds: #37 merges after review, not before 21:32.
 - 2026-10-17 21:33 R4: part 1 is done. #37 merged into dev after Davit approved it (3d5e2df), including his holdLevel reason fix (f629d63). https://github.com/DavitAndguladze/TOLK/pull/37. Part 2 (Key Point question wording) is still open for Datuna, so this stays in-progress.
+- 2026-10-17 21:55 R4 (Datuna): part 2 done - PR #45 (https://github.com/DavitAndguladze/TOLK/pull/45). Went with "What's the first/second/third important thing that happens in this chapter?" rather than your example's per-topic phrasing ("What advice did Nick's father give him?") - a topic-specific question needs a subject pulled out of the Key Point's free text, which isn't reliable for an arbitrary Chapter (and this generator is a stand-in for the real OCI question-writer anyway). Ordinal wording never quotes the answer and needs nothing extracted. Say if you'd rather block on the narrative version for the demo. Both parts of this request are done - closing.

@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 21:40
+updated: 2026-10-17 21:55
 ---
 
 ## Need
@@ -36,3 +36,4 @@ Each generated or fallback Chapter must carry its own answerable Check with vali
   - **Question ids to words:** each complex-word CheckQuestion carries `word`, its QuestionGrade has the same `questionId`, and grade 2 means exactly correct (no AI involved). A wrong one lands in `grading.missedWords` with source chapter-check. R5/R6 can graduate on that.
   - **#37 response:** yes, merged. decision, wordBank and nextVersionId are labelled stand-ins until R6/R5/R3 replace them.
   - **OCI grading credit:** agreed, the screen must not claim OCI when the stand-in graded. R4 will propose a small separate src/types PR so Grading records who graded, and ask R2 to render it instead of the fixed line.
+- 2026-10-17 21:55 R4 (Datuna): the "Boundary" bullet's ask on me - question wording done, PR #45 (https://github.com/DavitAndguladze/TOLK/pull/45), same fix as 0007 part 2. Only the `prompt` string changed; `keyPointId`, `answerSentenceIndex`, and the complex-word `word`/`choices` are untouched, so word-presence-in-version and valid-sentence-reference grounding still hold for your validator. The rest of this request (OCI transport reuse, Chat signature extension, grading credit) is the other R4's - leaving status as-is.
