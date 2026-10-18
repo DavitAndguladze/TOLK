@@ -1,0 +1,17 @@
+@layer theme, base, components, utilities;
+@layer components {
+  .screen { min-height: 100%; padding: max(1.5rem, env(safe-area-inset-top)) 1.5rem max(1.5rem, env(safe-area-inset-bottom)); color: var(--color-ink); }
+  .brand { font-size: 1.5rem; font-weight: 800; letter-spacing: -.04em; color: var(--color-light); }
+  .art { display: block; width: min(100%, 10rem); height: auto; margin: .75rem auto; }
+  .heading { text-align: center; font-size: 2rem; line-height: 1.15; font-weight: 800; letter-spacing: -.025em; }
+  .intro { margin-top: .6rem; text-align: center; color: var(--color-fog); line-height: 1.5; }
+  .book { margin-top: 1.5rem; text-align: center; }
+  .bookTitle { font-size: 1.15rem; line-height: 1.3; font-weight: 750; }
+  .chapter { margin-top: .4rem; color: var(--color-fog); line-height: 1.5; }
+  .steps { display: grid; gap: 1.25rem; margin: 1.5rem 0 0; padding-left: 1.25rem; }
+  .steps li { padding-left: .3rem; }
+  .steps li::marker { color: var(--color-light); font-weight: 750; }
+  .steps p { margin-top: .25rem; color: var(--color-fog); line-height: 1.5; }
+  .reassurance { margin-top: 1.5rem; color: var(--color-fog); font-size: .9rem; line-height: 1.5; }
+  .start { margin-top: 1.5rem; }
+}

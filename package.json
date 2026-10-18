@@ -13,6 +13,7 @@
     "db:up": "docker compose -f docker-compose.dev.yml up -d"
   },
   "dependencies": {
+    "@paper-design/shaders-react": "0.0.81",
     "better-auth": "^1.7.10",
     "drizzle-orm": "^0.45.4",
     "mysql2": "^3.24.6",

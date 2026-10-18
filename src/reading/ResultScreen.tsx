@@ -4,6 +4,7 @@ import { NextChapter } from "./NextChapter";
 import { ScoreCountUp } from "./ScoreCountUp";
 import { chapterCheckReview, resultHeadline } from "./result";
 import motion from "./ReadingMotion.module.css";
+import theme from "./ReadingTheme.module.css";
 import { Card } from "./ui/Card";
 import Link from "next/link";
 import controls from "./ui/DesignSystem.module.css";
@@ -40,7 +41,7 @@ export function ResultScreen({ result, nextHref, check, answers }: { result: Ans
   const hasAnswerContext = check?.chapterVersionId === result.session.chapterVersionId && answers !== undefined;
 
   return (
-    <section aria-live="polite" className="mx-auto max-w-xl px-6 pt-8 pb-12">
+    <section aria-live="polite" className={`${theme.surface} mx-auto max-w-xl px-6 pt-8 pb-12`}>
       <header className={styles.completion}>
         <svg aria-hidden="true" viewBox="0 0 200 132" className={styles.book} fill="none">
           <ellipse cx="100" cy="114" rx="68" ry="7" fill="var(--color-glow)" />
@@ -72,6 +73,7 @@ export function ResultScreen({ result, nextHref, check, answers }: { result: Ans
         <p className="text-sm text-fog">Next Chapter</p>
         <LevelChange from={decision.from} to={decision.to} />
         <p className="mt-3">{decision.explanation}</p>
+        <p className="mt-3 text-sm text-fog">L1 gives the most support. L5 is the author’s original text. Your Level can change by one step between Chapters, using your last three completed Chapters at this Level.</p>
       </Card>
 
       <h3 className="mt-8 font-semibold">What this was based on</h3>

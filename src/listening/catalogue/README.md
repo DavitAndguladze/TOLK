@@ -1,0 +1,13 @@
+# Classics catalogue (#96)
+
+R1 owns this standalone component at R4 request0055. R6 owns the Library page: import `BookCatalogue` from `@/listening/catalogue/BookCatalogue` and mount it below the real available Book cards, inside the page's existing padding. It requires no props, provider, storage, account or network calls. Retain R6's real Gatsby card/open route separately. None of these catalogue identifiers is an app Book/Chapter ID. No Gatsby text, Chapter Check, namespace, generation or availability is changed.
+
+All eleven entries say Coming soon. Native expandable details expose a description, approximate original-text reading time, provenance and an external Gutenberg source link. The external link is explicitly an original source, never a TOLK reading action. There are no disabled/dead reading buttons or made-up Levels/Chapter counts.
+
+Each cover is an original geometric illustration authored in `BookCover.tsx`, keyed by the matching `cover` field in `books.ts`: pocket watch (Alice), magnifying glass (Sherlock), island/map mark (Treasure), clock/orbit (Time), country house (Pride), two skylines (Cities), flask/lightning (Frankenstein), moon/castle (Dracula), kite/quill (Franklin), column/laurel (Meditations), branching tree (Origin). No external artwork, publisher covers, characters, fonts or image requests are used. These are original works rather than reproductions requiring a public-domain-edition cover claim. A cover credit appears next to each image in its details.
+
+Text copyright status for each exact source edition was verified on 2026-10-18 as “Public domain in the USA” on its linked Project Gutenberg page. The Meditations entry uses the translation in ebook2680; Origin uses ebook1228's first edition. The source URL and title/author are recorded in `books.ts` and shown in the card. This is an availability catalogue, not an import of those editions into TOLK.
+
+Reading estimates use each Gutenberg plain-text source's count of English letter words (allowing internal apostrophe/hyphen), excluding the START/END Gutenberg wrapper. Front matter within the edition remains included. Divide by200words/minute and round upward to15minutes; these are estimates for the original entire text, not a generated Chapter or a Reader-specific measurement. `source-audit.json` records exact URLs, counts, retrieval date and downloaded-file SHA256 for reproducibility. Only counts/hashes are retained; no source texts are added to the app.
+
+No new domain contract or pure application logic is introduced. Verify static content against the audit and test native details/links at390px. R6 mount and deployed Library acceptance remain separate; do not close #96 on this isolated component alone.

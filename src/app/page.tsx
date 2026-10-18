@@ -3,23 +3,27 @@ import { listLibrary } from "@/db";
 import { requireReader } from "@/platform/auth";
 import { Button } from "@/reading/ui/Button";
 import { Card } from "@/reading/ui/Card";
+import { PaperBackground } from "./PaperBackground";
+import { Shelf } from "./Shelf";
 import { SignOutButton } from "./SignOutButton";
 
 export default async function Library({ searchParams }: { searchParams: Promise<{ q?: string | string[] }> }) {
   // searchParams first: it marks the page dynamic, so `next build` never prerenders it (no database at build).
   const { q } = await searchParams;
-  const reader = await requireReader();
+  const reader = await requireReader("/welcome"); // a signed-out first open starts at Welcome (#98)
   const query = typeof q === "string" ? q : "";
   const books = await listLibrary(reader.id, query);
 
   return (
-    <main className="min-h-full px-6 pt-[max(1.5rem,env(safe-area-inset-top))] pb-12">
+    <main className="relative isolate min-h-full px-6 pt-[max(1.5rem,env(safe-area-inset-top))] pb-12">
+      <PaperBackground />
       <div className="mx-auto max-w-xl">
         <header className="flex items-baseline justify-between gap-4">
           <p className="font-book text-[1.0625rem] text-fog italic">{reader.name}</p>
           <SignOutButton />
         </header>
-        <h1 className="font-book text-[1.75rem] leading-tight font-medium">Library</h1>
+        <Shelf />
+        <h1 className="mt-3 text-center font-book text-[2.25rem] leading-tight font-medium">Library</h1>
 
         <form role="search" action="/" method="get" className="mt-4 flex gap-2">
           <label htmlFor="q" className="sr-only">
@@ -48,7 +52,7 @@ export default async function Library({ searchParams }: { searchParams: Promise<
                   {/* A plain <a>, not <Link>: opening a Book records progress, so it must never be prefetched. */}
                   <a
                     href={`/api/books/${book.id}/open`}
-                    className="flex min-h-11 flex-col rounded-[inherit] p-5 outline-light outline-offset-2 hover:bg-glow/20 focus-visible:outline-3"
+                    className="flex min-h-11 flex-col rounded-[inherit] p-5 outline-light outline-offset-2 hover:bg-glow/20 focus-visible:outline-3 motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:translate-y-0.5"
                   >
                     <span className="font-book text-[1.25rem] leading-snug font-medium">{book.title}</span>
                     <span className="text-sm text-fog">{book.author}</span>
