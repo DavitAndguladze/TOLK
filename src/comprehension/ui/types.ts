@@ -1,23 +1,14 @@
-import type { ChapterCheck, ChapterCheckAnswers, CheckQuestion } from "../../types";
+import type { ChapterCheck, ChapterCheckAnswers, QuestionGrade } from "../../types";
 import type { AnswerTranscriber } from "../transcription";
 
 /**
- * Handoff contract for Role 2 (Reading UI): mount this inline on the reading screen via local
- * state (e.g. `phase: "reading" | "check"`), not a route change, so the check opens with no
- * route change or spinner. `onSubmit` today only confirms storage - no result screen until
- * tickets #10/#11/#12 land.
+ * Handoff contract for Role 2 (Reading UI): mounted inline on the reading screen, not a route change.
+ * `gradeAnswer` grades one answer on Check (#97); `onSubmit` sends the whole Check after the last one.
  */
 export interface ChapterCheckPanelProps {
   check: ChapterCheck;
+  gradeAnswer: (questionId: string, entry: ChapterCheckAnswers["answers"][number]) => Promise<QuestionGrade>;
   onSubmit: (answers: ChapterCheckAnswers) => Promise<void>;
-  transcriber?: AnswerTranscriber;
-}
-
-export interface QuestionCardProps {
-  question: CheckQuestion;
-  value: string;
-  via: "spoken" | "typed";
-  onChange: (value: string, via: "spoken" | "typed") => void;
   transcriber?: AnswerTranscriber;
 }
 
