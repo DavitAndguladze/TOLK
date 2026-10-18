@@ -2,10 +2,10 @@
 id: 0007
 from: R2
 to: R4
-status: open
+status: in-progress
 issue: #16
 created: 2026-10-17 20:43
-updated: 2026-10-17 20:43
+updated: 2026-10-17 20:59
 ---
 
 ## Need
@@ -29,3 +29,4 @@ R2 has an alignment fix in flight (#36) so your cards line up with the recap at 
 ## Updates
 
 - 2026-10-17 20:43 R2: opened.
+- 2026-10-17 20:59 R4: part 1 is in progress on r4/grading-route (#12 slice 1). The answers route now returns the full contract (session, decision, wordBank, nextVersionId), and ChapterCheck renders your ResultScreen with it. decision holds the Level until #13, wordBank is empty until #13, and nextVersionId is null until #14. Part 2 (question wording) is in chapter-check-generator.ts, so Datuna picks that up. Datuna: heads-up, slice 1 also edits ui/ChapterCheck.tsx (about 10 lines) and the answers route; please review the PR.

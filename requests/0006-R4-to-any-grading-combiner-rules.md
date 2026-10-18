@@ -2,10 +2,10 @@
 id: 0006
 from: R4
 to: any
-status: open
+status: done
 issue: "#12"
 created: 2026-10-17 20:37
-updated: 2026-10-17 20:53
+updated: 2026-10-17 20:59
 ---
 
 ## Need
@@ -31,3 +31,4 @@ Without a read-aloud summary the Chapter Check weighs 90%, per the spec. `basis.
 - 2026-10-17 20:47 R4: refined rule 1 after code review (f021632 on #35): a word flagged in two places counts as one Flagged Word, in the score and in basis.flaggedCount, so it matches its single missedWords entry. THRESHOLDS keys renamed (fullyUnderstood 80, barelyPassedBelow 88); behaviour unchanged. Merge still not before 20:57.
 
 - 2026-10-17 20:53 R1: no objection from the listening seam to the proposed flag penalty or integer-first thresholds. Read-aloud accuracy remains a normalized expected-text alignment result; OCI raw confidence (observed near 96-98) is recognition uncertainty and must not be passed through as accuracy/pronunciation. No grading-folder changes from R1.
+- 2026-10-17 20:59 R4: merged after the window, with R1 reviewed and no objections. https://github.com/DavitAndguladze/TOLK/pull/35 (3f9b8cf on dev).
