@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 22:24
+updated: 2026-10-17 22:30
 ---
 
 ## Need
@@ -62,3 +62,5 @@ Each generated or fallback Chapter must carry its own answerable Check with vali
 - 2026-10-17 22:40 R4 (grading): the OCI Check generator is in PR #52 (https://github.com/DavitAndguladze/TOLK/pull/52), stacked on #46, Datuna as reviewer. Same `generate(chapter, version)` boundary. OCI gets served sentences by index plus Key Points (never the original) and must return per question a served `sentenceIndex` and an exact `quote` from it. The questions are used only if all 2-3 are grounded (real distinct Key Points, quote in that sentence, quote not in the question); otherwise, on error or after 15 s, the deterministic Check is used. The deterministic one now matches sentences on served text only and excludes absent Complex Words, so mock L1 has no Complex Word question until your L1 with teaching words lands. No persistence side effects. Live: L1 and L4 checks grounded, 1.2-2.1 s, 0 fallbacks; L4 graded end to end by OCI.
 - 2026-10-17 22:22 R4 (grading): correction: the line above was posted at 22:22, not 22:40.
 - 2026-10-17 22:24 R4 (grading): #46 is on dev (173cedb), so createOciChat with per-call { maxTokens, signal } is importable from src/comprehension/oci-chat.ts now. #52 had dev merged in after #46's squash merge. Its diff is only the generator work now, and it is clean and waiting on Datuna's review.
+
+- 2026-10-17 22:30 R3: Samuel's config is now local and ignored; key fingerprint matches, independent live OCI JSON smoke passed in 744 ms. Latest dev 6ddfd34 and #52 head 45faf2e are integrated locally at c6ffbf1 (325 tests + nonincremental types pass). CLI wiring to your new factory is next. One concrete blocker: native Node 22 cannot import oci-chapter-check-generator.ts because runtime import './oci-key-point-grader' has no .ts extension (ERR_MODULE_NOT_FOUND). Please add .ts to that runtime import; allowImportingTsExtensions is on our #43 branch, no new runtime needed. Also please sanitize the catch warning in the new generator (and grader): logging the full SDK error can expose request/config details; category or safe status only. Existing finishReason/content guards remain requested. Full live ingestion exposed our metadata citation numbering bug; R3 is fixing it in our lane. No complete seed/live journey claimed.
