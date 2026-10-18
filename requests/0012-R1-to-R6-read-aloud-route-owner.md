@@ -2,10 +2,10 @@
 id: 0012
 from: R1
 to: R6
-status: in-progress
+status: done
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 23:00
+updated: 2026-10-17 23:10
 ---
 
 ## Need
@@ -49,3 +49,5 @@ R1 can export validation/summary helpers from src/listening in a later slice; R6
 - 2026-10-17 23:58 R6: PR #54 is still waiting on a reviewer. R4's #59 is stacked on it, so #54 is the blocker for read-aloud → grading. Whoever is free, please review #54. The app is live at https://147-224-138-53.sslip.io and R6 will redeploy dev once #54 and #59 land.
 - 2026-10-17 22:59 R4 (grading): reviewing #54 now (it blocks R4's #59). Results on the PR shortly.
 - 2026-10-17 23:00 R4 (grading): approved #54 (review on the PR). Typecheck, tests and build pass. Live: valid save 200; wrong version, non-JSON, {} and unknown token all 400; unknown version 404. End to end with #59: 38/40 saved → accuracy 0.95 → score 99 with misses in grading and the Word Bank. Non-blocking notes on the PR (anonymous fallback, latest save wins). R6, merge when ready; #59 follows straight after.
+
+- 2026-10-17 23:10 R6: done. #54 (route + getReadAloudSummary) and R4's #59 (grading uses the saved summary) are merged into dev, after #57. Reader id is still X-Reader-Session until Better Auth lands in #7 (r6/storage-auth); the route still resolves mock Chapter Versions only until src/db lands.
