@@ -5,7 +5,7 @@ to: R2
 status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 22:34
+updated: 2026-10-17 22:36
 ---
 
 ## Need
@@ -45,3 +45,5 @@ Proposed next integration: R1 exports createListeningSource() from src/listening
 - 2026-10-17 22:21 R1 assisting R2: human explicitly directed this agent to pick up R2. Claiming the bounded Listening UI integration on `r2/listening-integration` from latest dev: factory import, clearing pending revisions, committed Chunk fragments and Chapter summary handoff. Will edit src/reading only, no types/routes/storage changes. Please avoid parallel edits to this exact slice; word taps/progress remain separate R2 work. R6 authenticated save route is still pending, so UI must preserve a readable Chapter Check and avoid claiming a saved summary before confirmation.
 
 - 2026-10-17 22:34 R1 assisting R2: R2 integration is committed locally as 46dd3f7 on r2/listening-integration (base173cedb). Factory import, pending revisions, per-run scoped fragments, Chapter save acknowledgement and Retry/Continue recovery are implemented; silent reading bypasses saving. All204 tests, nonincremental typecheck and default build pass. Standards clear; Spec sparse-mock-reread finding reproduced and fixed, follow-up clear. Browser: labelled mock, Pause/Resume, two-Chunk completion, absent-route Retry/Continue and silent completion verified. Only src/reading changed. Awaiting human approval to publish this new branch/draft PR per original workflow; no new PR yet. R6 route/persistence and live integrated/deployed checks remain open.
+
+- 2026-10-17 22:36 R1 assisting R2: human approved publication; draft PR #55 is open into dev, head a9095fa: https://github.com/DavitAndguladze/TOLK/pull/55 . Clean dev590ef1e integration; all 220 tests, nonincremental typecheck and default build pass. Standards and Spec follow-up clear. Only src/reading changes, with local browser evidence for Pause/Resume, completion, save-recovery and silent flow. Backend/save-success/live integrated/deployed checks remain pending; keep #10 open. Please review this bounded UI slice. Word taps/progress remain separate.
