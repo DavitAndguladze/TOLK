@@ -1,0 +1,347 @@
+{
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+  "region": "us-chicago-1",
+  "chapterVersionId": "gatsby-ch1-L1",
+  "sessionStarted": "2026-10-18T01:09:08.844Z",
+  "uniqueWords": 32,
+  "finalWordEvents": 0,
+  "firstArrivalEstimateMs": {
+    "count": 32,
+    "min": 274,
+    "median": 477,
+    "p95": 678,
+    "max": 701
+  },
+  "confidence": {
+    "min": 96.4212,
+    "max": 98.0401
+  },
+  "limitations": [
+    "One reading only; all observed word events are partial.",
+    "Capture origin and first-arrival delay are estimates; no after-paint or external clock calibration.",
+    "The Reader pressed Stop before a final result.",
+    "Confidence is the raw service value; no pronunciation grade is inferred."
+  ],
+  "words": [
+    {
+      "token": "when",
+      "startTimeInMs": 1740,
+      "endTimeInMs": 2040,
+      "confidence": 97.7019,
+      "isFinal": false,
+      "arrivedAtMs": 46061.80000000447,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 611
+    },
+    {
+      "token": "I",
+      "startTimeInMs": 2040,
+      "endTimeInMs": 2280,
+      "confidence": 97.6584,
+      "isFinal": false,
+      "arrivedAtMs": 46061.80000000447,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 371
+    },
+    {
+      "token": "was",
+      "startTimeInMs": 2280,
+      "endTimeInMs": 2460,
+      "confidence": 97.6772,
+      "isFinal": false,
+      "arrivedAtMs": 46444.30000000447,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 574
+    },
+    {
+      "token": "young",
+      "startTimeInMs": 2460,
+      "endTimeInMs": 2760,
+      "confidence": 97.2195,
+      "isFinal": false,
+      "arrivedAtMs": 46444.30000000447,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 274
+    },
+    {
+      "token": "my",
+      "startTimeInMs": 2940,
+      "endTimeInMs": 3420,
+      "confidence": 98.0401,
+      "isFinal": false,
+      "arrivedAtMs": 47478.60000000149,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 648
+    },
+    {
+      "token": "father",
+      "startTimeInMs": 3420,
+      "endTimeInMs": 3600,
+      "confidence": 97.531,
+      "isFinal": false,
+      "arrivedAtMs": 47478.60000000149,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 468
+    },
+    {
+      "token": "gave",
+      "startTimeInMs": 3600,
+      "endTimeInMs": 4020,
+      "confidence": 97.434,
+      "isFinal": false,
+      "arrivedAtMs": 47997.30000000447,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 567
+    },
+    {
+      "token": "me",
+      "startTimeInMs": 4020,
+      "endTimeInMs": 4200,
+      "confidence": 97.5339,
+      "isFinal": false,
+      "arrivedAtMs": 47997.30000000447,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 387
+    },
+    {
+      "token": "advice",
+      "startTimeInMs": 4200,
+      "endTimeInMs": 4560,
+      "confidence": 96.5948,
+      "isFinal": false,
+      "arrivedAtMs": 48377.70000000298,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 407
+    },
+    {
+      "token": "I",
+      "startTimeInMs": 5340,
+      "endTimeInMs": 5580,
+      "confidence": 97.6315,
+      "isFinal": false,
+      "arrivedAtMs": 49412.30000000447,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 422
+    },
+    {
+      "token": "still",
+      "startTimeInMs": 5580,
+      "endTimeInMs": 5820,
+      "confidence": 97.4563,
+      "isFinal": false,
+      "arrivedAtMs": 49931.70000000298,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 701
+    },
+    {
+      "token": "think",
+      "startTimeInMs": 5820,
+      "endTimeInMs": 6060,
+      "confidence": 97.3963,
+      "isFinal": false,
+      "arrivedAtMs": 49931.70000000298,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 461
+    },
+    {
+      "token": "about",
+      "startTimeInMs": 6060,
+      "endTimeInMs": 6420,
+      "confidence": 97.3336,
+      "isFinal": false,
+      "arrivedAtMs": 50316.20000000298,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 486
+    },
+    {
+      "token": "it",
+      "startTimeInMs": 6420,
+      "endTimeInMs": 6600,
+      "confidence": 97.171,
+      "isFinal": false,
+      "arrivedAtMs": 50316.20000000298,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 306
+    },
+    {
+      "token": "he",
+      "startTimeInMs": 7020,
+      "endTimeInMs": 7320,
+      "confidence": 97.2884,
+      "isFinal": false,
+      "arrivedAtMs": 51341.89999999851,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 611
+    },
+    {
+      "token": "said",
+      "startTimeInMs": 7320,
+      "endTimeInMs": 7560,
+      "confidence": 97.5262,
+      "isFinal": false,
+      "arrivedAtMs": 51341.89999999851,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 371
+    },
+    {
+      "token": "do",
+      "startTimeInMs": 8100,
+      "endTimeInMs": 8460,
+      "confidence": 97.1686,
+      "isFinal": false,
+      "arrivedAtMs": 52230.20000000298,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 360
+    },
+    {
+      "token": "not",
+      "startTimeInMs": 8460,
+      "endTimeInMs": 8700,
+      "confidence": 97.3706,
+      "isFinal": false,
+      "arrivedAtMs": 52748.80000000447,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 638
+    },
+    {
+      "token": "be",
+      "startTimeInMs": 8700,
+      "endTimeInMs": 9000,
+      "confidence": 97.3594,
+      "isFinal": false,
+      "arrivedAtMs": 52748.80000000447,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 338
+    },
+    {
+      "token": "quick",
+      "startTimeInMs": 9000,
+      "endTimeInMs": 9300,
+      "confidence": 97.1547,
+      "isFinal": false,
+      "arrivedAtMs": 53275.60000000149,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 565
+    },
+    {
+      "token": "to",
+      "startTimeInMs": 9300,
+      "endTimeInMs": 9540,
+      "confidence": 97.3004,
+      "isFinal": false,
+      "arrivedAtMs": 53275.60000000149,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 325
+    },
+    {
+      "token": "judge",
+      "startTimeInMs": 9540,
+      "endTimeInMs": 9720,
+      "confidence": 97.7052,
+      "isFinal": false,
+      "arrivedAtMs": 53801.5,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 671
+    },
+    {
+      "token": "people",
+      "startTimeInMs": 9720,
+      "endTimeInMs": 10020,
+      "confidence": 97.8443,
+      "isFinal": false,
+      "arrivedAtMs": 53801.5,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 371
+    },
+    {
+      "token": "not",
+      "startTimeInMs": 10680,
+      "endTimeInMs": 11100,
+      "confidence": 97.5668,
+      "isFinal": false,
+      "arrivedAtMs": 55188.80000000447,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 678
+    },
+    {
+      "token": "everyone",
+      "startTimeInMs": 11100,
+      "endTimeInMs": 11640,
+      "confidence": 96.4212,
+      "isFinal": false,
+      "arrivedAtMs": 55698.5,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 648
+    },
+    {
+      "token": "has",
+      "startTimeInMs": 11640,
+      "endTimeInMs": 12060,
+      "confidence": 97.1889,
+      "isFinal": false,
+      "arrivedAtMs": 56081.20000000298,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 611
+    },
+    {
+      "token": "the",
+      "startTimeInMs": 12180,
+      "endTimeInMs": 12540,
+      "confidence": 96.5976,
+      "isFinal": false,
+      "arrivedAtMs": 56610.39999999851,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 660
+    },
+    {
+      "token": "good",
+      "startTimeInMs": 12540,
+      "endTimeInMs": 12780,
+      "confidence": 97.1744,
+      "isFinal": false,
+      "arrivedAtMs": 56610.39999999851,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 420
+    },
+    {
+      "token": "things",
+      "startTimeInMs": 12780,
+      "endTimeInMs": 13080,
+      "confidence": 97.0522,
+      "isFinal": false,
+      "arrivedAtMs": 57115.89999999851,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 625
+    },
+    {
+      "token": "you",
+      "startTimeInMs": 13560,
+      "endTimeInMs": 13800,
+      "confidence": 97.528,
+      "isFinal": false,
+      "arrivedAtMs": 57623.10000000149,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 413
+    },
+    {
+      "token": "have",
+      "startTimeInMs": 13800,
+      "endTimeInMs": 14040,
+      "confidence": 96.9312,
+      "isFinal": false,
+      "arrivedAtMs": 58009.10000000149,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 559
+    },
+    {
+      "token": "had",
+      "startTimeInMs": 14040,
+      "endTimeInMs": 14220,
+      "confidence": 97.0315,
+      "isFinal": false,
+      "arrivedAtMs": 58009.10000000149,
+      "audioOriginEstimateMs": 43410.60000000149,
+      "firstArrivalDelayEstimateMs": 379
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "sessionStarted": "2026-10-18T01:18:57.922Z",
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+  "region": "us-chicago-1",
+  "readerReported": "Text kept pace with speech",
+  "stopped": true,
+  "finalWordEvents": 52,
+  "finalTranscriptions": [
+    {
+      "utterance": 0,
+      "startTimeInMs": 1860,
+      "endTimeInMs": 11580,
+      "arrivedAtMs": 15987.29999999702
+    },
+    {
+      "utterance": 1,
+      "startTimeInMs": 0,
+      "endTimeInMs": 1140,
+      "arrivedAtMs": 20135.69999999553
+    },
+    {
+      "utterance": 2,
+      "startTimeInMs": 600,
+      "endTimeInMs": 5040,
+      "arrivedAtMs": 25413.69999999553
+    }
+  ],
+  "finalWordClocks": [
+    {
+      "utterance": 0,
+      "wordCount": 33,
+      "firstTokenStartMs": 1860,
+      "lastTokenEndMs": 11580,
+      "derivedDelayUnavailable": false
+    },
+    {
+      "utterance": 1,
+      "wordCount": 5,
+      "firstTokenStartMs": 0,
+      "lastTokenEndMs": 1140,
+      "derivedDelayUnavailable": true
+    },
+    {
+      "utterance": 2,
+      "wordCount": 14,
+      "firstTokenStartMs": 600,
+      "lastTokenEndMs": 5040,
+      "derivedDelayUnavailable": true
+    }
+  ],
+  "firstUtteranceFirstArrivalEstimateMs": {
+    "count": 33,
+    "min": 158,
+    "median": 465,
+    "p95": 708,
+    "max": 710
+  },
+  "limitations": [
+    "Reader-reported pacing is qualitative, not an external-clock measurement.",
+    "Both transcription and token bounds restart across final results; no continuous clock normalization is established.",
+    "Later-utterance delays are intentionally unavailable.",
+    "Only numeric clock evidence and the Reader pacing report are exported; no transcript or audio is included."
+  ]
+}

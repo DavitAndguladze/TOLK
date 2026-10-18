@@ -1,0 +1,127 @@
+# OCI Speech realtime browser spike — issue #5
+
+Researched 2026-10-17 against Oracle documentation and Oracle-maintained source. This is an implementation reference, **not a live spike result**. No OCI credentials, browser microphone session, deployed URL, observed service response, or latency measurements were available during this research. The three decisions in `wiki/first-hour-spike.md` remain unverified.
+
+## Browser package and imports
+
+Install `@oracle/oci-ai-speech-realtime-web`; Oracle's source package identifies version **2.2.0** and entry point `dist/index.js`. This is the browser SDK, distinct from the general OCI TypeScript SDK used on the server. Its root exports the realtime client and API models. The build uses CommonJS with generated declarations, so use the package through the app bundler rather than assuming it is a standalone ESM script. [Oracle repository](https://github.com/oracle/oci-ai-speech-realtime-web-sdk), [package manifest](https://github.com/oracle/oci-ai-speech-realtime-web-sdk/blob/main/ai-speech-realtime-sdk-web/package.json), [root exports](https://github.com/oracle/oci-ai-speech-realtime-web-sdk/blob/main/ai-speech-realtime-sdk-web/index.ts), [build configuration](https://github.com/oracle/oci-ai-speech-realtime-web-sdk/blob/main/ai-speech-realtime-sdk-web/tsconfig.json).
+
+Client-side usage, following Oracle's example (the caller supplies `listener`, `session`, and `region`):
+
+```ts
+import {
+  AIServiceSpeechRealtimeApi,
+  RealtimeParametersModelDomainEnum,
+  RealtimeParametersStabilizePartialResultsEnum,
+} from "@oracle/oci-ai-speech-realtime-web";
+
+const client = new AIServiceSpeechRealtimeApi(
+  listener,
+  session.token,
+  session.compartmentId,
+  `wss://realtime.aiservice.${region}.oci.oraclecloud.com/ws/transcribe/stream`,
+  {
+    encoding: "audio/raw;rate=16000",
+    languageCode: "en-US",
+    modelType: "ORACLE",
+    modelDomain: RealtimeParametersModelDomainEnum.GENERIC,
+    stabilizePartialResults: RealtimeParametersStabilizePartialResultsEnum.NONE,
+    partialSilenceThresholdInMs: 0,
+    finalSilenceThresholdInMs: 1000,
+  },
+);
+client.connect();
+// While connected, request completion of the current partial:
+client.requestFinalResult();
+// On Stop / teardown:
+client.close();
+```
+
+The values above are a starting configuration from the [official React example](https://github.com/oracle/oci-ai-speech-realtime-web-sdk/blob/main/example-client/react-client/src/App.tsx), not measured optimal settings. Region must match token creation. A request for final results is separate from closing the connection; if final words matter, wait for the resulting final response before closing, with a bounded timeout. [Example instructions](https://github.com/oracle/oci-ai-speech-realtime-web-sdk/blob/main/example-client/README.md).
+
+## Callbacks, microphone ownership, and cleanup
+
+`RealtimeClientListener` requires `onConnect`, `onConnectMessage`, `onResult`, `onAckAudio`, `onError`, and `onClose`. `onConnect` means the socket opened; `onConnectMessage` means the service sent `CONNECT`. `onAckAudio` is relevant when acknowledgements are enabled. Neither connection callback proves that microphone capture has begun: after `CONNECT`, the SDK initiates asynchronous permission/capture, then invokes the authenticated callback. `getWebSocketState()` can report `RealtimeWebSocketState.RUNNING` after recording begins. [Realtime client source](https://github.com/oracle/oci-ai-speech-realtime-web-sdk/blob/main/ai-speech-realtime-sdk-web/src/ai-speech-realtime-web-client.ts).
+
+The SDK acquires its own microphone and streams audio; the spike should not also create a second recording pipeline. `close()` stops the streamer, stops its stream tracks, and closes the socket. **Source-inspection concern:** stopping while the microphone permission request is unresolved can allow the later promise handler to start capture after Stop. Verify this case and ensure late streams are released. Errors invoke `onError`; the application must manage teardown. These are source-derived concerns, not observed failures. [Realtime client source](https://github.com/oracle/oci-ai-speech-realtime-web-sdk/blob/main/ai-speech-realtime-sdk-web/src/ai-speech-realtime-web-client.ts).
+
+The streamer converts channel-zero samples to little-endian signed 16-bit PCM, resampling to 16 kHz. It uses `AudioContext` and `ScriptProcessorNode`, with 16 kHz initialization and 48/44.1 kHz fallbacks. Test the target phone/browser and HTTPS deployment; source compatibility branches are not proof of cross-browser success. Inspect audio-context cleanup as well as track cleanup: its reset routine disconnects nodes and discards its context reference without explicitly closing the context. [Audio streamer source](https://github.com/oracle/oci-ai-speech-realtime-web-sdk/blob/main/ai-speech-realtime-sdk-web/src/speech-audio-streamer.ts).
+
+## Result schema: words, timestamps, confidence
+
+`onResult(result)` receives `result.transcriptions[]`. Each transcription has `isFinal`, `transcription`, `startTimeInMs`, `endTimeInMs`, `confidence`, `trailingSilence`, and `tokens[]`. Each token has:
+
+| Field | Meaning |
+| --- | --- |
+| `token` | Recognized text |
+| `type` | `WORD` or `PUNCTUATION`; filter for words |
+| `startTimeInMs` | Token start, milliseconds |
+| `endTimeInMs` | Token end, milliseconds |
+| `confidence` | Recognition confidence number |
+
+These fields are in Oracle's generated [browser API models](https://github.com/oracle/oci-ai-speech-realtime-web-sdk/blob/main/ai-speech-realtime-sdk-web/src/ai-speech-api-client.ts), [token reference](https://docs.oracle.com/en-us/iaas/tools/typescript/latest/modules/_aispeech_lib_model_realtime_message_result_transcription_token_.realtimemessageresulttranscriptiontoken.html), and [transcription reference](https://docs.oracle.com/en-us/iaas/tools/typescript/latest/modules/_aispeech_lib_model_realtime_message_result_transcription_.realtimemessageresulttranscription.html). The reviewed field definitions specify units but do not explicitly define the timestamp clock origin or confidence range. Confirm the stream origin, presence/meaning of values on partials, and observed confidence range from live responses; do not silently invent values for missing fields.
+
+Treat `isFinal: false` as a revisable partial. Oracle's example replaces the current partial and appends finalized text, clearing the partial. Appending every callback's word list will duplicate repeated partial hypotheses. Keep interim and final rows visibly distinct. [Official result handling](https://github.com/oracle/oci-ai-speech-realtime-web-sdk/blob/main/example-client/react-client/src/App.tsx).
+
+Confidence describes recognition uncertainty, not a Reader's pronunciation grade. A substitution or skipped expected word still needs alignment to the Chapter Version; that remains the approach in ADR-0002. Oracle itself describes confidence as useful for identifying possibly incorrect transcription. [Oracle Speech product description](https://www.oracle.com/artificial-intelligence/speech/).
+
+## Server-only session token
+
+Use `oci-common` and `oci-aispeech` on the server. For local API-key configuration, adapt the documented authentication provider as follows; the config path/profile and compartment come from server-only configuration:
+
+```ts
+import * as common from "oci-common";
+import * as aispeech from "oci-aispeech";
+
+async function mintSpeechSession(configPath: string, profile: string, compartmentId: string) {
+  const provider = new common.ConfigFileAuthenticationDetailsProvider(configPath, profile);
+  const speech = new aispeech.AIServiceSpeechClient({
+    authenticationDetailsProvider: provider,
+  });
+  const response = await speech.createRealtimeSessionToken({
+    createRealtimeSessionTokenDetails: { compartmentId },
+  });
+  return response.realtimeSessionToken;
+}
+```
+
+The configuration must select the same region as the browser endpoint. The response object contains `token`, `sessionId`, and `compartmentId`; its JWT contains expiry information. Keep OCI private keys and long-lived credentials on the server; return only the short-lived session object and required connection metadata. [Oracle server example](https://github.com/oracle/oci-ai-speech-realtime-web-sdk/blob/main/example-client/index.ts), [token response model](https://docs.oracle.com/en-us/iaas/tools/typescript/2.116.2/modules/_aispeech_lib_model_realtime_session_token_.realtimesessiontoken.html), [SDK authentication methods](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm).
+
+Oracle's example uses `SessionAuthDetailProvider` for an OCI CLI session instead; choose the provider matching the supplied credentials. On OCI, Oracle recommends instance-principal authentication. Token issuance must have application authentication/authorization before deployment: an unprotected minting endpoint lets arbitrary callers consume the tenancy's Speech resources. Do not copy example token logging or wildcard CORS into the deployed app. [Oracle server example](https://github.com/oracle/oci-ai-speech-realtime-web-sdk/blob/main/example-client/index.ts), [Oracle integration/authentication guidance](https://docs.oracle.com/en/cloud/paas/digital-assistant/use-chatbot/features-oracle-web.html).
+
+## Limits and required live evidence
+
+Live update, 2026-10-17 at 20:09 CDT: the first real Chrome 155/Windows microphone session in `us-chicago-1` returned 32 partial words with timings and confidence. [Captured sample and measurement limitations](evidence/r1-session-1.json). Observed raw confidence ranged from 96.4212 to 98.0401; do not assume a 0–1 scale. Oracle's actual token `exp` was epoch milliseconds; the local route now converts it directly to an ISO timestamp, covered by a token-route regression and live verification. These observations do not establish behavior in every region/model or complete the repeat/final-result protocol.
+
+Further live testing returned 33 final words in [session 2](evidence/r1-session-2.json), then exposed token-clock regressions across callbacks in [session 3](evidence/r1-session-3-clocks.json). Later session-origin latency calculations from that session are invalid. Oracle's schemas define milliseconds without specifying clock origins, and its web client forwards RESULT messages unchanged; adding transcription and token times together is not a documented correction. The spike now retains both bounds, scopes first-seen words by utterance, and suppresses derived delays after the first final result pending calibration. [Oracle transcription schema](https://docs.oracle.com/en-us/iaas/tools/python/2.154.2/api/ai_speech/models/oci.ai_speech.models.RealtimeMessageResultTranscription.html), [token schema](https://docs.oracle.com/en-us/iaas/tools/python/2.149.0/api/ai_speech/models/oci.ai_speech.models.RealtimeMessageResultTranscriptionToken.html), [SDK message handling](https://github.com/oracle/oci-ai-speech-realtime-web-sdk/blob/main/ai-speech-realtime-sdk-web/src/ai-speech-realtime-web-client.ts).
+
+The [controlled follow-up](evidence/r1-session-4-clocks.json) captured raw transcription bounds and confirmed that both sets of timestamps can restart. The Reader reported that text kept pace with speech; the first utterance's 33 first-arrival estimates had median 465 ms and max 710 ms. Later derived delays remained unavailable as intended. This supports OCI realtime as the local implementation choice; it does not establish a continuous timestamp clock or replace deployed HTTPS verification.
+
+Oracle currently lists 10 concurrent Live Transcribe sessions per tenancy, with increases available through support. The documentation advertises results within a few seconds, which does **not** establish the spike's under-one-second goal. Partial/final silence thresholds and stabilization controls apply to the Oracle model; use `ORACLE` for this initial English spike. [Service limits](https://docs.oracle.com/en-us/iaas/Content/speech/using/speech.htm), [Live Transcribe guidance](https://docs.oracle.com/en-us/iaas/Content/speech/using/using-live-transcribe.htm), [parameter reference](https://docs.oracle.com/en-us/iaas/tools/typescript/latest/modules/_aispeech_lib_model_realtime_parameters_.realtimeparameters.html).
+
+Record the following before making the spike decision:
+
+1. Deployed URL, date, browser/device, OCI region/model, configuration, and microphone permission outcome.
+2. Actual browser-to-OCI session producing text; retain a sanitized result sample showing token timings, confidence, type, and `isFinal`, with no JWT or audio.
+3. A fixed public-domain Chapter Version passage, repeated several times; include continuous speech, a pause over three seconds, a skipped word, and a self-correction.
+4. Speech-to-first-visible-partial latency and speech-to-final latency separately. Use synchronized speech-end observations for a few manually marked words, and report sample count plus median, p95, and maximum. A calculation from stream-relative token times requires an observed capture-origin anchor; socket-open/token-received time is not that anchor. Log callback arrival and after-paint time so UI delay remains visible. Mark any timing based on an estimated anchor as an estimate.
+5. Verify whether interim word timing/confidence arrives early enough for highlighting. Check final timing consistency across utterances before using `next.startTimeInMs - previous.endTimeInMs` to infer a hesitation.
+6. Stop, restart, denied permission, Stop during pending permission, tab navigation, and socket failure release the microphone and do not leave a second session running.
+
+This protocol is proposed spike methodology, not an Oracle guarantee. Report each of the three spike checks as measured pass/fail or unverified. Follow the fallback decision table in `wiki/first-hour-spike.md`; documentation alone cannot justify selecting the production listening engine.
+
+## Browser-local isolated-word timing
+
+The follow-up probe avoids the unverified OCI clock origin: it estimates the end of an isolated word from the SDK's existing PCM stream, timestamps the first matching recognition callback and DOM mutation using `performance.now()`, then records a second animation-frame callback. The [ten-attempt numeric evidence](evidence/r1-isolated-word-latency.json) includes four measured attempts and six inconclusive attempts. DOM estimates were 340–514 ms; second-rendering-opportunity estimates were 345–522 ms. These are local estimates, not acoustic-to-physical-display measurements or final-result timings.
+
+Animation-frame callbacks run as part of the browser rendering process and can be paused for hidden pages. A second callback indicates another rendering opportunity, not proof that hardware displayed pixels; the probe rejects hidden-page trials. Optional Element Timing render/presentation timestamps are recorded only if actually observed. They remained unavailable in these trials. [HTML animation-frame processing](https://html.spec.whatwg.org/multipage/imagebitmap-and-animations.html#animation-frames), [Page Visibility](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API), [Element Timing specification](https://w3c.github.io/element-timing/), [Paint Timing mixin](https://w3c.github.io/paint-timing/#painttimingmixin).
+
+The track's reported latency setting describes a target which may vary, so it is included as metadata and never subtracted as a calibrated correction. Capture buffering, callback scheduling, quiet word endings, automatic gain, and ambient noise all affect the PCM endpoint. The trial uses a one-second quiet baseline and requires subsequent sound plus silence; it retains failed/aborted trials and automatically stops capture after completion or 20 seconds. [Media Capture latency setting](https://www.w3.org/TR/mediacapture-streams/#dom-mediatracksettings-latency).
+
+## Reducing laptop microphone background pickup
+
+The installed Oracle web SDK 2.2.0 requests `getUserMedia({ audio: true })` and exposes the resulting stream. It has no microphone-distance setting. The spike now optionally applies `noiseSuppression: { ideal: true }`, `echoCancellation: { ideal: true }`, and `autoGainControl: { ideal: false }` to that existing audio track. The SDK streamer pauses until the request settles; Stop remains available, and a late settings promise cannot restart a stopped stream. Unsupported/rejected constraints keep current capture settings with a visible notice. The actual settings are recorded separately from the requested preference, without device identifiers or labels.
+
+These browser controls manage processing, not target-speaker identification. Noise suppression does not guarantee removal of competing speech, echo cancellation concerns playback echo, and disabling automatic gain does not establish a physical pickup radius. Quiet speech may become less recognizable. Compare both modes before treating this as an improvement; no background-speech rejection result has yet been established. [Media Capture audio constraints and settings](https://www.w3.org/TR/mediacapture-streams/#dom-mediatrackconstraintset-noisesuppression), [Oracle capture implementation](https://github.com/oracle/oci-ai-speech-realtime-web-sdk/blob/main/ai-speech-realtime-sdk-web/src/ai-speech-realtime-web-client.ts).
+
+During the first built-in laptop microphone comparison, the visible page reported noise suppression on, echo cancellation on, and automatic gain still on despite the optional off preference. Constraint success is therefore not evidence that every preference was applied. The Reader reported no competing speech while reading, but nearby voices were transcribed during pauses. This is a qualitative observation, not a measured improvement against defaults, and establishes that pause-time isolation remains unsolved. All 15 listening checks, strict typecheck, and spike production build pass; both review axes found no actionable defects.
