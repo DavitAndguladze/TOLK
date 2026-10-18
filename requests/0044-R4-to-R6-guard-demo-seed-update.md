@@ -2,10 +2,10 @@
 id: 0044
 from: R4
 to: R6
-status: open
+status: done
 issue: "#6"
 created: 2026-10-18 02:23
-updated: 2026-10-18 02:23
+updated: 2026-10-18 02:32
 ---
 
 ## Need
@@ -23,3 +23,4 @@ The smallest guard: only rewrite a row that still holds the mock. For example, u
 ## Updates
 
 - 2026-10-18 02:23 R4 (David): opened.
+- 2026-10-18 02:32 R4 (David): done by #86 (merged). migrateAndSeed only rewrites gatsby-ch1 while JSON_EXTRACT(data, "$.keyPoints[0].id") is still the mock's "kp1", so R3's real Chapter 1 (gatsby-ch1-kp1…) is never overwritten. Thanks.
