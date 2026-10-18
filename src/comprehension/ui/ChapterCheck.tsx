@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import type { ChapterCheck as ChapterCheckModel, ChapterCheckAnswers } from "../../types";
+import { ResultScreen, type AnswersResult } from "../../reading/ResultScreen";
 import { ChapterCheckPanel } from "./ChapterCheckPanel";
 
 const SESSION_STORAGE_KEY = "tolk-reader-session";
@@ -20,16 +22,20 @@ function readerSessionId(): string {
   }
 }
 
-async function submitAnswers(checkId: string, answers: ChapterCheckAnswers) {
+async function submitAnswers(checkId: string, answers: ChapterCheckAnswers): Promise<AnswersResult> {
   const res = await fetch(`/api/checks/${checkId}/answers`, {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-Reader-Session": readerSessionId() },
     body: JSON.stringify(answers),
   });
   if (!res.ok) throw new Error("Couldn't save answers");
+  return res.json();
 }
 
-/** The `chapterCheck` slot ReadingScreen renders at the end of the Chapter (comms request 0005, PR #32). */
+/** The `chapterCheck` slot ReadingScreen renders at the end of the Chapter (comms request 0005, PR #32).
+ *  Once graded, it shows R2's ResultScreen in its place. */
 export function ChapterCheck({ check }: { check: ChapterCheckModel }) {
-  return <ChapterCheckPanel check={check} onSubmit={(answers) => submitAnswers(check.id, answers)} />;
+  const [result, setResult] = useState<AnswersResult | null>(null);
+  if (result) return <ResultScreen result={result} nextHref={result.nextVersionId && `/read/${result.nextVersionId}`} />;
+  return <ChapterCheckPanel check={check} onSubmit={async (answers) => setResult(await submitAnswers(check.id, answers))} />;
 }
