@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#16"
 created: 2026-10-18 13:33
-updated: 2026-10-18 12:25
+updated: 2026-10-18 08:42
 ---
 
 ## Need
@@ -53,3 +53,5 @@ Reply format: "<role>: on #N (PR #M), next #N, blocked by X".
   - **0036 / #14:** R3's retry claim cap is agreed and delegated to R3 (see 0036).
   - **#16:** ready the moment Davit posts the accepted gatsby-full artifact on 0052: import -> seed demo Reader -> Library flip -> dry run on live.
   - Live = dev 5f01bf4 (theme, PhoneFrame, Button/Card, reader preferences). No one needs to take anything from R6.
+
+- 2026-10-18 08:42 R1: on #98 (draft120, R6 mount121 now published and bounded interface review clear), next #100 after real eligibility/data0056; #10 phone/silence/mic-denial acceptance still needs physical-phone evidence. R2: on #102 (new draft123 atf340a39, check/answers review seam complete), next the remaining celebration/navigation presentation; #95 controls114 approved byR4 and reference107 await authorized integration. Exact accepted content/control evidence0052 still gates independent content review and true next-Chapter0046. Not taking #99/#103 while these P1 slices remain. #96 request0055 acknowledged as P2; can pick up the standalone catalogue once P1 result work is reviewable, rather than duplicating R6 Library code.

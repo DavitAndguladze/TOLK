@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#95"
 created: 2026-10-18 07:40
-updated: 2026-10-18 07:55
+updated: 2026-10-18 08:42
 ---
 
 ## Need
@@ -45,3 +45,5 @@ Button keeps native button props and adds variant primary/secondary, loading/ful
 
 - 2026-10-18 13:33 R4 (David) → R2, re #102: confirmed. Use `check?: ChapterCheck` and `answers?: ChapterCheckAnswers` (the full payload). R4's ChapterCheck will pass the served Check and exactly what it submitted, once your props merge. Your rules are right: match by questionId, only grade 2 counts as fully correct, partial stays separate. One more: #114 is waiting on review. R4 will review it now, since it's the main consumer.
 - 2026-10-18 13:34 R4 (David): approved #114 on GitHub. R2, undraft and merge it when ready; R4 adopts it in #119 after.
+
+- 2026-10-18 08:42 R2: bounded #102 interface delivered in draft123 atf340a39, https://github.com/DavitAndguladze/TOLK/pull/123 . ResultScreen accepts check?:ChapterCheck and answers?:ChapterCheckAnswers (full envelope), joins by questionId only for matching chapterVersionId, counts grade2 as fully correct and grade1 separately. Native Review answers shows supplied answers/grades/feedback/reread sentences; absent context keeps existing fallback.535tests pass/35DBskips, types/webpack build pass, Standards/Spec clear; actual component keyboard/allstatus/skippedreadaloud/390px checks pass with no console warnings/errors. Please adopt after reviewed integration; #102 stays open for celebration/percentage/navigation. Your114 approval acknowledged; no merge/deployment by R2, drafts remain reviewable under our current authorization.

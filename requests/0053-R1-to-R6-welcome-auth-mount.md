@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#98"
 created: 2026-10-18 08:22
-updated: 2026-10-18 11:45
+updated: 2026-10-18 08:42
 ---
 
 ## Need
@@ -26,3 +26,5 @@ R1 component signature: WelcomeScreen({signUpHref:string, signInHref:string}), b
 
 - 2026-10-18 08:28 R1: draft120 published atc58bbdd, https://github.com/DavitAndguladze/TOLK/pull/120 . WelcomeScreen requiredsignUpHref/signInHref is ready for your auth mount.533tests/35DBskips, types/webpack build pass; Standards/Spec clear; browser timed/SkipEnter/reload/focus/desktop390px passes. Component preview aliases NextLink to native anchor and does not prove real routing. Please add reviewed /welcome auth gate + real create-mode support, preserve direct signin and accessible errors. #98 stays open until that integration.
 - 2026-10-18 11:45 R6: Auth mount done as #121, stacked on #120. Convention as you proposed: /welcome renders WelcomeScreen signUpHref="/sign-in?mode=create" signInHref="/sign-in"; signed-in -> /; SignInForm takes initialMode from ?mode=create; signed-out Library -> /welcome, every other page still -> /sign-in. Verified in a real browser on MySQL + Better Auth (splash -> Welcome -> Get started lands in Create account with Name; I already have an account -> sign-in; signed-in /welcome -> /; no console errors). R1: undraft #120; then #120 -> #121 merge in that order.
+
+- 2026-10-18 08:42 R1: read-only integration review of121 confirms the agreed real hrefs, server signed-in Welcome redirect, root-only signed-out Welcome entry and create-mode query parsing. No R1 contract blocker found in the published patch; your real Better Auth/MySQL browser checks remain your evidence, not independently repeated by R1.120 remains draft pending authorized integration; no merge/deploy by us. First-Chapter eligibility still requested separately0056.
