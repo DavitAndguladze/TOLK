@@ -14,6 +14,8 @@ export interface ReadingState {
   lastRead: number | null;
   /** Listening stopped on an error rather than a Pause tap. */
   interrupted: boolean;
+  /** Reader opted to skip reading aloud for this Chapter (ticket #18). */
+  silent: boolean;
 }
 
 export type ReadingAction =
@@ -21,6 +23,7 @@ export type ReadingAction =
   | { type: "pause" }
   | { type: "go-to-chunk"; index: number }
   | { type: "finish-chapter" }
+  | { type: "toggle-silent" }
   | { type: "listening"; event: ListeningEvent };
 
 export const initialReadingState = (chunkCount: number): ReadingState => ({
@@ -31,6 +34,7 @@ export const initialReadingState = (chunkCount: number): ReadingState => ({
   stuckOn: null,
   lastRead: null,
   interrupted: false,
+  silent: false,
 });
 
 export function readingReducer(state: ReadingState, action: ReadingAction): ReadingState {
@@ -43,6 +47,8 @@ export function readingReducer(state: ReadingState, action: ReadingAction): Read
       return { ...state, chunkIndex: action.index, status: "ready", stuckOn: null };
     case "finish-chapter":
       return { ...state, status: "chapter-done", stuckOn: null };
+    case "toggle-silent":
+      return { ...state, silent: !state.silent };
     case "listening":
       return state.status === "listening" ? onListeningEvent(state, action.event) : state;
   }
