@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { generateChapterCheck } from "../comprehension/chapter-check-generator";
 import type { Chat } from "../comprehension/oci-key-point-grader";
 import vocabulary from "../data/vocabulary/english-2018.json" with { type: "json" };
@@ -84,8 +84,22 @@ describe("web generation runtime", () => {
 
   it("bounds a stuck provider and still uses the stored fallback within the total budget", async () => {
     const { next, store, setFallback } = fixture(); setFallback(await fallbackFor(next));
-    const result = await createGenerationRuntime({ store, chat: () => new Promise(() => {}), budgetMs: 100 }).run("pending-test", next);
-    expect(result?.artifact?.provenance.fallbackReason).toBe("timeout");
+    vi.useFakeTimers();
+    // Native AbortSignal.timeout bypasses fake timers; control this clock boundary too.
+    const timeout = vi.spyOn(AbortSignal, "timeout").mockImplementation((milliseconds) => {
+      const controller = new AbortController();
+      setTimeout(() => controller.abort(new DOMException("Timed out", "TimeoutError")), milliseconds);
+      return controller.signal;
+    });
+    try {
+      const pending = createGenerationRuntime({ store, chat: () => new Promise(() => {}), budgetMs: 100 }).run("pending-test", next);
+      await vi.advanceTimersByTimeAsync(90);
+      expect((await pending)?.artifact?.provenance.fallbackReason).toBe("timeout");
+    } finally {
+      timeout.mockRestore();
+      vi.clearAllTimers();
+      vi.useRealTimers();
+    }
   });
 
   it("records failure when neither generation nor a valid stored fallback is available", async () => {
