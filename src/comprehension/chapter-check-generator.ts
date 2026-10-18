@@ -3,9 +3,14 @@ import type { Chapter, ChapterCheck, ChapterVersion, ComplexWord, Sentence } fro
 /** The seam Role 4 implements. Role 3's real Chapter generator calls this instead of writing its own questions. */
 export type ChapterCheckGenerator = (chapter: Chapter, version: ChapterVersion) => Promise<ChapterCheck>;
 
-const FILLER_CHOICES = ["to decide something quickly", "to speak very loudly"];
+/**
+ * Checks a generator wrote as a stand-in because the AI failed. The service returns these but
+ * doesn't cache them, so the next request tries the AI again. A WeakSet keeps the
+ * `ChapterCheckGenerator` signature (and src/types) unchanged.
+ */
+export const fallbackChecks = new WeakSet<ChapterCheck>();
 
-const ORDINALS = ["first", "second", "third"];
+const FILLER_CHOICES = ["to decide something quickly", "to speak very loudly"];
 
 /** Picks the served sentence whose text shares the most words with `needle`; falls back to the first sentence. */
 function bestMatchingSentence(sentences: Sentence[], needle: string): number {
@@ -40,6 +45,20 @@ function wordsInVersion(words: ComplexWord[], version: ChapterVersion): ComplexW
 }
 
 /**
+ * Points the Reader at the part of the text that answers, by the first few words of the answering
+ * sentence (never more than half of it), so there is one clear answer and the question doesn't
+ * hold it. Text gives no order, so the old "first/second/third important thing" had none.
+ */
+function keyPointPrompt(sentence: string, repeat: boolean): string {
+  const words = sentence.split(/\s+/).filter(Boolean);
+  const leadLength = Math.min(3, Math.floor(words.length / 2));
+  if (leadLength === 0) return "What is one important idea in this chapter?";
+  // Two Key Points can land on one sentence; the second is cued from its other end so the prompts differ.
+  const cue = repeat ? `"…${words.slice(-leadLength).join(" ")}"` : `"${words.slice(0, leadLength).join(" ")}…"`;
+  return `The chapter says: ${cue} What does it say, in your own words?`;
+}
+
+/**
  * Deterministic stand-in for the AI gateway's "generate Chapter Check" call: 2-3 Key Point
  * questions, 1-2 Complex Word questions. Real OCI Generative AI swaps in later behind this
  * same signature - keep the shape (not the prose) the thing tests depend on.
@@ -51,14 +70,19 @@ export const generateChapterCheck: ChapterCheckGenerator = async (chapter, versi
   const keyPointCount = Math.min(3, Math.max(2, chapter.keyPoints.length));
   const complexWordCount = Math.min(2, Math.max(1, chapter.complexWords.length));
 
-  const keyPointQuestions = chapter.keyPoints.slice(0, keyPointCount).map((kp, i) => ({
-    id: `${version.id}-kp-${i}`,
-    kind: "key-point" as const,
-    // Asks by position, not by quoting the Key Point - quoting it answers the question in the asking.
-    prompt: `What's the ${ORDINALS[i] ?? `${i + 1}th`} important thing that happens in this chapter?`,
-    keyPointId: kp.id,
-    answerSentenceIndex: bestMatchingSentence(version.sentences, kp.text),
-  }));
+  const keyPointQuestions = chapter.keyPoints.slice(0, keyPointCount).map((kp, i) => {
+    const answerSentenceIndex = bestMatchingSentence(version.sentences, kp.text);
+    return {
+      id: `${version.id}-kp-${i}`,
+      kind: "key-point" as const,
+      prompt: keyPointPrompt(
+        version.sentences.find((s) => s.index === answerSentenceIndex)?.text ?? "",
+        chapter.keyPoints.slice(0, i).some((earlier) => bestMatchingSentence(version.sentences, earlier.text) === answerSentenceIndex),
+      ),
+      keyPointId: kp.id,
+      answerSentenceIndex,
+    };
+  });
 
   const complexWordQuestions = wordsInVersion(chapter.complexWords, version)
     .slice(0, complexWordCount)

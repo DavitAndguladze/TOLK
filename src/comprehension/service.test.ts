@@ -1,6 +1,7 @@
 import { describe, expect, test, vi } from "vitest";
 import { mockChapter, mockChapterCheck, mockChapterVersion } from "../mocks";
 import { createInMemoryAnswersStore } from "./answers-store";
+import { fallbackChecks } from "./chapter-check-generator";
 import { getChapterCheckForVersion, submitCheckAnswers } from "./service";
 
 describe("getChapterCheckForVersion", () => {
@@ -32,6 +33,23 @@ describe("getChapterCheckForVersion", () => {
     expect(first).toBe(mockChapterCheck);
     expect(second).toBe(mockChapterCheck);
     expect(generate).toHaveBeenCalledTimes(1);
+  });
+
+  test("a fallback Check is returned but not cached, so the next call tries the AI again", async () => {
+    const version = mockChapterVersion(1);
+    const fallback = { ...mockChapterCheck, id: "fallback" };
+    fallbackChecks.add(fallback);
+    const generate = vi.fn().mockResolvedValueOnce(fallback).mockResolvedValueOnce(mockChapterCheck);
+    const cache = new Map();
+
+    const first = await getChapterCheckForVersion(mockChapter, version, { generate, cache });
+    const second = await getChapterCheckForVersion(mockChapter, version, { generate, cache });
+    const third = await getChapterCheckForVersion(mockChapter, version, { generate, cache });
+
+    expect(first).toBe(fallback);
+    expect(second).toBe(mockChapterCheck);
+    expect(third).toBe(mockChapterCheck);
+    expect(generate).toHaveBeenCalledTimes(2);
   });
 
   test("a failed generation isn't cached, so the next call retries", async () => {
