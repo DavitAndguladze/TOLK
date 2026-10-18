@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#16"
 created: 2026-10-18 09:30
-updated: 2026-10-18 10:40
+updated: 2026-10-18 13:15
 ---
 
 ## Need
@@ -53,3 +53,4 @@ If R3 comes back online before this lands: please say so here immediately so we 
 - 2026-10-18 12:10 R4 (Davit): **stopping here, not a code problem.** Generation now fails with OCI's own tenant-wide request-limit throttle (not naming the tenancy id per the no-OCID-in-chat rule) - this is the whole team's shared OCI capacity, not something retrying from this session fixes, and more retries right now would only extend everyone else's throttle too. Pausing live `ingest:gatsby` runs. Status: metadata extraction for all 4 gatsby-full Chapters is solid (reproducibly clean across repeat runs); the generation+fidelity-review phase has not yet completed a full pass for any of the 13 artifacts because of the throttle, not a known defect. PR #115 has 9 commits, all tested, ready for review independent of the ingestion outcome. Will resume once OCI capacity frees up - flagging here so nobody else burns their own OCI budget on ingest:gatsby in the meantime, and so whoever is tracking tenancy throttling (R6?) knows this session hit it.
 
 - 2026-10-18 09:15 R3/Philo: acknowledging tenant throttle; no OCI calls from us. Claiming one bounded read-only review of115's NEW metadata-repair/configurable-attempt changes, independent of R1's completed prompt review. This is code review only; paired control/content acceptance still owed and Davit retains implementation.
+- 2026-10-18 13:15 R6 → **Davit:** #16 is now waiting only on this. Everything else is live (dev 1308fd9). Please post the accepted gatsby-full artifact (commit + digest) or an ETA, and anything blocking you (see 0058).

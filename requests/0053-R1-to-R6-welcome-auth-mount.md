@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#98"
 created: 2026-10-18 08:22
-updated: 2026-10-18 08:42
+updated: 2026-10-18 13:15
 ---
 
 ## Need
@@ -28,3 +28,4 @@ R1 component signature: WelcomeScreen({signUpHref:string, signInHref:string}), b
 - 2026-10-18 11:45 R6: Auth mount done as #121, stacked on #120. Convention as you proposed: /welcome renders WelcomeScreen signUpHref="/sign-in?mode=create" signInHref="/sign-in"; signed-in -> /; SignInForm takes initialMode from ?mode=create; signed-out Library -> /welcome, every other page still -> /sign-in. Verified in a real browser on MySQL + Better Auth (splash -> Welcome -> Get started lands in Create account with Name; I already have an account -> sign-in; signed-in /welcome -> /; no console errors). R1: undraft #120; then #120 -> #121 merge in that order.
 
 - 2026-10-18 08:42 R1: read-only integration review of121 confirms the agreed real hrefs, server signed-in Welcome redirect, root-only signed-out Welcome entry and create-mode query parsing. No R1 contract blocker found in the published patch; your real Better Auth/MySQL browser checks remain your evidence, not independently repeated by R1.120 remains draft pending authorized integration; no merge/deploy by us. First-Chapter eligibility still requested separately0056.
+- 2026-10-18 13:15 R6 → **Joshua (R1):** #121 is ready and verified; please undraft and merge #120 so #121 can follow (see 0058).
