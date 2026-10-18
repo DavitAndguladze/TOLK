@@ -21,13 +21,14 @@ function review({ version, check, digest, chapter }: FidelityInput): FidelityRev
     keyPointEvidence: chapter.keyPoints.map((point, sentenceIndex) => ({ keyPointId: point.id, sentenceIndex, quote: version.sentences[sentenceIndex].text })),
     checkEvidence: check.questions.map((question) => ({ questionId: question.id, sentenceIndex: question.answerSentenceIndex, quote: version.sentences[question.answerSentenceIndex].text })) };
 }
-const generator = (levelScore?: number) => createChapterGenerator({ generateText: async (prompt) => {
+const generator = (levelScore?: number, initialFailures = 0, maxAttempts?: number) => createChapterGenerator({ maxAttempts, generateText: async (prompt) => {
+  if (initialFailures-- > 0) throw new Error("Transient test provider failure");
   const data = JSON.parse(prompt.split("DATA:\n")[1]);
   return JSON.stringify({ level: data.level, levelScore: levelScore ?? data.level * 20, sentences: data.sentences, reinforcedWords: [] });
 }, generateCheck: generateChapterCheck, evaluateFidelity: async (input) => review(input),
 policyForChapter: () => ({ requiredNames: ["Nick"], retainedWords: ["hope"], vocabulary }) });
 
-async function fixture(levelScore?: number) {
+async function fixture(levelScore?: number, initialFailures = 0, maxAttempts?: number) {
   const readerId = randomUUID(), bookId = randomUUID();
   const chapters: Chapter[] = [1, 2, 3, 4].map((number) => ({ id: `${bookId}-ch${number}`, bookId, number, title: `Chapter ${number}`,
     originalText: sentences.join(" "), keyPoints: sentences.map((text, index) => ({ id: `${bookId}-ch${number}-kp${index}`, chapterId: `${bookId}-ch${number}`, text })),
@@ -36,7 +37,7 @@ async function fixture(levelScore?: number) {
     keyPoints: chapter.keyPoints.map((point, originalSentenceIndex) => ({ keyPointId: point.id, originalSentenceIndex, quote: sentences[originalSentenceIndex] })),
     complexWords: [{ word: "hope", originalSentenceIndex: 2, quote: sentences[2] }],
   } }]));
-  const seed = await generateGatsbySeed({ book: { id: bookId, title: "Test Book", author: "Test", sourceUrl: "https://example.com/fixture", chapterCount: 4 }, chapters, policies }, generator(levelScore));
+  const seed = await generateGatsbySeed({ book: { id: bookId, title: "Test Book", author: "Test", sourceUrl: "https://example.com/fixture", chapterCount: 4 }, chapters, policies }, generator(levelScore, initialFailures, maxAttempts));
   const input: NextChapterInput = { original: chapters[1], baseline: seed.sharedChapterOne.version, readerId,
     decision: { from: 1, to: 1, reason: "barely-passed", explanation: "Keep this Level.", reinforcement: "context-clue" }, wordBank: [], graduatedWords: [] };
   return { readerId, bookId, seed, input };
@@ -115,6 +116,37 @@ describe.skipIf(!testDatabase)("persisted Chapter generation", () => {
     await store.loadGatsbySeed(seed);
     expect(await content.getChapterVersion(seed.sharedChapterOne.version.id)).toEqual(seed.sharedChapterOne.version);
     expect(await store.getFallbackArtifact(bookId, 2, 1)).toEqual(seed.fallbacks[0]);
+  });
+
+  it.each([3, 5])("imports a complete validated offline seed that needed %i attempts", async (attempts) => {
+    const { readerId, bookId, seed } = await fixture(undefined, attempts - 1, 5);
+    owned.push({ readerId, bookId });
+    expect(seed.sharedChapterOne.provenance.attempts).toBe(attempts);
+    const serialized = JSON.parse(JSON.stringify(seed));
+    await store.loadGatsbySeed(serialized);
+    await store.loadGatsbySeed(serialized);
+    expect(await content.getChapterVersion(seed.sharedChapterOne.version.id)).toEqual(seed.sharedChapterOne.version);
+    expect(await store.getFallbackArtifact(bookId, 4, 2)).toEqual(seed.fallbacks[11]);
+  });
+
+  it.each([0, 6, 1.5])("rejects offline seed provenance with invalid attempt count %s", async (attempts) => {
+    const { readerId, bookId, seed } = await fixture();
+    owned.push({ readerId, bookId });
+    const invalid = structuredClone(seed);
+    invalid.sharedChapterOne.provenance.attempts = attempts;
+    await expect(store.loadGatsbySeed(invalid)).rejects.toThrow("Invalid Chapter artifact provenance");
+    expect(await content.getBook(bookId)).toBeNull();
+  });
+
+  it("retains the two-attempt provenance bound when saving a Reader's live generation", async () => {
+    const { readerId, id, input } = await setup();
+    const token = (await store.claimGeneration(readerId, id))!;
+    const artifact = await generator().generate(input);
+    const invalid = structuredClone(artifact);
+    invalid.provenance.attempts = 3;
+    await expect(store.saveGeneratedChapter(id, invalid, token, input)).rejects.toThrow("Invalid Chapter artifact provenance");
+    expect((await store.resolveGeneration(readerId, id))?.status).toBe("pending");
+    expect(await store.saveGeneratedChapter(id, artifact, token, input)).toBe(true);
   });
 
   it("returns one stable pending ID under concurrent starts and scopes resolution to its Reader", async () => {
