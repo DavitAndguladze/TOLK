@@ -119,3 +119,31 @@ test("a failed OCI token request rejects Start without silently using browser sp
   await expect(source.start(chunk, () => {})).rejects.toThrow("could not get a session token");
   expect(Context.latest.closed).toBe(true);
 });
+
+test("an expired Reader sign-in explains recovery and does not request the microphone", async () => {
+  install();
+  const microphone = vi.fn();
+  vi.stubGlobal("navigator", { mediaDevices: { getUserMedia: microphone } });
+  vi.stubGlobal("fetch", vi.fn(async () => new Response("private response", { status: 401 })));
+  const source = createListeningSource({ engine: "oci-realtime" });
+  await expect(source.start(chunk, () => {})).rejects.toThrow("Sign in again to read aloud");
+  expect(microphone).not.toHaveBeenCalled();
+  expect(Context.latest.closed).toBe(true);
+});
+
+test("denied microphone permission releases OCI resources and the same source can retry", async () => {
+  install();
+  vi.stubGlobal("navigator", { mediaDevices: { getUserMedia: async () => { throw new DOMException("Not allowed", "NotAllowedError"); } } });
+  const source = createListeningSource({ engine: "oci-realtime" });
+  await expect(source.start(chunk, () => {})).rejects.toThrow("Check permission and retry");
+  expect(Context.latest.closed).toBe(true);
+  expect(Socket.latest.readyState).toBe(3);
+  install();
+  const events: ListeningEvent[] = [];
+  await source.start(chunk, event => events.push(event));
+  expect(events).toEqual([]); // A connected but silent microphone earns no word results.
+  const summary = await source.stop();
+  expect(summary.wordResults.map(word => word.outcome)).toEqual(["pending", "pending", "pending", "pending"]);
+  expect(summary.misses).toEqual([]);
+  expect(track.stop).toHaveBeenCalled();
+});
