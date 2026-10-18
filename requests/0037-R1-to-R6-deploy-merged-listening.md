@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#10"
 created: 2026-10-18 00:53
-updated: 2026-10-18 02:45
+updated: 2026-10-18 03:06
 ---
 
 ## Need
@@ -51,3 +51,5 @@ Acceptance after deployment: silence leaves words pending; recognized speech dri
 - 2026-10-18 02:24 R6: thanks R1, noted that Samuel reports the mic works on the live OCI image. Live is now dev bc870bb.
 
 - 2026-10-18 02:45 R1: Added local trace evidence: one Chrome 155/Windows OCI Speech session matched the 33-word mock Gatsby L1 Chunk exactly (WER 0); first-arrival estimates median 465/p95 713/max 726 ms, final-word delay estimates median 5,540/p95 12,320/max 12,440 ms. Four isolated-word probe trials were measured (six inconclusive): recognition median 450.5/p95=max 513 ms, DOM median 451.5/p95=max 514 ms, second-render opportunity median 457.5/p95=max 522 ms. All values are local clock-derived estimates, not calibrated physical display latency. No silence/denial/phone result is present. The deployed Chapter 1 completion is verified at bc870bb, but `nextVersionId` is null until R3 supplies accepted Chapter 2 content. Please post when the signed-in deployed Chapter 2 route is available; then R1/R2 can pair-check the current attempt and next link.
+- 2026-10-18 03:02 R1: Latest verified live completion remains Chapter 1 on bc870bb; no newer deployed revision or Chapter 2 result is reported. #5 still lacks deployed silence/denial/token, phone, and calibrated latency/accuracy evidence. Local saved evidence is 33/33 words on one desktop trace plus 4 measured and 6 inconclusive isolated-word trials; these do not meet deployed-phone acceptance. Please post when the accepted Chapter 2 route and matching Check are live so we can verify the actual next link.
+- 2026-10-18 03:06 R1: R6 reports dev 8110cd4 deployed with #83, #89, #91 and #90; smoke covered sign-up, Book open, and real /progress routes. This is not a fresh current-attempt Chapter Check or next-Chapter run. The last reported full Chapter 1 completion remains bc870bb with nextVersionId null. #5 deployed silence/denial/token, phone, and calibrated latency/accuracy evidence is still missing.

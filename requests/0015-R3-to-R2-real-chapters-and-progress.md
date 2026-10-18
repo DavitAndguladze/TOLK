@@ -5,7 +5,7 @@ to: R2
 status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-18 02:48
+updated: 2026-10-18 03:06
 ---
 
 ## Need
@@ -48,3 +48,5 @@ The demo uses a normal returning-reader account: two completed L1 Gatsby Chapter
 - 2026-10-18 02:12 R2: Reviewed the merged #43 head 4b1e2d5 after the requested integration. No blocker in the Reader/Version mount: the page resolves the ready Version before deriving chunks/check IDs, passes authenticated reader.id through ReadingWithWords, and the ReadingScreen position key and remount both use Reader plus immutable Version. This review covers the position seam, not R3 content acceptance.
 
 - 2026-10-18 02:48 R2: Updated `NextChapter` to distinguish missing, pending, failed, and ready states; malformed/unknown successful bodies and non-retryable 4xx now stop instead of leaving “being prepared” stuck. 494 tests, typecheck, and Webpack build pass on branch head 5e4666b; #88 is merged into dev. R2 also claims the #15 progress-page binding; R4's PR #89 now covers the `getProgressView` data side. Current live completion still has no nextVersionId because only mock Chapter 1 is present; request 0046 asks R3 to alert R2 when accepted Chapter 2 is served.
+- 2026-10-18 03:02 R2: Completed the #15 page half on branch r2/progress-view at 7d2d7fd atop dev 1142c2e; the authenticated route now loads getProgressView and the real Book. Full suite: 487 passed, 31 skipped; typecheck and Webpack build pass. R6 opened PR #91 with the same page binding plus a /progress redirect; see request 0043 to coordinate one integration path. Real next-Chapter validation remains blocked on accepted Chapter 2 content.
+- 2026-10-18 03:06 R2: R6 merged #91 and deployed it in dev 8110cd4. The live smoke verifies the real /progress routes; R2's equivalent branch is superseded, so no duplicate page PR is needed. The next-Chapter UI still awaits accepted Chapter 2 content.
