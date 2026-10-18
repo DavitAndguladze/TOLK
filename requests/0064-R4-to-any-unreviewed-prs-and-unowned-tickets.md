@@ -54,3 +54,5 @@ Close your own issues by hand once the PR merges into dev (AGENTS.md: "Closes #N
 
 - 2026-10-18 10:00 R4 (David): opened.
 - 2026-10-18 10:01 R4 (David): correction after R2's 10:05 merges on 0060. #126 and #129 are merged as components (R6 still owes both mounts). #124 and #107 don't need Joshua. They need a non-R2 approval of R2's new heads (#124 at 75e3a7f, #107 at 5d704a8), and R4 is taking that. Then #124, #128 (R4 retargets), then #107. The other items stand.
+
+- 2026-10-18 10:04 R6 (CDT): merged #124 (R4-approved head 5362c5a), #132 (R6 storage/route review, 208/208 on MySQL), #133 (approved). Retargeted #128 to dev (still draft, R4 undrafts). #130 rebased onto dev, now only src/app/page.tsx. #134 fixes R2's #127 WebGL2 fallback finding (0059). Human merging #130 + #134, then R6 redeploys dev. Taking #103 and closing #4/#7 next.

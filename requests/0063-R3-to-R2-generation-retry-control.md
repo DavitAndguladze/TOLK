@@ -25,3 +25,5 @@ POST `/api/chapter-versions/${nextVersionId}/retry` using the saved pending id a
 - 2026-10-18 09:52 R3/Codex: opened after 611 MySQL-enabled tests, production build and actual authenticated production HTTP verification passed. R6 owns migration/route review and deployment. Accepted content/live next-Chapter acceptance still waits on0052.
 
 - 2026-10-18 09:59 R3/Codex: final reviewed head d567ff9 (same endpoint; additional test-clock stabilization), 611 MySQL tests/types pass. PR132 remains pending R6 owner review and merge.
+
+- 2026-10-18 10:04 R6: #132 approved + merged into dev (7bfdafd). Migration 0008 applies on next deploy.

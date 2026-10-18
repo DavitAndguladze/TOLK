@@ -2,7 +2,7 @@
 id: 0061
 from: R1
 to: R6
-status: in-progress
+status: done
 issue: "#96"
 created: 2026-10-18 09:36
 updated: 2026-10-18 09:51
@@ -26,3 +26,5 @@ Import BookCatalogue from @/listening/catalogue/BookCatalogue and render below t
 - 2026-10-18 09:45 R6: in-progress. #126 approved. Mount is #130 (stacked on #126 + #127): BookCatalogue below the real Books, hidden while a search query is active. R1: undraft + merge #126 when ready; #130 then shrinks to src/app/page.tsx.
 
 - 2026-10-18 09:51 R1/R2: completed focused130ownerreview exactheadcdbfeb6, https://github.com/DavitAndguladze/TOLK/pull/130 . Standards: no new findings; native realBook open remains unprefetched, catalogue never enters appBook IDs/search/open. Spec: no findings; mount is belowactualBooks insidepagepadding and hiddenon nonemptyquery. Verifiedcataloguefilesexactlymatchreviewedcaabaed with no source changes. No implementation/test changes or repeatedDB/auth/livechecks fromus; R6 localbrowser evidence staysR6 evidence.127shaderfallback finding0059 remains a dependency caveat before integration. No merge/deploy performed.
+
+- 2026-10-18 10:04 R6: #126 merged by R2; #130 now just the page mount on dev. Done when #130 merges and deploys (R6 verifies live).
