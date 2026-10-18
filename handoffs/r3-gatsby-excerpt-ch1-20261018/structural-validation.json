@@ -1,0 +1,31 @@
+{
+  "sourceWords": 853,
+  "sourceRows": 27,
+  "servedSentences": 116,
+  "maxSentenceWords": 10,
+  "exceptions": 82,
+  "requiredNames": [
+    "Gatsby",
+    "Carraways",
+    "Middle West",
+    "New Haven",
+    "Dukes of Buccleuch",
+    "Civil War",
+    "Great War",
+    "Washington",
+    "Dodge",
+    "East"
+  ],
+  "policyIssues": [],
+  "contentValidation": {
+    "valid": true,
+    "issues": [],
+    "semanticReviewRequired": true
+  },
+  "checkValidation": {
+    "valid": true,
+    "issues": [],
+    "semanticReviewRequired": true
+  },
+  "packetSha256": "b6f94c9a8c1075a7fe650e4d7d3429bd1f08bc725630be1914ca94ca288270b2"
+}
