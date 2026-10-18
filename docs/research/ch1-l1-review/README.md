@@ -58,3 +58,31 @@ Additional unresolved imagery: riotous island at 41; courtesy bay/domesticated w
 R1 compared the complete mapped groups for source 0–39 at `3467489` and reported concrete meaning/attitude issues at 10, 12, 13, 18 and 19. These agree with the remaining opening repair list: military moral-order imagery, personality as gestures, impressionability/romantic readiness, the ironic war allusion, and restlessness rather than distress. R1 found the neighbourhood-freedom rendering at 33 defensible in context; remove it from the concrete-defect list without inventing new detail. The earlier founder, portrait, books and well-rounded-specialist repairs were present, with no additional concrete plot/relationship error reported in 20–39.
 
 This is a bounded independent review with findings, not full Chapter approval. R1 did not certify all exception necessities, review source 40–361, or regenerate/revalidate the historical Check. Full source 0–39 remained unchanged in slice 3.
+
+## Slice 4 — 2026-10-18 (Davit/R4, taking over #6)
+
+Compared source 80–159. Repaired 88 and 101.
+
+- 88: "It felt like I had made her stop something" was a vague, inaccurate gloss of "disturbed her by coming in" — replaced with "I felt like I should not have come in," preserving Nick's near-apology for intruding.
+- 101: "12 people sent **her** love through me" wrongly implied the people were relaying Daisy's own love back to her; the original is "their love" (the dozen people's own regards, sent to Daisy via Nick). Fixed the pronoun.
+
+No new source-word exceptions were needed for either fix (both use only existing low-rank vocabulary, verified against `src/data/vocabulary/english-2018.json`). Combined structural validation still passes: 897 served sentences, all 362 ordered source indexes covered in order, every sentence at most 10 words (checked with the actual `tokenize` used by the validator, not a manual word count).
+
+Source 80–159 was otherwise faithful: no dropped plot facts, attitude changes, or relationship errors found, including the dialogue-heavy stretch (100–139) where short interjections ("Never.", "Absolutely!", "Tomorrow!") are consistently expanded to full sentences — a deliberate, consistent simplification pattern, not a fidelity defect. Notably 117's "hovering restlessly" → "moving around the room without rest" correctly avoids the "restlessness as distress" error R1 flagged for the opening range.
+
+The next comparison is 160–179. Source 0–79 stayed unchanged. Key Points, updated Check evidence and independent semantic acceptance remain outstanding, as do the four unresolved imagery rows from slices 2–3 (10/12/13/18/19/33/41/42/47/51/79).
+
+## Slice 5 — 2026-10-18 (Davit/R4)
+
+Compared source 160–239, including the dinner-table scene, Tom's "Rise of the Coloured Empires" monologue (180–199), the butler's-nose story, and Miss Baker's revelation of Tom's affair. No repairs needed — this stretch was faithful throughout, including subtler cases:
+
+- 187: "unthoughtful sadness" correctly rendered as "her sad look did not seem to come from thought," not just "sad."
+- 199: "pathetic in his concentration" correctly uses the older, non-pejorative sense ("almost made me feel sorry for him"), not the modern dismissive one.
+- 212: "quickened something within her" correctly rendered as "did seem more alive," preserving the cause (Tom's absence).
+- 236–238: "some woman" → "another woman" actually clarifies the affair implication for an L1 reader without changing it.
+
+Two borderline, defensible calls (not fixed, same standard R1 used at source 33): 166 renders "complained" (a mild whine) as "angry voice" (stronger than the original register); 210 moves the departing light's personified "lingering regret" onto the narrator's own feeling, preserving the bittersweet tone but changing the grammatical subject.
+
+Structural validation still passes (897 served sentences, all 362 source indexes, ≤10 words each). The next comparison is 240–259. Source 0–79 remains for R1's independent review. Key Points, updated Check evidence and independent semantic acceptance remain outstanding, as do the unresolved imagery rows from slices 2–3 and the two new borderline calls above.
+
+**Running total: 240 of 362 source sentences compared (66%).**

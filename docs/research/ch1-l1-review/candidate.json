@@ -36,7 +36,9 @@
       82,
       83,
       87,
+      88,
       95,
+      101,
       105,
       117,
       119,
@@ -1441,7 +1443,7 @@
         "originalSentenceIndex": 88
       },
       {
-        "text": "It felt like I had made her stop something.",
+        "text": "I felt like I should not have come in.",
         "originalSentenceIndex": 88
       },
       {
@@ -1625,7 +1627,7 @@
         "originalSentenceIndex": 101
       },
       {
-        "text": "12 people sent her love through me.",
+        "text": "12 people sent their love through me.",
         "originalSentenceIndex": 101
       },
       {
