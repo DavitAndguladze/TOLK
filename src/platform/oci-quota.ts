@@ -24,3 +24,13 @@ export function ociQuotaResponse(retryAfter: number) {
   return Response.json({ error: "Too many requests. Wait a moment and try again." },
     { status: 429, headers: { "Retry-After": String(retryAfter), "Cache-Control": "private, no-store" } });
 }
+
+/** Thrown by a paid call the Reader's budget refused; routes map it to ociQuotaResponse. */
+export class OciQuotaError extends Error {
+  constructor(readonly retryAfter: number) { super("OCI quota reached"); this.name = "OciQuotaError"; }
+}
+
+/** `paid` spends the Reader's budget each time it runs; once refused, `free` answers instead (e.g. the stand-in grader). */
+export function metered<A extends unknown[], R>(readerId: string, paid: (...args: A) => Promise<R>, free: (...args: A) => Promise<R>) {
+  return (...args: A): Promise<R> => (takeOciCall(readerId) === null ? paid(...args) : free(...args));
+}

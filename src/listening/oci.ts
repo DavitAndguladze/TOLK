@@ -77,6 +77,13 @@ export const openOciSpeech: OpenRecognition = (signal, onSnapshot, onError) => n
     if (context.sampleRate !== 16000) throw new Error("sample-rate");
     const response = await fetch("/api/speech/token", { method: "POST", credentials: "same-origin", cache: "no-store", signal });
     if (response.status === 401) { fail("Sign in again to read aloud. You can still read silently."); return; }
+    if (response.status === 429) {
+      const seconds = Number(response.headers.get("Retry-After"));
+      const retry = Number.isSafeInteger(seconds) && seconds > 0
+        ? `Try again in ${seconds} ${seconds === 1 ? "second" : "seconds"}` : "Wait a moment and try again";
+      fail(`Read-aloud is temporarily limited. ${retry}, or keep reading silently.`);
+      return;
+    }
     if (!response.ok) { fail("OCI listening could not get a session token. Check sign-in and Speech configuration."); return; }
     const token = await response.json() as { token: string; region: string; compartmentId: string; expiresAt: string };
     if (signal.aborted) return;

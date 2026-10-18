@@ -3,7 +3,7 @@ import { isDeepStrictEqual } from "node:util";
 import { and, asc, eq, isNull } from "drizzle-orm";
 import vocabulary from "../data/vocabulary/english-2018.json" with { type: "json" };
 import gatsbySource from "../data/gatsby/content.json" with { type: "json" };
-import { verifyChapterArtifact, type GeneratedChapter } from "../leveling/generator";
+import { MAX_OFFLINE_GENERATION_ATTEMPTS, verifyChapterArtifact, type GeneratedChapter } from "../leveling/generator";
 import type { GatsbySeed } from "../leveling/seed";
 import type { IngestedChapterPolicy } from "../leveling/ingestion";
 import type { ChapterVersion, Level, NextChapterInput } from "../types";
@@ -102,8 +102,8 @@ function assertSame(left: unknown, right: unknown, identity = "content identity"
   if (!same(left, right)) throw new Error(`Immutable ${identity} already contains different data; use a new reviewed Book/Chapter namespace instead of replacing served content`);
 }
 
-function verifyProvenance({ version, provenance }: GeneratedChapter): void {
-  if (!provenance || !Number.isInteger(provenance.attempts) || provenance.attempts < 1 || provenance.attempts > 2
+function verifyProvenance({ version, provenance }: GeneratedChapter, maxAttempts = 2): void {
+  if (!provenance || !Number.isInteger(provenance.attempts) || provenance.attempts < 1 || provenance.attempts > maxAttempts
     || !["live", "pre-generated", "original"].includes(provenance.source)
     || provenance.personalized !== (version.readerId !== null && version.level !== 5)
     || (provenance.source === "live" && (version.readerId === null || version.level === 5))
@@ -178,7 +178,7 @@ export async function loadGatsbySeed(seed: GatsbySeed): Promise<void> {
     || artifacts.some(({ version }) => !expected.includes(`${version.chapterNumber}:${version.level}`))
     || seed.sharedChapterOne.version.chapterNumber !== 1 || seed.sharedChapterOne.version.level !== 1) throw new Error("Incomplete Gatsby seed artifacts");
   function validateShared(artifact: GeneratedChapter): void {
-    verifyProvenance(artifact);
+    verifyProvenance(artifact, MAX_OFFLINE_GENERATION_ATTEMPTS);
     const { version } = artifact;
     const chapter = seed.content.chapters.find((candidate) => candidate.id === version.chapterId);
     const policy = seed.content.policies[version.chapterId];

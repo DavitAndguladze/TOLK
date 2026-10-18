@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { createOciQuota } from "./oci-quota";
+import { createOciQuota, metered } from "./oci-quota";
 
 describe("per-Reader OCI quota", () => {
   test("allows the limit per minute, then says when to retry", () => {
@@ -16,5 +16,15 @@ describe("per-Reader OCI quota", () => {
     expect(take("a", 10_000)).toBe(50);
     expect(take("a", 59_999)).toBe(1);
     expect(take("a", 60_000)).toBeNull();
+  });
+});
+
+describe("metered", () => {
+  test("uses the free path once the Reader's budget is spent", async () => {
+    const readerId = `metered-${Math.random()}`;
+    const call = metered(readerId, async () => "paid", async () => "free");
+    const results = await Promise.all(Array.from({ length: 31 }, () => call()));
+    expect(results.filter((r) => r === "paid")).toHaveLength(30);
+    expect(results.at(-1)).toBe("free");
   });
 });
