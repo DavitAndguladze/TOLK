@@ -13,6 +13,7 @@ const evidence = document.querySelector<HTMLElement>("#evidence")!;
 const words = document.querySelector<HTMLTableSectionElement>("#words")!;
 const probeButton = document.querySelector<HTMLButtonElement>("#probe")!;
 const probePrompt = document.querySelector<HTMLElement>("#probe-prompt")!;
+const reduceBackground = document.querySelector<HTMLInputElement>("#reduce-background")!;
 type Probe = {
   id: string;
   baselineMs: number; noiseTotal: number; noiseFrames: number; maxFrameMs: number;
@@ -20,6 +21,7 @@ type Probe = {
   recognitionMs?: number; domMs?: number; renderOpportunityMs?: number;
   elementRenderMs?: number; presentationMs?: number; observer?: PerformanceObserver;
   reportedInputLatencyMs?: number;
+  microphoneSettings?: object;
   timer?: ReturnType<typeof setTimeout>;
 };
 let activeProbe: Probe | undefined;
@@ -59,6 +61,7 @@ function cleanup() {
   if (session) release(session);
   start.disabled = false;
   probeButton.disabled = false;
+  reduceBackground.disabled = false;
   stop.disabled = final.disabled = true;
 }
 
@@ -76,6 +79,7 @@ function finishProbe(probe: Probe, reason?: string) {
     browserPresentationDelayEstimateMs: measured && probe.presentationMs !== undefined ? Math.round(probe.presentationMs - probe.speechEndMs!) : null,
     maxPcmFrameDurationMs: probe.maxFrameMs, energyThreshold: probe.threshold ?? null,
     reportedInputLatencyMs: probe.reportedInputLatencyMs ?? null,
+    microphoneSettings: probe.microphoneSettings ?? null,
   };
   record("latency-probe", details);
   probeHistory.push({ at: new Date().toISOString(), ...details });
@@ -101,6 +105,8 @@ function failListening(message: string) {
 async function startListening(isProbe = false) {
   start.disabled = true;
   probeButton.disabled = true;
+  const backgroundReductionRequested = reduceBackground.checked;
+  reduceBackground.disabled = true;
   stop.disabled = false;
   const probe: Probe | undefined = isProbe ? { id: `r1-probe-${++probeSequence}`, baselineMs: 0, noiseTotal: 0, noiseFrames: 0, maxFrameMs: 0 } : undefined;
   activeProbe = probe;
@@ -139,6 +145,7 @@ async function startListening(isProbe = false) {
   document.querySelector("#stream-check")!.textContent = "Browser streaming: pending.";
   document.querySelector("#fields-check")!.textContent = "Word timing and confidence: pending.";
   document.querySelector("#delay-check")!.textContent = "Delay under one second: pending.";
+  document.querySelector("#microphone-settings")!.textContent = "Microphone processing: waiting for capture.";
   record("start", { browser: navigator.userAgent, chapterVersionId: mockChapterVersion(1).id });
   status.textContent = "Requesting an OCI session token…";
   try {
@@ -243,7 +250,7 @@ async function startListening(isProbe = false) {
     client = session;
     // SDK 2.2.0 has no recording-ready callback; observe its public state transition.
     const setState = session.setWebSocketState;
-    session.setWebSocketState = state => {
+    session.setWebSocketState = async state => {
       setState(state);
       if (state === RealtimeWebSocketState.ERROR) {
         // Normal SDK errors call onError synchronously; capture silent startRecording failures too.
@@ -259,8 +266,34 @@ async function startListening(isProbe = false) {
       if (state !== RealtimeWebSocketState.RUNNING) return;
       // A permission prompt may resolve after a socket failure or page teardown.
       if (client !== session) { release(session); return; }
+      const track = session.mediaStream?.getAudioTracks?.()[0];
+      let processingNote = backgroundReductionRequested ? "Browser processing controls unavailable. " : "Using browser defaults. ";
+      if (backgroundReductionRequested && typeof track?.applyConstraints === "function") {
+        status.textContent = "Preparing microphone background reduction…";
+        session.audioStreamer.pauseRecording();
+        try {
+          await track.applyConstraints({
+            noiseSuppression: { ideal: true }, echoCancellation: { ideal: true }, autoGainControl: { ideal: false },
+          });
+          processingNote = "Background reduction requested. ";
+        } catch {
+          processingNote = "Browser could not apply background reduction; using current settings. ";
+        }
+        if (client !== session) return;
+        session.audioStreamer.resumeRecording();
+      }
+      const settings = track?.getSettings?.() as (MediaTrackSettings & { latency?: number }) | undefined;
+      const microphoneSettings = {
+        backgroundReductionRequested,
+        noiseSuppression: settings?.noiseSuppression ?? null,
+        echoCancellation: settings?.echoCancellation ?? null,
+        autoGainControl: settings?.autoGainControl ?? null,
+      };
+      record("microphone-settings", microphoneSettings);
+      const describe = (value: boolean | null) => value === null ? "unreported" : value ? "on" : "off";
+      document.querySelector("#microphone-settings")!.textContent = `${processingNote}Noise suppression: ${describe(microphoneSettings.noiseSuppression)}. Echo cancellation: ${describe(microphoneSettings.echoCancellation)}. Automatic gain: ${describe(microphoneSettings.autoGainControl)}.`;
       if (probe) {
-        const settings = session.mediaStream?.getAudioTracks?.()[0]?.getSettings?.() as (MediaTrackSettings & { latency?: number }) | undefined;
+        probe.microphoneSettings = microphoneSettings;
         if (typeof settings?.latency === "number" && Number.isFinite(settings.latency)) probe.reportedInputLatencyMs = settings.latency * 1000;
       }
       const sendAudio = session.audioStreamer.config.callBack!;

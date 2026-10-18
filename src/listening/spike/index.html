@@ -29,6 +29,9 @@
     <h2 id="read-heading">Read this Chapter Version aloud</h2>
     <blockquote id="chapter"></blockquote>
     <p>Allow the microphone after Start. Wait for “Listening”, then read naturally. Pause for three seconds, skip a word, and try a correction.</p>
+    <p><label><input id="reduce-background" type="checkbox" checked> Reduce background pickup</label></p>
+    <p>Requests noise suppression and echo cancellation with automatic gain off. Nearby speech can still be recognized. Use a close headset microphone in a busy room; uncheck this option to compare browser defaults.</p>
+    <p id="microphone-settings" role="status">Microphone processing: not started.</p>
     <div>
       <button id="start">Start OCI listening</button>
       <button id="final" disabled>Request final result</button>

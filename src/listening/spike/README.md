@@ -25,6 +25,10 @@ The published Oracle browser package **2.2.0 contains TypeScript source but omit
 
 ## Capture the three checks
 
+**Built-in microphone background pickup:** “Reduce background pickup” is enabled by default. On the SDK's existing audio track, the spike requests noise suppression and echo cancellation on, automatic gain off, using optional browser constraints. Streaming is paused while applying these settings; Stop during that wait never resumes the stopped stream. The page and `microphone-settings` evidence report actual returned values, or unreported/unsupported status. Uncheck before a new Start to compare browser defaults. Latency-probe history includes the processing settings for each new trial; the earlier retained measurements predate this option.
+
+This is a processing preference, not distance filtering or speaker identification. Nearby conversations may remain intelligible. Disabling gain control may also make quiet reading harder to recognize; compare both settings in your usual surroundings. A headset microphone close to the Reader is preferable in a busy room. No extra audio stream, new AI service, or audio persistence is introduced. Background rejection has not yet been verified by a comparison reading.
+
 1. Start, allow the microphone, wait for “Listening”, and read the Chapter Version. Actual recognized text establishes browser streaming. Socket authentication alone does not.
 2. Inspect both partial and final word rows. Copy evidence showing nonmissing start/end milliseconds and confidence; verify timings across two utterances. Confidence is recognition uncertainty, not a pronunciation grade.
 3. Read at least three times, including a pause over three seconds, a skipped word, and a correction. Record first-visible partial and final-result delay separately. Report sample count, median, p95, and maximum. The displayed values are estimates anchored to the first PCM frame; confirm clock origin and visible latency with an external observer/clock before choosing an engine. Negative values invalidate that estimate. Do not use token fetch or socket setup duration as speech latency.

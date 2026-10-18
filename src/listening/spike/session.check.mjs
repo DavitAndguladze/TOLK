@@ -13,7 +13,7 @@ function page(elementTiming = false, tokenError = false) {
   const document = { visibilityState: "visible", addEventListener(event, callback) { listeners.set(event, callback); },
     createElement() { return { attributes: new Map(), setAttribute(name, value) { this.attributes.set(name, value); } }; }, querySelector(selector) {
     if (!elements.has(selector)) elements.set(selector, {
-      textContent: "", disabled: false, scrollIntoView() {}, replaceChildren(child) { this.child = child; },
+      textContent: "", disabled: false, checked: selector === "#reduce-background", scrollIntoView() {}, replaceChildren(child) { this.child = child; },
       insertRow() { return { insertCell() { return {}; } }; },
     });
     return elements.get(selector);
@@ -27,11 +27,12 @@ function page(elementTiming = false, tokenError = false) {
     close() { this.closed = true; }
     grantMicrophone(state) {
       this.track = { readyState: "live", stop() { this.readyState = "ended"; } };
-      this.mediaStream = { getTracks: () => [this.track] };
+      this.mediaStream = { getTracks: () => [this.track], getAudioTracks: () => [this.track] };
       this.audioStreamer = { config: { callBack() {} }, audioContext: {
         state: "running", close() { this.state = "closed"; return Promise.resolve(); },
-      } };
-      this.setWebSocketState(state);
+      }, pauseRecording() { this.paused = true; }, resumeRecording() { this.paused = false; } };
+      if (this.configureTrack) this.configureTrack(this.track);
+      return this.setWebSocketState(state);
     }
   }
   let clock = 1000;
@@ -67,6 +68,72 @@ function page(elementTiming = false, tokenError = false) {
     hide() { document.visibilityState = "hidden"; listeners.get("visibilitychange")?.(); },
     evidence: () => JSON.parse(elements.get("#evidence").textContent) };
 }
+
+test("background reduction pauses audio until requested processing is applied and reports actual settings", async () => {
+  const p = page();
+  await p.start();
+  const session = p.sessions[0];
+  let resolveConstraints;
+  let requested;
+  session.configureTrack = track => {
+    track.applyConstraints = constraints => { requested = constraints; return new Promise(resolve => { resolveConstraints = resolve; }); };
+    track.getSettings = () => ({ noiseSuppression: true, echoCancellation: true, autoGainControl: false });
+  };
+  const ready = session.grantMicrophone(p.states.RUNNING);
+  const paused = session.audioStreamer.paused;
+  const startingStatus = p.elements.get("#status").textContent;
+  resolveConstraints?.();
+  await ready;
+  p.stop();
+  assert.equal(paused, true);
+  assert.doesNotMatch(startingStatus, /^Listening\./);
+  assert.equal(requested?.noiseSuppression.ideal, true);
+  assert.equal(requested?.echoCancellation.ideal, true);
+  assert.equal(requested?.autoGainControl.ideal, false);
+  const applied = p.evidence().find(event => event.event === "microphone-settings");
+  assert.equal(applied?.noiseSuppression, true);
+  assert.equal(applied?.autoGainControl, false);
+  assert.match(p.elements.get("#microphone-settings").textContent, /Automatic gain: off/);
+});
+
+test("Stop during microphone processing never resumes the stopped stream", async () => {
+  const p = page();
+  await p.start();
+  const session = p.sessions[0];
+  let resolveConstraints;
+  session.configureTrack = track => {
+    track.applyConstraints = () => new Promise(resolve => { resolveConstraints = resolve; });
+  };
+  const ready = session.grantMicrophone(p.states.RUNNING);
+  p.stop();
+  resolveConstraints();
+  await ready;
+  assert.equal(session.audioStreamer.paused, true);
+  assert.equal(session.track.readyState, "ended");
+  assert.equal(p.elements.get("#start").disabled, false);
+  assert.match(p.elements.get("#status").textContent, /^Stopped\./);
+});
+
+test("unsupported or rejected microphone processing keeps listening with truthful settings", async () => {
+  for (const mode of ["unsupported", "rejected", "defaults"]) {
+    const p = page();
+    if (mode === "defaults") p.elements.get("#reduce-background").checked = false;
+    await p.start();
+    const session = p.sessions[0];
+    let requested = false;
+    if (mode !== "unsupported") session.configureTrack = track => {
+      track.applyConstraints = async () => { requested = true; throw new Error("Not available"); };
+      track.getSettings = () => ({ noiseSuppression: false, autoGainControl: true });
+    };
+    await session.grantMicrophone(p.states.RUNNING);
+    assert.match(p.elements.get("#status").textContent, /^Listening\./);
+    const settings = p.elements.get("#microphone-settings").textContent;
+    if (mode === "unsupported") assert.match(settings, /unavailable.*unreported/);
+    else assert.match(settings, /Noise suppression: off.*Automatic gain: on/);
+    assert.equal(requested, mode === "rejected");
+    p.stop();
+  }
+});
 
 test("isolated-word probe measures local speech end to rendering opportunities without OCI timestamps", async () => {
   const p = page();
