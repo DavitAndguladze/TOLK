@@ -3,8 +3,8 @@ import { db } from "../db/client";
 import { flaggedWords } from "../db/schema";
 import type { ChapterVersion, FlaggedWord } from "../types";
 
-export async function listFlags(readerId: string, versionId: string): Promise<FlaggedWord[]> {
-  const rows = await db().select({ data: flaggedWords.data }).from(flaggedWords)
+export async function listFlags(readerId: string, versionId: string, connection: Pick<ReturnType<typeof db>, "select"> = db()): Promise<FlaggedWord[]> {
+  const rows = await connection.select({ data: flaggedWords.data }).from(flaggedWords)
     .where(and(eq(flaggedWords.readerId, readerId), eq(flaggedWords.chapterVersionId, versionId)))
     .orderBy(flaggedWords.tokenIndex);
   return rows.map((row) => row.data);

@@ -12,6 +12,9 @@ export function recordAnswers(check: ChapterCheck, submission: ChapterCheckAnswe
   const byQuestion = new Map<string, ChapterCheckAnswers["answers"][number]>();
 
   for (const answer of submission.answers) {
+    if (!answer || typeof answer !== "object" || typeof answer.questionId !== "string") {
+      throw new AnswerValidationError("Each answer must name a question");
+    }
     const question = byId.get(answer.questionId);
     if (!question) {
       throw new AnswerValidationError(`"${answer.questionId}" is not a question on check "${check.id}"`);

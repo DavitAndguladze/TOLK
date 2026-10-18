@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChapterCheck } from "@/comprehension/ui/ChapterCheck";
-import { getBook, getChapter, getChapterCheck, getChapterVersion } from "@/db";
+import { getBook, getChapter, getChapterCheck } from "@/db";
+import { resolveReaderVersion } from "@/leveling/reader-version";
 import { requireReader } from "@/platform/auth";
 import { chunkChapterVersion } from "@/reading/chunk";
 import { LevelLadder } from "@/reading/LevelLadder";
@@ -10,8 +11,8 @@ import { ReadingWithWords } from "@/words/ReadingWithWords";
 export default async function ReadPage({ params }: { params: Promise<{ versionId: string }> }) {
   const { versionId } = await params;
   const reader = await requireReader();
-  const version = await getChapterVersion(versionId);
-  if (!version || version.status !== "ready" || (version.readerId !== null && version.readerId !== reader.id)) notFound();
+  const { version } = await resolveReaderVersion(reader.id, versionId);
+  if (!version) notFound();
   const [book, chapter, check] = await Promise.all([
     getBook(version.bookId), getChapter(version.bookId, version.chapterNumber), getChapterCheck(version.id),
   ]);

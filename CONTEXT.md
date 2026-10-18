@@ -79,6 +79,9 @@ _Avoid_: Borderline, close call
 The stored record of one Chapter read: Read-aloud Misses, Chapter Check score, and Grading Result.
 _Avoid_: Attempt, run
 
+**Chapter Completion**:
+The saved Session Result, Level decision, Word Bank update, and next Chapter Version reference for one Reader and served Chapter Version. Retries return this same outcome without applying progress again.
+
 ## Words
 
 **Word Bank**:

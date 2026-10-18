@@ -5,6 +5,7 @@ import { db } from "./client";
 import { bookProgress, books, chapterChecks, chapters, chapterVersions, sessionResults } from "./schema";
 
 export { db } from "./client";
+export type DatabaseConnection = Pick<ReturnType<typeof db>, "select" | "insert">;
 
 export interface ContentBundle {
   books: Book[];
@@ -45,14 +46,14 @@ export async function getChapterCheck(chapterVersionId: string): Promise<Chapter
   return row?.data ?? null;
 }
 
-export async function getBookProgress(readerId: string, bookId: string): Promise<BookProgress | null> {
-  const [row] = await db().select().from(bookProgress).where(and(eq(bookProgress.readerId, readerId), eq(bookProgress.bookId, bookId)));
+export async function getBookProgress(readerId: string, bookId: string, connection: DatabaseConnection = db()): Promise<BookProgress | null> {
+  const [row] = await connection.select().from(bookProgress).where(and(eq(bookProgress.readerId, readerId), eq(bookProgress.bookId, bookId)));
   return row ? { bookId, currentChapterNumber: row.currentChapterNumber, currentLevel: row.currentLevel, currentVersionId: row.currentVersionId } : null;
 }
 
 /** Moves the Reader's place in a Book. An actual Level change restarts Level history (#41). */
-export async function setBookProgress(readerId: string, progress: BookProgress): Promise<void> {
-  const before = await getBookProgress(readerId, progress.bookId);
+export async function setBookProgress(readerId: string, progress: BookProgress, connection: DatabaseConnection = db()): Promise<void> {
+  const before = await getBookProgress(readerId, progress.bookId, connection);
   const levelChanged = before !== null && before.currentLevel !== progress.currentLevel;
   const values = {
     currentChapterNumber: progress.currentChapterNumber,
@@ -61,14 +62,14 @@ export async function setBookProgress(readerId: string, progress: BookProgress):
     updatedAt: new Date(),
     ...(levelChanged && { levelChangedAt: new Date() }),
   };
-  await db().insert(bookProgress).values({ readerId, bookId: progress.bookId, ...values }).onDuplicateKeyUpdate({ set: values });
+  await connection.insert(bookProgress).values({ readerId, bookId: progress.bookId, ...values }).onDuplicateKeyUpdate({ set: values });
 }
 
 /** Saves a finished Chapter. A duplicate submit for the same Chapter Version returns the first result unchanged. */
-export async function recordSessionResult(session: SessionResult, bookId: string): Promise<SessionResult> {
+export async function recordSessionResult(session: SessionResult, bookId: string, connection: DatabaseConnection = db()): Promise<SessionResult> {
   // A no-op update rather than INSERT IGNORE: IGNORE would also turn a too-long or invalid value into a
   // silent truncation, and the lookup below would then find nothing.
-  await db().insert(sessionResults).values({
+  await connection.insert(sessionResults).values({
     id: session.id,
     readerId: session.readerId,
     bookId,
@@ -78,7 +79,7 @@ export async function recordSessionResult(session: SessionResult, bookId: string
     completedAt: new Date(session.completedAt),
     data: session,
   }).onDuplicateKeyUpdate({ set: { id: sql`id` } });
-  const [row] = await db()
+  const [row] = await connection
     .select({ data: sessionResults.data })
     .from(sessionResults)
     .where(and(eq(sessionResults.readerId, session.readerId), eq(sessionResults.chapterVersionId, session.chapterVersionId)));
@@ -90,9 +91,9 @@ export async function recordSessionResult(session: SessionResult, bookId: string
  * Input for `decideNextLevel` (#60): this Reader's results in this Book since the last actual Level change,
  * one per Chapter (its latest), oldest first. Includes the just-recorded Chapter.
  */
-export async function levelHistory(readerId: string, bookId: string): Promise<SessionResult[]> {
-  const [progress] = await db().select({ since: bookProgress.levelChangedAt }).from(bookProgress).where(and(eq(bookProgress.readerId, readerId), eq(bookProgress.bookId, bookId)));
-  const rows = await db()
+export async function levelHistory(readerId: string, bookId: string, connection: DatabaseConnection = db()): Promise<SessionResult[]> {
+  const [progress] = await connection.select({ since: bookProgress.levelChangedAt }).from(bookProgress).where(and(eq(bookProgress.readerId, readerId), eq(bookProgress.bookId, bookId)));
+  const rows = await connection
     .select({ chapterNumber: sessionResults.chapterNumber, data: sessionResults.data })
     .from(sessionResults)
     .where(and(eq(sessionResults.readerId, readerId), eq(sessionResults.bookId, bookId), progress?.since ? gt(sessionResults.completedAt, progress.since) : undefined))
@@ -123,7 +124,8 @@ export async function listLibrary(readerId: string, q = ""): Promise<(Book & { p
 /** Where this Reader resumes a Book: their current Chapter Version, or the shared Chapter 1 at L1 for a new Reader. */
 export async function openBook(readerId: string, bookId: string): Promise<{ chapter: Pick<Chapter, "id" | "number" | "title">; version: ChapterVersion } | null> {
   const progress = await getBookProgress(readerId, bookId);
-  const version = progress ? await getChapterVersion(progress.currentVersionId) : await sharedFirstChapter(bookId);
+  let version = progress ? await getChapterVersion(progress.currentVersionId) : await sharedFirstChapter(bookId);
+  if (!version && progress) version = await (await import("./generation")).getGenerationVersion(readerId, progress.currentVersionId);
   if (!version) return null;
   const chapter = await getChapter(bookId, version.chapterNumber);
   if (!chapter) return null;

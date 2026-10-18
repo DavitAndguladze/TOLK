@@ -1,4 +1,5 @@
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
+import { completeChapter, CompletionError, generateCompletedChapter } from "@/comprehension/complete-chapter";
 import { completionKey } from "@/comprehension/completion-key";
 import { gradeChapterCheck } from "@/comprehension/grade-check";
 import { readAloudForAttempt } from "@/comprehension/read-aloud-attempt";
@@ -9,13 +10,36 @@ import {
 } from "@/comprehension/registry";
 import { submitCheckAnswers } from "@/comprehension/service";
 import { mockChapter } from "@/mocks";
-import { readerIdFor } from "@/platform/auth";
+import { getReader } from "@/platform/auth";
+import { readerIdFrom } from "@/platform/reader-id";
 import { consumeReadAloudSummary, getReadAloudSummary } from "@/platform/registry";
 import type { Api, ChapterCheckAnswers } from "@/types";
 import { flagStore } from "@/words/registry";
 import { chapterEvidence } from "@/words/word-bank";
 
 export async function POST(req: Request, { params }: { params: Promise<{ checkId: string }> }) {
+  if (process.env.DATABASE_URL || process.env.LOCAL_DATABASE_URL) {
+    const reader = await getReader();
+    if (!reader) return NextResponse.json({ error: "Sign in first" }, { status: 401 });
+    const origin = req.headers.get("origin");
+    if (origin && origin !== new URL(process.env.BETTER_AUTH_URL || req.url).origin) {
+      return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
+    }
+    try {
+      const outcome = await completeChapter(reader.id, (await params).checkId, await req.json(), { keyPointGrader, now: () => new Date() });
+      after(async () => {
+        try { await generateCompletedChapter(outcome); }
+        catch (err) { console.warn("Chapter generation could not continue:", err instanceof Error ? err.name : "unknown"); }
+      });
+      return NextResponse.json(outcome, { headers: { "Cache-Control": "private, no-store" } });
+    } catch (err) {
+      if (err instanceof CompletionError) return NextResponse.json({ error: err.message }, { status: err.status });
+      if (err instanceof AnswerValidationError || err instanceof SyntaxError) return NextResponse.json({ error: "Invalid Chapter Check answers" }, { status: 400 });
+      console.warn("Chapter completion could not be saved:", err instanceof Error ? err.name : "unknown");
+      return NextResponse.json({ error: "Couldn't save your result. Try again." }, { status: 503 });
+    }
+  }
+  // The existing database-less demo remains separate from authenticated durable completions.
   const { checkId } = await params;
   // checkId is deterministic (`check-${versionId}`); a restart, hot reload, or second worker can
   // wipe checksById, so recover by regenerating rather than failing the Reader's submission.
@@ -25,7 +49,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ checkId
 
   // Chapter 1's L1 version (and its check) is shared across every Reader (ADR-0008); key storage
   // by Reader (signed in, or a namespaced per-browser id) so one Reader's submission can't overwrite another's.
-  const sessionId = await readerIdFor(req);
+  const sessionId = readerIdFrom(undefined, req.headers.get("x-reader-session"));
   const storageKey = `${check.id}:${sessionId}`;
 
   try {

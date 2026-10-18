@@ -6,8 +6,8 @@ import gatsbySource from "../data/gatsby/content.json" with { type: "json" };
 import { verifyChapterArtifact, type GeneratedChapter } from "../leveling/generator";
 import type { GatsbySeed } from "../leveling/seed";
 import type { IngestedChapterPolicy } from "../leveling/ingestion";
-import type { Level, NextChapterInput } from "../types";
-import { db, getBook, getChapter, getChapterVersion, loadContent } from ".";
+import type { ChapterVersion, Level, NextChapterInput } from "../types";
+import { db, getBook, getChapter, getChapterVersion, loadContent, type DatabaseConnection } from ".";
 import { books, chapterArtifacts, chapterChecks, chapterGenerations, chapterPolicies, chapterVersions, chapters } from "./schema";
 
 export { getChapter, getChapterVersion } from ".";
@@ -24,15 +24,17 @@ export interface GenerationDescriptor {
 }
 
 /** One saved completion has one stable pending identity, including failed retries. */
-export async function startGeneration(readerId: string, bookId: string, chapterNumber: number, level: Level, baselineVersionId: string): Promise<string> {
-  const [baseline, chapter] = await Promise.all([getChapterVersion(baselineVersionId), getChapter(bookId, chapterNumber)]);
+export async function startGeneration(readerId: string, bookId: string, chapterNumber: number, level: Level, baselineVersionId: string, connection: DatabaseConnection = db()): Promise<string> {
+  const [preceding] = await connection.select({ data: chapterVersions.data }).from(chapterVersions).where(eq(chapterVersions.id, baselineVersionId));
+  const [original] = await connection.select({ data: chapters.data }).from(chapters).where(and(eq(chapters.bookId, bookId), eq(chapters.number, chapterNumber)));
+  const baseline = preceding?.data, chapter = original?.data;
   if (!readerId.trim() || !chapter || !baseline || baseline.status !== "ready" || baseline.bookId !== bookId
     || baseline.chapterNumber + 1 !== chapterNumber || (baseline.readerId !== null && baseline.readerId !== readerId)
     || ![1, 2, 3, 4, 5].includes(level) || Math.abs(level - baseline.level) > 1) {
     throw new Error("Invalid generation target or preceding baseline");
   }
-  await db().insert(chapterGenerations).ignore().values({ id: `pending-${randomUUID()}`, readerId, bookId, chapterNumber, level, baselineVersionId });
-  const [row] = await db().select().from(chapterGenerations).where(and(eq(chapterGenerations.readerId, readerId), eq(chapterGenerations.baselineVersionId, baselineVersionId)));
+  await connection.insert(chapterGenerations).ignore().values({ id: `pending-${randomUUID()}`, readerId, bookId, chapterNumber, level, baselineVersionId });
+  const [row] = await connection.select().from(chapterGenerations).where(and(eq(chapterGenerations.readerId, readerId), eq(chapterGenerations.baselineVersionId, baselineVersionId)));
   if (!row || row.bookId !== bookId || row.chapterNumber !== chapterNumber || row.level !== level) throw new Error("Conflicting generation for this saved baseline");
   return row.id;
 }
@@ -48,6 +50,18 @@ export async function resolveGeneration(readerId: string, pendingId: string): Pr
   }
   return { id: row.id, readerId, bookId: row.bookId, chapterNumber: row.chapterNumber, level: row.level,
     baselineVersionId: row.baselineVersionId, status: row.status, artifact };
+}
+
+/** The stable pending identity resolves to the exact immutable artifact when ready. */
+export async function getGenerationVersion(readerId: string, pendingId: string): Promise<ChapterVersion | null> {
+  const pending = await resolveGeneration(readerId, pendingId);
+  if (!pending) return null;
+  if (pending.artifact) return pending.artifact.version;
+  const [original, baseline] = await Promise.all([getChapter(pending.bookId, pending.chapterNumber), getChapterVersion(pending.baselineVersionId)]);
+  if (!original || !baseline) return null;
+  return { ...baseline, id: pending.id, readerId, chapterId: original.id, chapterNumber: original.number,
+    level: pending.level, status: pending.status === "failed" ? "failed" : "generating", text: "", sentences: [], tokens: [],
+    reinforcedWords: [], baselineVersionId: baseline.id };
 }
 
 /** The 20-second generator can be reclaimed after 30 seconds if its server process died. */
