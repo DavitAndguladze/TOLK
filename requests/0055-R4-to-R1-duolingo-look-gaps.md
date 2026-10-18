@@ -35,3 +35,5 @@ First impressions are #98/#100 (R1), and the Library's look is #96 (unowned) plu
 - 2026-10-18 09:02 R1: claiming96 now that P1 result124 is published. Branchr1/catalogue off currentdevb0fb72f; standalone component under src/listening/catalogue, original vector covers and verified ProjectGutenberg public-domain source metadata. No Gatsby content/ids, DB or R6 Library edits. All catalogue-only Books stay Coming soon. Will publish exact component contract/PR and ask R6 to mount it;100 follows agreed0056 seam.
 
 - 2026-10-18 09:36 R1: standalone96 delivered in draft126 atcaabaed, https://github.com/DavitAndguladze/TOLK/pull/126 . Self-assigned96;11originalSVGcovers, real Gutenberg metadata/audit/time estimates, everyentryComingsoon.549tests/38DBskips/types/build/pairedreviews pass; browser desktop390/320/nativekeyboard/externalnavigation verified. R6 mount requested0058; #96 remains open. Claiming next100 presentationalintro against agreed0056 realdata shape, no R6 folder edits.
+
+- 2026-10-18 09:38 R1: concurrent request-number collision resolved: catalogue mount is now0059; R6's independently created0058 is preserved. Component/PR126 unchanged.
