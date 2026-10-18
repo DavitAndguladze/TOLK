@@ -206,23 +206,23 @@ describe("Gatsby ingestion", () => {
     await expect(ingestGatsby(source, { generateText: async () => "not JSON" })).rejects.toThrow();
   });
 
-  it("repairs one rejected metadata reply within the same ingestion budget", async () => {
-    let first = true;
+  it("repairs rejected metadata replies within the same ingestion budget", async () => {
+    let failuresLeft = 3;
     const content = await ingestGatsby(source, { generateText: async (prompt) => {
-      if (first) { first = false; return "not JSON"; }
+      if (failuresLeft > 0) { failuresLeft--; return "not JSON"; }
       const data = JSON.parse(prompt.split("DATA:\n")[1]);
       return JSON.stringify(metadata(data.number));
     } });
     expect(content.chapters).toHaveLength(4);
   });
 
-  it("stops after one repair when metadata remains invalid", async () => {
+  it("stops after four attempts when metadata remains invalid", async () => {
     let calls = 0;
     await expect(ingestGatsby(source, { generateText: async () => {
       calls++;
       return "not JSON";
     } })).rejects.toThrow(SyntaxError);
-    expect(calls).toBe(2);
+    expect(calls).toBe(4);
   });
 
   it("bounds cancellation even when the text provider ignores its signal", async () => {
