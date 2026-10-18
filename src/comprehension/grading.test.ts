@@ -125,6 +125,13 @@ describe("combineGrading", () => {
 
       expect(grading.score).toBe(score);
     });
+
+    test("counts a word flagged twice as one Flagged Word", () => {
+      const grading = combineGrading(input({ readAloud: readAloud(1), flaggedWords: ["quick", "quick", "advice"] }));
+
+      expect(grading.score).toBe(96);
+      expect(grading.basis.flaggedCount).toBe(2);
+    });
   });
 
   describe("without a read-aloud summary", () => {
