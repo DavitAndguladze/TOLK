@@ -1,8 +1,10 @@
-import type { Chapter, ChapterCheck } from "../types";
+import type { Chapter, ChapterCheck, Grading, Level, LevelDecision, SessionResult, WordBankUpdate } from "../types";
 import { LEVELS } from "../types";
 import { mockChapter, mockChapterVersion } from "../mocks";
 import { createInMemoryAnswersStore } from "./answers-store";
 import { generateChapterCheck } from "./chapter-check-generator";
+import type { KeyPointGrader } from "./grade-check";
+import { mockKeyPointGrader } from "./key-point-grader";
 import { getChapterCheckForVersion } from "./service";
 
 /**
@@ -14,6 +16,28 @@ import { getChapterCheckForVersion } from "./service";
 export const chapterCheckCache = new Map<string, Promise<ChapterCheck>>(); // keyed by Chapter Version id
 export const checksById = new Map<string, ChapterCheck>(); // keyed by Chapter Check id
 export const answersStore = createInMemoryAnswersStore();
+export const sessionResults = new Map<string, SessionResult>(); // keyed like answersStore: `${checkId}:${readerSessionId}`
+
+// OCI Generative AI grading swaps in here (#12, next slice).
+export const keyPointGrader: KeyPointGrader = mockKeyPointGrader;
+
+/** Stand-in until R6's Level rules (#13): the next Chapter stays at this Level. */
+export function holdLevel(level: Level, grading: Grading): LevelDecision {
+  return {
+    from: level,
+    to: level,
+    reason:
+      grading.result === "struggled" ? "struggled-hold"
+      : grading.result === "partly-understood" ? "partly-understood"
+      : grading.barelyPassed ? "barely-passed"
+      : "fully-understood", // still held at this Level until #13; reason just names what actually happened
+    explanation: "Your next Chapter stays at this Level.",
+    reinforcement: "plain",
+  };
+}
+
+/** Stand-in until the Word Bank (#13) lands. */
+export const emptyWordBankUpdate: WordBankUpdate = { bank: [], graduatedThisChapter: [], wordsLearnedTotal: 0 };
 
 // Mock Chapter Versions until #04/#05 land real Book ingestion and a Chapter Version store.
 export const mockVersions = LEVELS.map((level) => mockChapterVersion(level));
