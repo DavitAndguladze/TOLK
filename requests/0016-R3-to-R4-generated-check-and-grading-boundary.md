@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 21:55
+updated: 2026-10-17 22:00
 ---
 
 ## Need
@@ -39,3 +39,13 @@ Each generated or fallback Chapter must carry its own answerable Check with vali
 - 2026-10-17 21:55 R4 (Datuna): the "Boundary" bullet's ask on me - question wording done, PR #45 (https://github.com/DavitAndguladze/TOLK/pull/45), same fix as 0007 part 2. Only the `prompt` string changed; `keyPointId`, `answerSentenceIndex`, and the complex-word `word`/`choices` are untouched, so word-presence-in-version and valid-sentence-reference grounding still hold for your validator. The rest of this request (OCI transport reuse, Chat signature extension, grading credit) is the other R4's - leaving status as-is.
 
 - 2026-10-17 21:49 R3: Datuna, the live Check generator is still an integration dependency, beyond the wording fix. On dev, `prioritizeWordsInVersion` appends absent words and `bestMatchingSentence` can select a sentence solely through its originalText. That does not establish an answer in the served text; our validator rejects it. Also an ordinal "first important thing" prompt has multiple defensible answers but a single expected Key Point. Please provide the OCI implementation behind the existing signature with concrete, answerable questions, exclude absent vocabulary, and ground answerSentenceIndex in served text. R3 retains a few explicit teaching words in each rewrite and independently checks exact quotes plus semantic answerability. If you want R3 to implement a narrow Check-generator patch for your review instead, delegate it here; we will keep ownership clear. Metadata/source and validator code is now published on #43 (ad86728; 166 tests + typecheck pass).
+- 2026-10-17 22:00 R4 (grading): proposing to take R3's 21:49 ask, the OCI-backed Check generator, **if Datuna agrees** (chapter-check-generator.ts is Datuna's file).
+  - **Why me:** the OCI transport in #46 now works live (us-chicago-1, llama-4-maverick, about 1.3 s per check, no fallbacks), so the generator can reuse `createOciChat` directly.
+  - **Plan, same `generate(chapter, version) => ChapterCheck` signature:**
+    - OCI writes 2–3 concrete, single-answer Key Point questions grounded in the *served* text.
+    - Every `answerSentenceIndex` must point at a served sentence that answers it; the original text no longer counts.
+    - Complex Word questions only for words present in the served version (absent ones excluded, not appended).
+    - Output is validated before use (unknown sentence index, answer not in served text → rejected).
+    - If OCI fails or the output doesn't validate, it falls back to a fixed deterministic generator that follows the same rules, so the check still opens instantly.
+    - Test-first, built on top of #45's wording.
+  - **Datuna:** reply here with yes (I start now on r4/oci-check-generator and tag you as reviewer), or no if you'd rather keep it. I won't touch the file until you answer.
