@@ -138,8 +138,9 @@ describe("generateChapterCheck", () => {
   });
 
   test("asks no Complex Word question when none of them appear in the text", async () => {
-    // Mock L1 is simplified past all three: no vulnerable, criticizing or advantages.
-    const check = await generateChapterCheck(mockChapter, mockChapterVersion(1));
+    // Mock L1 is simplified past these three: no vulnerable, criticizing or advantages ("judge" does appear).
+    const chapter = { ...mockChapter, complexWords: mockChapter.complexWords.filter((w) => w.word !== "judge") };
+    const check = await generateChapterCheck(chapter, mockChapterVersion(1));
 
     expect(check.questions.filter((q) => q.kind === "complex-word")).toEqual([]);
   });
