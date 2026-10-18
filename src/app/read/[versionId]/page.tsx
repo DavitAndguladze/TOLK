@@ -36,7 +36,7 @@ export default async function ReadPage({ params }: { params: Promise<{ versionId
           <LevelLadder current={version.level} />
         </div>
       </header>
-      <ReadingWithWords key={`${reader.id}:${version.id}`} chapterVersionId={version.id} readerId={reader.id} chunks={chunkChapterVersion(version)} chapterCheck={<ChapterCheck check={check} />} />
+      <ReadingWithWords key={`${reader.id}:${version.id}`} chapterVersionId={version.id} readerId={reader.id} chunks={chunkChapterVersion(version)} chapterCheck={<ChapterCheck check={check} readerId={reader.id} />} />
     </main>
   );
 }
