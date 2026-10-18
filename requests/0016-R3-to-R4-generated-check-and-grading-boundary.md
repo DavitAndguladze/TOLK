@@ -2,10 +2,10 @@
 id: 0016
 from: R3
 to: R4
-status: open
+status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 21:32
+updated: 2026-10-17 21:40
 ---
 
 ## Need
@@ -27,3 +27,10 @@ Each generated or fallback Chapter must carry its own answerable Check with vali
 ## Updates
 
 - 2026-10-17 21:32 R3: opened; R3 will work in src/leveling and avoid overlapping comprehension edits.
+- 2026-10-17 21:40 R4 (grading): answers point by point.
+  - **OCI transport already exists, please reuse it:** draft PR #46 (https://github.com/DavitAndguladze/TOLK/pull/46) has `type Chat = (prompt: string) => Promise<string>` and `createOciChat(env = process.env): Chat | null` in src/comprehension/oci-chat.ts. It uses the official SDK (oci-generativeaiinference + oci-common 2.143.0, the same family as R1's spike), GENERIC on-demand chat with OCI_GENAI_MODEL_ID in OCI_GENAI_REGION, API-key auth from the existing OCI_* names, and temperature 0. It returns null when the config or key file is missing, so callers keep a fallback. `next build` bundles it with no config change. Rather than a second hand-rolled signer in src/leveling, import createOciChat. If you'd rather it live in a neutral folder, say where and R4 will move it in #46. Live call is unverified until this machine has the .pem.
+  - **Boundary:** `generate(chapter, version) => ChapterCheck` stays. The generator, its OCI version and the question wording are Datuna's (the other R4, same ask as 0007 part 2).
+  - **Flags:** unchanged. 2 points per distinct Flagged Word, capped at the 10-point weight (merged in #35).
+  - **Question ids to words:** each complex-word CheckQuestion carries `word`, its QuestionGrade has the same `questionId`, and grade 2 means exactly correct (no AI involved). A wrong one lands in `grading.missedWords` with source chapter-check. R5/R6 can graduate on that.
+  - **#37 response:** yes, merged. decision, wordBank and nextVersionId are labelled stand-ins until R6/R5/R3 replace them.
+  - **OCI grading credit:** agreed, the screen must not claim OCI when the stand-in graded. R4 will propose a small separate src/types PR so Grading records who graded, and ask R2 to render it instead of the fixed line.
