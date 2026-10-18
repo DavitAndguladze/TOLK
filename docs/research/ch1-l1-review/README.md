@@ -86,3 +86,24 @@ Two borderline, defensible calls (not fixed, same standard R1 used at source 33)
 Structural validation still passes (897 served sentences, all 362 source indexes, ≤10 words each). The next comparison is 240–259. Source 0–79 remains for R1's independent review. Key Points, updated Check evidence and independent semantic acceptance remain outstanding, as do the unresolved imagery rows from slices 2–3 and the two new borderline calls above.
 
 **Running total: 240 of 362 source sentences compared (66%).**
+
+## Slice 6 — 2026-10-18 (Davit/R4): Chapter 1 editorial pass complete
+
+Compared source 240–361, finishing the chapter. Repaired 249: "Daisy moved her head at Tom, making her no clear" was broken English (a dropped/garbled clause), not a meaning error — replaced with "Daisy moved her head at Tom to say no."
+
+This stretch covered the chapter's two most load-bearing passages, both faithful:
+
+- **The "beautiful little fool" scene (270–279)**: Daisy's monologue about her daughter's birth is preserved verbatim at the key line (278: "a beautiful little fool").
+- **The ending (353–361)**: the green light, Gatsby's trembling reach toward the dark water, and the "silver pepper of the stars" are all intact. Source 361's "unquiet darkness" is correctly rendered as "dark, without quiet" rather than the opposite-meaning "quiet darkness" — a place a careless rewrite could easily have flipped the ending's mood.
+
+One more defensible, unforced call: 326 completes Daisy's intentionally truncated "Our beautiful white—" (interrupted by Tom) with "lives," resolving an ambiguity the original leaves open. Noted, not changed, since it doesn't introduce a false fact.
+
+**Chapter 1's editorial comparison is now complete: all 362 of 362 source sentences reviewed.** Combined repairs across all sessions: source 0–361, with concrete fixes at (from earlier slices) 5, 14, 15, 16, 17, 20, 22, 24, 25, 26, 28, 29, 32, 34, 35, 37, 38, 39, 6, 8, 9, 40, 41, 42, 44, 45, 46, 49, 51, 54, 55, 56, 58, 59, 61, 62, 63, 66, 67, 68, 70, 71, 72, 73, 74, 75, 77, and (this session) 88, 101, 249. Structural validation passes in full: 897 served sentences, all 362 source indexes covered in strict order, every sentence at most 10 words (verified against the actual `tokenize`/rank data the validator uses, not a manual count).
+
+**What is still outstanding before this can be imported** (unchanged by this session, listed for whoever picks this up next):
+1. **Unresolved imagery/tone rows**, never hard-fixed because they're genuinely defensible, not wrong: 10, 12, 13, 18, 19 (R1 confirmed these as concrete issues — still open), 33 (R1 confirmed defensible, not a defect), 41, 42, 47, 51, 79 (slices 2–3), 166, 210, 326 (this session).
+2. **Key Points**: never compared in this review. The Chapter's 3 Key Points need the same sentence-level fidelity check against this candidate's served sentences.
+3. **The Chapter Check** (`check.json`): stale — bound to an old candidate revision, with sentence indexes that no longer match. Must be regenerated against the final candidate and independently fidelity-checked.
+4. **Independent model fidelity gate**: every actual attempt so far has failed (throttling after 35 calls, omitted real passages, a validator that gave false explanations of its own rejections). A human-approved candidate does not equal a passing fidelity run; that gate still has to actually pass before this is importable.
+5. **R1's independent review** only covered 0–39 so far; 40–361 (including this session's slices) has had editorial repair but no second, independent reader.
+6. This is Chapter 1 of 4 needed (Ch 2–4 are fallback/original-only so far, per `r3-content-integration.md`) before the Golden Path's content blocker clears.
