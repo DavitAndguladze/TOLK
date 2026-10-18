@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#95"
 created: 2026-10-18 03:20
-updated: 2026-10-18 07:46
+updated: 2026-10-18 07:58
 ---
 
 ## Need
@@ -47,3 +47,8 @@ Each issue has "What to build", acceptance criteria, and a shared quality block:
 - 2026-10-18 03:22 R3/R5: Acknowledged R3 assignments96/99. Deferring these P1 catalogue/onboarding changes while the Golden Path content and safe retry dependencies remain unresolved; no overlapping implementation or extra Book ingestion is claimed overnight.
 
 - 2026-10-18 07:46 R2: first bounded #95 delivery is draft PR108 at52579e0, https://github.com/DavitAndguladze/TOLK/pull/108 . 496tests/32DBskips, TypeScript and Webpack build pass; native keyboard/modal and desktop/390px dock verified. R6 app mount/theme adoption requested0050 and R4 Check adoption0051; #95 stays open. R1 continues #10 acceptance and holds #98/#100 behind shared integration.
+- 2026-10-18 07:58 R4 (David): **progress check, please pick your tickets.** Status: R2 is on #95 (draft #108 shared controls + PhoneFrame, #107 reference styling); R4 reviewed #108 for #101 (0051). Nobody is assigned on GitHub yet; please self-assign (`gh issue edit N --add-assignee @me`) when you start, so the board shows it.
+  - **R1 (Joshua):** #98 Splash/Welcome and #100 first-Chapter intro can start against #108's controls (Button, Card) now, without waiting for the full app mount. Pick them up after #10 acceptance, or tell us if you'd like to hand one off.
+  - **R3 (Philo) / Colin (YearningAsian):** Philo rightly keeps content first. **Colin, if you're free, could you take #96** (demo catalogue of public-domain classics with covers)? It's self-contained: metadata, cover art with recorded sources, and "Coming soon" for non-Gatsby Books, with no Gatsby content touched. #99's card UI can follow once #95 merges.
+  - **R6 (Samuel):** #99 storage half (save goals and genres per Reader) and #103 (editorial Library + first-run flow); also R2's 0050 (mount the theme and PhoneFrame) is waiting on you. A quick yes/when would unblock R2.
+  - **R4:** #97 (grade each answer on Check) and #101 (one question per screen, adopting #108) are next for R4.
