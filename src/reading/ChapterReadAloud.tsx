@@ -1,23 +1,32 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { createReadingAttempt } from "./read-aloud";
 import { saveReadAloudSummary } from "./save-read-aloud";
+
+const ConfirmedReadAloudStartedAt = createContext<string | null>(null);
+
+/** The acknowledged summary for this completion only; R4 includes it in the Chapter Check submission. */
+export function useConfirmedReadAloudStartedAt(): string | null {
+  return useContext(ConfirmedReadAloudStartedAt);
+}
 
 /** Confirm a summary save before showing the Chapter Check; silent reading needs no summary. */
 export function ChapterReadAloud({ attempt, children }: { attempt: ReturnType<typeof createReadingAttempt> | null; children: ReactNode }) {
   const [status, setStatus] = useState<"preparing" | "saving" | "saved" | "not-needed" | "failed" | "continue">("preparing");
   const [retry, setRetry] = useState(0);
+  const [confirmedStartedAt, setConfirmedStartedAt] = useState<string | null>(null);
   useEffect(() => {
     let live = true;
     setStatus("preparing");
+    setConfirmedStartedAt(null);
     void (async () => {
       const summary = await attempt?.finish();
       if (!live) return;
       if (!summary) { setStatus("not-needed"); return; }
       setStatus("saving");
       await saveReadAloudSummary(summary);
-      if (live) setStatus("saved");
+      if (live) { setConfirmedStartedAt(summary.startedAt); setStatus("saved"); }
     })().catch(() => { if (live) setStatus("failed"); });
     return () => { live = false; };
   }, [attempt, retry]);
@@ -33,5 +42,5 @@ export function ChapterReadAloud({ attempt, children }: { attempt: ReturnType<ty
       </div>
     </div>
   );
-  return <>{status === "saved" && <p role="status" className="mt-6 text-fog">Read-aloud results saved.</p>}{children}</>;
+  return <ConfirmedReadAloudStartedAt.Provider value={status === "saved" ? confirmedStartedAt : null}>{status === "saved" && <p role="status" className="mt-6 text-fog">Read-aloud results saved.</p>}{children}</ConfirmedReadAloudStartedAt.Provider>;
 }
