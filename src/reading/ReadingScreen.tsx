@@ -242,6 +242,12 @@ function ChapterReadingScreen({
 
       <footer className={`${theme.controls} fixed inset-x-0 bottom-0 px-6 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))]`}>
         <div className="mx-auto max-w-xl">
+          {state.listeningError && <p role="alert" className="mb-3 rounded-xl border-l-4 border-gold bg-white/80 px-3 py-2 text-sm text-ink">{state.listeningError}</p>}
+          {(stuckWord || state.interrupted) && (
+            <p aria-live="polite" className="mb-2 text-sm font-semibold text-ink">
+              {stuckWord ? `Take your time with “${stuckWord.normalized || stuckWord.text}”` : "Listening stopped. Tap Resume to try again."}
+            </p>
+          )}
           <div className="flex justify-end">
             <button
               type="button"
@@ -255,38 +261,29 @@ function ChapterReadingScreen({
             </button>
           </div>
           <div id="reading-details" hidden={!controlsExpanded}>
-          {state.listeningError && <p role="alert" className="mb-3 rounded-xl border-l-4 border-gold bg-white/80 px-3 py-2 text-sm text-ink">{state.listeningError}</p>}
-          {state.status === "ready" && state.chunkIndex === 0 && <p className="mb-2 text-sm text-fog">Reading aloud is optional. It helps us grade your reading more accurately.</p>}
-          {demoListening && !state.silent && <p className="mb-2 text-sm text-ink">Demo playback. Words advance automatically; the microphone is not used.</p>}
-          <div className="flex items-center justify-between text-sm text-fog">
-            <p aria-live="polite">
-              {stuckWord ? (
-                <span className="font-semibold text-ink">Take your time with “{stuckWord.normalized || stuckWord.text}”</span>
-              ) : state.interrupted ? (
-                <span className="font-semibold text-ink">Listening stopped. Tap Resume to try again.</span>
-              ) : (
-                <>
-                  Part {state.chunkIndex + 1} of {chunks.length}
-                  {listening && <span className="ml-2 text-light">{listeningLabel}</span>}
-                </>
-              )}
-            </p>
-          </div>
-          <div className="mt-3"><ProgressBar label="Chapter position" value={state.chunkIndex} max={chunks.length - 1} /></div>
-          {state.status === "ready" && state.chunkIndex === 0 && (
-            <button
-              type="button"
-              role="switch"
-              aria-checked={state.silent}
-              onClick={() => dispatch({ type: "toggle-silent" })}
-              className="mt-2 flex items-center gap-2 text-sm text-fog"
-            >
-              <span aria-hidden className={`relative h-5 w-9 rounded-full transition-colors ${state.silent ? "bg-light" : "bg-hairline"}`}>
-                <span className={`absolute top-0.5 left-0.5 size-4 rounded-full bg-white transition-transform ${state.silent ? "translate-x-4" : ""}`} />
-              </span>
-              Read silently
-            </button>
-          )}
+            {state.status === "ready" && state.chunkIndex === 0 && <p className="mb-2 text-sm text-fog">Reading aloud is optional. It helps us grade your reading more accurately.</p>}
+            {demoListening && !state.silent && <p className="mb-2 text-sm text-ink">Demo playback. Words advance automatically; the microphone is not used.</p>}
+            <div className="flex items-center justify-between text-sm text-fog">
+              <p aria-live="polite">
+                Part {state.chunkIndex + 1} of {chunks.length}
+                {listening && <span className="ml-2 text-light">{listeningLabel}</span>}
+              </p>
+            </div>
+            <div className="mt-3"><ProgressBar label="Chapter position" value={state.chunkIndex} max={chunks.length - 1} /></div>
+            {state.status === "ready" && state.chunkIndex === 0 && (
+              <button
+                type="button"
+                role="switch"
+                aria-checked={state.silent}
+                onClick={() => dispatch({ type: "toggle-silent" })}
+                className="mt-2 flex items-center gap-2 text-sm text-fog"
+              >
+                <span aria-hidden className={`relative h-5 w-9 rounded-full transition-colors ${state.silent ? "bg-light" : "bg-hairline"}`}>
+                  <span className={`absolute top-0.5 left-0.5 size-4 rounded-full bg-white transition-transform ${state.silent ? "translate-x-4" : ""}`} />
+                </span>
+                Read silently
+              </button>
+            )}
           </div>
           <div className="mt-3 flex gap-3">
             <Button
