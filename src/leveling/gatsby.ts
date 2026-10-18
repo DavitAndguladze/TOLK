@@ -1,7 +1,7 @@
 import type { Book, Chapter } from "../types";
 
 export const GATSBY_BOOK: Book = {
-  id: "gatsby",
+  id: "gatsby-full",
   title: "The Great Gatsby",
   author: "F. Scott Fitzgerald",
   sourceUrl: "https://www.gutenberg.org/ebooks/64317",
@@ -30,7 +30,7 @@ export function parseGatsby(source: string): OriginalChapter[] {
     const originalText = body.slice(heading.index + heading[0].length, headings[index + 1]?.index ?? body.length).trim();
     if (!originalText || originalText.split(/\s+/).length < 1000) throw new Error(`Gatsby Chapter ${index + 1} is incomplete.`);
     return {
-      id: `gatsby-ch${index + 1}`,
+      id: `${GATSBY_BOOK.id}-ch${index + 1}`,
       bookId: GATSBY_BOOK.id,
       number: index + 1,
       title: `Chapter ${index + 1}`,

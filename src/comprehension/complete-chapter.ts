@@ -15,7 +15,6 @@ import { AnswerValidationError, recordAnswers } from "./record-answers";
 import { runGeneration } from "../leveling/runtime";
 
 export type ChapterCompletion = Api["POST /api/checks/[checkId]/answers"]["res"];
-const answerGrades = createMySqlAnswerGradeStore();
 
 export class CompletionError extends Error {
   constructor(message: string, readonly status: number) { super(message); }
@@ -109,7 +108,7 @@ export async function completeChapter(readerId: string, checkId: string, submiss
     const session = await gradeChapterCheck({ check, chapter, version, answers, readAloud, readerId,
       flaggedWords: [...new Set(flags.map((flag) => flag.word))] },
       // Reuses each Key Point grade the Reader already saw on Check (#97), so every answer is graded once.
-      { ...grading, keyPointGrader: rememberingKeyPointGrader(grading.keyPointGrader, answerGrades, { readerId, checkId: check.id }) });
+      { ...grading, keyPointGrader: rememberingKeyPointGrader(grading.keyPointGrader, createMySqlAnswerGradeStore(tx), { readerId, checkId: check.id }) });
     session.id = randomUUID();
     await recordSessionResult(session, version.bookId, tx);
     const decision = decideNextLevel(version.level, session.grading, await levelHistory(readerId, version.bookId, tx));
