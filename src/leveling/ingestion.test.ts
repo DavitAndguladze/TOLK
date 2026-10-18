@@ -2,12 +2,12 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { parseGatsby } from "./gatsby.ts";
 import { splitOriginalSentences } from "./content.ts";
-import { ingestGatsby } from "./ingestion.ts";
+import { getRequiredNameCandidates, ingestGatsby } from "./ingestion.ts";
 
 const source = readFileSync(new URL("../data/gatsby/pg64317.txt", import.meta.url), "utf8");
 const consciousSource = source.replace("In my younger and more vulnerable years", "I was conscious. In my younger and more vulnerable years");
 const originals = parseGatsby(source).slice(0, 4);
-function promptData(prompt: string): { number: number; sentences: { originalSentenceIndex: number; text: string }[] } {
+function promptData(prompt: string): { number: number; nameCandidates: string[]; sentences: { originalSentenceIndex: number; text: string }[] } {
   return JSON.parse(prompt.split("DATA:\n")[1]);
 }
 function metadata(number: number, suppliedSentences = splitOriginalSentences(originals[number - 1].originalText)) {
@@ -24,13 +24,27 @@ function metadata(number: number, suppliedSentences = splitOriginalSentences(ori
   return {
     keyPoints: sentences.slice(0, 3).map((text, originalSentenceIndex) => ({ text, originalSentenceIndex, quote: text })),
     complexWords,
-    requiredNames: ["Gatsby", "Tom", "Carraway", "George", "Daisy", "Myrtle"]
-      .filter((name) => sentences.join(" ").includes(name)).slice(0, 1),
+    requiredNameCandidateIndexes: (() => {
+      const candidates = getRequiredNameCandidates(sentences);
+      const name = ["Gatsby", "Tom", "Carraway", "George", "Daisy", "Myrtle"]
+        .find((candidate) => sentences.join(" ").includes(candidate));
+      const index = name ? candidates.indexOf(name) : -1;
+      return index < 0 ? [] : [index];
+    })(),
     retainedWords: complexWords.map((entry) => entry.word),
   };
 }
 
 describe("Gatsby ingestion", () => {
+  it("offers only exact excerpt-bound candidate strings for required names", () => {
+    const chapterFourSentences = splitOriginalSentences(originals[3].originalText);
+    const candidates = getRequiredNameCandidates(chapterFourSentences);
+    expect(candidates).toContain("Gatsby");
+    expect(candidates).toContain("East Egg");
+    expect(candidates).not.toContain("James B. Ferret");
+    expect(getRequiredNameCandidates(["No—Gatsby turned out all right at the end;"])).not.toContain("No");
+  });
+
   it("gives the model explicit source indexes so it can cite an excerpt without counting sentences", async () => {
     const content = await ingestGatsby(source, { generateText: async (prompt) => {
       const data = promptData(prompt);
@@ -112,8 +126,9 @@ describe("Gatsby ingestion", () => {
   it("rejects an invented multiword name even when one generic word occurs in the source", async () => {
     await expect(ingestGatsby(source, { generateText: async (prompt) => {
       const data = promptData(prompt);
-      return JSON.stringify({ ...metadata(data.number, data.sentences.map((row) => row.text)), requiredNames: ["New Amsterdam"] });
-    } }).then(() => "seed accepted")).rejects.toThrow("Names not present verbatim");
+      return JSON.stringify({ ...metadata(data.number, data.sentences.map((row) => row.text)),
+        requiredNameCandidateIndexes: [data.nameCandidates.length] });
+    } }).then(() => "seed accepted")).rejects.toThrow("required-name candidate indexes");
   });
 
   it("does not substitute a similar-looking word while preserving an unrelated definition", async () => {
@@ -146,7 +161,8 @@ describe("Gatsby ingestion", () => {
       const data = promptData(prompt);
       const value = metadata(data.number, data.sentences.map((row) => row.text));
       if (data.number !== 1) return JSON.stringify(value);
-      return JSON.stringify({ ...value, requiredNames: chapterOneReplies++ === 0 ? ["Nick Carraway"] : ["Gatsby"] });
+      return JSON.stringify({ ...value, requiredNameCandidateIndexes: chapterOneReplies++ === 0
+        ? [data.nameCandidates.length] : [data.nameCandidates.indexOf("Gatsby")] });
     } });
     expect(content.policies["gatsby-excerpts-ch1"].requiredNames).toEqual(["Gatsby"]);
   });
@@ -227,15 +243,15 @@ describe("Gatsby ingestion", () => {
     await expect(ingestGatsby(source, { generateText: async (prompt) => {
       const data = promptData(prompt);
       const value = metadata(data.number, data.sentences.map((row) => row.text));
-      return JSON.stringify(data.number === 1 ? { ...value, requiredNames: [...value.requiredNames, "Zzyzx Qorvane"] } : value);
-    } })).rejects.toThrow("Names not present verbatim");
+      return JSON.stringify(data.number === 1 ? { ...value, requiredNameCandidateIndexes: [...value.requiredNameCandidateIndexes, data.nameCandidates.length] } : value);
+    } })).rejects.toThrow("required-name candidate indexes");
   });
 
   it("rejects an empty required-name policy instead of silently exempting no names", async () => {
     await expect(ingestGatsby(source, { generateText: async (prompt) => {
       const data = promptData(prompt);
-      return JSON.stringify({ ...metadata(data.number, data.sentences.map((row) => row.text)), requiredNames: [] });
-    } })).rejects.toThrow("policy");
+      return JSON.stringify({ ...metadata(data.number, data.sentences.map((row) => row.text)), requiredNameCandidateIndexes: [] });
+    } })).rejects.toThrow("required-name candidate indexes");
   });
 
   it("requires at least three contextual Complex Words", async () => {
@@ -262,11 +278,21 @@ describe("Gatsby ingestion", () => {
 
   it("stops after four attempts when metadata remains invalid", async () => {
     let calls = 0;
-    await expect(ingestGatsby(source, { generateText: async () => {
+    let failure: (Error & { diagnostics?: unknown }) | undefined;
+    try {
+      await ingestGatsby(source, { generateText: async () => {
       calls++;
       return "not JSON";
-    } })).rejects.toThrow(SyntaxError);
+      } });
+    } catch (error) {
+      failure = error as Error & { diagnostics?: unknown };
+    }
     expect(calls).toBe(4);
+    expect(failure).toBeInstanceOf(SyntaxError);
+    expect(failure?.diagnostics).toMatchObject({
+      phase: "metadata", chapterId: "gatsby-excerpts-ch1", rejectedResponse: "not JSON",
+      validationMessage: "Invalid JSON syntax; escape newlines and quotes inside strings.", attempts: 4,
+    });
   });
 
   it("bounds cancellation even when the text provider ignores its signal", async () => {

@@ -71,6 +71,36 @@ describe("ChapterGenerator", () => {
     expect(result.provenance.attempts).toBe(2);
   });
 
+  it("retains the exact rejected passage, source and policy for offline diagnosis", async () => {
+    const rejected = { ...draft, sentences: draft.sentences.map((sentence, index) => index === 0
+      ? { ...sentence, text: "Nick saw a green light and went to his house with his dog." } : sentence) };
+    let error: (Error & { code?: string; cause?: Error & { diagnostics?: unknown } }) | undefined;
+    try {
+      await createChapterGenerator({ ...dependencies(), maxAttempts: 1,
+        generateText: async () => JSON.stringify(rejected) }).generatePreGenerated(chapter, 1);
+    } catch (cause) {
+      error = cause as Error & { code?: string; cause?: Error & { diagnostics?: unknown } };
+    }
+    expect(error?.code).toBe("CHAPTER_GENERATION_UNAVAILABLE");
+    expect(error?.cause?.diagnostics).toMatchObject({
+        chapterId: chapter.id,
+        policy: { requiredNames: ["Nick"], retainedWords: ["hope"] },
+        failedPassages: [expect.objectContaining({
+          passageIndex: 0,
+          sourceSentences: expect.arrayContaining([expect.objectContaining({ text: "Nick saw a green light." })]),
+          rejectedDraft: JSON.stringify(rejected),
+          validationMessages: expect.stringContaining("sentence-length"),
+        })],
+    });
+  });
+
+  it("clears model-invented reinforcement when the Chapter has no active Word Bank", async () => {
+    const result = await createChapterGenerator({ ...dependencies(), generateText: async () => JSON.stringify({
+      ...draft, reinforcedWords: [{ word: "hope", reinforcement: "plain", sentenceIndex: 2 }],
+    }) }).generatePreGenerated(chapter, 1);
+    expect(result.version.reinforcedWords).toEqual([]);
+  });
+
   it("corrects a missing source sentence using validation feedback in its single retry", async () => {
     const result = await createChapterGenerator({ ...dependencies(), generateText: async (prompt) => {
       const corrected = prompt.includes("Sentence mappings must cover the full original Chapter");

@@ -6,13 +6,32 @@ const [outputArgument, ...extra] = process.argv.slice(2);
 if (outputArgument === "--help") {
   console.log("Usage: npm run ingest:gatsby -- [output.json]\nCreates validated Gatsby content only; never connects to the Reader database. Existing output is not overwritten. INGEST_PAUSE_MS spaces serial OCI calls; INGEST_VERSION_BUDGET_MS, INGEST_MAX_ATTEMPTS and INGEST_MAX_TOKENS tune offline generation.");
 } else {
-  main().catch((error) => {
+  main().catch(async (error) => {
     console.error(error instanceof Error ? error.message : "Gatsby ingestion failed.");
+    if (process.env.INGEST_DEBUG_FAILURES === "1") {
+      const failure = errorChain(error).find((cause) => cause?.diagnostics)?.diagnostics;
+      if (failure) {
+        const output = resolve(`.scratch/gatsby-failure-${new Date().toISOString().replace(/[:.]/g, "-")}.json`);
+        await mkdir(dirname(output), { recursive: true });
+        const serialized = JSON.stringify(failure, null, 2)
+          .replace(/ocid1\.[a-z0-9._:-]+/gi, "[redacted OCID]")
+          .replace(/Bearer\s+\S+/gi, "Bearer [redacted]")
+          .replace(/-----BEGIN [^-]*PRIVATE KEY-----[\s\S]*?-----END [^-]*PRIVATE KEY-----/g, "[redacted private key]");
+        await writeFile(output, `${serialized}\n`, { flag: "wx" });
+        console.error(`Saved source, policy, rejected draft, and validation details to ${output}.`);
+      }
+    }
     for (let cause = error?.cause; cause; cause = cause?.cause) {
       console.error("  caused by:", cause instanceof Error ? cause.message : cause);
     }
     process.exitCode = 1;
   });
+}
+
+function errorChain(error) {
+  const chain = [];
+  for (let cause = error; cause; cause = cause.cause) chain.push(cause);
+  return chain;
 }
 
 async function main() {
