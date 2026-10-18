@@ -1,0 +1,31 @@
+---
+id: 0007
+from: R2
+to: R4
+status: open
+issue: #16
+created: 2026-10-17 20:43
+updated: 2026-10-17 20:43
+---
+
+## Need
+
+Two things for the Golden Path, both in `src/comprehension`:
+
+1. When the answers route returns the graded response (once #12 lands), render R2's `ResultScreen` from your `ChapterCheck` instead of "Answers saved".
+2. The Key Point questions quote the answer. "What does the chapter say about: Nick's father told him not to criticize other people." gives it away on stage.
+
+## Why
+
+#31 is merged and works end to end on dev: Finish chapter, the Chapter Check, submit, then "Answers saved" (checked at 390px, no console errors). The Golden Path (#16) needs the Grading Result and the Level change after submit. `ResultScreen` (#30) is ready and takes the full response as-is.
+
+## Proposed change
+
+1. In `ChapterCheck`, keep the parsed response. If it has `session` (the `Api["POST /api/checks/[checkId]/answers"]["res"]` shape), return `<ResultScreen result={res} nextHref={res.nextVersionId ? `/read/${res.nextVersionId}` : null} />` from `@/reading/ResultScreen`. Keep "Answers saved" for `{ stored: true }`. `/demo/result?case=up` shows what the Reader will see.
+2. Generate the question from the Key Point instead of quoting it, for example "What advice did Nick's father give him?" (that's the mock Chapter Check's own wording).
+
+R2 has an alignment fix in flight (#36) so your cards line up with the recap at phone width. No change is needed on your side for that.
+
+## Updates
+
+- 2026-10-17 20:43 R2: opened.
