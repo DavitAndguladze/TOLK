@@ -33,6 +33,24 @@ function contains(source: string, word: string): boolean {
   return new RegExp(`(?<![\\p{L}\\p{N}])${word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\p{L}\\p{N}])`, "iu").test(source.replace(/\s+/g, " "));
 }
 
+/**
+ * The model sometimes names a Complex Word's dictionary/lemma form (e.g. "peremptory") when the
+ * quoted source actually uses an inflected form ("peremptorily") - a real, repeated failure seen
+ * live, not a one-off. Find the actual quoted token sharing a long common prefix with the given
+ * word and use that instead of failing a correct citation over the word's exact ending.
+ */
+function inflectedWordInQuote(quote: string, word: string): string | null {
+  const lower = word.toLowerCase();
+  const tokens = quote.match(/[\p{L}]+(?:['’-][\p{L}]+)*/gu) ?? [];
+  for (const token of tokens) {
+    const other = token.toLowerCase();
+    let shared = 0;
+    while (shared < lower.length && shared < other.length && lower[shared] === other[shared]) shared++;
+    if (shared >= 6 && shared >= Math.min(lower.length, other.length) - 3) return token;
+  }
+  return null;
+}
+
 function sourceQuote(sentence: string, quote: string): string | null {
   if (sentence.includes(quote)) return quote;
   // Models normalize curly quotes and capitalize excerpts; retain the actual source spelling.
@@ -87,8 +105,10 @@ DATA:\n${JSON.stringify({ ...original, originalText: undefined,
           if (!record(row) || !text(row.word) || !text(row.meaning) || !/^[\p{L}]+(?:['’-][\p{L}]+)*$/u.test(row.word)) {
             throw new Error(`Invalid contextual Complex Word for ${original.id}`);
           }
-          if (!contains(evidence.quote, row.word)) throw new Error(`Complex Word ${JSON.stringify(row.word)} is absent from its quote at source index ${evidence.originalSentenceIndex}; use the exact inflected word found there, not a dictionary form.`);
-          return { word: row.word, meaning: row.meaning.trim() };
+          if (contains(evidence.quote, row.word)) return { word: row.word, meaning: row.meaning.trim() };
+          const inflected = inflectedWordInQuote(evidence.quote, row.word);
+          if (!inflected) throw new Error(`Complex Word ${JSON.stringify(row.word)} is absent from its quote at source index ${evidence.originalSentenceIndex}; use the exact inflected word found there, not a dictionary form.`);
+          return { word: inflected, meaning: row.meaning.trim() };
         });
         if (new Set(keyPoints.map((point) => point.text.toLowerCase())).size !== keyPoints.length
           || new Set(complexWords.map((word) => word.word.toLowerCase())).size !== complexWords.length) {

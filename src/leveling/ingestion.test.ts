@@ -126,6 +126,36 @@ describe("Gatsby ingestion", () => {
     expect(content.chapters[0].complexWords.map((entry) => entry.word)).toEqual(["younger", "vulnerable", "turning"]);
   });
 
+  it("repairs a Complex Word's dictionary form to the quote's actual inflected form", async () => {
+    // Real observed, repeated model behavior: it names "peremptory" (the lemma) for a quote that
+    // actually reads "peremptorily" at that exact source index.
+    const peremptorilyIndex = splitOriginalSentences(originals[0].originalText)
+      .findIndex((sentence) => sentence.includes("peremptorily"));
+    expect(peremptorilyIndex).toBeGreaterThanOrEqual(0);
+    const content = await ingestGatsby(source, { generateText: async (prompt) => {
+      const data = JSON.parse(prompt.split("DATA:\n")[1]);
+      const value = metadata(data.number);
+      if (data.number !== 1) return JSON.stringify(value);
+      const sentence = splitOriginalSentences(originals[0].originalText)[peremptorilyIndex];
+      const complexWords = [{ word: "peremptory", meaning: "commanding, allowing no refusal",
+        originalSentenceIndex: peremptorilyIndex, quote: sentence }, ...value.complexWords.slice(1)];
+      // Omit the lemma from retainedWords too - the separate retainedWords-repair fix adds the
+      // final (repaired) word back in, so this only needs to avoid a stale unevidenced leftover.
+      return JSON.stringify({ ...value, complexWords, retainedWords: complexWords.slice(1).map((entry) => entry.word) });
+    } });
+    expect(content.chapters[0].complexWords[0].word).toBe("peremptorily");
+  });
+
+  it("still rejects a Complex Word whose quote shares nothing with it", async () => {
+    await expect(ingestGatsby(source, { generateText: async (prompt) => {
+      const data = JSON.parse(prompt.split("DATA:\n")[1]);
+      const value = metadata(data.number);
+      return JSON.stringify(data.number === 1
+        ? { ...value, complexWords: [{ ...value.complexWords[0], word: "unrelatedword" }, ...value.complexWords.slice(1)] }
+        : value);
+    } })).rejects.toThrow("is absent from its quote");
+  });
+
   it("still rejects a name with no word present anywhere in the Chapter", async () => {
     await expect(ingestGatsby(source, { generateText: async (prompt) => {
       const data = JSON.parse(prompt.split("DATA:\n")[1]);
