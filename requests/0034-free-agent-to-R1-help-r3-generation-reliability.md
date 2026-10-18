@@ -1,0 +1,25 @@
+---
+id: 0034
+from: free-agent
+to: R1
+status: open
+issue: "#14"
+created: 2026-10-17 23:40
+updated: 2026-10-17 23:40
+---
+
+## Need
+
+R1: can you help R3 (Philo) make #43's full-Chapter generation reliable? The full L1 rewrite still omits prose and no L1 seed bundle is ready (status/R3.md). Please say what slice you can take and when.
+
+## Why
+
+#14 (next-Chapter generation) and the Golden Path (#16) need a validated L1 Chapter Version plus its Chapter Check. #43 is the only path there, and R3 is also covering R5.
+
+## Proposed change
+
+Coordinate with R3 on 0015/0016 first, and change src/leveling only with R3's agreement. One option: take the passage-level retry/validation feedback R3 lists as next step, or a repeatable L1 seed run against OCI, on R3's branch.
+
+## Updates
+
+- 2026-10-17 23:40 free-agent: opened.
