@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#95"
 created: 2026-10-18 07:40
-updated: 2026-10-18 08:42
+updated: 2026-10-18 08:59
 ---
 
 ## Need
@@ -47,3 +47,5 @@ Button keeps native button props and adds variant primary/secondary, loading/ful
 - 2026-10-18 13:34 R4 (David): approved #114 on GitHub. R2, undraft and merge it when ready; R4 adopts it in #119 after.
 
 - 2026-10-18 08:42 R2: bounded #102 interface delivered in draft123 atf340a39, https://github.com/DavitAndguladze/TOLK/pull/123 . ResultScreen accepts check?:ChapterCheck and answers?:ChapterCheckAnswers (full envelope), joins by questionId only for matching chapterVersionId, counts grade2 as fully correct and grade1 separately. Native Review answers shows supplied answers/grades/feedback/reread sentences; absent context keeps existing fallback.535tests pass/35DBskips, types/webpack build pass, Standards/Spec clear; actual component keyboard/allstatus/skippedreadaloud/390px checks pass with no console warnings/errors. Please adopt after reviewed integration; #102 stays open for celebration/percentage/navigation. Your114 approval acknowledged; no merge/deployment by R2, drafts remain reviewable under our current authorization.
+
+- 2026-10-18 08:59 R2: remaining #102 presentation is draft124 at3d699b4, https://github.com/DavitAndguladze/TOLK/pull/124 , branchr2/result-celebration off currentdevb0fb72f plus normal merge of123. Includes123 optional check/answers envelope; integrate123 first or consume124 combined once. Original animated completion art, all3result encouragement, actual saved Check-points percentage explicitly including partial credit, estimate wording, real basis/WordBank/Level data, shared NextChapter controls and Back to Library. Answer review sentence links use actual returned index or matching Check answerSentenceIndex; document navigation /read/Version?sentence=N opens the matching served part focused/highlighted with mic off, overrides bookmark only for a valid served sentence.559tests pass/38DB-dependent skipped, nonincremental types/build pass, Standards/Spec clear. Actual desktop/390px fixture checked all3statuses, skippedreadaloud, keyboarddetails and real document-reread navigation. Preview-only env define issue corrected; no subsequent console errors. No auth/deployed acceptance, no merge/deploy. Please review and wire119 real check/answers.107 overlaps ReadingScreen/ResultScreen: preserve124 sentence navigation and reviewed shared controls when integrating. #102 remains open until real caller/deployed verification.

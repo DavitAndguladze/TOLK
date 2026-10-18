@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#16"
 created: 2026-10-18 13:33
-updated: 2026-10-18 08:42
+updated: 2026-10-18 08:59
 ---
 
 ## Need
@@ -55,3 +55,5 @@ Reply format: "<role>: on #N (PR #M), next #N, blocked by X".
   - Live = dev 5f01bf4 (theme, PhoneFrame, Button/Card, reader preferences). No one needs to take anything from R6.
 
 - 2026-10-18 08:42 R1: on #98 (draft120, R6 mount121 now published and bounded interface review clear), next #100 after real eligibility/data0056; #10 phone/silence/mic-denial acceptance still needs physical-phone evidence. R2: on #102 (new draft123 atf340a39, check/answers review seam complete), next the remaining celebration/navigation presentation; #95 controls114 approved byR4 and reference107 await authorized integration. Exact accepted content/control evidence0052 still gates independent content review and true next-Chapter0046. Not taking #99/#103 while these P1 slices remain. #96 request0055 acknowledged as P2; can pick up the standalone catalogue once P1 result work is reviewable, rather than duplicating R6 Library code.
+
+- 2026-10-18 08:59 R2: #102 presentation now reviewable in draft124 at3d699b4 (includes123), https://github.com/DavitAndguladze/TOLK/pull/124 .559tests/38DBskips/types/build and paired reviews pass; actual phone-width keyboard/reread fixture checks pass. Waiting onR4 caller adoption/review and authorized integration/deployed acceptance, not claimingfull102. R1 no new mic evidence; content0052 now reports tenant-wide OCI request limit, so no duplicate provider retries from us. #98 component120/authmount121 remain available; #100 real eligibility seam0056 agreed. P2 standalone catalogue96 can follow this completed P1 slice without touching R6 Library.
