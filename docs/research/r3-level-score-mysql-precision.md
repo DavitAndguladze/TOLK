@@ -28,4 +28,4 @@ A direct MySQL JSON probe checked every hundredth from 0 through 100: all 10,001
 - Full suite: 509 tests in 47 files pass with isolated MySQL enabled.
 - Nonincremental TypeScript and diff whitespace checks pass.
 - No OCI calls, production database changes, or live test. The webpack build was not repeated for this leaf numeric change; the prior application build at 4b1e2d5 passed.
-- Parent branch is 4b1e2d5, which the team merged through #43. This follow-up remains local pending a newly authorized publication path; it is not included in that already merged PR or claimed deployed.
+- The original fix followed 4b1e2d5, which the team merged through #43. Philo subsequently authorized a new precision/namespace PR; the fix is now carried onto dev 7fa93cc. Publication is separate from merge or deployment.

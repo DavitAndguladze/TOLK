@@ -15,8 +15,14 @@ Before the change, the new actual-MySQL regression failed with `Immutable Chapte
 - Nonincremental TypeScript check passed; diff whitespace check passed.
 - Actual `loadGatsbySource()` ran twice beside the existing sample. Sample Book, Chapter, served L1 Version and stored Check were identical before/after. Full Book, four Chapters and policies round-tripped exactly; no full-source ready Versions were created. Test-created full-source metadata was cleaned.
 
-Primary diff review found no blocker. No build/browser repetition was needed for the identity-only metadata/parser change. No OCI call, production import or live validation occurred. The local checkout does not include newer dev completion/demo-seed changes; this is not a combined-runtime claim.
+Primary diff review found no blocker. No build/browser repetition was needed for the identity-only metadata/parser change. No OCI call, production import or live validation occurred. These original counts describe the overnight checkout; the publication follow-up below uses current dev.
 
 A separate read-only compatibility review of merged #88 at `0ca99095` found no ID/Check contract mismatch. Its demo seed consumes actual shared L1 Version/Check pairs for Chapters 1–3 under the supplied Book. The full R3 seed still requires all 13 accepted artifacts, including Chapter 4 L2. Word graduation must be verified in rehearsal because a later Check must test the seeded bank word.
 
-Content, regenerated Check, fidelity gates and independent acceptance remain outstanding. R6 owns eventual import and Library transition; human publication/scope decisions remain queued for morning after #43 merged.
+Content, regenerated Check, fidelity gates and independent acceptance remain outstanding. R6 owns eventual import and Library transition. Philo authorized publication of the precision/namespace fixes after #43 merged; no content acceptance or production import is implied.
+
+## Publication follow-up
+
+Both fixes were carried onto dev `7fa93cc`, including the team's durable completion, demo-reader and shared-UI work. The namespace reverse-identity comparison still passes: all non-identity source metadata is unchanged. The reviewed Chapter 1 prose, Check and evidence are not replaced by this PR; their acceptance remains with the content owners.
+
+On the integrated branch, all 576 tests in 53 files pass with isolated real MySQL, and nonincremental TypeScript and diff checks pass. The first full run hit the pre-existing concurrent first-migration race for migration 0005; after verifying the migration journal was complete, the full rerun passed. Ignored review snapshots were excluded from discovery. No production build or browser rerun was needed for the unchanged leaf/data scope.
