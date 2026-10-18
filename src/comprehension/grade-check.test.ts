@@ -126,6 +126,29 @@ describe("gradeChapterCheck", () => {
     });
   });
 
+  test("holds a Complex Word question instead of throwing when its word isn't one of the Chapter's Complex Words", async () => {
+    const staleCheck: ChapterCheck = {
+      ...check,
+      questions: [
+        ...check.questions.filter((q) => q.kind === "key-point"),
+        { id: "stale-cw", kind: "complex-word", prompt: "What does 'ephemeral' mean?", word: "ephemeral", choices: ["brief", "huge", "loud"], answerSentenceIndex: 0 },
+      ],
+    };
+    const staleAnswer: ChapterCheckAnswers = {
+      answers: staleCheck.questions.map((q) => ({ questionId: q.id, answer: q.kind === "key-point" ? "an answer" : "brief", via: "typed" as const })),
+    };
+
+    const session = await gradeChapterCheck(
+      { check: staleCheck, chapter: mockChapter, version, answers: staleAnswer, readAloud: null, flaggedWords: [], readerId: "reader-1" },
+      { keyPointGrader: gradesAll(2), now },
+    );
+
+    expect(session.grading.questionGrades).toContainEqual({
+      questionId: "stale-cw", grade: 2, feedback: "Held: not scored.", rereadSentenceIndex: null, rereadSentence: null,
+    });
+    expect(session.grading.missedWords).toEqual([]);
+  });
+
   describe("who graded", () => {
     test("is OCI Generative AI when it graded every Key Point answer", async () => {
       const oci: KeyPointGrader = async () => ({ grade: 2, feedback: "Yes.", gradedBy: "oci-generative-ai" });
