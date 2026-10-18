@@ -1,7 +1,7 @@
 // MySQL 8 (HeatWave in OCI, Docker locally), ADR-0010. Content rows keep the shared type as JSON
 // (`data`) plus the few columns we look up by; the JSON is the source of truth.
 import { boolean, index, int, json, mysqlTable, primaryKey, text, timestamp, uniqueIndex, varchar } from "drizzle-orm/mysql-core";
-import type { Book, ChapterCheck, ChapterVersion, Chapter, Level, SessionResult } from "../types";
+import type { Book, ChapterCheck, ChapterVersion, Chapter, Level, ReadAloudSummary, SessionResult } from "../types";
 
 const id = (name = "id") => varchar(name, { length: 191 });
 const createdAt = () => timestamp("created_at", { fsp: 3 }).notNull().defaultNow();
@@ -112,3 +112,14 @@ export const sessionResults = mysqlTable("session_results", {
   uniqueIndex("session_results_reader_version").on(t.readerId, t.chapterVersionId),
   index("session_results_history").on(t.readerId, t.bookId, t.completedAt),
 ]);
+
+/**
+ * The Reader's latest unspent read-aloud summary per Chapter Version (0024). No user FK: until every page
+ * requires sign-in, reader_id may be the per-browser X-Reader-Session id.
+ */
+export const readAloudSummaries = mysqlTable("read_aloud_summaries", {
+  readerId: id("reader_id").notNull(),
+  chapterVersionId: id("chapter_version_id").notNull(),
+  data: json("data").$type<ReadAloudSummary>().notNull(),
+  updatedAt: updatedAt(),
+}, (t) => [primaryKey({ columns: [t.readerId, t.chapterVersionId] })]);
