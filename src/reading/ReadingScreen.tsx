@@ -7,6 +7,7 @@ import type { Chunk } from "./chunk";
 import { initialReadingState, readingReducer, unreadTokens } from "./session";
 import { createReadingAttempt } from "./read-aloud";
 import { ChapterReadAloud } from "./ChapterReadAloud";
+import motion from "./ReadingMotion.module.css";
 
 const button =
   "min-h-13 cursor-pointer rounded-2xl border-b-4 text-base font-semibold transition-[transform,background-color,border-color] outline-light focus-visible:outline-2 focus-visible:outline-offset-2 active:translate-y-0.5 disabled:cursor-not-allowed disabled:active:translate-y-0 motion-reduce:transition-none";
@@ -21,7 +22,8 @@ const outcomeClass: Record<WordOutcome, string> = {
 };
 
 function Word({ token, outcome, latest, stuck, flagged, onTap }: { token: Token; outcome: WordOutcome; latest: boolean; stuck: boolean; flagged: boolean; onTap?: () => void }) {
-  const className = `-mx-0.5 rounded-md px-0.5 transition-colors duration-200 ${outcomeClass[outcome]} ${latest ? "bg-glow/45" : ""} ${stuck ? "animate-pulse bg-gold/15 ring-2 ring-gold/60" : ""} ${flagged ? "bg-gold/15 ring-1 ring-gold/60" : ""}`;
+  const missed = outcome === "mispronounced" || outcome === "skipped";
+  const className = `-mx-0.5 rounded-md px-0.5 motion-safe:transition-colors motion-safe:duration-200 ${outcomeClass[outcome]} ${latest ? `bg-glow/45 ${motion.readingWordLatest}` : ""} ${stuck ? `bg-gold/15 ring-2 ring-gold/60 ${motion.readingWordAttention}` : ""} ${missed ? `bg-gold/15 ${motion.readingWordAttention}` : ""} ${flagged ? "bg-gold/15 ring-1 ring-gold/60" : ""}`;
   const content = (
     <>
       {token.text}

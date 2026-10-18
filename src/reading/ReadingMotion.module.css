@@ -74,6 +74,34 @@
   }
 }
 
+@keyframes reading-word-arrival {
+  0% {
+    box-shadow: 0 0 0 0 rgb(127 224 174 / 0%);
+  }
+
+  55% {
+    box-shadow: 0 0 0 3px rgb(127 224 174 / 35%);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgb(127 224 174 / 0%);
+  }
+}
+
+@keyframes reading-word-attention {
+  0% {
+    background-color: rgb(168 120 31 / 15%);
+  }
+
+  55% {
+    background-color: rgb(168 120 31 / 27%);
+  }
+
+  100% {
+    background-color: rgb(168 120 31 / 15%);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .resultHeadline {
     animation: result-tile-in 420ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
@@ -119,5 +147,13 @@
     animation: latest-point-reveal 360ms cubic-bezier(0.2, 0.75, 0.25, 1) 650ms both;
     transform-origin: center;
     transform-box: fill-box;
+  }
+
+  .readingWordLatest {
+    animation: reading-word-arrival 380ms ease-out;
+  }
+
+  .readingWordAttention {
+    animation: reading-word-attention 460ms ease-out;
   }
 }
