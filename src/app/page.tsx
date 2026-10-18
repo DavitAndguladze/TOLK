@@ -1,5 +1,6 @@
 // The Library (#7): every Book, searchable by title or author, with the Reader's place in each.
 import { listLibrary } from "@/db";
+import { BookCatalogue } from "@/listening/catalogue/BookCatalogue";
 import { requireReader } from "@/platform/auth";
 import { Button } from "@/reading/ui/Button";
 import { Card } from "@/reading/ui/Card";
@@ -66,6 +67,13 @@ export default async function Library({ searchParams }: { searchParams: Promise<
               </li>
             ))}
           </ul>
+        )}
+
+        {/* Coming-soon classics (#96): not app Books, so they sit outside search results. */}
+        {!query && (
+          <div className="mt-10">
+            <BookCatalogue />
+          </div>
         )}
       </div>
     </main>
