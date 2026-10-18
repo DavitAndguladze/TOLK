@@ -7,6 +7,9 @@ if (outputArgument === "--help") {
 } else {
   main().catch((error) => {
     console.error(error instanceof Error ? error.message : "Gatsby ingestion failed.");
+    for (let cause = error?.cause; cause; cause = cause?.cause) {
+      console.error("  caused by:", cause instanceof Error ? cause.message : cause);
+    }
     process.exitCode = 1;
   });
 }
