@@ -35,6 +35,33 @@ describe("createOciChapterCheckGenerator", () => {
     expect(check.questions.filter((q) => q.kind === "complex-word")).toEqual(fallback.questions.filter((q) => q.kind === "complex-word"));
   });
 
+  test("retries OCI once when the first reply isn't grounded", async () => {
+    const chat = vi.fn<Chat>().mockResolvedValueOnce("Here are some questions!").mockResolvedValueOnce(JSON.stringify({ questions: grounded }));
+
+    const check = await generateWith(chat);
+
+    expect(chat).toHaveBeenCalledTimes(2);
+    expect(check.questions[0].prompt).toBe(grounded[0].question);
+  });
+
+  test("retries OCI once when the first call fails", async () => {
+    const chat = vi.fn<Chat>().mockRejectedValueOnce(new Error("429")).mockResolvedValueOnce(JSON.stringify({ questions: grounded }));
+
+    const check = await generateWith(chat);
+
+    expect(chat).toHaveBeenCalledTimes(2);
+    expect(check.questions[0].prompt).toBe(grounded[0].question);
+  });
+
+  test("falls back to the deterministic Check after one retry", async () => {
+    const chat = vi.fn<Chat>().mockRejectedValue(new Error("429"));
+
+    const check = await generateWith(chat);
+
+    expect(chat).toHaveBeenCalledTimes(2);
+    expect(check).toEqual(await generateChapterCheck(mockChapter, version));
+  });
+
   test("reads the JSON when the model wraps it in a code fence", async () => {
     const check = await generateWith(async () => "```json\n" + JSON.stringify({ questions: grounded }) + "\n```");
 

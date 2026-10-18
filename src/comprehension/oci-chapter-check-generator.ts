@@ -39,6 +39,9 @@ function groundedQuestions(text: string, chapter: Chapter, version: ChapterVersi
   return result;
 }
 
+/** One retry: a throttled or off-script reply often succeeds the second time. */
+const ATTEMPTS = 2;
+
 /**
  * OCI Generative AI writes the Key Point questions; Complex Word questions stay deterministic
  * (multiple choice from the Chapter's meanings, graded exactly). Anything not grounded in the
@@ -47,13 +50,16 @@ function groundedQuestions(text: string, chapter: Chapter, version: ChapterVersi
 export function createOciChapterCheckGenerator({ chat, fallback, timeoutMs }: { chat: Chat; fallback: ChapterCheckGenerator; timeoutMs: number }): ChapterCheckGenerator {
   return async (chapter, version) => {
     const base = await fallback(chapter, version);
-    try {
-      const reply = await askWithDeadline(chat, questionsPrompt(chapter, version), { timeoutMs, maxTokens: 800, json: true });
-      const keyPointQuestions = groundedQuestions(reply, chapter, version);
-      if (keyPointQuestions) return { ...base, questions: [...keyPointQuestions, ...base.questions.filter((q) => q.kind === "complex-word")] };
-      console.warn(`OCI Check generation for ${version.id}: reply not grounded in the served text, using the deterministic Check`);
-    } catch (err) {
-      console.warn(`OCI Check generation failed for ${version.id} (${describeOciError(err)}), using the deterministic Check`);
+    for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
+      const retry = attempt < ATTEMPTS ? ", retrying" : ", using the deterministic Check";
+      try {
+        const reply = await askWithDeadline(chat, questionsPrompt(chapter, version), { timeoutMs, maxTokens: 800, json: true });
+        const keyPointQuestions = groundedQuestions(reply, chapter, version);
+        if (keyPointQuestions) return { ...base, questions: [...keyPointQuestions, ...base.questions.filter((q) => q.kind === "complex-word")] };
+        console.warn(`OCI Check generation for ${version.id}: reply not grounded in the served text${retry}`);
+      } catch (err) {
+        console.warn(`OCI Check generation failed for ${version.id} (${describeOciError(err)})${retry}`);
+      }
     }
     return base;
   };
