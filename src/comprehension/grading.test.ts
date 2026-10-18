@@ -3,7 +3,13 @@ import type { AnswerGrade, GradingInput, GradingResult, QuestionGrade, ReadAloud
 import { combineGrading } from "./grading";
 
 const grades = (...values: AnswerGrade[]): QuestionGrade[] =>
-  values.map((grade, i) => ({ questionId: `q${i + 1}`, grade, feedback: "", rereadSentenceIndex: grade === 2 ? null : i }));
+  values.map((grade, i) => ({
+    questionId: `q${i + 1}`,
+    grade,
+    feedback: "",
+    rereadSentenceIndex: grade === 2 ? null : i,
+    rereadSentence: grade === 2 ? null : `sentence ${i}`,
+  }));
 
 const readAloud = (accuracy: number, misses: ReadAloudMiss[] = []): ReadAloudSummary => ({
   chapterVersionId: "gatsby-ch1-L1",
@@ -21,6 +27,7 @@ const input = (overrides: Partial<GradingInput>): GradingInput => ({
   readAloud: null,
   flaggedWords: [],
   complexWordMisses: [],
+  gradedBy: "stand-in",
   ...overrides,
 });
 
@@ -49,19 +56,21 @@ describe("combineGrading", () => {
   });
 
   describe("basis and feedback", () => {
-    test("reports what the grade was based on, and keeps each answer's feedback", () => {
+    test("reports what the grade was based on and who graded it, and keeps each answer's feedback", () => {
       const questionGrades = grades(2, 1, 0);
 
-      const grading = combineGrading(input({ questionGrades, readAloud: readAloud(0.94), flaggedWords: flags(2) }));
+      const grading = combineGrading(
+        input({ questionGrades, readAloud: readAloud(0.94), flaggedWords: flags(2), gradedBy: "oci-generative-ai" }),
+      );
 
-      expect(grading.basis).toEqual({ readAloudAccuracy: 0.94, checkScore: 3, checkMax: 6, flaggedCount: 2 });
+      expect(grading.basis).toEqual({ readAloudAccuracy: 0.94, checkScore: 3, checkMax: 6, flaggedCount: 2, gradedBy: "oci-generative-ai" });
       expect(grading.questionGrades).toEqual(questionGrades);
     });
 
     test("reports no read-aloud accuracy when there was no read-aloud summary", () => {
       const grading = combineGrading(input({ questionGrades: grades(2, 2, 1, 1) }));
 
-      expect(grading.basis).toEqual({ readAloudAccuracy: null, checkScore: 6, checkMax: 8, flaggedCount: 0 });
+      expect(grading.basis).toEqual({ readAloudAccuracy: null, checkScore: 6, checkMax: 8, flaggedCount: 0, gradedBy: "stand-in" });
     });
   });
 
@@ -134,6 +143,7 @@ describe("combineGrading", () => {
     });
   });
 
+  // Silent reading fallback (#18): the Reader skipped reading aloud, so no ReadAloudSummary exists.
   describe("without a read-aloud summary", () => {
     test("weighs the Chapter Check 90% and Flagged Words 10%", () => {
       // Check 4/6 → 60, no flags → 10.

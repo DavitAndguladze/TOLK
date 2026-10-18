@@ -1,6 +1,6 @@
 import type {
-  AnswerGrade, Chapter, ChapterCheck, ChapterCheckAnswers, ChapterVersion, CheckQuestion, KeyPoint, QuestionGrade,
-  ReadAloudSummary, Sentence, SessionResult,
+  AnswerGrade, Chapter, ChapterCheck, ChapterCheckAnswers, ChapterVersion, CheckQuestion, KeyPoint, KeyPointGradedBy,
+  QuestionGrade, ReadAloudSummary, Sentence, SessionResult,
 } from "../types";
 import { combineGrading } from "./grading";
 
@@ -11,7 +11,7 @@ export type KeyPointGrader = (input: {
   answer: string;
   /** The sentence in this Chapter Version that answers the question. */
   sentence: Sentence;
-}) => Promise<{ grade: AnswerGrade; feedback: string }>;
+}) => Promise<{ grade: AnswerGrade; feedback: string; gradedBy: KeyPointGradedBy }>;
 
 export interface GradeChapterCheckInput {
   check: ChapterCheck;
@@ -31,6 +31,7 @@ export async function gradeChapterCheck(
 ): Promise<SessionResult> {
   const { check, chapter, version, answers } = input;
   const answerTo = new Map(answers.answers.map((a) => [a.questionId, a.answer]));
+  const keyPointGradedBy: KeyPointGradedBy[] = [];
 
   const questionGrades: QuestionGrade[] = await Promise.all(
     check.questions.map(async (question) => {
@@ -38,19 +39,29 @@ export async function gradeChapterCheck(
       if (question.kind === "complex-word") {
         // Multiple choice built from the Chapter's Complex Words, so the right answer is known: no AI needed.
         const { meaning } = chapter.complexWords.find((w) => w.word === question.word)!;
-        return answer === meaning
-          ? { questionId: question.id, grade: 2 as const, feedback: "Yes.", rereadSentenceIndex: null }
-          : {
-              questionId: question.id,
-              grade: 0 as const,
-              feedback: `'${question.word}' means ${meaning}.`,
-              rereadSentenceIndex: question.answerSentenceIndex,
-            };
+        if (answer === meaning) {
+          return { questionId: question.id, grade: 2 as const, feedback: "Yes.", rereadSentenceIndex: null, rereadSentence: null };
+        }
+        const missedSentence = version.sentences.find((s) => s.index === question.answerSentenceIndex)!;
+        return {
+          questionId: question.id,
+          grade: 0 as const,
+          feedback: `'${question.word}' means ${meaning}.`,
+          rereadSentenceIndex: question.answerSentenceIndex,
+          rereadSentence: missedSentence.text,
+        };
       }
       const keyPoint = chapter.keyPoints.find((kp) => kp.id === question.keyPointId)!;
       const sentence = version.sentences.find((s) => s.index === question.answerSentenceIndex)!;
-      const { grade, feedback } = await deps.keyPointGrader({ question, keyPoint, answer, sentence });
-      return { questionId: question.id, grade, feedback, rereadSentenceIndex: grade < 2 ? sentence.index : null };
+      const { grade, feedback, gradedBy } = await deps.keyPointGrader({ question, keyPoint, answer, sentence });
+      keyPointGradedBy.push(gradedBy);
+      return {
+        questionId: question.id,
+        grade,
+        feedback,
+        rereadSentenceIndex: grade < 2 ? sentence.index : null,
+        rereadSentence: grade < 2 ? sentence.text : null,
+      };
     }),
   );
 
@@ -66,7 +77,14 @@ export async function gradeChapterCheck(
     chapterNumber: version.chapterNumber,
     level: version.level,
     readAloudMisses: input.readAloud?.misses ?? [],
-    grading: combineGrading({ questionGrades, readAloud: input.readAloud, flaggedWords: input.flaggedWords, complexWordMisses }),
+    grading: combineGrading({
+      questionGrades,
+      readAloud: input.readAloud,
+      flaggedWords: input.flaggedWords,
+      complexWordMisses,
+      // Credit OCI only when it graded every Key Point answer.
+      gradedBy: keyPointGradedBy.length > 0 && keyPointGradedBy.every((g) => g === "oci-generative-ai") ? "oci-generative-ai" : "stand-in",
+    }),
     completedAt,
   };
 }
