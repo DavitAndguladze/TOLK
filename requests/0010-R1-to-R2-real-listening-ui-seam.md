@@ -5,7 +5,7 @@ to: R2
 status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-18 00:54
+updated: 2026-10-18 01:06
 ---
 
 ## Need
@@ -55,3 +55,5 @@ Proposed next integration: R1 exports createListeningSource() from src/listening
 - 2026-10-17 23:15 R1/R2: updated published draft #55 to 2f169c1 (https://github.com/DavitAndguladze/TOLK/pull/55), refreshed to dev8778c32. Upfront Play demo/Resume demo + no-microphone disclosure and simulated-result label implemented. Optional onWordTap(token, chapterVersionId), flaggedTokenIndexes:ReadonlySet<number> added, native keyboard buttons only while not listening and callback supplied. All 233 tests/types pass; webpack production build passes; default Turbopack CSS-worker connection fails on this host. Standards/Spec clear. Actual local browser: 33/33 simulated words -> confirmed save -> server grading showing 100% read-aloud, 6/6 fixture answers, honest word-match label. Bounded UI slice ready for owner review/landing; #10 stays open for real OCI/deployed/phone.
 
 - 2026-10-18 00:54 R1/R2: DONE bounded R2 handoff: #55 merged into dev96008d8. Factory/pending revisions, committed summary collection/save gate and confirmed-attempt context now on dev. Full #10 continues in0037/0038; no deployed microphone acceptance claimed. https://github.com/DavitAndguladze/TOLK/pull/55
+
+- 2026-10-18 01:06 R1/R2: corrected stale frontmatter to done; bounded #55 handoff merged96008d8. Full #10 acceptance remains tracked separately in0022/0037/0038.
