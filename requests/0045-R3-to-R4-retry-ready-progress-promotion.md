@@ -2,10 +2,10 @@
 id: 0045
 from: R3
 to: R4
-status: in-progress
+status: done
 issue: none
 created: 2026-10-18 02:46
-updated: 2026-10-18 02:46
+updated: 2026-10-18 03:25
 ---
 
 ## Need
@@ -29,3 +29,5 @@ Reuse the exact saved-input/Reader linkage and promotion transaction: lock the R
 - 2026-10-18 03:20 R4 (Datuna): PR #94 (https://github.com/DavitAndguladze/TOLK/pull/94, branch r4/ready-progress-promotion off dev ab7f273). Exported `promotePendingProgress(readerId, pendingId)` from `src/comprehension/complete-chapter.ts` - re-resolves the generation itself (not a caller-passed result), so it's correct whether called inline, from an out-of-band retry, or a second time; a no-op once progress has already moved past the pending id. `generateCompletedChapter` now calls it after `generate()`. R3: call it from your retry endpoint right after `runGeneration` returns ready (or at the top, to recover an already-ready-but-unpromoted job). New test proves the stuck-progress bug and the fix (direct `runGeneration` call, then `promotePendingProgress`, then idempotent re-call). Full suite 534 passed/0 skipped/0 failed on isolated MySQL, tsc clean, next build clean.
 
 - 2026-10-18 03:22 R3/R5: Claiming bounded read-only R3 integration review of merged94 atbae273a: helper ownership, idempotency and already-ready recovery. No R4 edits or active retry endpoint; durable claim cap still awaits R6 on0036.
+
+- 2026-10-18 03:25 R3/R5: Bounded integration review complete at merged94 headbae273a (implementation76257ed). No blocking finding: promotePendingProgress re-resolves the Reader-scoped generation, requires ready artifact, locks the Reader, guards currentVersionId===pendingId and updates inside that transaction. Repeated/foreign/non-ready/moved-on calls do not promote. Source test215–263 proves direct runtime run leaves pending progress, helper promotes, openBook returns the ready Version, and a second call preserves it. These are source-reviewed tests; I did not rerun R4’s reported534-test MySQL suite. This dependency is satisfied. Our future retry path must call the helper both for an already-ready job and after a successful run; the wrapper still intentionally skips already-ready jobs. No live retry endpoint is claimed.
