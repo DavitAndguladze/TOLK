@@ -1,4 +1,4 @@
-import type { Chapter, ChapterCheck, Grading, Level, LevelDecision, ReadAloudSummary, SessionResult, WordBankEntry, WordBankUpdate } from "../types";
+import type { Api, Chapter, ChapterCheck, Grading, Level, LevelDecision, SessionResult, WordBankEntry, WordBankUpdate } from "../types";
 import { LEVELS } from "../types";
 import { mockChapter, mockChapterVersion } from "../mocks";
 import { type ChapterEvidence, updateWordBank } from "../words/word-bank";
@@ -11,6 +11,8 @@ import { createOciChat } from "./oci-chat";
 import { createOciKeyPointGrader } from "./oci-key-point-grader";
 import { getChapterCheckForVersion } from "./service";
 
+type AnswersResponse = Api["POST /api/checks/[checkId]/answers"]["res"];
+
 /**
  * Dev-only process-wide singletons so the two route handlers (and the reading page) can find
  * each other's state without a database (until the MySQL HeatWave store lands, R6 #40). The tested modules
@@ -21,7 +23,11 @@ export const chapterCheckCache = new Map<string, Promise<ChapterCheck>>(); // ke
 export const checksById = new Map<string, ChapterCheck>(); // keyed by Chapter Check id
 export const answersStore = createInMemoryAnswersStore();
 export const sessionResults = new Map<string, SessionResult>(); // keyed like answersStore: `${checkId}:${readerSessionId}`
-export const gradedReadAloud = new Map<string, ReadAloudSummary>(); // keyed like answersStore: the reading each submission was last graded with
+// The last answered completion per `${checkId}:${readerSessionId}`, so a retried submission gets the same
+// result without grading, spending a reading, or touching the Word Bank again. On globalThis like the
+// read-aloud store, so a hot reload can't lose it while the reading it spent stays spent.
+const shared = globalThis as typeof globalThis & { tolkCompletedChecks?: Map<string, { key: string; res: AnswersResponse }> };
+export const completedChecks = (shared.tolkCompletedChecks ??= new Map());
 export const wordBanks = new Map<string, WordBankEntry[]>(); // keyed by Reader session id
 
 // OCI Generative AI grades Key Point answers when .env.local configures it; the stand-in otherwise, and as its fallback.
