@@ -23,7 +23,12 @@ function libraryHref(q: string, genre: FavouriteGenre | null) {
   return search ? `/?${search}` : "/";
 }
 
-const sectionHeading = "font-book text-[1.5rem] leading-tight font-medium";
+// Cover images for seeded Books whose (immutable) row has no coverImageUrl, e.g. "gatsby-full": "/covers/gatsby.jpg".
+// Books without one get the typographic cover.
+const COVER_IMAGES: Record<string, string> = {};
+const coverOf = (book: Book): string | undefined => book.coverImageUrl ?? COVER_IMAGES[book.id];
+
+const sectionHeading ="font-book text-[1.5rem] leading-tight font-medium";
 
 export default async function Library({ searchParams }: { searchParams: Promise<{ q?: string | string[]; genre?: string | string[] }> }) {
   // searchParams first: it marks the page dynamic, so `next build` never prerenders it (no database at build).
@@ -134,7 +139,11 @@ function BookGrid({ books }: { books: LibraryBook[] }) {
                 href={`/books/${book.id}/start`}
                 className="flex flex-col rounded-[inherit] outline-light outline-offset-2 hover:bg-glow/20 focus-visible:outline-3 motion-safe:transition-transform motion-safe:duration-100 motion-safe:active:translate-y-0.5"
               >
-                <TypographicCover title={book.title} author={book.author} />
+                {coverOf(book) ? (
+                  <img src={coverOf(book)} alt="" className="block aspect-[8/9] w-full object-cover @max-[17.5rem]:max-h-52" />
+                ) : (
+                  <TypographicCover title={book.title} author={book.author} />
+                )}
                 <span className="flex flex-col p-3">
                   <span className="font-book text-[1.0625rem] leading-snug font-medium [overflow-wrap:anywhere]">{book.title}</span>
                   <span className="mt-1 text-[0.8rem] text-fog">{book.author}</span>
