@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+/* The green light across the bay: the Reader climbs toward the author's original at L5. */
+@theme {
+  --color-mist: #e9efec;
+  --color-ink: #14201b;
+  --color-fog: #56655e;
+  --color-light: #17724c;
+  --color-glow: #7fe0ae;
+  --color-gold: #a8781f;
+  --color-hairline: #c5d1cb;
+
+  --animate-page-in: page-in 220ms ease-out;
+
+  @keyframes page-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+}
+
+@theme inline {
+  --font-book: var(--font-newsreader), Georgia, serif;
+  --font-ui: var(--font-atkinson), system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  overscroll-behavior-y: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

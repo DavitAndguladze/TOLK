@@ -50,6 +50,10 @@ _Avoid_: User, student, learner
 The Reader reading a Chapter Version out loud while the app compares speech word by word against the text.
 _Avoid_: Dictation, voice mode
 
+**Chunk**:
+A short run of whole sentences from a Chapter Version, shown on one screen and read aloud in one listening session.
+_Avoid_: Page, passage, section
+
 **Read-aloud Miss**:
 A word the Reader mispronounced or skipped while reading aloud.
 _Avoid_: Error, mistake
