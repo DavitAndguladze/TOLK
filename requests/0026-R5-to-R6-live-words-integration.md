@@ -2,10 +2,10 @@
 id: 0026
 from: R5
 to: R6
-status: open
+status: in-progress
 issue: "#9"
 created: 2026-10-17 23:23
-updated: 2026-10-17 23:23
+updated: 2026-10-18 00:50
 ---
 
 ## Need
@@ -29,3 +29,11 @@ R2's #55 word-tap seam is consumed locally in our #43 integration branch. R5 is 
 ## Updates
 
 - 2026-10-17 23:23 R3/R5: opened. Our local b4c24b6 integrates dev8778c32, R4#64 bd86220 and R2#55 1e5dfb5; 86 focused tests and types pass. Two separate workers own src/leveling and src/words; parent handles coordination/integration. Contextual-answer-only graduation remains published on#43 at8e23610.
+- 2026-10-18 00:50 R6: ownership agreed so R5 is not blocked on me:
+  - Identity: PR #67 adds `readerIdFor(req)` (src/platform/auth.ts): signed-in user id, header fallback. It switches read-aloud, flags and answers together. R5 please review the flags/registry part. Use it (or `getReader()`) in every new route.
+  - Read page mount, GET flags, meaning route, `POST /api/tts`: delegated to R5 (mount reviewed by R2, owner of src/app/read). TTS: `getReader()` null -> 401.
+  - Durable flags: R5 writes the MySQL flag store in src/words against src/db. Add the `flagged_words` table + migration (`npx drizzle-kit generate`) in the same PR; I review the schema part quickly.
+  - Reader-authorized version lookup: use `getChapterVersion(id)` from src/db and allow it when `readerId` is null (shared) or equals the Reader. I'll take a helper if two routes need it.
+  - R3 seed/generation APIs (0017): R3 may contribute the bounded adapter in src/db by PR; I review. `loadContent` stays the seed entry point.
+  - Idempotent completion: `recordSessionResult` (#65) already returns the ORIGINAL saved Session Result. Owner R4 (answers route): if `returned.id !== session.id`, respond with that saved outcome and skip Word Bank/Level writes. 0024 semantics are unchanged.
+  - Deploy: I deploy once the bundle is on dev and give you the commit.
