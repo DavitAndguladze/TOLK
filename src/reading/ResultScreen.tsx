@@ -1,6 +1,6 @@
-import Link from "next/link";
 import type { Api } from "../types";
 import { LevelChange } from "./LevelChange";
+import { NextChapter } from "./NextChapter";
 import { resultHeadline } from "./result";
 
 export type AnswersResult = Api["POST /api/checks/[checkId]/answers"]["res"];
@@ -50,7 +50,8 @@ export function ResultScreen({ result, nextHref }: { result: AnswersResult; next
           <ul className="mt-2 space-y-2">
             {toReview.map((q) => (
               <li key={q.questionId} className="rounded-xl border-l-4 border-gold/70 bg-white/60 px-4 py-3">
-                {q.feedback}
+                <p>{q.feedback}</p>
+                {q.rereadSentence && <p className="mt-1 text-sm text-fog">Reread: “{q.rereadSentence}”</p>}
               </li>
             ))}
           </ul>
@@ -77,18 +78,7 @@ export function ResultScreen({ result, nextHref }: { result: AnswersResult; next
       )}
 
       <div className="mt-10">
-        {nextHref ? (
-          <Link
-            href={nextHref}
-            className="flex min-h-13 items-center justify-center rounded-2xl bg-light px-4 font-semibold text-white outline-light transition hover:bg-[#125f3f] focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[0.98]"
-          >
-            Read Chapter {chapterNumber + 1}
-          </Link>
-        ) : (
-          <p className="flex min-h-13 items-center justify-center rounded-2xl bg-hairline px-4 font-semibold text-fog">
-            Writing Chapter {chapterNumber + 1} for you…
-          </p>
-        )}
+        <NextChapter versionId={result.nextVersionId} href={nextHref} chapterNumber={chapterNumber} />
       </div>
     </section>
   );

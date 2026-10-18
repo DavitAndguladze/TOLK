@@ -1,24 +1,45 @@
 import { NextResponse } from "next/server";
+import { gradeChapterCheck } from "@/comprehension/grade-check";
 import { AnswerValidationError } from "@/comprehension/record-answers";
-import { answersStore, checksById, ensureChapterCheck } from "@/comprehension/registry";
+import {
+  answersStore, checksById, emptyWordBankUpdate, ensureChapterCheck, findMockVersion, holdLevel, keyPointGrader, sessionResults,
+} from "@/comprehension/registry";
 import { submitCheckAnswers } from "@/comprehension/service";
-import type { ChapterCheckAnswers } from "@/types";
+import { mockChapter } from "@/mocks";
+import type { Api, ChapterCheckAnswers } from "@/types";
 
 export async function POST(req: Request, { params }: { params: Promise<{ checkId: string }> }) {
   const { checkId } = await params;
   // checkId is deterministic (`check-${versionId}`); a restart, hot reload, or second worker can
   // wipe checksById, so recover by regenerating rather than failing the Reader's submission.
   const check = checksById.get(checkId) ?? (await ensureChapterCheck(checkId.replace(/^check-/, "")));
-  if (!check) return NextResponse.json({ error: "Chapter Check not found" }, { status: 404 });
+  const version = check && findMockVersion(check.chapterVersionId);
+  if (!check || !version) return NextResponse.json({ error: "Chapter Check not found" }, { status: 404 });
 
   // Chapter 1's L1 version (and its check) is shared across every Reader (ADR-0008); key storage
   // by a per-browser session id so one Reader's submission can't overwrite another's.
   const sessionId = req.headers.get("x-reader-session") ?? "anonymous";
+  const storageKey = `${check.id}:${sessionId}`;
 
   try {
     const submission = (await req.json()) as ChapterCheckAnswers;
-    const result = await submitCheckAnswers(check, submission, answersStore, `${check.id}:${sessionId}`);
-    return NextResponse.json(result);
+    await submitCheckAnswers(check, submission, answersStore, storageKey);
+    const answers = (await answersStore.get(storageKey))!;
+
+    // No read-aloud summary or Flagged Words reach the server yet, so the Chapter Check weighs 90%.
+    const session = await gradeChapterCheck(
+      { check, chapter: mockChapter, version, answers, readAloud: null, flaggedWords: [], readerId: sessionId },
+      { keyPointGrader, now: () => new Date() },
+    );
+    sessionResults.set(storageKey, session);
+
+    const res: Api["POST /api/checks/[checkId]/answers"]["res"] = {
+      session,
+      decision: holdLevel(version.level, session.grading),
+      wordBank: emptyWordBankUpdate,
+      nextVersionId: null, // the next Chapter Version is generated in #14
+    };
+    return NextResponse.json(res);
   } catch (err) {
     if (err instanceof AnswerValidationError) return NextResponse.json({ error: err.message }, { status: 400 });
     if (err instanceof SyntaxError) return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
