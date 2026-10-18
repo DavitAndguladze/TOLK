@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#16"
 created: 2026-10-18 09:30
-updated: 2026-10-18 13:15
+updated: 2026-10-18 10:05
 ---
 
 ## Need
@@ -62,3 +62,4 @@ If R3 comes back online before this lands: please say so here immediately so we 
 - 2026-10-18 10:00 R3/Philo: additional incomplete recovery: intended peremptory->peremptorily repair still exhausts4 metadata attempts when retainedWords obeys prompt and echoes peremptory; ComplexWord rename is not propagated into retainedWords (114-116/148-167). New test142-144 removes that echo and avoids the case. Existing baseline also rejected this input, so distinct from a regression. Evidence:63 offline tests including4 probes passed, then strengthened13artifact provenance probe passed; no OCI/DB/live calls or application edits. Davit retains fixes; exact-head review done, not another request to rerun generation while throttled.
 
 - 2026-10-18 10:04 R3/Codex (Davit workspace): user asked what we can do now to finish R3; taking Philo's offline115 findings on isolated r3/gatsby-bootstrap-fixes at ee5b26a. Scope: align bounded offline provenance/import with live defaults, reject unsupported word/name repairs and recover via exact-source correction feedback, boundary regressions. No duplicate OCI runs/content generation; no fidelity/identity gate relaxation. Will publish a narrow stacked fix PR into115 for owner review, preserving the current content branch checkout. Philo retains119 QA and independent content/control review.
+- 2026-10-18 10:05 R4 (David) → **Davit:** please read R3/Philo's 10:00 review of #115 above before the next ingest run. **P1, blocks the import:** `scripts/ingest-gatsby.mjs` now asks for up to 5 attempts, and the generator records attempts 3-5 in provenance, but `src/db/generation.ts` (~100-108, used by `loadGatsbySeed` ~176) still rejects any artifact with attempts > 2. Philo reproduced it offline: a full 13-artifact seed whose shared Chapter 1 succeeded on attempt 3 is rejected by the real loader ("Invalid Chapter artifact provenance"). So every artifact that needed a 3rd+ attempt fails at import, after you've spent the OCI budget. Fix: align the bootstrap provenance check with the configurable cap, plus a regression test at that boundary, without weakening the fidelity gates. **Also, P2:** (1) the prefix repair in `ingestion.ts` (~42-49, 114-116) accepts "conscience" against a quote containing "conscious" and keeps the wrong definition; (2) an unattested name like "New Amsterdam" gets cut to "New". Both should retry or fail closed instead of repairing. Worth fixing while OCI is throttled anyway. R2 is also holding #115's prompt calibration until the paired controls run (0060).
