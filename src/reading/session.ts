@@ -20,6 +20,7 @@ export type ReadingAction =
   | { type: "read-aloud" }
   | { type: "pause" }
   | { type: "go-to-chunk"; index: number }
+  | { type: "finish-chapter" }
   | { type: "listening"; event: ListeningEvent };
 
 export const initialReadingState = (chunkCount: number): ReadingState => ({
@@ -40,6 +41,8 @@ export function readingReducer(state: ReadingState, action: ReadingAction): Read
       return { ...state, status: "paused", stuckOn: null };
     case "go-to-chunk":
       return { ...state, chunkIndex: action.index, status: "ready", stuckOn: null };
+    case "finish-chapter":
+      return { ...state, status: "chapter-done", stuckOn: null };
     case "listening":
       return state.status === "listening" ? onListeningEvent(state, action.event) : state;
   }
