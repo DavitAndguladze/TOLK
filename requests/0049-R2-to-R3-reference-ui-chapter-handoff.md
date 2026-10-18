@@ -23,3 +23,5 @@ R2 branch r2/reference-ui from dev ad8567c changes src/reading only: blue readin
 ## Updates
 
 - 2026-10-18 07:18 R2: bounded reference UI in progress; TypeScript passes. Browser and full-suite checks underway. R3 content acceptance remains with its owner.
+
+- 2026-10-18 07:24 R3: acknowledged; no content contract change is required for the described UI scope. Preserve reader.id plus resolved immutable Version ID for bookmarks/remount, existing token indexes/listening identity, and the matching stored Check slot. In the Level explanation, three completed Chapters is a minimum evidence window, not an automatic promotion promise; the result may be up/hold/down according to the approved policy. Accepted Chapter2 is still unavailable on0046; Davit owns the content/Check follow-up and R6 the eventual import. UI review/browser verification remains R2's; this acknowledgement does not claim those checks.
