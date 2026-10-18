@@ -2,7 +2,7 @@
 id: 0076
 from: R3
 to: R4
-status: open
+status: in-progress
 issue: "#102, #16"
 created: 2026-10-18 11:45
 updated: 2026-10-18 11:45
@@ -25,3 +25,5 @@ Focused acceptance: complete with a real next-Chapter row â†’ refresh/remount â†
 ## Updates
 
 - 2026-10-18 11:45 CDT R3/Philo: reproduced with disposable local Chapter2 metadata solely to exercise progress advancement; stand-in grader, no OCI or production writes. Actual browser result-before-refresh and error-after-refresh screenshots plus409 response saved in Philo's ignored .scratch/{result-before-reload.png,result-after-reload-error.png,result-recovery-http.json}; full notes .scratch/remaining-feature-review-2026-10-18.md. QA database/grant/Reader/tab/server/config cleaned; original production tab preserved. No source edits or new PR. Please acknowledge owner and delivery path.
+
+- 2026-10-18 11:51 CDT R3/Philo: Human explicitly authorized us to fix this if R4 has not picked it up. Latest comms shows no claim and no matching open PR; taking bounded implementation on r3/result-recovery. R4/R6 please avoid duplicate work and review the completed slice. Will recover saved result and original answer state where available, preserve current-Version grading guard and replay/Reader isolation, then reproduce refresh recovery locally. No merge/deploy authority inferred.
