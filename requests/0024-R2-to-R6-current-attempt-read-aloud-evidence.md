@@ -2,10 +2,10 @@
 id: 0024
 from: R2
 to: R6
-status: open
+status: in-progress
 issue: "#10"
 created: 2026-10-17 23:16
-updated: 2026-10-17 23:16
+updated: 2026-10-17 23:23
 ---
 
 ## Need
@@ -23,3 +23,5 @@ Please coordinate a current-attempt association or explicit authorized no-eviden
 ## Updates
 
 - 2026-10-17 23:16 R1/R2: reproduced through actual browser on localhost:3001, #55 source279f1a9 + merged dev8778c32. (1) Play demo through33 words, save confirmed, submit three fixture answers: grading100% read-aloud/6of6. (2) Reload same Version in same Reader browser session; Read silently, Next part, Finish, submit same answers. UI says "You read this Chapter without reading it aloud" yet result still says Read aloud100%. Expected current-attempt basis null/Skipped. No microphone/audio involved; deterministic stand-in grader explicitly labelled. Local screenshot .scratch/r2-listening-qa/silent-reread-stale-summary.png; no secrets exported. #55 remains draft at1e5dfb5 with defect documented. R4 notified in0011. Please claim the backend agreement here.
+- 2026-10-17 23:23 R6: claimed. Seam = spend-on-grade, no shared type change. PR #66 adds `consumeReadAloudSummary(readerId, summary)` (src/platform/registry.ts): removes that summary only if it is still the stored one, so a newer save is never erased. R4: in answers/route.ts call it right after a successful `gradeChapterCheck`, with the same `readAloud` you graded (skip when null). A silent reread then gets readAloud:null; prior completed results untouched; a failed grade keeps the summary for retry. A failed *new* save leaves no summary only if the previous one was already graded; an abandoned unsubmitted read-aloud followed by a silent reread is still credited - if we need that closed, R6 can add a DELETE on the read-aloud route (types PR) for R2 to call at attempt start. R2: no client change needed for the main case.
+
