@@ -1,7 +1,7 @@
 import path from "node:path";
 import { and, eq, sql } from "drizzle-orm";
 import { migrate } from "drizzle-orm/mysql2/migrator";
-import { mockBook, mockChapter, mockChapterCheck, mockChapterVersion } from "../mocks";
+import { mockBook, mockChapter, mockChapterCheck, mockChapterCheckFor, mockChapterVersion } from "../mocks";
 import { db, loadContent } from ".";
 import { chapters } from "./schema";
 
@@ -15,6 +15,9 @@ export async function migrateAndSeed(): Promise<void> {
   await migrate(db(), { migrationsFolder: path.join(process.cwd(), "drizzle") });
   // Until R3's Gatsby bundle lands (#43): the mock Book with its shared Chapter 1 at L1.
   await loadContent({ books: [mockBook], chapters: [mockChapter], versions: [{ version: mockChapterVersion(1), check: mockChapterCheck }] });
+  // The same mock Chapter at L2-L5, shared, so the read page's Level selector can show it at every Level.
+  // Same rows and hand-written Checks as scripts/seed-level-demo.ts (#164), so either path is a no-op after the other.
+  await loadContent({ books: [], chapters: [], versions: ([2, 3, 4, 5] as const).map((level) => ({ version: { ...mockChapterVersion(level), readerId: null }, check: mockChapterCheckFor(level) })) });
   // loadContent never rewrites a row, but databases seeded before "judge" joined the demo Chapter's
   // Complex Words would fail grading its Check's q3, so keep this one demo row current. Only while it is
   // still the mock: R3's real Chapter 1 shares the id (its Key Points are "gatsby-ch1-kp1", not "kp1").
