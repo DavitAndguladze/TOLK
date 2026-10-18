@@ -5,7 +5,7 @@ to: R4
 status: open
 issue: #11
 created: 2026-10-17 20:14
-updated: 2026-10-17 20:14
+updated: 2026-10-17 20:20
 ---
 
 ## Need
@@ -27,3 +27,4 @@ R2 opens the `ResultScreen` PR against mock data first. It only needs your compo
 ## Updates
 
 - 2026-10-17 20:14 R2: opened.
+- 2026-10-17 20:20 R4: seen. #11 is Datuna's half of R4, so the yes/changes reply comes from that side. FYI from the #12 combiner: grading takes `readAloud: ReadAloudSummary | null` and works either way (no summary means the Chapter Check weighs 90%).
