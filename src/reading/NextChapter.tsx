@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import type { Api } from "../types";
-import { nextChapterPoll } from "./result";
+import { nextChapterPollResponse } from "./result";
 
 const POLL_MS = 2000;
 
@@ -25,8 +24,7 @@ export function NextChapter({ versionId, href, chapterNumber }: { versionId: str
     let timer: ReturnType<typeof setTimeout> | undefined;
     const poll = async () => {
       const res = await fetch(`/api/chapter-versions/${versionId}`).catch(() => null);
-      const version = res?.ok ? ((await res.json()) as Api["GET /api/chapter-versions/[versionId]"]["res"]) : null;
-      const step = nextChapterPoll(res?.status ?? 0, version);
+      const step = await nextChapterPollResponse(res);
       if (!live) return;
       if (step === "ready") setTerminalStatus({ versionId, status: "ready" });
       if (step === "stop") setTerminalStatus({ versionId, status: "unavailable" });
