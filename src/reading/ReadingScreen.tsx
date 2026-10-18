@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useReducer, useRef, useState, type ReactNode } from "react";
 import type { Token, WordOutcome } from "../types";
 import { createListeningSource } from "../listening/client";
-import type { Chunk } from "./chunk";
+import { rereadChunk, type Chunk } from "./chunk";
 import { initialReadingState, readingReducer, unreadTokens } from "./session";
 import { createReadingAttempt } from "./read-aloud";
 import { ChapterReadAloud } from "./ChapterReadAloud";
@@ -74,11 +74,21 @@ function ChapterReadingScreen({
   const [listeningLabel, setListeningLabel] = useState("Connecting…");
   const [positionReady, setPositionReady] = useState(false);
   const [resumedPart, setResumedPart] = useState<number | null>(null);
+  const [reviewSentence, setReviewSentence] = useState<number | null>(null);
+  const passage = useRef<HTMLParagraphElement>(null);
   const positionKey = readerId ? `tolk-reading-position:${encodeURIComponent(readerId)}:${encodeURIComponent(chapterVersionId)}` : null;
   const chunk = chunks[state.chunkIndex];
   const listening = state.status === "listening";
 
   useEffect(() => {
+    const sentence = new URLSearchParams(window.location.search).get("sentence");
+    const target = rereadChunk(chunks, sentence);
+    if (target >= 0) {
+      dispatch({ type: "restore-position", index: target });
+      setReviewSentence(Number(sentence));
+      setPositionReady(true);
+      return;
+    }
     try {
       if (positionKey) {
         const tokenIndex: unknown = JSON.parse(localStorage.getItem(positionKey) ?? "null");
@@ -93,6 +103,10 @@ function ChapterReadingScreen({
     setPositionReady(true);
     // Reader and Version changes remount this component; only restore once, before interaction.
   }, []);
+
+  useEffect(() => {
+    if (reviewSentence !== null && chunk?.sentences.some(sentence => sentence.index === reviewSentence)) passage.current?.focus();
+  }, [reviewSentence, state.chunkIndex]);
 
   useEffect(() => {
     if (!positionReady || !positionKey || !chunk?.tokens.length) return;
@@ -180,24 +194,25 @@ function ChapterReadingScreen({
   return (
     <>
       <section aria-label="Chapter text" className="px-6 pt-8 pb-72">
+        {reviewSentence !== null && chunk.sentences.some(sentence => sentence.index === reviewSentence) && <p role="status" className="mx-auto mb-4 max-w-xl text-sm text-fog">Sentence {reviewSentence + 1} from your Chapter Check is highlighted. Reading aloud is optional.</p>}
         {resumedPart !== null && state.status === "ready" && state.chunkIndex === resumedPart - 1 && (
           <div className="mx-auto mb-6 max-w-xl rounded-2xl border border-hairline bg-white/70 px-4 py-3">
             <p className="text-sm text-ink">Back at part {resumedPart}. Your place was saved on this device.</p>
             <button type="button" onClick={() => { setResumedPart(null); dispatch({ type: "go-to-chunk", index: 0 }); }} className="min-h-11 cursor-pointer text-sm font-semibold text-light underline underline-offset-4 outline-light focus-visible:outline-2 focus-visible:outline-offset-2">Start from the beginning</button>
           </div>
         )}
-        <p key={chunk.index} className="mx-auto max-w-xl animate-page-in font-book text-[1.5625rem] leading-[1.7] text-pretty">
+        <p ref={passage} tabIndex={-1} key={chunk.index} className="mx-auto max-w-xl animate-page-in font-book text-[1.5625rem] leading-[1.7] text-pretty focus-visible:outline-2 focus-visible:outline-light">
           {chunk.tokens.map((token, i) => (
             <Fragment key={token.index}>
               {i > 0 && " "}
-              <Word
+              <span className={token.sentenceIndex === reviewSentence ? "rounded bg-glow/60" : undefined}><Word
                 token={token}
                 outcome={state.outcomes[token.index] ?? "pending"}
                 latest={listening && token.index === state.lastRead}
                 stuck={token.index === state.stuckOn}
                 flagged={flaggedTokenIndexes?.has(token.index) ?? false}
                 onTap={!listening && onWordTap ? () => onWordTap(token, chapterVersionId) : undefined}
-              />
+              /></span>
             </Fragment>
           ))}
         </p>

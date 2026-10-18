@@ -12,7 +12,9 @@ export const resultHeadline = (grading: Grading): string => HEADLINE[grading.res
 /** Join only the actual saved grades and supplied Check/answers; never infer a Reader's answer. */
 export function chapterCheckReview(session: SessionResult, check?: ChapterCheck, answers?: ChapterCheckAnswers) {
   const grades = session.grading.questionGrades;
+  const { checkScore, checkMax } = session.grading.basis;
   return {
+    scorePercent: checkMax > 0 ? Math.round(checkScore / checkMax * 100) : null,
     fullyCorrect: grades.filter(question => question.grade === 2).length,
     partlyCorrect: grades.filter(question => question.grade === 1).length,
     total: grades.length,
@@ -21,6 +23,7 @@ export function chapterCheckReview(session: SessionResult, check?: ChapterCheck,
         ? check.questions.find(question => question.id === grade.questionId) : undefined;
       return {
         ...grade,
+        rereadSentenceIndex: grade.rereadSentenceIndex ?? question?.answerSentenceIndex ?? null,
         prompt: question?.prompt ?? null,
         answer: question ? answers?.answers.find(answer => answer.questionId === grade.questionId)?.answer ?? null : null,
       };

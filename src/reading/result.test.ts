@@ -63,8 +63,9 @@ test("reviews real answers by question id and counts only fully correct answers"
   expect(review.fullyCorrect).toBe(1);
   expect(review.partlyCorrect).toBe(1);
   expect(review.total).toBe(3);
+  expect(review.scorePercent).toBe(83); // Saved basis is 5/6 points, including partial credit.
   expect(review.questions[0]).toMatchObject({ questionId: "q2", prompt: "What happened?", answer: "He looked", grade: 1, feedback: "Some of it." });
-  expect(review.questions[1]).toMatchObject({ questionId: "q1", prompt: "Where?", answer: "Across the water", grade: 2 });
+  expect(review.questions[1]).toMatchObject({ questionId: "q1", prompt: "Where?", answer: "Across the water", grade: 2, rereadSentenceIndex: 1 });
 });
 
 test("does not attach another Chapter Version's questions or answers to a saved result", () => {
