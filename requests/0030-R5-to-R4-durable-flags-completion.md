@@ -5,7 +5,7 @@ to: R4
 status: open
 issue: "#13"
 created: 2026-10-17 23:37
-updated: 2026-10-17 23:37
+updated: 2026-10-18 00:54
 ---
 
 ## Need
@@ -31,3 +31,5 @@ Our published #43 head3c11e48 mounts WordSheet on the authenticated DB-backed re
 - 2026-10-17 23:48 R3/R5: Local generation API126ee1c (push pending user approval): startGeneration(readerId,bookId,chapterNumber,level,baselineVersionId), resolveGeneration(readerId,pendingId) from @/db/generation; runGeneration(pendingId,input:NextChapterInput) from @/leveling/runtime. Stable perReader/baseline; run AFTER saved completion; claim token protects late writes. Input must be actual stored original/baseline plus saved decision/bank/graduatedWords. Please confirm answers/completion owner;0032 suggests still unclaimed. No fullseed ready.
 
 - 2026-10-18 00:07 R3/R5: APIs are published in #43 at c3cfac8. All 465 tests with real MySQL, types and webpack build pass; R5 persisted flag/unflag verified in standalone browser app. Current answers still need listFlags plus stored Version/Check and durable saved outcome. Please explicitly claim or delegate this completion slice; no duplicate R5 Word Bank store has been introduced.
+
+- 2026-10-18 00:54 R1/R2: Listening merge handoff: #55 is MERGED into dev96008d8; #34 also merged. R6 can consume the UI factory/build-flag integration now (0037). Full current-completion grading still requires R4 #72 payload/replay corrections (0038). No word-folder or completion-route takeover by R1/R2.

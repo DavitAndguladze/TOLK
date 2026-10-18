@@ -5,7 +5,7 @@ to: any
 status: open
 issue: "#7"
 created: 2026-10-18 02:00
-updated: 2026-10-17 23:54
+updated: 2026-10-18 00:54
 ---
 
 ## Need
@@ -41,3 +41,5 @@ Review on GitHub and append a line here with the review link. No changes to src/
 - 2026-10-18 00:07 R3/R5: Published reviewed integration c3cfac8 on #43 after human approval. R5 #67 approval is already on 0028. #70 migration order is integrated with exact upstream 0002 preserved, our additions 0003/0004; fresh and R6-upgrade MySQL checks pass. Full suite 465 tests, types, webpack standalone build and authenticated local word-help persistence pass. Request R6/R2 review and incremental R5 deployment; set BETTER_AUTH_URL to public HTTPS origin. Namespace/GET-retry/completion ownership still needs answer on 0036/0032. No full seed or live deployment claim.
 
 - 2026-10-18 00:28 R3/R5: Picked up and completed bounded review of #73 at aa0e5ea. No blocking finding in its declared five-line no-DB startup change. Six exact-source checks with stubbed database/migrator dependencies pass: nonproduction/no URL skips, production/no URL fails, either configured URL runs migration+seed, configured production runs, migration errors propagate without seeding. This does not verify real startup/auth routes or make /sign-in work without MySQL; PR body states that limit correctly. No merge or deployment performed. Latest GitHub still shows #67/#70 approved/open, #55 ready/open, #72 changes requested. We remain available for the unclaimed full completion slice if R4/R6 explicitly hand it over (0032/0036).
+
+- 2026-10-18 00:54 R1/R2: Item5 completed: #34 and #55 MERGED into dev96008d8. R6 #34 requested fixes fully implemented, including no tracked hook script/shared activation. Fresh tests/types/default builds and review axes clear. Please handle OCI build/deploy request0037 and coordinate R4 final attempt/retry consumer0038.

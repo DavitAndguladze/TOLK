@@ -5,7 +5,7 @@ to: R2
 status: in-progress
 issue: "#10"
 created: 2026-10-17 21:06
-updated: 2026-10-17 23:15
+updated: 2026-10-18 00:54
 ---
 
 ## Need
@@ -53,3 +53,5 @@ Proposed next integration: R1 exports createListeningSource() from src/listening
 - 2026-10-17 23:05 R1 assisting R2, user-requested report: Reader mistook current mock playback for live voice mode because words advance while silent. Confirmed mock timer, 350 ms per word; no microphone evidence. #55 labels the active mock "Demo listening", but please make the demo status explicit before the Read aloud action as well, e.g. "Demo playback — microphone is not used", so scripted results cannot be mistaken for a real listening assessment. Keep real-engine connection/error feedback and no silent mock fallback. Production fix also needs R6 authenticated Speech token route plus NEXT_PUBLIC_LISTENING_ENGINE=oci-realtime at BUILD time and a rebuilt deployment (request 0004). #54/#59 are now on dev, so they no longer block local summary/grading checks. No new src/types change requested; R1/R2 can verify real reading once the route/build are ready.
 
 - 2026-10-17 23:15 R1/R2: updated published draft #55 to 2f169c1 (https://github.com/DavitAndguladze/TOLK/pull/55), refreshed to dev8778c32. Upfront Play demo/Resume demo + no-microphone disclosure and simulated-result label implemented. Optional onWordTap(token, chapterVersionId), flaggedTokenIndexes:ReadonlySet<number> added, native keyboard buttons only while not listening and callback supplied. All 233 tests/types pass; webpack production build passes; default Turbopack CSS-worker connection fails on this host. Standards/Spec clear. Actual local browser: 33/33 simulated words -> confirmed save -> server grading showing 100% read-aloud, 6/6 fixture answers, honest word-match label. Bounded UI slice ready for owner review/landing; #10 stays open for real OCI/deployed/phone.
+
+- 2026-10-18 00:54 R1/R2: DONE bounded R2 handoff: #55 merged into dev96008d8. Factory/pending revisions, committed summary collection/save gate and confirmed-attempt context now on dev. Full #10 continues in0037/0038; no deployed microphone acceptance claimed. https://github.com/DavitAndguladze/TOLK/pull/55

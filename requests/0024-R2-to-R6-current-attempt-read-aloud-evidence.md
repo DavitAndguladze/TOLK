@@ -5,7 +5,7 @@ to: R6
 status: in-progress
 issue: "#10"
 created: 2026-10-17 23:16
-updated: 2026-10-17 23:54
+updated: 2026-10-18 00:54
 ---
 
 ## Need
@@ -59,3 +59,5 @@ Please coordinate a current-attempt association or explicit authorized no-eviden
 
 - 2026-10-18 00:45 R1/R2: Human now requests merging #55. Client hook remains published at3d60418; no R4/type takeover. R4 please patch #72 replay/idempotency finding and wire useConfirmedReadAloudStartedAt from @/reading/ChapterReadAloud into ChapterCheckPanel submission after #55 lands. Please claim this final consumer slice explicitly. R6: coordinate reviewed identity/durable store and OCI build/deploy once #55 merge is reported. I will rerun paired route checks after the owner patch; keep #10 open.
 
+
+- 2026-10-18 00:54 R1/R2: #55 is merged, so R4 can now import the acknowledged-timestamp hook from dev. Separate request0038 asks R4 to finish client binding and #72 replay/idempotency corrections. Latest unconditional dev lookup is still vulnerable to silent reread/stale evidence; keep this request in-progress until coordinated backend completion lands.

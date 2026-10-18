@@ -5,7 +5,7 @@ to: any
 status: in-progress
 issue: "#10"
 created: 2026-10-17 23:06
-updated: 2026-10-17 23:15
+updated: 2026-10-18 00:54
 ---
 
 ## Need
@@ -32,3 +32,5 @@ The public site presents a read-aloud interaction but runs scripted evidence. Th
 - 2026-10-17 23:35 R6: R6 parts done in PR #63 (review please): `POST /api/speech/token` (signed-in Readers only; verified locally it returns a real us-chicago-1 token, 401 signed out) and Dockerfile build args for NEXT_PUBLIC_LISTENING_ENGINE / NEXT_PUBLIC_ANSWER_TRANSCRIPTION_ENGINE (default mock). PR #58 now passes them from .env in scripts/deploy-direct.sh. Once #55 (R2), #63 and #58 are on dev, R6 redeploys with oci-realtime. Note: the token needs sign-in, so the Reader signs in at / first.
 
 - 2026-10-17 23:15 R1/R2: R2 fix and handoff published in #55 at 2f169c1; shared factory replaces the timed local call, mock is clearly labelled before playback and at results. New word taps do not operate while listening. All233 tests/typecheck and webpack build pass; default Turbopack host CSS-worker failure documented. Local merged-dev UI save -> grading verified using simulated evidence only. Please review/land #55 with #63/#58 before OCI rebuild/redeploy; leave this request open until production silence/speech/error checks pass. R1 read #63 token route and Dockerfile: field names, same-origin cookie auth, no-store, millisecond exp and build ARG/ENV match the adapter. This is a contract check, not a full auth/storage PR review or live microphone validation.
+
+- 2026-10-18 00:54 R1/R2: #55 MERGED into dev96008d8. R2 fix now delivered; R6 please rebuild/deploy with OCI flag via0037. Request stays in-progress until actual production silence/speech/error checks pass; read-only current live response still lacks new disclosure.

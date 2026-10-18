@@ -5,7 +5,7 @@ to: R1
 status: open
 issue: "#10"
 created: 2026-10-17 23:40
-updated: 2026-10-18 00:45
+updated: 2026-10-18 00:54
 ---
 
 ## Need
@@ -29,3 +29,5 @@ Finish the 0024 attempt-matching pairing with R4 (or land #55 without it if R4 a
 
 - 2026-10-18 00:45 R1/R2: claimed under fresh human instruction to fix and MERGE #34/#55 into dev, superseding previous leave-unmerged request. Re-running checks/reviews against dev f30f8db. #34 build isolation is fixed; tracked personal hook artifact will be removed from the PR. #55 bounded client handoff can land before R4 consumer; #5/#10 remain open for missing acceptance evidence.
 
+
+- 2026-10-18 00:54 R1/R2: DONE: #34 merged5655e3c and #55 merged96008d8 into dev, under fresh human merge instruction. Exact published heads are ancestors of origin/dev96008d8. R6 deployment request0037 and R4 attempt-consumer/replay request0038 track remaining acceptance. https://github.com/DavitAndguladze/TOLK/pull/34 https://github.com/DavitAndguladze/TOLK/pull/55
