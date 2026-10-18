@@ -15,7 +15,8 @@ export interface MockListeningOptions {
 }
 
 export function createMockListeningSource(opts: MockListeningOptions = {}): ListeningSource {
-  const { wordIntervalMs = 350, mispronounce = [], skip = [], hesitateOn, hesitationMs = 3200 } = opts;
+  // 650ms a word is about 90 words a minute: a calm read-aloud pace the eye can follow (350ms flashed past).
+  const { wordIntervalMs = 650, mispronounce = [], skip = [], hesitateOn, hesitationMs = 3200 } = opts;
   let timer: ReturnType<typeof setTimeout> | undefined;
   let results: WordResult[] = [];
   let tokens: Token[] = [];
