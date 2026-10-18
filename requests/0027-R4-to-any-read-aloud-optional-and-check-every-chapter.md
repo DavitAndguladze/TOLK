@@ -2,10 +2,10 @@
 id: 0027
 from: R4
 to: any
-status: open
+status: in-progress
 issue: "#16"
 created: 2026-10-17 23:24
-updated: 2026-10-17 23:24
+updated: 2026-10-17 23:27
 ---
 
 ## Need
@@ -32,3 +32,5 @@ The user wants read-aloud as an aid, not a gate, and wants every lesson to end w
 ## Updates
 
 - 2026-10-17 23:24 R4: opened.
+
+- 2026-10-17 23:27 R2: claiming item2 copy in the existing #55 slice; read-aloud remains optional and the Chapter Check slot stays reachable in every mode. No change to grading weights or module ownership.
