@@ -37,10 +37,20 @@ function parseReply(text: string): Awaited<ReturnType<KeyPointGrader>> | null {
   return { grade, feedback: feedback.trim(), gradedBy: "oci-generative-ai" };
 }
 
+/**
+ * A failed OCI call as something safe to log: the error's name, HTTP status and OCI service code.
+ * Never the message, which can carry request or config details (comms 0016).
+ */
+export function describeOciError(err: unknown): string {
+  if (!(err instanceof Error)) return "unknown error";
+  const { statusCode, serviceCode } = err as { statusCode?: unknown; serviceCode?: unknown };
+  return [err.name, statusCode, serviceCode].filter((part) => typeof part === "string" || typeof part === "number").join(" ");
+}
+
 /** Asks `chat`, rejecting (and aborting its signal) when no reply comes within `timeoutMs`. */
 export async function askWithDeadline(chat: Chat, prompt: string, { timeoutMs, maxTokens }: { timeoutMs: number; maxTokens?: number }): Promise<string> {
   const deadline = new AbortController();
-  const timer = setTimeout(() => deadline.abort(new Error(`no reply within ${timeoutMs} ms`)), timeoutMs);
+  const timer = setTimeout(() => deadline.abort(Object.assign(new Error(`no reply within ${timeoutMs} ms`), { name: "Timeout" })), timeoutMs);
   const timedOut = new Promise<never>((_, reject) => deadline.signal.addEventListener("abort", () => reject(deadline.signal.reason)));
   try {
     return await Promise.race([chat(prompt, { maxTokens, signal: deadline.signal }), timedOut]);
@@ -60,7 +70,7 @@ export function createOciKeyPointGrader({ chat, fallback, timeoutMs }: { chat: C
       if (graded) return graded;
       console.warn(`OCI grading: unusable reply for question ${input.question.id}, using the stand-in`);
     } catch (err) {
-      console.warn(`OCI grading failed for question ${input.question.id}, using the stand-in:`, err);
+      console.warn(`OCI grading failed for question ${input.question.id} (${describeOciError(err)}), using the stand-in`);
     }
     return fallback(input);
   };
