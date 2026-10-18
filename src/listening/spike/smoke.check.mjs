@@ -1,25 +1,18 @@
 import assert from "node:assert/strict";
-import { spawn } from "node:child_process";
 import { test } from "node:test";
+import { createServer } from "vite";
 
 test("spike serves its page and guards token minting without calling OCI", async () => {
-  const server = spawn(process.execPath, ["node_modules/vite/bin/vite.js", "--host", "127.0.0.1", "--port", "5176"], {
-    cwd: import.meta.dirname,
-    env: { ...process.env, OCI_COMPARTMENT_OCID: "", OCI_SPEECH_REGION: "", OCI_REGION: "" },
-    stdio: "pipe",
+  // This test file has its own Node process; blank credentials before loading config.
+  Object.assign(process.env, { OCI_COMPARTMENT_OCID: "", OCI_SPEECH_REGION: "", OCI_REGION: "" });
+  const server = await createServer({
+    root: import.meta.dirname,
+    server: { host: "127.0.0.1", port: 0, strictPort: true },
+    logLevel: "error",
   });
-  const origin = "http://127.0.0.1:5176";
-  let output = "";
-  server.stdout.on("data", chunk => { output += chunk; });
-  server.stderr.on("data", chunk => { output += chunk; });
   try {
-    let ready = false;
-    for (let attempt = 0; attempt < 100; attempt++) {
-      try { ready = (await fetch(origin)).ok; } catch {}
-      if (ready || server.exitCode !== null) break;
-      await new Promise(resolve => setTimeout(resolve, 100));
-    }
-    assert.ok(ready, output);
+    await server.listen();
+    const origin = `http://127.0.0.1:${server.httpServer.address().port}`;
     const page = await (await fetch(origin)).text();
     assert.match(page, /Live checks have not been run/);
     const module = await fetch(`${origin}/main.ts`);
@@ -35,6 +28,6 @@ test("spike serves its page and guards token minting without calling OCI", async
     assert.equal(missingConfig.headers.get("cache-control"), "no-store");
     assert.match((await missingConfig.json()).message, /OCI_COMPARTMENT_OCID/);
   } finally {
-    server.kill();
+    await server.close();
   }
 });
