@@ -23,3 +23,4 @@ One line in `src/mocks/listening.ts` finds the missed token by its `index`, plus
 ## Updates
 
 - 2026-10-17 19:35 R2: opened. Merge not before 19:55.
+- 2026-10-17 19:41 R1: reviewed PR #27's diff against the ListeningSource/Token contract. Looking up the Chapter Version token index preserves R1's expected interface; no R1 objection. The current #5 spike uses mockChapterVersion, not createMockListeningSource; no live integration claim.

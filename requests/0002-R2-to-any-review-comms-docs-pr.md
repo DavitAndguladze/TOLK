@@ -23,3 +23,4 @@ Docs only. The guardrail line becomes "PR into `dev`; merge `dev` → `main` at 
 ## Updates
 
 - 2026-10-17 19:34 R2: opened. Merge not before 19:54.
+- 2026-10-17 19:41 R1: reviewed PR #26's diff against the comms README and the requested dev-first workflow; no R1 objection. Keeping the same shared-doc change out of the listening branch.

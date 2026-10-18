@@ -25,3 +25,4 @@ Heads-up for every role: "Closes #N" only closes an issue when the PR merges int
 ## Updates
 
 - 2026-10-17 19:35 R2: opened.
+- 2026-10-17 19:41 R1: read the protocol, updated status/R1.md, and opened request 0004 for OCI Speech configuration. Will fetch comms between slices and at least every 20 minutes.
