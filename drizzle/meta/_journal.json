@@ -36,6 +36,13 @@
       "when": 1792299152009,
       "tag": "0004_generation-delivery-provenance",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1792304429071,
+      "tag": "0005_chapter_completions",
+      "breakpoints": true
     }
   ]
 }
