@@ -1,6 +1,6 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, test } from "vitest";
 import { mockChapterCheck, mockChapterVersion, mockGrading } from "../mocks";
-import { applyToWordBank, chapterEvidence, type ChapterEvidence } from "./word-bank";
+import { chapterEvidence, updateWordBank, type ChapterEvidence } from "./word-bank";
 
 const chapter = (chapterNumber: number, evidence: Partial<ChapterEvidence> = {}): ChapterEvidence => ({
   chapterNumber,
@@ -13,30 +13,30 @@ const chapter = (chapterNumber: number, evidence: Partial<ChapterEvidence> = {})
 });
 
 describe("Word Bank", () => {
-  it("adds a word the Reader got wrong, with source wrong", () => {
-    const { bank } = applyToWordBank([], chapter(1, { missed: ["advice"], seen: ["advice"] }));
+  test("adds a word the Reader got wrong, with source wrong", () => {
+    const { bank } = updateWordBank([], chapter(1, { missed: ["advice"], seen: ["advice"] }));
     expect(bank).toEqual([{ word: "advice", source: "wrong", timesSeen: 1, graduated: false, addedInChapter: 1, graduatedInChapter: null }]);
   });
 
-  it("adds a Flagged Word with source flagged, and a word both missed and flagged only once", () => {
-    const { bank } = applyToWordBank([], chapter(1, { missed: ["advice", "advice"], flagged: ["quick", "advice"] }));
+  test("adds a Flagged Word with source flagged, and a word both missed and flagged only once", () => {
+    const { bank } = updateWordBank([], chapter(1, { missed: ["advice", "advice"], flagged: ["quick", "advice"] }));
     expect(bank.map(({ word, source }) => ({ word, source }))).toEqual([
       { word: "advice", source: "wrong" },
       { word: "quick", source: "flagged" },
     ]);
   });
 
-  it("counts each later Chapter a bank word appears in", () => {
-    const ch1 = applyToWordBank([], chapter(1, { flagged: ["advice"], seen: ["advice", "father"] }));
-    const ch2 = applyToWordBank(ch1.bank, chapter(2, { seen: ["advice", "father"], missed: ["advice"] }));
-    const ch3 = applyToWordBank(ch2.bank, chapter(3, { seen: ["gatsby"] }));
+  test("counts each later Chapter a bank word appears in", () => {
+    const ch1 = updateWordBank([], chapter(1, { flagged: ["advice"], seen: ["advice", "father"] }));
+    const ch2 = updateWordBank(ch1.bank, chapter(2, { seen: ["advice", "father"], missed: ["advice"] }));
+    const ch3 = updateWordBank(ch2.bank, chapter(3, { seen: ["gatsby"] }));
     expect(ch3.bank).toEqual([{ word: "advice", source: "flagged", timesSeen: 2, graduated: false, addedInChapter: 1, graduatedInChapter: null }]);
   });
 
-  it("graduates a word flagged in Chapter 1 and read correctly in Chapter 3", () => {
-    const ch1 = applyToWordBank([], chapter(1, { flagged: ["vulnerable"], seen: ["vulnerable"] }));
-    const ch2 = applyToWordBank(ch1.bank, chapter(2, { seen: ["advice"] }));
-    const ch3 = applyToWordBank(ch2.bank, chapter(3, { seen: ["vulnerable"], readCorrectly: ["vulnerable"] }));
+  test("graduates a word flagged in Chapter 1 and read correctly in Chapter 3", () => {
+    const ch1 = updateWordBank([], chapter(1, { flagged: ["vulnerable"], seen: ["vulnerable"] }));
+    const ch2 = updateWordBank(ch1.bank, chapter(2, { seen: ["advice"] }));
+    const ch3 = updateWordBank(ch2.bank, chapter(3, { seen: ["vulnerable"], readCorrectly: ["vulnerable"] }));
     expect(ch3).toEqual({
       bank: [{ word: "vulnerable", source: "flagged", timesSeen: 2, graduated: true, addedInChapter: 1, graduatedInChapter: 3 }],
       graduatedThisChapter: ["vulnerable"],
@@ -44,39 +44,60 @@ describe("Word Bank", () => {
     });
   });
 
-  it("doesn't graduate in the Chapter the word entered, or when it's flagged or missed again", () => {
-    const ch1 = applyToWordBank([], chapter(1, { missed: ["advice"], flagged: ["quick", "judge"], readCorrectly: ["advice"] }));
-    expect(ch1.wordsLearnedTotal).toBe(0);
-    const ch2 = applyToWordBank(ch1.bank, chapter(2, { flagged: ["quick"], missed: ["judge"], readCorrectly: ["quick", "judge"] }));
-    expect(ch2.bank.filter((e) => e.graduated)).toEqual([]);
-  });
-
-  it("graduates a Complex Word answered correctly in a later Chapter, without reading aloud", () => {
-    const ch1 = applyToWordBank([], chapter(1, { missed: ["criticizing"] }));
-    const ch2 = applyToWordBank(ch1.bank, chapter(2, { answeredCorrectly: ["criticizing"] }));
+  test("graduates a Complex Word answered correctly in a later Chapter, without reading aloud", () => {
+    const ch1 = updateWordBank([], chapter(1, { missed: ["criticizing"] }));
+    const ch2 = updateWordBank(ch1.bank, chapter(2, { answeredCorrectly: ["criticizing"] }));
     expect(ch2.graduatedThisChapter).toEqual(["criticizing"]);
   });
 
-  it("returns a Graduated Word flagged again to the bank, and Words Learned drops", () => {
-    const ch1 = applyToWordBank([], chapter(1, { flagged: ["vulnerable", "advice"] }));
-    const ch2 = applyToWordBank(ch1.bank, chapter(2, { readCorrectly: ["vulnerable", "advice"] }));
+  test("doesn't graduate a word in the Chapter it entered", () => {
+    const { wordsLearnedTotal } = updateWordBank([], chapter(1, { missed: ["advice"], readCorrectly: ["advice"] }));
+    expect(wordsLearnedTotal).toBe(0);
+  });
+
+  test("doesn't graduate a word flagged again in the Chapter it was read correctly", () => {
+    const ch1 = updateWordBank([], chapter(1, { flagged: ["quick"] }));
+    const ch2 = updateWordBank(ch1.bank, chapter(2, { flagged: ["quick"], readCorrectly: ["quick"] }));
+    expect(ch2.wordsLearnedTotal).toBe(0);
+  });
+
+  test("doesn't graduate a word missed again in the Chapter it was also read correctly", () => {
+    const ch1 = updateWordBank([], chapter(1, { flagged: ["judge"] }));
+    const ch2 = updateWordBank(ch1.bank, chapter(2, { missed: ["judge"], readCorrectly: ["judge"] }));
+    expect(ch2.wordsLearnedTotal).toBe(0);
+  });
+
+  test("returns a Graduated Word flagged again to the bank, and Words Learned drops", () => {
+    const ch1 = updateWordBank([], chapter(1, { flagged: ["vulnerable", "advice"] }));
+    const ch2 = updateWordBank(ch1.bank, chapter(2, { readCorrectly: ["vulnerable", "advice"] }));
     expect(ch2.wordsLearnedTotal).toBe(2);
-    const ch3 = applyToWordBank(ch2.bank, chapter(3, { flagged: ["vulnerable"], readCorrectly: ["vulnerable"] }));
+    const ch3 = updateWordBank(ch2.bank, chapter(3, { flagged: ["vulnerable"], readCorrectly: ["vulnerable"] }));
     expect(ch3.bank.find((e) => e.word === "vulnerable")).toEqual({
       word: "vulnerable", source: "flagged", timesSeen: 1, graduated: false, addedInChapter: 3, graduatedInChapter: null,
     });
     expect(ch3.wordsLearnedTotal).toBe(1);
     expect(ch3.graduatedThisChapter).toEqual([]);
-    const ch4 = applyToWordBank(ch3.bank, chapter(4, { readCorrectly: ["vulnerable"] }));
+    const ch4 = updateWordBank(ch3.bank, chapter(4, { readCorrectly: ["vulnerable"] }));
     expect(ch4).toMatchObject({ graduatedThisChapter: ["vulnerable"], wordsLearnedTotal: 2 });
+  });
+
+  test("applying the same Chapter twice graduates nothing twice", () => {
+    const ch1 = updateWordBank([], chapter(1, { flagged: ["advice"] }));
+    const ch2 = chapter(2, { readCorrectly: ["advice"] });
+    const once = updateWordBank(ch1.bank, ch2);
+    const twice = updateWordBank(once.bank, ch2);
+    expect(twice).toMatchObject({ graduatedThisChapter: ["advice"], wordsLearnedTotal: 1 });
   });
 });
 
 describe("Chapter evidence from a graded Chapter", () => {
-  it("reads misses, flags, correct reading and correct Complex Word answers off the grading", () => {
-    // mockGrading: "advice" missed aloud, "quick" flagged; mockChapterCheck q3 asks about "judge" and got a 2.
+  // mockChapterVersion(1) tokens: 0 "When", 3 "young,", 8 "advice.". mockGrading: "advice" missed aloud,
+  // "quick" flagged. mockChapterCheck's complex-word question q3 asks about "judge" and got a 2.
+  const version = mockChapterVersion(1);
+
+  test("reads misses, flags, correct reading and correct Complex Word answers off the grading", () => {
     const evidence = chapterEvidence({
-      version: mockChapterVersion(1),
+      version,
       check: mockChapterCheck,
       grading: mockGrading,
       readAloud: {
@@ -94,11 +115,20 @@ describe("Chapter evidence from a graded Chapter", () => {
       readCorrectly: ["when", "young"],
       answeredCorrectly: ["judge"],
     });
-    expect(evidence.seen).toEqual(expect.arrayContaining(["advice", "judge", "quick"]));
+    expect(evidence.seen).toEqual(version.tokens.map((t) => t.normalized));
   });
 
-  it("has nothing read correctly when the Reader read silently", () => {
-    const evidence = chapterEvidence({ version: mockChapterVersion(1), check: mockChapterCheck, grading: mockGrading, readAloud: null });
+  test("a wrong Complex Word answer is missed, and its question doesn't count as answered correctly", () => {
+    const grading = {
+      questionGrades: mockGrading.questionGrades.map((g) => (g.questionId === "q3" ? { ...g, grade: 0 as const } : g)),
+      missedWords: [{ word: "Judge", source: "chapter-check" as const }],
+    };
+    const evidence = chapterEvidence({ version, check: mockChapterCheck, grading, readAloud: null });
+    expect(evidence).toMatchObject({ missed: ["judge"], answeredCorrectly: [] });
+  });
+
+  test("has nothing read correctly when the Reader read silently", () => {
+    const evidence = chapterEvidence({ version, check: mockChapterCheck, grading: mockGrading, readAloud: null });
     expect(evidence.readCorrectly).toEqual([]);
   });
 });

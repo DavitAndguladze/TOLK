@@ -1,3 +1,4 @@
+// The Word Bank (ADR-0009): the words a Reader hasn't mastered yet, and how each one graduates.
 import type { ChapterCheck, ChapterVersion, Grading, ReadAloudSummary, WordBankEntry, WordBankUpdate } from "../types";
 
 /** What one Chapter showed about the Reader's words. Words are normalized like Token.normalized. */
@@ -13,7 +14,7 @@ export interface ChapterEvidence {
   answeredCorrectly: string[];
 }
 
-export function applyToWordBank(bank: WordBankEntry[], chapter: ChapterEvidence): WordBankUpdate {
+export function updateWordBank(bank: WordBankEntry[], chapter: ChapterEvidence): WordBankUpdate {
   const { chapterNumber } = chapter;
   const missed = new Set(chapter.missed);
   const flagged = new Set(chapter.flagged);
@@ -63,13 +64,13 @@ export function chapterEvidence({
   readAloud: Pick<ReadAloudSummary, "wordResults"> | null;
 }): ChapterEvidence {
   const tokenWords = new Map(version.tokens.map((t) => [t.index, t.normalized]));
-  const gotTwo = new Set(grading.questionGrades.filter((g) => g.grade === 2).map((g) => g.questionId));
+  const fullyCorrect = new Set(grading.questionGrades.filter((g) => g.grade === 2).map((g) => g.questionId));
   return {
     chapterNumber: version.chapterNumber,
     missed: grading.missedWords.filter((m) => m.source !== "flagged").map((m) => normalize(m.word)),
     flagged: grading.missedWords.filter((m) => m.source === "flagged").map((m) => normalize(m.word)),
     seen: [...tokenWords.values()],
     readCorrectly: (readAloud?.wordResults ?? []).flatMap((r) => (r.outcome === "correct" ? (tokenWords.get(r.tokenIndex) ?? []) : [])),
-    answeredCorrectly: check.questions.flatMap((q) => (q.kind === "complex-word" && q.word && gotTwo.has(q.id) ? [normalize(q.word)] : [])),
+    answeredCorrectly: check.questions.flatMap((q) => (q.kind === "complex-word" && q.word && fullyCorrect.has(q.id) ? [normalize(q.word)] : [])),
   };
 }
