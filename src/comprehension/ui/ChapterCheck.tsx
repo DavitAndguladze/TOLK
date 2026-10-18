@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { ChapterCheck as ChapterCheckModel, ChapterCheckAnswers } from "../../types";
+import { useConfirmedReadAloudStartedAt } from "../../reading/ChapterReadAloud";
 import { ResultScreen, type AnswersResult } from "../../reading/ResultScreen";
 import { ChapterCheckPanel } from "./ChapterCheckPanel";
 
@@ -36,6 +37,11 @@ async function submitAnswers(checkId: string, answers: ChapterCheckAnswers): Pro
  *  Once graded, it shows R2's ResultScreen in its place. */
 export function ChapterCheck({ check }: { check: ChapterCheckModel }) {
   const [result, setResult] = useState<AnswersResult | null>(null);
+  // The reading R2 confirmed saved for this completion, or null for a silent read or a failed save,
+  // so grading credits only this reading (comms 0024).
+  const readAloudStartedAt = useConfirmedReadAloudStartedAt();
   if (result) return <ResultScreen result={result} nextHref={result.nextVersionId && `/read/${result.nextVersionId}`} />;
-  return <ChapterCheckPanel check={check} onSubmit={async (answers) => setResult(await submitAnswers(check.id, answers))} />;
+  return (
+    <ChapterCheckPanel check={check} onSubmit={async (answers) => setResult(await submitAnswers(check.id, { ...answers, readAloudStartedAt }))} />
+  );
 }
