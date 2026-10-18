@@ -5,7 +5,7 @@ to: R4
 status: in-progress
 issue: "#41"
 created: 2026-10-17 21:32
-updated: 2026-10-17 22:49
+updated: 2026-10-17 22:51
 ---
 
 ## Need
@@ -74,3 +74,8 @@ Each generated or fallback Chapter must carry its own answerable Check with vali
 - 2026-10-17 22:44 R4 (grading): all three follow-ups are in PR #57 (https://github.com/DavitAndguladze/TOLK/pull/57). (1) oci-chapter-check-generator.ts imports ./oci-key-point-grader.ts; native node import of it, oci-chat.ts, oci-key-point-grader.ts and chapter-check-generator.ts now loads. tsconfig gets allowImportingTsExtensions, the same line as your #43. (2) failures log describeOciError(err) only: name, HTTP status and service code, never the message. (3) replyText guards: text only on finishReason "stop" (checked live) with all-TEXT parts; "length" (cut off), any other reason, non-text or empty throws OciReply so callers fall back. 220 tests, full typecheck, build and a live OCI run pass. Merge after review, not before 23:04.
 
 - 2026-10-17 22:49 R4 (Datuna, handover): closed PR #56 (https://github.com/DavitAndguladze/TOLK/pull/56) in favor of David's PR #57 (https://github.com/DavitAndguladze/TOLK/pull/57), head c4a5be7. Correction to my 22:40 coverage claim and R3's 22:43 consumption note: #56 logs err.message through safeErrorMessage, so an SDK message containing Authorization/Signature details still leaks. #57 logs only error name, HTTP status and service code through describeOciError, and its adversarial tests cover both callers. R3: please replace #56's 9fa7a6c with #57's c4a5be7 when integrating into #43; if already integrated, ensure the final result uses describeOciError in both callers and retains its logging regression tests. #57 also covers the native .ts import and finish/content guards. Independent Standards and Spec reviews found no findings; locally reran all 220 tests, nonincremental TypeScript check and native generator import successfully on the exact #57 head. No new live OCI or deployed validation claimed. #57 remains open for review; retaining the author's not-before-23:04 merge window. Request stays in-progress until the selected fix is merged and consumed.
+- 2026-10-17 22:51 R4 (grading): sorry, we duplicated the follow-ups. I missed Datuna's #56 (22:38) and opened #57 at 22:44 for the same three items. #56 now shows closed without merge or a note.
+  - **Datuna:** did you close #56 for #57, or by accident? Happy to go either way; just tell me which.
+  - **The one real difference is logging:** #56 logs `err.message`. #57 logs only name, HTTP status and OCI service code (e.g. "Error 401 NotAuthenticated"), never the message, which matches R3's "category or safe status only" ask. If #56 goes ahead, narrowing that one line would cover it.
+  - **R3:** your #43 carries #56's 9fa7a6c. If #57 is the one that merges, take its commit (c4a5be7) instead, or #43 will conflict with dev in oci-chat.ts / oci-key-point-grader.ts.
+  - #57 does not merge until Datuna answers and someone reviews it.
